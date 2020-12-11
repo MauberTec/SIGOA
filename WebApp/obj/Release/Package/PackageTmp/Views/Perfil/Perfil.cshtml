@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "::.. Perfis ..::";
+}
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 1060 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(1060)); // 1060 = id DO MODULO "PERFIS"
+
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 1060 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <table id="tblPerfis">
+                        <thead>
+                            <tr>
+                                <th>per_id</th>
+                                <th>Perfil</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    @{
+                        if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                        {
+                            <button type="button" class="btn btn-primary botaoInserir" data-toggle="modal" data-target="#myModal" onclick="Perfil_Inserir();">Novo Perfil</button>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<input type="hidden" id="hddnSelectedper_id" name="hddnSelectedper_id" value="-1" />
+
+<div id="subGrids" style="visibility:hidden">
+
+    <section class="content" style="min-height: 50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 id="HeaderModulosdoPerfil" class="box-title"></h3>
+                    </div>
+
+                    <div class="box-body">
+                        <table id="tblModulosDoPerfil">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>mod_pai_id</th>
+                                    <th>Módulo</th>
+                                    <th class="centro-horizontal">Ativo</th>
+                                    <th class="centro-horizontal">Leitura</th>
+                                    <th class="centro-horizontal">Escrita</th>
+                                    <th class="centro-horizontal">Exclusão</th>
+                                    <th class="centro-horizontal">Inserção</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content" style="min-height: 50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 id="HeaderGruposdoPerfil" class="box-title"></h3>
+                    </div>
+
+                    <div class="box-body">
+                        <table id="tblGruposDoPerfil">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Associado</th>
+                                    <th>Grupo</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content" style="min-height: 50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 id="HeaderUsuariosdoPerfil" class="box-title"></h3>
+                    </div>
+
+                    <div class="box-body">
+                        <table id="tblUsuariosDoPerfil">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Associado</th>
+                                    <th>Usuário</th>
+                                    <th>Nome</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+                                                            <style>
+                                                                .dataTables_filter {
+                                                                    display: none !important;
+                                                                }
+                                                            </style>
+
+                                                            <link href="~/Content/Gerais.css" rel="stylesheet" />
+                                                            <link href="~/Content/font-awesome.css" rel="stylesheet" />
+                                                            <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+                                                            <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+                                                            <script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+                                                            @section Scripts{
+                                                                <script>
+                                                                    var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+                                                                    var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+                                                                    var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+                                                                    var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+                                                                </script>
+                                                                <script src="~/Scripts/Perfil/Perfil.js"></script>
+                                                            }
+
+                                                            <div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                                <div class="modal-dialog modal-lg" role="document">
+                                                                    <div class="modal-content" style="margin-left:150px; width:550px;">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                            <h3 class="modal-title text-center"><b><label id="lblModalHeader">Editar Perfil</label></b></h3>
+                                                                        </div>
+                                                                        <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                                                                            <br />
+                                                                            <div class="modal-body form-group">
+
+                                                                                <div class="form-group" style="display:none;">
+                                                                                    <label class="control-label col-sm-2" for="per_id">ID</label>
+                                                                                    <div class="col-sm-10">
+                                                                                        <input type="text" class="form-control" id="txtper_id" placeholder="Id" disabled="disabled" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label col-sm-2">Perfil<span class="text-danger">*</span> </label>
+                                                                                    <div class="col-sm-10">
+                                                                                        <input id="txtper_descricao" name="txtper_descricao" class="form-control"
+                                                                                               placeholder="Descrição" data-val="true"
+                                                                                               data-val-required="Descrição do Perfil" required
+                                                                                               maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                                                                               autocomplete="off"
+                                                                                               onblur="ChecaRepetido(this, 0)"
+                                                                                               onkeyup="validaAlfaNumerico(this,1,0)" />
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label class="control-label col-sm-2" for="per_ativo">Ativo </label>
+                                                                                    <div class="col-sm-10">
+                                                                                        <input type="checkbox" id="chkper_ativo" style="margin-top: 10px;">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <div class="modal-footer">
+                                                                                <div class="col-md-3 col-md-offset-4">
+                                                                                    <button id="bntSalvar" name="bntSalvar" onclick="return Perfil_Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SIGOA_DESENVModelStoreContainer" CdmEntityContainer="SIGOA_DESENVEntities">
+    <FunctionImportMapping FunctionImportName="STP_SEL_FICHA_INSPECAO_CADASTRAL" FunctionName="SIGOA_DESENVModel.Store.STP_SEL_FICHA_INSPECAO_CADASTRAL" />
+  </EntityContainerMapping>
+</Mapping>

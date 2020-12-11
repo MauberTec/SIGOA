@@ -1,0 +1,865 @@
+﻿
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 710 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(710)); // 710 = id DO MODULO "Cadastro de Documentos"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 710 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    UsuarioPermissoes permissoesAssociarOBJETO = lstPermissoes.Find(x => x.mod_id.Equals(720)); // 720 = id DO MODULO "Documentos/Associar a Objeto"
+    UsuarioPermissoes permissoesAssociarOS = lstPermissoes.Find(x => x.mod_id.Equals(730)); // 730 = id DO MODULO "Documentos/Associar a OS"
+
+
+}
+
+<style>
+    .uppercase {
+        text-transform: uppercase;
+    }
+
+    /*.fixedFont   {
+        font-family: 'Lucida Console';
+        padding-top: 7px;
+    }*/
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    option {
+        color: black !important;
+    }
+
+        option:first-child {
+            color: grey !important;
+        }
+
+    .empty {
+        color: #a3a3a3 !important;
+    }
+
+    .padrao {
+        color: black !important;
+    }
+
+    .dataTables_wrapper .dataTables_processing {
+        background-color: gray;
+        background:unset;
+    }
+
+    .dataTables_filter {
+        display: none
+    }
+
+    #tblPastas.dataTable > thead > tr > th[class*="sort"]:before,
+    #tblPastas.dataTable > thead > tr > th[class*="sort"]:after,
+    #tblPastasServidor.dataTable > thead > tr > th[class*="sort"]:before,
+    #tblPastasServidor.dataTable > thead > tr > th[class*="sort"]:after
+    {
+        content: "" !important;
+    }
+
+
+    #tblArquivos.dataTable > thead > tr > th[class*="sort"]:before,
+    #tblArquivos.dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+    }
+
+    #divArquivos {
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+    }
+
+    .tabela {
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .bordaTop {
+        border-top: solid 1px black;
+        text-align: center;
+    }
+
+    .bordaBottom {
+        border-bottom: solid 1px black;
+        text-align: center;
+    }
+
+    .espacador {
+        width: 10px;
+    }
+
+    .caminho {
+        font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+        font-size: 20px;
+    }
+</style>
+
+<div style="width:100%; margin:0 auto;">
+
+
+    <section class="content" style="min-height: 50px;">
+
+        <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+            @{
+                ViewBag.Title = "::.. Documentos ..::";
+            }
+        </form>
+
+
+        <div style="width:100%;" id="divFiltros">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Localizar</h3>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">Código</label>
+                            <input type="text" class="form-control" id="txtFiltroDoc_Codigo" onkeydown="if (event.keyCode == 13) { Documento_Filtrar(); }">
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="control-label">Descrição</label>
+                            <input type="text" class="form-control" id="txtFiltroDoc_Descricao" onkeydown="if (event.keyCode == 13) { Documento_Filtrar(); }">
+
+                        </div>
+
+                        <div class="col-sm-3 ">
+                            <label class="control-label">Classe</label>
+                            @Html.DropDownList("cmbFiltroClasseProjeto", null, "-- Selecione --", new { @class = "form-control" })
+                        </div>
+
+                        <div class="col-sm-3 ">
+                            <label class="control-label">Tipo</label>
+                            @Html.DropDownList("cmbFiltroTipoDocumento", null, "-- Selecione --", new { @class = "form-control" })
+                        </div>
+
+                        <div>
+                            <div class="btn-box-tool pull-right" style="margin-top:10px">
+                                <button type="reset" class="btn btn-info" onclick="return Documento_LimparFiltro()"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                                <button type="submit" class="btn btn-primary" onclick="return Documento_Filtrar()" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Documentos</h3>
+                    </div>
+
+                    <div class="box-body">
+                        <style>
+                            input.paginate_input {
+                                width: 60px !important;
+                                text-align: center;
+                            }
+
+                        </style>
+
+                        <table id="tblDocumentos">
+                            <thead>
+                                <tr>
+                                    <th>tpd_tipo_id</th>
+                                    <th>doc_id</th>
+
+                                    <th>Documento</th>
+                                    <th>Classe de Projeto</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                    <th>Caminho</th>
+                                    <th>Opções</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        @{
+                            if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                            {
+                                <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="return Documento_Inserir();">Novo Documento</button>
+                            }
+
+                            if (@permissoesAssociarOBJETO.mfl_inserir > 0)
+                            {
+                                <button type="button" class="btn btn-primary  botaoInserir" onclick="return AssociarObjeto();">Associar Documento a Objeto</button>
+                            }
+
+                            if (@permissoesAssociarOS.mfl_inserir > 0)
+                            {
+                                <button type="button" class="btn btn-primary  botaoInserir" onclick="return AssociarOS();">Associar Documento a O.S.</button>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <input type="hidden" id="hddnSelectedgru_id" name="hddnSelectedgru_id" value="-1" />
+
+    <div id="subGrids" style="visibility:hidden">
+
+        <section class="content" style="min-height: 50px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 id="HeaderObjetosAssociados" class="box-title">Objetos Associados</h3>
+                        </div>
+
+                        <div class="box-body">
+                            <table id="tblObjetosAssociados" style="width: 100% !important;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>  </th>
+                                        <th>Objeto</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content" style="min-height: 50px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 id="HeaderOSsAssociadas" class="box-title">OSs Associadas</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="tblOSsAssociadas" style="width: 100% !important;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th> </th>
+                                        <th>Ordem de Serviço</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</div>
+
+<style>
+    option:first-child {
+        color: black !important;
+    }
+</style>
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+
+
+<script src="~/Content/plugins/jquery.mask.min.js"></script>
+<script src="~/Content/plugins/jquery.mask.js"></script>
+
+@section Scripts{
+
+    <script>
+                            var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+                            var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+                            var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+                            var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+
+                            var mascaraDocumentoTecnicoGeral ;
+                            var mascaraDocumentoTecnicoEspecifico;
+
+                          //  var mascaraDocumentoTecnicoGeral = "SS-DE-AAA/000"
+                          //  var mascaraDocumentoTecnicoEspecifico = "SS-AAAAAAAAA-000.000-AAA-AAA/000"
+                            var options = {
+                                onInvalid: function (val, e, f, invalid, options) {
+                                    //  var error = invalid[0];
+                                    // console.log("Digit: ", error.v, " is invalid for the position: ", error.p, ". We expect something like: ", error.e);
+                                    var corVermelho = "rgb(228, 88, 71)";
+                                    f.css("background-color", corVermelho);
+                                }
+                            };
+
+                            jQuery("#txtSequencial").mask("000", options);
+                            jQuery("#txtRevisao").mask("S9", options);
+
+    </script>
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Scripts/Documento/Documento.js"></script>
+}
+
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:650px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Editar Documento</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="margin: 0px;">
+                    <div class="form-group" style="display:none">
+                        <label class="control-label col-sm-3">ID<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9">
+                            <input id="txtdoc_id" name="txtdoc_id" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="text-align:center;">
+                        <input id="txtdoc_codigo" name="txtdoc_codigo" class="txtdoc_codigoHeader" readonly style="display:none" />
+                        <table class="tabela" id="tblDocTecGeral" style="display:none">
+                            <tr>
+                                <td class="bordaBottom">1º nível</td>
+                                <td class="espacador"></td>
+                                <td class="bordaBottom" colspan="5">2º nível</td>
+                                <td class="espacador"></td>
+                                <td class=" bordaBottom">Revisão</td>
+                            </tr>
+                            <tr>
+                                <td><label id="txt10" name="txt10" class="txtdoc_codigoHeader" readonly>XX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly style="text-align:center;">DE</label> </td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt11" name="txt11" class="txtdoc_codigoHeader" readonly>XXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>/</label></td>
+                                <td><label id="txt12" name="txt12" class="txtdoc_codigoHeader" readonly>XXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt13" name="txt13" class="txtdoc_codigoHeader" readonly>xx</label></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop" colspan="3">1º grupo</td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop">2º grupo</td>
+                                <td class="espacador"></td>
+                                <td> </td>
+                            </tr>
+                        </table>
+                        <br />
+                        <table class="tabela" id="tblDocTecEspecifico" style="display:none">
+                            <tr>
+                                <td class=" bordaBottom">1º nível</td>
+                                <td class="espacador"></td>
+                                <td class=" bordaBottom" colspan="7">2º nível</td>
+                                <td class="espacador"></td>
+                                <td class=" bordaBottom" colspan="3">3º nível</td>
+                                <td class="espacador"></td>
+                                <td class=" bordaBottom">Revisão</td>
+                            </tr>
+                            <tr>
+                                <td><label id="txt20" name="txt20" class="txtdoc_codigoHeader" readonly>XX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt21" name="txt21" class="txtdoc_codigoHeader" readonly>XXXXXXXXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt22A" name="txt22A" class="txtdoc_codigoHeader" readonly>XXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>.</label></td>
+                                <td><label id="txt22B" name="txt22B" class="txtdoc_codigoHeader" readonly>XXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt23" name="txt23" class="txtdoc_codigoHeader" readonly>XXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt24" name="txt24" class="txtdoc_codigoHeader" readonly>X00</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>/</label></td>
+                                <td><label id="txt25" name="txt25" class="txtdoc_codigoHeader" readonly>XXX</label></td>
+                                <td><label class="txtdoc_codigoHeader" readonly>-</label></td>
+                                <td><label id="txt26" name="txt26" class="txtdoc_codigoHeader" readonly>X0</label></td>
+
+                            </tr>
+                            <tr>
+                                <td class=""></td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop">1º grupo</td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop" colspan="3">2º grupo</td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop">3º grupo</td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop">1º grupo</td>
+                                <td class="espacador"></td>
+                                <td class="bordaTop">2º grupo</td>
+                                <td class="espacador"></td>
+                                <td></td>
+
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Código Digitável:<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9" style="margin-top: 0px;   padding-top:0 !important;">
+                            <input id="txtCodigoDigitavel" name="txtCodigoDigitavel" class="form-control uppercase"
+                                   autocomplete="off" placeholder="Digitar o Código Completo ou Preencher abaixo"
+                                   maxlength="50" title="Digitar o Código Completo ou Preencher os campos abaixo"
+                                   onkeyup="txtCodigoDigitavel_onKeyUP()" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">1º Nível<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9 " style="margin-top: 0px;   padding-top:0 !important;">
+                            @Html.DropDownList("cmbTiposDocumento", null, "--Selecione--", new { @class = "form-control", @onchange = "cmbTiposDocumento_onchange()" })
+                        </div>
+                    </div>
+
+                    <div id="divNaoAssociado" style="display:none">
+
+                        <div id="divDocTecEspecificoNivel2" style="display:none">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">2º Nível Grupo 1<span class="text-danger">*</span> </label>
+                                <div class="col-sm-9">
+                                    <input id="txtdoc_Grupo21" name="txtdoc_Grupo21" class="form-control"
+                                           placeholder="1o. Grupo"
+                                           autocomplete="off"
+                                           maxlength="9" title=""
+                                           onkeyup="colocaMascara_Grupo21()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">2º Nível Grupo 2A<span class="text-danger">*</span> </label>
+                                <div class="col-sm-9">
+                                    <input id="txtdoc_Grupo22a" name="txtdoc_Grupo22a" class="form-control"
+                                           placeholder="2o.Grupo A" data-val="true"
+                                           data-val-required="2o.Grupo A - Km Inicial" required
+                                           autocomplete="off" title="km inicial do trecho, arredondado conforme NBR 5891"
+                                           onkeyup="txtdoc_Grupo22a_onKeyUP(this)"
+                                           maxlength="3" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">2º Nível Grupo 2B<span class="text-danger">*</span> </label>
+                                <div class="col-sm-9">
+                                    <input id="txtdoc_Grupo22b" name="txtdoc_Grupo22b" class="form-control"
+                                           placeholder="2o.Grupo B" data-val="true"
+                                           data-val-required="2o.Grupo B - Km Final" required
+                                           autocomplete="off" title="km final do trecho, arredondado conforme NBR 5891"
+                                           onkeyup="txtdoc_Grupo22b_onKeyUP(this)"
+                                           maxlength="3" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">2º Nível Grupo 3<span class="text-danger">*</span> </label>
+                                <div class="col-sm-9">
+                                    <input id="txtdoc_Grupo23" name="txtdoc_Grupo23" class="form-control" required
+                                           autocomplete="off" title="os dois primeiros dígitos referem-se ao subtrecho, lote, fase ou prioridade; o terceiro dígito refere-se à identificação de obra de arte especial ou itens, todos definidos pelo DER/SP"
+                                           onkeyup="txtdoc_Grupo23_onKeyUP(this)"
+                                           maxlength="3" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="lblNivel21" class="control-label col-sm-3">2º Nível Grupo 1<span class="text-danger">*</span> </label>
+                            <label id="lblNivel31" class="control-label col-sm-3" style="display:none">3º Nível Grupo 1<span class="text-danger">*</span> </label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="cmbClasseProjeto"
+                                        placeholder="Classe Projeto" title="Classe de Projeto"
+                                        name="cmbClasseProjeto" onchange="cmbClasseProjeto_onchange()"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="lblNivel22" class="control-label col-sm-3">2º Nível Grupo 2<span class="text-danger">*</span></label>
+                            <label id="lblNivel32" class="control-label col-sm-3" style="display:none">3º Nível Grupo 2<span class="text-danger">*</span></label>
+                            <div class="col-sm-9" style="padding-top: 0 !important;">
+                                <input id="txtSequencial" name="txtSequencial" class="form-control"
+                                       placeholder="Digitar/Escolher Sequencial" data-val-required="Sequencial" required autocomplete="off"
+                                       maxlength="3" title="Seqüencial de Emissão (3 dígitos)"
+                                       onkeyup="txtSequencial_onKeyUP(this)"
+                                       list="listSequencial" />
+
+                                <datalist id="listSequencial"></datalist>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="lblNivel25" class="control-label col-sm-3">Revisão<span class="text-danger">*</span></label>
+                            <div class="col-sm-9" style="padding-top: 0 !important;">
+                                <input id="txtRevisao" name="txtRevisao" class="form-control uppercase"
+                                       onkeyup="txtRevisao_onKeyUP(this)" title="Revisão: 1 Letra + 1 Número ou somente 1 Letra"
+                                       placeholder="Digitar Revisão (Letra / Letra+Número)" required autocomplete="off" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Descrição<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9">
+                            <input id="txtdoc_descricao" name="txtdoc_descricao" class="form-control"
+                                   placeholder="Descrição" data-val="true"
+                                   data-val-required="Descrição" required
+                                   maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                   autocomplete="off"
+                                   onkeyup="txtdoc_descricao_onKeyUP(this)" />
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+            <label class="control-label col-sm-3">Classe<span class="text-danger">*</span> </label>
+            <div class="col-sm-9  " style="margin-top: 0px;   padding-top:0 !important;">
+                @Html.DropDownList("cmbDocClasse", null, null, new { @class = "form-control" })
+            </div>
+        </div>*@
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Arquivo Associado<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9">
+                            <input id="txtdoc_caminho" name="txtdoc_caminho"
+                                   readonly placeholder="Selecionar Arquivo no Servidor"
+                                   class="form-control" style="width: 85%; display: inline" />
+                            <button style="display:inline; width:40px; height:25px;" onclick="ListarArquivos(''); return false;">...</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Ou Fazer Upload e Associar</label>
+                        <div class="col-sm-9">
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="width:10%">
+                                        <label class="control-label col-sm-1">De</label>
+                                    </td>
+                                    <td style="width:90%">
+                                        <input id="txtdoc_caminho2" name="txtdoc_caminho2"
+                                               readonly placeholder="Selecionar Arquivo local"
+                                               class="form-control" style="width: 85%; display:inline" />
+
+                                        <button style="display:inline; width:40px; height:25px; display:inline" onclick="docBrowse.click(); return false;">...</button>
+                                        <input type="file" id="docBrowse" name="docBrowse" style="display:none" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="control-label col-sm-1">Para</label>
+                                    </td>
+                                    <td>
+                                        <input id="txtdoc_caminho3" name="txtdoc_caminho3"
+                                               readonly placeholder="Selecionar Pasta no Servidor"
+                                               class="form-control" style="width: 85%; display: inline; margin-top:7px !important; " />
+                                        <button style="display:inline; width:40px; height:25px; display:inline" onclick="ListarArquivos('',1); return false;">...</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button id="bntUpload" name="bntUpload" onclick="return UploadArquivo('docBrowse')" class="btn btn-primary btn-block btn-flat" style="width:85%; margin-top:7px !important; margin-left:3px !important">Upload</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <br /> 
+                    <input type="checkbox" id="chkdoc_ativo" style="margin-top: 10px; display:none;">
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar" onclick="return Documento_Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAssociarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Associar este Documento a Objeto</label></b></h3>
+                <div class=" col-sm-12">
+                    <input id="txtdoc_codigo2" name="txtdoc_codigo2" class="form-group txtdoc_codigoHeader" readonly style="text-align:center; width:90%" />
+                </div>
+            </div>
+
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="margin:10px !important">
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Localizar Objetos</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <label class="control-label">Código Objeto</label>
+                            <input id="txtLocalizarObjeto" name="txtLocalizarObjeto" class="form-control"
+                                   placeholder="Digite o Código/Iniciais do Objeto"
+                                   autocomplete="off"
+                                   onkeyup="if ((event.keyCode == 13) || (this.value.length > 1) ) { event.preventDefault(); LocalizarObjetos(); return false;} " />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <div class="btn-box-tool pull-right" style="margin-top:5px">
+                                <button type="reset" class="btn btn-info" onclick="return LimparLocalizarObjetos()"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                                <button class="btn btn-primary" onclick="return LocalizarObjetos();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="form-group" style="text-align:center">
+                        <div class="col-sm-12" style="text-align:left">
+                            <label class="control-label">Objetos Localizados</label>
+                            <div class="control-label"
+                                 style="height:100px; overflow-y:auto; border:solid 1px lightgray; border-radius:4px !important; text-align:left; padding: 6px;"
+                                 id="divObjetosLocalizados">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntAssociarObjeto" name="bntAssociarObjeto" onclick="return Documento_AssociarObjeto_Salvar();" class="btn btn-primary btn-block btn-flat">Associar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAssociarOS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Associar este Documento a Ordem de Serviço</label></b></h3>
+                <div class=" col-sm-12">
+                    <input id="txtdoc_codigo2a" name="txtdoc_codigo2a" class="form-group txtdoc_codigoHeader" readonly style="text-align:center; width:90%" />
+                </div>
+            </div>
+
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="margin:10px !important">
+
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Localizar Ordem de Serviço</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <label class="control-label">Código O.S.</label>
+                            <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo"
+                                   onkeydown="if (event.keyCode == 13) { return LocalizarOSs(); }"
+                                   placeholder="Digite Código/Iniciais da O.S.">
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="control-label">Código Objeto</label>
+                            <input type="text" class="form-control" id="txtFiltroObj_codigo"
+                                   onkeydown="if (event.keyCode == 13) { return LocalizarOSs(); }"
+                                   placeholder="Digite Código/Iniciais do Objeto">
+                        </div>
+
+                        <div class="col-sm-4">
+                            <label class="control-label">Tipo</label>
+                            @Html.DropDownList("cmbFiltroTiposOS", null, "-- Selecione --", new { @class = "form-control " })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <div class="btn-box-tool pull-right" style="margin-top:5px">
+                                <button type="reset" class="btn btn-info" onclick="return LimparLocalizarOSs()"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                                <button class="btn btn-primary" onclick="return LocalizarOSs();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group" style="text-align:center">
+                        <div class="col-sm-12" style="text-align:left">
+                            <label class="control-label">Ordens de Serviço Localizadas</label>
+                            <div class="control-label"
+                                 style="height:100px; overflow-y:auto; border:solid 1px lightgray; border-radius:4px !important; text-align:left; padding: 6px;"
+                                 id="divOSsLocalizadas">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntAssociarOS" name="bntAssociarOS" onclick="return Documento_AssociarOS_Salvar();" class="btn btn-primary btn-block btn-flat">Associar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalListarArquivos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:100px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Documento</label></b></h3>
+            </div>
+
+
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }"
+                  style=" margin-left: 0 !important; margin-right: 0 !important;" >
+                <br />
+
+                <div class="modal-body form-group"  style=" margin-left: 5px!important; margin-right: 5px!important;" >
+                    <div class="form-group" style="text-align:left !important; font-size:20px; margin-left:10px">
+                        <i class="fa fa-folder-open-o" aria-hidden="true">
+                            <label id="txtTituloBrowser" name="txtTituloBrowser" class="caminho" />
+                        </i>
+                    </div>
+
+                    <div class="form-group" id="divPastas">
+                        <table id="tblPastas" >
+                            <thead>
+                                <tr>
+                                    <th>Diretório</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+
+                    </div>
+                    <div class="form-group" id="divArquivos" style="padding:0;">
+                        <table id="tblArquivos" >
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Arquivo</th>
+                                    <th>Opções</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                    </div>
+                </div>
+            </form>
+
+
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .fa-sm {
+        font-size: 0.63em;
+    }
+</style>
+
+<div class="modal fade" id="modalListarPastasServidor" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:100px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Pasta no Servidor</label></b></h3>
+            </div>
+
+
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }"
+                   style=" margin-left: 5px!important; margin-right: 5px!important;"  >
+                <br />
+
+                <div class="modal-body form-group"  style=" margin-left: 0 !important; margin-right: 0 !important;" >
+                    <div class="form-group" style="text-align:left !important;  font-size:20px; margin-left:5px">
+                        <i class="fa fa-folder-open-o" aria-hidden="true">
+                            <label id="txtTituloBrowser2" name="txtTituloBrowser2" class="caminho" />
+                        </i>
+                    </div>
+
+                    <div class="form-group" id="divPastas">
+
+                        <span class="fa-stack fa-sm"  style="margin-left:20px;" >
+                            <i class="fa fa-folder-o fa-stack-2x"></i>
+                            <i class="fa fa-plus fa-stack-1x"></i>
+                        </span> <a href="#" onclick="btn_NovaPasta_click()" title="Nova Pasta">Criar Nova Pasta</a>
+
+                        <table id="tblPastasServidor" >
+                            <thead>
+                                <tr>
+                                    <th>Diretório</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                    </div>
+                </div>
+            </form>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+

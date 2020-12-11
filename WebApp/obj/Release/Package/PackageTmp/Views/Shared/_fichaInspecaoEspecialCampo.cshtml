@@ -1,0 +1,554 @@
+﻿
+
+<style type="text/css">
+    #divFicha4_CAMPO option:first-child {
+        color: black !important;
+    }
+
+    #divFicha4_CAMPO option {
+        color: black !important;
+    }
+
+        #divFicha4_CAMPO option::selection {
+            color: blue !important;
+        }
+
+    .centroH {
+        text-align: center;
+    }
+
+    .contornoBranco {
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+
+    .lblTitulos {
+        height: 25px;
+        color: #FFFFFF;
+        background-color: gray;
+        font-weight: bold;
+        /*border: solid 1px black;*/
+        padding-left: 5px;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos2 {
+        height: 25px;
+        background-color: #CCCCCC;
+        font-weight: bold;
+        text-align: center;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos3 {
+        height: 25px;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        text-align: left;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        padding-left: 5px;
+    }
+
+    .lblsBold {
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px !important;
+    }
+
+    .lblsNormal {
+        font-weight: normal;
+        height: 25px;
+        margin: 0 !important;
+        margin-top: 5px !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px;
+    }
+
+    input.txts, .txts {
+        border: solid 1px lightgray;
+        width: 75%;
+        height: 95%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        resize: none;
+    }
+
+    input.txts50, .txts50 {
+        border: solid 1px lightgray;
+        width: 50%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    input.txts25, .txts25 {
+        border: solid 1px lightgray;
+        width: 25%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    .cmbs {
+        border: solid 1px lightgray;
+        /*width: 50%;*/
+        margin: 0 !important;
+        margin-left: 3px;
+        margin-bottom: 0 !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .cmbs_anom {
+        border: solid 1px lightgray;
+        /*width: 50%;*/
+        margin: 0 !important;
+        margin-left: 3px;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+    .cmbsNoWidth {
+        border: solid 1px lightgray;
+        /*width: 10%;*/
+        margin-left: 3px;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue !important;
+    }
+
+    #divFicha4_CAMPO .cmbs option:checked,
+    #divFicha4_CAMPO .cmbsNoWidth option:checked {
+        border: solid 1px lightgray;
+        margin-left: 3px;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .txtsNoWidth {
+        border: solid 1px lightgray;
+        width: 10%;
+        margin-left: 3px;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        margin-top: 5px !important;
+    }
+
+    .larguraPadrao {
+        width: 5%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    .altura50 {
+        height: 50px;
+    }
+
+    .borderBottom {
+        border-bottom: solid 1px black;
+    }
+
+    .borderTop {
+        border-top: solid 1px black;
+    }
+
+    .borderLeft {
+        border-left: solid 1px black;
+    }
+
+    .borderRight {
+        border-right: solid 1px black;
+    }
+
+    .borderBottomPt {
+        border-bottom: dotted 1px black;
+    }
+
+    .borderTopPt {
+        border-top: dotted 1px black;
+    }
+
+    .borderLeftPt {
+        border-left: dotted 1px black;
+    }
+
+    .borderRightPt {
+        border-right: dotted 1px black;
+    }
+
+    .borderNone {
+        border: none
+    }
+
+    .borderAll {
+        border: solid 1px black;
+    }
+
+    #divFicha4_CAMPO input:disabled,
+    #divFicha4_CAMPO textarea:disabled,
+    #divFicha4_CAMPO select:disabled {
+        background-color: transparent;
+        border: none !important;
+    }
+
+    #divFicha4_CAMPO input:enabled,
+    #divFicha4_CAMPO textarea:enabled,
+    #divFicha4_CAMPO select:enabled {
+        background-color: white;
+        border: solid 1px black;
+    }
+
+    #divFicha4_CAMPO select:disabled {
+        background-color: transparent;
+        border: none !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .paddingLeft5 {
+        padding-left: 5px !important
+    }
+
+    .cabecalho {
+        font-family: Calibri;
+        font-size: 10pt;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .fontePadrao {
+        font-family: Calibri;
+        font-size: 10pt;
+        text-align: left;
+    }
+</style>
+
+<div id="divFicha4_CAMPO" style="font-family:Calibri; font-size:10.5pt; ">
+
+    <style>
+        .cabecalho_subdivisao1 { font-family: Calibri; font-size: 8pt; font-weight:bold; color:red;  }
+        .cabecalho_subdivisao2 { font-family: Calibri; font-size: 8pt; font-weight: bold; color: green; }
+        .cabecalho_grupos { font-family: Calibri; font-size: 8pt; font-weight: bold; color: blue; }
+        .cabecalho_objeto { font-family: Calibri; font-size: 8pt; font-weight: normal; color: blue;}
+        .linha_normal {  font-family: Calibri; font-size: 8pt; font-weight: normal; color: black; }
+    </style>
+
+    <table id="tblFicha4_INSPECAO_ESPECIAL_CAMPO" cellpadding="0" cellspacing="0" style="width: 100%; margin-bottom:20px; border:solid 1px black">
+        <tr style="visibility:hidden;">
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header0a" style="display:none;"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+
+            <td class="larguraPadrao" style="display:none"></td>
+            <td class="larguraPadrao" style="display:none"></td>
+            <td class="larguraPadrao" style="display:none"></td>
+            <td class="larguraPadrao" style="display:none"></td>
+        </tr>
+
+
+        @*INICIO CABECALHO*@
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header1a" class="lblTitulos" style="margin:0; padding:0; display:none;"></td>
+            <td colspan="17" class="lblTitulos" style="margin:0; padding:0; text-align:right; margin-right:5px;">
+                <table style="width:100%">
+                    <tr>
+                        <td></td>
+                        <td style="width:25px !important; text-align:right;margin-right:5px; ">
+                            <button id="btn_Salvar_INSPECAO_ESPECIAL_CAMPO"
+                                    type="button"
+                                    onclick="return SalvarDados_Ficha4_CAMPO_VALORES(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; text-align:right;margin-right:5px; ">
+                            <button id="btn_Cancelar_INSPECAO_ESPECIAL_CAMPO"
+                                    type="button"
+                                    onclick="return CancelarDados_Ficha4_CAMPO(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_INSPECAO_ESPECIAL_CAMPO"
+                                    type="button"
+                                    onclick="return EditarDados_Ficha4_CAMPO(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
+                                    title="Editar"
+                                    style="border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+
+                    </tr>
+                </table>
+            </td>
+
+            <td colspan="4" style="display:none"></td>
+        </tr>
+
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header0b" style="display:none;"></td>
+            <td class="borderLeft"><label class="lblsBold">OAE:</label></td>
+            <td colspan="3" ><label class="txts" id="lblOAE" style="border:none !important"></label></td>
+
+            <td colspan="10" style="text-align:center; height:20px"><label class="lblsBold">DEPARTAMENTO DE ESTRADAS DE RODAGEM DO ESTADO DE SÃO PAULO - DER/SP</label></td>
+
+            <td ><label class="lblsBold" id="lbldatainspcampo">DATA:</label></td>
+            <td colspan="2" class="borderRight"><input disabled id="txt_ins_anom_data" class="txts" readonly style="width:95%" /></td>
+
+            <td style="display:none"></td>
+            <td style="display:none"></td>
+            <td style="display:none"></td>
+            <td style="display:none"></td>
+        </tr>
+
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header0c" style="display:none;"></td>
+            <td class="borderLeft"><label class="lblsBold" id="lblins_anom_OAE">Responsável:</label></td>
+            <td colspan="3"  ><input disabled id="txt_ins_anom_Responsavel" class="txts" /></td>
+            <td colspan="10" style="text-align:center; height:20px"><label class="lblsBold">FICHA DE CADASTRAMENTO DE ANOMALIAS - INSPEÇÃO ESPECIAL</label></td>
+
+            <td colspan="3" class="borderRight"><label class="lblsBold" id="lblFL">Fl:</label></td>
+
+            <td style="display:none"></td>
+            <td style="display:none"></td>
+            <td style="display:none"></td>
+            <td style="display:none"></td>
+        </tr>
+
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header2a" rowspan="3" class="borderAll cabecalho" style="display:none;">CÓDIGO DO OBJETO</td>
+            <td rowspan="3" class="borderAll cabecalho ">
+                <table style="width:100%;">
+                    <tr>
+                        <td style="width:26px">
+                            <button id="btn_Adicionar_Objeto_Anomalia"
+                                    type="button"
+                                    onclick="return Ficha4_CAMPO_btn_Adicionar_Objeto_Anomalia_onclick()"
+                                    title="Inserir Objeto"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-plus text-success contornoBranco"></span>
+                            </button>
+                        </td>
+                        <td style="text-align:left">
+                            <label class="lblsBold">
+                                ITEM
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td rowspan="3" class="borderAll cabecalho ">LOCALIZAÇÃO (SUB-TRECHO)  ELEMENTO ESTRUTURAL</td>
+            <td rowspan="2" colspan="3" class="borderAll cabecalho ">TIPO DE ANOMALIA</td>
+            <td rowspan="3" class="borderAll cabecalho ">NÍVEL DE ALERTA</td>
+            <td rowspan="3" class="borderAll cabecalho ">QUANTI DADE</td>
+            <td rowspan="3" class="borderAll cabecalho ">ESPAÇA-MENTO MÉDIO (cm)</td>
+            <td colspan="4" class="borderAll cabecalho ">DIMENSÕES</td>
+            <td rowspan="3" class="borderAll cabecalho ">CAUSA PROVÁVEL</td>
+            <td rowspan="3" class="borderAll cabecalho ">FOTO Nº</td>
+            <td rowspan="3" class="borderAll cabecalho ">CROQUI Nº</td>
+            <td rowspan="3" class="borderAll cabecalho ">DESENHO</td>
+            <td rowspan="3" class="borderAll cabecalho ">OBSERVAÇÕES</td>
+            <td rowspan="3" class="borderAll cabecalho " style="display:none">REPARO INDICADO</td>
+            <td rowspan="3" class="borderAll cabecalho " style="display:none">QUANTIDADE INDICADA</td>
+            <td rowspan="3" class="borderAll cabecalho " style="display:none">REPARO ADOTADO</td>
+            <td rowspan="3" class="borderAll cabecalho " style="display:none">QUANTIDADE ADOTADA</td>
+        </tr>
+        <tr>
+            <td class="borderAll cabecalho ">LARG.</td>
+            <td class="borderAll cabecalho ">COMPR</td>
+            <td class="borderAll cabecalho " colspan="2">ABERTURA (mm)</td>
+        </tr>
+        <tr id="tr_pai">
+            <td class="borderAll cabecalho ">Nº</td>
+            <td class="borderAll cabecalho ">Sigla</td>
+            <td class="borderAll cabecalho ">Cód</td>
+
+            <td class="borderAll cabecalho ">(cm)</td>
+            <td class="borderAll cabecalho ">(cm)</td>
+            <td class="borderAll cabecalho ">MÍNIMA</td>
+            <td class="borderAll cabecalho ">MÁXIMA</td>
+        </tr>
+
+        @*FIM CABECALHO*@
+
+        @*  AQUI ENTRA A TABELA CRIADA DINAMICAMENTE*@
+
+
+        @* RODAPÉ *@
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header3a" style="display:none;" class="borderTop"></td>
+            <td colspan="17" class="cabecalho borderTop borderLeft borderRight" style="text-align:left">QUADRO A:</td>
+            <td colspan="6" class="fontePadrao borderTop" style="display:none"></td>
+        </tr>
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header4a" style="display:none;"></td>
+            <td class="fontePadrao borderLeft borderRight" colspan="17" >Houve dúvidas para identificar alguma anomalia?
+                <select name="DuvidasAnomalia" id="cmb_ins_anom_quadroA_1" disabled >
+                    <option value=""></option>
+                    <option value="sim">SIM</option>
+                    <option value="nao">NÃO</option>
+                </select>
+            </td>
+            <td colspan="6" class="fontePadrao" style="display:none"></td>
+        </tr>
+        <tr>
+            <td id="tdFICHA4_CodObjeto_ian_id_header5a" style="display:none;"></td>
+            <td class="fontePadrao borderLeft borderRight" colspan="17">
+                Em caso positivo identificar as anomalias  através do nº:
+            <input id="txt_ins_anom_quadroA_2" class="txts" style="width:45%;"  disabled />
+            </td>
+            <td colspan="6" class="fontePadrao" style="display:none"></td>
+        </tr>
+
+    </table>
+
+
+</div>
+
+
+<div class="modal fade" id="modalSelecionarObjetoLocalizacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Selecionar Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="margin: 0px;">
+
+                    <div id="Ficha4_CAMPO_divSubdivisao1" class="form-group">
+                        <label class="control-label col-sm-2">Subdivisão 1</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="Ficha4_CAMPO_cmbSubdivisao1" name="Ficha4_CAMPO_cmbSubdivisao1"
+                                    onchange="Ficha4_CAMPO_cmbSubdivisao1_onchange()"
+                                    placeholder="Subdivisão 1">
+                                <option value="-1" selected disabled>-- Selecione --</option>
+                                <option value="11">Superestrutura</option>
+                                <option value="12">Mesoestrutura</option>
+                                <option value="13">Infraestrutura</option>
+                                <option value="14">Encontro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="Ficha4_CAMPO_divSubdivisao2" class="form-group" style="display:none">
+                        <label class="control-label col-sm-2">Subdivisão 2</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="Ficha4_CAMPO_cmbSubdivisao2" name="Ficha4_CAMPO_cmbSubdivisao2"
+                                    onchange="Ficha4_CAMPO_cmbSubdivisao2_onchange()"
+                                    placeholder="Subdivisão 2"></select>
+                        </div>
+                    </div>
+
+                    <div id="Ficha4_CAMPO_divSubdivisao3" class="form-group" style="display:none">
+                        <label class="control-label col-sm-2">Subdivisão 3</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="Ficha4_CAMPO_cmbSubdivisao3" name="Ficha4_CAMPO_cmbSubdivisao3"
+                                    onchange="Ficha4_CAMPO_cmbSubdivisao3_onchange()"
+                                    placeholder="Subdivisão 3"></select>
+                        </div>
+                    </div>
+
+                    <div id="Ficha4_CAMPO_divGrupoObjetos" class="form-group" style="display:none">
+                        <label class="control-label col-sm-2">Grupo de Objetos</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="Ficha4_CAMPO_cmbGrupoObjetos" name="Ficha4_CAMPO_GrupoObjetos"
+                                    onchange="Ficha4_CAMPO_cmbGrupoObjetos_onchange()"
+                                    placeholder="Grupo de Objetos"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="Ficha4_CAMPO_divLocalizacaoObjeto">
+                        <label class="control-label col-sm-2">Objeto</label>
+                        <div class="col-sm-10">
+                            <div id="divFicha4_CAMPO_LocalizacaoObjeto" class="control-label" style="height:100px; overflow-y:auto; border:solid 1px lightgray; border-radius:4px !important; text-align:left; padding: 6px;">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="Ficha4_CAMPO_bntSalvar_Localizacao" name="Ficha4_CAMPO_bntSalvar_Localizacao" onclick="return Ficha4_CAMPO_bntSalvar_Localizacao_click(); return false;" class="btn btn-primary btn-block btn-flat">Adicionar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    if (paginaPai == "Objeto")
+        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
+    else
+        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
+
+    //moment.locale('pt-br');         // pt-br
+    //$.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    //jQuery(function ($) {
+    //    $.datepicker.regional['pt-BR'] = datepicker_regional;
+    //    $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+    //});
+
+    //$('#txt_atr_id_103').datepicker({
+    //    dateFormat: 'dd/mm/yy'
+    //});
+
+    //$('#txt_atr_id_104').datepicker({
+    //    dateFormat: 'dd/mm/yy'
+    //});
+
+</script>

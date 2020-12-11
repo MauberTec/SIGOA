@@ -1,0 +1,455 @@
+﻿@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+
+    if (Session["Usuario"] == null)
+    {
+        if (!Response.IsRequestBeingRedirected)
+        {
+           // Response.Redirect("~/AcessoNegado/AcessoNegado");
+            Response.Redirect("~/Login/Index");
+        }
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/ionicons.min.css" rel="stylesheet" />
+    @*<link href="~/Content/jquery-jvectormap.css" rel="stylesheet" />*@
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/skin-blue.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link href="~/Content/DataTables/datatables.css" rel="stylesheet" />
+    <link href="~/Content/Base.css" rel="stylesheet" />
+    <script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+    <script src="~/Content/plugins/sweetalert2.all.min.js"></script>
+    <style>
+        .tabulacao {
+            margin-left: 15px !important;
+        }
+        /* o important é necessario nesse caso */
+        .margem3px {
+            padding-left: 3px;
+        }
+
+        .icon1Size {
+            height: 45px !important;
+            width: 45px !important;
+        }
+
+        .swal-height {
+            height: 180px;
+        }
+    </style>
+
+    <script>
+
+        function Uploadimage(usu_id_sel, imgBrowseCtl, fotoAnterior) {
+            $('#txtusu_foto1').val("@gUsuario.usu_foto");
+            var file = $('#' + imgBrowseCtl).get(0).files;
+
+            // checa o tamanho do arquivo
+            var tamanhoMb =  (file.item(0).size / 1024 /1024);
+            if (tamanhoMb > 2) {
+                showMessage('warning', 'Aviso', 'O tamanho máximo permitido é 2Mb');
+
+                return false;
+            }
+
+            var porcentagem = 0;
+            let timerInterval
+            Swal.fire({
+                title: 'Enviando imagem para o servidor',
+                html: '<b></b>%',
+                timer: 200000,
+                timerProgressBar: false,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading()
+                    timerInterval = setInterval(() => {
+                        const content = Swal.getContent()
+                        if (content) {
+                            const b = content.querySelector('b')
+                            if (b) {
+                                b.textContent = porcentagem;
+                               // Swal.getTimerLeft()
+                            }
+                        }
+                    }, 100)
+                },
+                onClose: () => {
+                    clearInterval(timerInterval)
+                    return;
+                }
+            }).then((result) => {
+                Swal.close();
+                    return;
+                })
+
+            var data = new FormData;
+            data.append("ImageFile", file[0]);
+            data.append("FotoAnterior", fotoAnterior);
+            data.append("usu_id", usu_id_sel);
+
+            var usu_id_logado = @gUsuario.usu_id;
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            percentComplete = parseInt(percentComplete * 100);
+
+                            porcentagem = percentComplete;
+                            if (percentComplete === 100) {
+                                Swal.close();
+                            }
+
+                        }
+                    }, false);
+
+                    return xhr;
+                },
+
+                type: "Post",
+                url: "/Usuario/Usuario_ImageUpload",
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != "") {
+                        var src = response;
+                        // se o usuario selecionado = usuario logado
+                        if (usu_id_sel == usu_id_logado) {
+                            document.getElementById("imgUsu_foto1").setAttribute('src',src);
+                            document.getElementById("imgUsu_foto2").setAttribute('src', src);
+                            document.getElementById("imgUsu_foto3").setAttribute('src', src);
+                        }
+
+                        if ($("#imgUsuario").length > 0) { // se tem imgUsuario, significa grid de Usuario
+                            document.getElementById("imgUsuario").setAttribute('src', src);
+
+                            $("#imgUsuario").attr("src", src);
+                            $('#txtusu_foto').val(src);
+                            $('#tblUsuarios').DataTable().ajax.reload(null, false);
+                        }
+
+
+                        usu_foto: $('#txtusu_foto1').val(response);
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/inputPaging.js"></script>
+
+
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="#" class="logo" onclick="Logout();">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><img src="@Url.Content("~/images/logo_branco.png")" width="50" /></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><img src="@Url.Content("~/images/logo_branco.png")" width="100" /></span>
+            </a>            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <span class="title-system">SIGOA - Sistema de Gerenciamento de Obras de Arte</span>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav" id="ulDropDown">
+                        <!--<li class="dropdown tasks-menu" style="cursor: pointer;">
+                            <a onclick="helpOnline();">
+                                AJUDA
+                                <i class="fa fa-question-circle"></i>
+                            </a>
+                        </li>-->
+
+                        <li class="dropdown user user-menu" id="liDropDown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <img src=@Url.Content(@gUsuario.usu_foto) id="imgUsu_foto1" class="user-image" alt="User Image">
+                                <span class="hidden-xs">Bem Vindo, @gUsuario.usu_usuario</span>
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src=@Url.Content(@gUsuario.usu_foto) id="imgUsu_foto2" class="img-circle" alt="User Image">
+                                    <br />
+                                    <input type="file" id="imageBrowse1" name="imageBrowse1" style="display:none" accept="image/jpeg" />
+                                    <input type="text" id="txtusu_foto1" style="display:none" />
+                                    <a href="#" style="color:white; background-color:transparent;" id="btnBrowse1">Trocar Imagem</a>
+
+                                    <p>
+                                        <div style="color:white; font-weight:bold">@gUsuario.usu_nome</div>
+                                        @*<div style="color:white; font-weight:bold">@gUsuario.areaUsuario.regionalUsuario.reg_nome - @gUsuario.areaUsuarioModel.are_nome</div>*@
+                                    </p>
+                                </li>
+
+                                <li class="user-body" style="display:none">
+                                    <div class="form-group">
+                                        <div id="uploadedImage" style="text-align:center"></div>
+                                        <br />
+                                        <div class="form-group" style="display:none;">
+                                            <label class="control-label col-sm-2" for="usu_id">ID</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="txtusu_id1" placeholder="Id" disabled="disabled" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </li>
+
+
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a class="btn btn-default btn-flat" onclick="ModalTrocaSenha();"><i class="fa fa-key"></i> Alterar Senha</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a class="btn btn-default btn-flat" id="btnSair" onclick="Logout();"><i class="fa fa-sign-out"></i> Sair</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- *************** INICIO LATERAL    ********************************************************************************* -->
+
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar" style="height: auto;">
+                <!-- Sidebar user panel -->
+                <div class="user-panel" style="height:55px;" >
+                    <div class="pull-left image">
+                        <img src=@Url.Content(@gUsuario.usu_foto) id="imgUsu_foto3" class="img-circle icon1Size" alt=@gUsuario.usu_usuario>
+                    </div>
+                    <div class="pull-left info truncate">
+                        <p>@gUsuario.usu_nome</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul id="menu" class="sidebar-menu tree" data-widget="tree">
+                    <li class="header" style="padding:0px"></li>
+                    <li>
+                        <a href="/Home/Index">
+                            <i class="fa fa-home active"></i> <span>Home</span>
+                        </a>
+                    </li>
+
+                    @{ // montagem do menu lateral segundo os privilegios de cada usuario
+
+                        int i = 0;
+                        while (i < gUsuario.lstMenus.Count)
+                        {
+
+                            if ((i < gUsuario.lstMenus.Count - 1) && (gUsuario.lstMenus[i + 1].men_pai_id > 0) && (gUsuario.lstMenus[i].men_pai_id <= 0)
+                                )
+                            {
+                                <li class="treeview">
+                                    @{string sMenuPai = @gUsuario.lstMenus[i].LinkText;}
+
+                                    <a href="#" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
+                                        <i class="@gUsuario.lstMenus[i].men_icone"></i> <span>@gUsuario.lstMenus[i].LinkText</span>
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+
+                                    <ul class="treeview-menu">
+                                        @{
+                                            i++;
+
+                                            while ((i < gUsuario.lstMenus.Count) && (gUsuario.lstMenus[i].men_pai_id >= 0))
+                                            {
+                                                <li class="tabulacao">
+                                                    <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="@sMenuPai">
+                                                        <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                        <span>@gUsuario.lstMenus[i].LinkText </span>
+                                                    </a>
+                                                </li>
+                                                i++;
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                                i--;
+                            }
+
+                            if (((i == gUsuario.lstMenus.Count - 1) && (gUsuario.lstMenus[i].men_pai_id < 0))
+                                    || ((i <= gUsuario.lstMenus.Count - 2) && (gUsuario.lstMenus[i + 1].men_pai_id < 0) && (gUsuario.lstMenus[i].men_pai_id < 0))
+                                )
+                            {
+                                <li>
+                                    <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
+                                        <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                        <span>@gUsuario.lstMenus[i].LinkText </span>
+                                    </a>
+                                </li>
+                            }
+                            i++;
+                            if (i >= gUsuario.lstMenus.Count) { break; };
+
+                        } // while
+                    }
+
+                </ul>
+
+            </section>
+        </aside>
+
+        <!-- *************** FIM LATERAL    ********************************************************************************* -->
+        <!-- *************** INICIO CENTRAL    ********************************************************************************* -->
+
+        <div class="content-wrapper">
+            <section class="content" style="margin-top:-17px;">
+                <section class="content-header">
+                    <h1 id="h1Titulo">Home</h1>
+                    <ol class="breadcrumb" id="menuSuperior">
+                        <li><i class="fa fa-home"></i><a href="/Home/Index" class="margem3px"> Home</a></li>
+                        <li id="liSubMenu1"><i class="" id="iconSubMenu1"></i><a href="#" id="subMenu1" class="margem3px"> </a></li>
+                        <li id="liSubMenu2" class="active"><span id="subMenu2"> </span></li>
+                    </ol>
+                </section>
+
+                @RenderBody()
+                @RenderSection("Scripts", required: false)
+
+
+            </section>
+        </div>
+        <!-- *************** FIM CENTRAL    ********************************************************************************* -->
+
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                Versão: 1.0.0
+            </div>
+            <strong>Copyright &copy; 2020 <a href="#">DER</a>. Todos os direitos reservados</strong>
+            <label class="col-md-offset-3">
+                Sua sessão expira em <span id="tempoSessao"></span> minutos.
+            </label>
+        </footer>
+    </div>
+
+    <div class="modal fade" id="modalTrocarSenhaAtual" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="margin-left:150px; width:550px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title text-center" id="mySpanArrematante"><b>Alterar Senha</b></h3>
+                </div>
+                <form>
+                    <br />
+                    <div class="modal-body form-group">
+                        <div class="row">
+                            <div class="col-md-offset-3">
+                                <label>Senha Atual<span class="text-danger">*</span> </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 form-group has-feedback input-group">
+                                <input type="password" id="txtSenhaAtual" name="txtSenhaAtual" class="form-control" placeholder="Senha Atual" ToolTip="Digite Senha Atual" data-val="true" data-val-required="- digite a senha atual." required />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-3">
+                                <label>Nova Senha (Mínimo 5 caracteres)<span class="text-danger">*</span> </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 form-group has-feedback input-group">
+                                <input type="password" id="txtSenhaNova" name="txtSenhaNova"
+                                       onkeyup="validaTxtSenha(txtSenhaNova)"
+                                       onblur="validaTxtSenha(txtSenhaNova)"
+                                       class="form-control" placeholder="Nova Senha"
+                                       ToolTip="Digite Nova Senha" data-val="true"
+                                       data-val-required="- digite a nova senha."
+                                       pattern=".{5,255}" title="Mínimo 5 caracteres"
+                                       required />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-3">
+                                <label>Confirmar Senha<span class="text-danger">*</span> </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3 form-group has-feedback input-group">
+                                <input type="password" id="txtSenhaNovaConfirmar" name="txtSenhaNovaConfirmar"
+                                       onkeyup="validaTxtSenha(txtSenhaNovaConfirmar)"
+                                       onblur="validaTxtSenha(txtSenhaNovaConfirmar)"
+                                       class="form-control"
+                                       placeholder="Confirmar Senha" ToolTip="Confirme Nova Senha"
+                                       data-val="true" data-val-required="- digite para confirmar a nova senha."
+                                       pattern=".{5,255}" title="Mínimo 5 caracteres"
+                                       required />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div style="margin-left:33.33%; margin-right:33.33%">
+
+                            <button id="bntTrocarSenha" name="bntTrocarSenha" onclick="return AlterarSenhaAtual();" class="btn btn-primary btn-block btn-flat"> Alterar Senha</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/fastclick.js"></script>
+    <script src="~/Content/js/adminlte.min.js"></script>
+    <script src="~/Content/js/jquery.sparkline.min.js"></script>
+    <script src="~/Content/js/jquery.slimscroll.min.js"></script>
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Content/plugins/jquery.mask.js"></script>
+    <script src="~/Content/plugins/sweetalert2.min.js"></script>
+    <script src="~/Scripts/Service.js"></script>
+    <script src="~/Content/DataTables/helperDataTable.js"></script>
+    <script src="~/Scripts/TempoSessao.js"></script>
+
+    @section Scripts{}
+    <script>
+
+        var usu_id = @gUsuario.usu_id;
+        var usu_trocar_senha = parseInt(@gUsuario.usu_trocar_senha);
+        if (usu_trocar_senha == 1)
+        {
+            ModalTrocaSenha();
+        }
+
+    </script>
+    <script src="~/Scripts/Shared/Shared.js"></script>
+    <link href="~/Content/Base.css" rel="stylesheet" />
+</body>
+</html>

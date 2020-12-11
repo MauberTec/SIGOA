@@ -1,0 +1,771 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 130 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(130)); // id DO MODULO "Objeto/Objeto"
+
+    UsuarioPermissoes permissoesAssociarDOCUMENTO = lstPermissoes.Find(x => x.mod_id.Equals(150)); // id DO MODULO "Associação de Documentos"
+    if (permissoesAssociarDOCUMENTO == null)
+    {
+        permissoesAssociarDOCUMENTO = new UsuarioPermissoes();
+        permissoesAssociarDOCUMENTO.mfl_leitura = 0;
+        permissoesAssociarDOCUMENTO.mfl_escrita = 0;
+        permissoesAssociarDOCUMENTO.mfl_inserir = 0;
+        permissoesAssociarDOCUMENTO.mfl_excluir = 0;
+    }
+
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 130 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+
+<h2></h2>
+<script>
+    // variavel usada para identificar a view origem da ficha cadastral shared
+    var paginaPai = "Objeto";
+    var qualFicha = 1;
+
+</script>
+
+<style>
+    .codigoHeader {
+        color: red !important;
+        font-weight: bold;
+        font-size: 18pt !important;
+        margin: 0px;
+        background-color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .maxwidthDescricao {
+        max-width: 400px !important;
+    }
+
+    .dropbtn {
+        background-color: #3c8dbc;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        width: 98%;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #3c8dbc;
+    }
+
+    .visibilityHidden {
+        visibility: hidden !important;
+    }
+</style>
+
+<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
+
+
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Objetos ..::";
+    }
+</form>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-3">
+                    <label class="control-label">Código</label>
+                    <input type="text" class="form-control" id="txtFiltroObj_Codigo"  maxlength="200" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Descrição</label>
+                    <input type="text" class="form-control" id="txtFiltroObj_Descricao" maxlength="255" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+
+                </div>
+
+                <div class="col-sm-3 ">
+                    <label class="control-label">Classe</label>
+                    @Html.DropDownList("cmbFiltroClassesObjeto", null, "-- Selecione --", new { @class = "form-control " })
+                </div>
+
+                <div class="col-sm-3 ">
+                    <label class="control-label">Tipo</label>
+                    @Html.DropDownList("cmbFiltroTiposObjeto", null, "-- Selecione --", new { @class = "form-control " })
+                </div>
+
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltro();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltro();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <table id="tblObjetos">
+                    <thead>
+                        <tr>
+                            <th>row_numero</th>
+                            <th>temFilhos</th>
+                            <th>row_expandida</th>
+                            <th>obj_id</th>
+                            <th>clo_id</th>
+                            <th>tip_id</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Classe</th>
+                            <th>Tipo</th>
+                            <th>nNivel</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                @{
+                    if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                    {
+                        <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="bntNovo_click();">Novo Objeto</button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<style>
+    .altura30 {
+        height: 30px;
+    }
+
+    .backgrdTransparent {
+        background-color: transparent !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+</style>
+
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <ul class="nav nav-tabs" id="Tabs" role="tablist">
+                    <li class="active">
+                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral">Atributos</a>
+                    </li>
+                    <li>
+                        <a id="tabDocumentosAssociadosHeader" data-toggle="tab" href="#tabDocumentosAssociados">Documentos Associados</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="TabContent">
+
+                    <div class="tab-pane fade in active" id="tabFichaInspecaoCadastral" role="tabpanel" aria-labelledby="tabFichaInspecaoCadastral">
+                        <br /><br />
+                        @*<div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <h3 class="modal-title"><b><label id="lblModalHeader">Atributos</label></b></h3>
+                                    </div>
+                                </div>
+                            </div>*@
+
+                        <br /><br /><br />
+
+                        @{
+                            Html.RenderPartial("_fichaInspecaoCadastral");
+                        }
+
+                    </div>
+
+                    <div class="tab-pane fade" id="tabDocumentosAssociados" role="tabpanel" aria-labelledby="tabDocumentosAssociados">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    @{
+                                        if (@permissoesAssociarDOCUMENTO.mfl_inserir > 0)
+                                        {
+                                            <button type="button" class="btn btn-primary " onclick="return AssociarDocumento();">Associar Documento(s)</button>
+                                        }
+                                    }
+                                </div>
+                                <div class="col-sm-10">
+                                    <h3 class="modal-title" style="text-align:center"><b><label id="HeaderObjDocumentos">Documentos associados ao Objeto</label></b></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+
+                        <table id="tblDocumentosAssociados">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Documento</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                    <th>Caminho</th>
+                                    <th>Opções</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<br />
+<br />
+<br />
+
+
+<input type="hidden" id="hddnSelectedtip_id" name="hddnSelectedtip_id" value="-1" />
+<input type="hidden" id="hddnSelectedclo_id" name="hddnSelectedclo_id" value="-1" />
+<input type="hidden" id="hddnSelectedId_obj_id" name="hddnSelectedId_obj_id" value="-1" />
+
+
+<style>
+    .dataTables_filter {
+        display: none
+    }
+
+    #tblObjAtributosFixosPOPUP tr.even {
+        background-color: #ffffff !important;
+    }
+
+    .fonte14 {
+        font-size: 12.5pt;
+        font-weight: bold;
+    }
+
+    #tblObjAtributosFixosPOPUP tr:hover,
+    #tblObjAtributosFixosPOPUP td:hover,
+    #tblObjAtributosFixosPOPUP hover {
+        background-color: #ffffff !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    /*. {
+        font-family: 'Lucida Console';
+        padding-top: 7px;
+        font-weight: normal !important;
+    }*/
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+</style>
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+                var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+                var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+                var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+                var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+
+}
+<script src="~/Scripts/Base.js"></script>
+<script src="~/Scripts/Objeto/Objeto.js"></script>
+
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+<script src="~/Content/plugins/jquery.mask.min.js"></script>
+<script src="~/Content/plugins/jquery.mask.js"></script>
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Editar Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="padding-top: 3px; padding-bottom:0; margin: 5px !important;">
+                    <div class="form-group" style="margin:0px; padding:0 !important;">
+                        <div class="col-sm-12" style="margin-bottom: 10px; padding-top:0 !important; text-align:center; font-size:12pt;">
+                            <label id="lblObjetoSelecionado"
+                                   name="lblObjetoSelecionado"
+                                   class="txtdoc_codigoHeader" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Classe</label>
+                        <div class="col-sm-10 ">
+                            <label id="lblClasseSelecionada"
+                                   style="border:none !important;box-shadow:none !important; text-align:left; padding-right:0px;"
+                                   class="control-label "></label>
+
+                            <select id="cmbClassesObjeto" style="display:none;"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Tipo<span class="text-danger">*</span></label>
+                        <div class="col-sm-10 ">
+                            <label id="lblTipoSelecionado"
+                                   style="border:none !important;box-shadow:none !important; text-align:left; padding-right:0px;"
+                                   class="control-label "></label>
+
+
+                            <select class="form-control" id="cmbTiposObjeto"
+                                    placeholder="--Selecione--"
+                                    onchange="preencheDescricao()"
+                                    name="cmbTiposObjeto"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="vertical-align:middle !important">
+                        <label class="control-label col-sm-2">Código<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td id="tdLblPrefixo" style="vertical-align: text-bottom;">
+                                        <label id="lblPrefixo"
+                                               style="border:none !important;box-shadow:none !important; text-align:right; padding-right:0px; padding-left:0px;"
+                                               class="form-control"></label>
+                                    </td>
+
+                                    <td>
+                                        <select class="form-control" id="cmbAEVCVG" style="width:60px;display:none; margin-right:10px; margin-top:-8px; "
+                                                onchange="preencheDescricao('txtcodigo');"></select>
+                                    </td>
+
+                                    <td style="display:none;" id="tdTxtCodigo">
+                                        <input id="txtcodigo" name="txtcodigo" style="width:60px; margin-right: 10px; margin-top: -8px;"
+                                               onkeyup="txtcodigo_onKeyUp()"
+                                               class="form-control"
+                                               maxlength="7"
+                                               autocomplete="off" />
+                                    </td>
+                                    <td>
+                                        <label id="lblAte"
+                                               style="border:none !important;box-shadow:none !important; display:none;text-align:right; padding-right:0px; padding-left:0px;"
+                                               class="form-control">Até</label>
+                                    </td>
+                                    <td>
+                                        <input id="txtCodigoAte" name="txtCodigoAte" style="width:60px; display:none; margin-right: 10px; margin-top: -8px; margin-left: 10px;"
+                                               class="form-control"
+                                               maxlength="2"
+                                               autocomplete="off" />
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Descrição</label>
+                        <div class="col-sm-10">
+                            <input id="txtdescricao" name="txtdescricao" class="form-control"
+                                   placeholder="Descrição" data-val="true" required
+                                   maxlength="255"
+                                   autocomplete="off"
+                                   onkeyup="checaVazio(this,0)" />
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                            <label class="control-label col-sm-2">Ativo <span class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="checkbox" id="chkativo" checked="checked" style="margin-top: 10px;">
+                            </div>
+                        </div>*@
+
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar" onclick="return SalvarObjeto();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAssociarDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Associar Documento(s) a este a Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group" style="text-align:center;">
+                        <input id="txt_codigo" name="txt_codigo" class="txtdoc_codigoHeader"  maxlength="50"  readonly style="text-align:center; width:95%" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:5px !important">Documento</label>
+                        <div class="col-sm-6" style="padding-left:0px !important">
+                            <input id="txtLocalizarDocumento" name="txtLocalizarDocumento" class="form-control col-sm-6"
+                                   placeholder="Digite o Código do Documento"
+                                   autocomplete="off" maxlength="50" 
+                                   onkeyup="if ((event.keyCode == 13)) { event.preventDefault(); if (!document.getElementById('btnLocalizarDocumentos').disabled) LocalizarDocumentos(); return false;} " />
+                            </div>
+                            <div class="col-sm-3">
+                                <button id="btnLocalizarDocumentos" onclick="return LocalizarDocumentos();" class="btn btn-primary btn-block btn-flat col-sm-3" style="width:100px">Localizar</button>
+                            </div>
+                        </div>
+                    <div class="form-group" >
+                        <div class="col-sm-3" style="text-align:right">
+                            <label class="control-label"  style="text-align:right" id="lblTotalLocalizados">Encontrados</label>
+                        </div>
+                        <div class="col-sm-9"
+                             style="width:72%; height:100px; overflow-y:auto; border:solid 1px lightgray; border-radius:4px !important;"
+                             id="divDocumentosLocalizados">
+                        </div>
+                    </div>
+               </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntAssociarDocumento" name="bntAssociarDocumento" onclick="return Objeto_AssociarDocumento_Salvar();" class="btn btn-primary btn-block btn-flat">Associar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalListarArquivos" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:540px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Documento(s)</label></b></h3>
+            </div>
+
+            @{
+                // (partialView, Controller)
+                Html.RenderPartial("_SelecionarDocumento", "Documento");
+
+            }
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/Objeto/Objeto_BotaoNovo.js"></script>
+<div class="modal fade" id="modalNovoRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Novo Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="margin: 0px;">
+
+                    <div id="divCodigoDigitavel" class="form-group" style="margin-bottom: -10px !important; margin-top: 10px;">
+                        <label class="control-label col-sm-3">Código</label>
+                        <div class="col-sm-9" style="margin-top: 0px; padding-top:0 !important">
+                            <input id="txtCodigoDigitavel" name="txtCodigoDigitavel" class="form-control uppercase codigoHeader"
+                                   autocomplete="off" readonly style="border:none !important; box-shadow:none !important;"
+                                   maxlength="80" />
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div id="divRodovia" class="form-group">
+                        <label class="control-label col-sm-3">Rodovia<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9" style="margin-top: 0px; padding-top:0 !important;">
+                            <table style="width:100%" cellspacing="2">
+                                <tr>
+                                    <td style="width:40%;">
+                                        <select class="form-control" id="cmbRodovia" name="cmbRodovia"
+                                                onchange="cmbRodovia_onchange()"
+                                                placeholder="Rodovia"></select>
+                                    </td>
+                                    <td style="width:30%;">
+                                        <input id="txtRodovia" name="txtRodovia" class="form-control col-sm-3"
+                                               placeholder="Código Rodovia" disabled
+                                               onkeyup="txtRodovia_onkeyup()"
+                                               style="margin-left: 5px !important;"
+                                               autocomplete="off"
+                                               maxlength="7" />
+                                    </td>
+                                    <td id="tdcmbRodoviaED" style="display:none;">
+                                        <select class="form-control" id="cmbRodoviaED" name="cmbRodoviaED"
+                                                onchange="PreenchetxtCodigoDigitavel()"
+                                                style="margin-left:7px !important; ">
+                                            @*<option value="" selected>Esq./Dir. (Opcional)</option>*@
+                                            <option selected value="E">Esquerda</option>
+                                            <option value="D">Direita</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="divOAE" class="form-group">
+                        <label class="control-label col-sm-3">Obra de Arte<span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <input id="txtOAE" name="txtOAE" class="form-control"
+                                   title="Quilometragem"
+                                   onkeyup="PreenchetxtCodigoDigitavel()"
+                                   placeholder="Quilometragem" data-val="true" required
+                                   autocomplete="off"
+                                   maxlength="7" />
+                        </div>
+                    </div>
+
+                    <div id="divTipoOAE" class="form-group">
+                        <label class="control-label col-sm-3">Tipo de Obra de Arte</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbTipoOAE" name="cmbTipoOAE"
+                                    onchange="cmbTipoOAE_onchange()"
+                                    placeholder="Tipo de Obra de Arte"></select>
+                        </div>
+                    </div>
+
+                    <div id="divSubdivisao1" class="form-group">
+                        <label class="control-label col-sm-3">Subdivisão 1</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbSubdivisao1" name="cmbSubdivisao1"
+                                    onchange="cmbSubdivisao1_onchange()"
+                                    placeholder="Subdivisão 1"></select>
+                        </div>
+                    </div>
+
+                    <div id="divSubdivisao2" class="form-group" style="display:none">
+                        <label class="control-label col-sm-3">Subdivisão 2</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbSubdivisao2" name="cmbSubdivisao2"
+                                    onchange="cmbSubdivisao2_onchange()"
+                                    placeholder="Subdivisão 2"></select>
+                        </div>
+                    </div>
+
+                    <div id="divSubdivisao3" class="form-group" style="display:none">
+                        <label class="control-label col-sm-3">Subdivisão 3</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbSubdivisao3" name="cmbSubdivisao3"
+                                    onchange="cmbSubdivisao3_onchange()"
+                                    placeholder="Subdivisão 3"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divGrupoObjetos">
+                        <label class="control-label col-sm-3">Grupo de Objetos</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbGrupoObjetos" name="cmbGrupoObjetos"
+                                    onchange="cmbGrupoObjetos_onchange()"
+                                    placeholder="Grupo de Objetos"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divNumeroObjeto">
+                        <label class="control-label col-sm-3">Número Objeto</label>
+                        <div class="col-sm-9">
+
+                            <table cellpadding="0" cellspacing="0" style="width:100%">
+                                <tr>
+                                    <td id="tdTxtLocalizacao" style="width:60px;">
+                                        <input id="txtNumeroObjeto" name="txtNumeroObjeto" class="form-control"
+                                               placeholder="00" autocomplete="off"
+                                               onkeyup="PreenchetxtCodigoDigitavel()"
+                                               maxlength="2" />
+                                    </td>
+                                    <td style="width:30px;">
+                                        <label id="lblAte_Novo"
+                                               style="border:none !important; box-shadow:none !important; text-align:left; margin:0;"
+                                               class="form-control">Até</label>
+                                    </td>
+                                    <td>
+                                        <input id="txtNumeroObjetoAte_Novo" name="txtNumeroObjetoAte_Novo"
+                                               class="form-control" placeholder="00"
+                                               maxlength="2" title="Valor Opcional para inserção em sequência"
+                                               autocomplete="off" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divLocalizacao">
+                        <label class="control-label col-sm-3">Localização</label>
+                        <div class="col-sm-9">
+                            <table cellpadding="0" cellspacing="0" style="width:100%">
+                                <tr>
+                                    <td style="width:60px;">
+                                        <select class="form-control" id="cmbAEVCVG_Novo" style="width:60px; margin-right:10px; margin-top:-8px;" onchange="PreenchetxtCodigoDigitavel()"></select>
+                                    </td>
+
+                                    <td id="tdTxtLocalizacao" style="width:60px;">
+                                        <input id="txtLocalizacao" name="txtLocalizacao" style="width:60px;  margin-top: -8px; margin-left: 10px;"
+                                               class="form-control" autocomplete="off" placeholder="00"
+                                               onkeyup="txtLocalizacao_onkeyup()"
+                                               maxlength="2" />
+                                    </td>
+                                    <td style="width:30px;">
+                                        <label id="lblAte_Novo"
+                                               style="border:none !important; box-shadow:none !important; text-align:left;"
+                                               class="form-control">Até</label>
+                                    </td>
+                                    <td>
+                                        <input id="txtLocalizacaoAte_Novo" name="txtLocalizacaoAte_Novo" style="margin-top: -8px;"
+                                               class="form-control" placeholder="00"
+                                               maxlength="2" title="Valor Opcional para inserção em sequência"
+                                               autocomplete="off" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divDescricao">
+                        <label class="control-label col-sm-3">Descrição</label>
+                        <div class="col-sm-9">
+                            <input id="txtNovoDescricao" name="txtNovoDescricao" class="form-control"
+                                   placeholder="Descrição (Opcional)" autocomplete="off"
+                                   maxlength="255" />
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvarNovo" name="bntSalvarNovo" onclick="return bntSalvarNovo_click();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
+
+<script>
+    // datepickers da ficha, aba DADOS GERAIS - POR ALGUM MOTIVO SÓ FUNCIONOU COLOCANDO AQUI
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    jQuery(function ($) {
+        $.datepicker.regional['pt-BR'] = datepicker_regional;
+        $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+    });
+
+    $('#txt_atr_id_103').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_atr_id_104').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    moduloCorrente = 'Objetos';
+    qualModulo = 'Objetos';
+</script>

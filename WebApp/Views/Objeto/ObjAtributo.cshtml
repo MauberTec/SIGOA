@@ -1,0 +1,387 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    var ultimoPedaco = Request.RequestContext.HttpContext.Request.RawUrl.Split('/').Last();
+    int qualModuloId = -3000;
+    if (int.TryParse(ultimoPedaco, out qualModuloId))
+    {
+        qualModuloId = Convert.ToInt32(ultimoPedaco);
+    }
+
+
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = qualModuloId });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(qualModuloId)); // 120 = id DO MODULO "Objeto/AtributoFixo"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = qualModuloId });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    UsuarioPermissoes permissoesConfiguracaoAtributos = lstPermissoes.Find(x => x.mod_id.Equals(150)); // acha permissoes para Configuracao de atributos
+    if (permissoesConfiguracaoAtributos == null)
+    {
+        permissoesConfiguracaoAtributos = new UsuarioPermissoes();
+        permissoesConfiguracaoAtributos.mfl_leitura= 0;
+        permissoesConfiguracaoAtributos.mfl_escrita= 0;
+        permissoesConfiguracaoAtributos.mfl_inserir= 0;
+        permissoesConfiguracaoAtributos.mfl_excluir = 0;
+    }
+
+}
+
+<h2></h2>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Atributos de Objeto ..::";
+    }
+</form>
+
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-3 ">
+                    <label class="control-label">Classe</label>
+                    @Html.DropDownList("cmbFiltroClassesObjeto", null, "-- Selecione --", new { @class = "form-control ", @onchange = "cmbClassesObjeto_onchange(this)" })
+                </div>
+
+                <div class="col-sm-3 ">
+                    <label class="control-label">Tipo</label>
+                    <select class="form-control" id="cmbFiltroTiposObjeto"
+                            placeholder="Filtrar por Tipo de Objeto"
+                            name="cmbFiltroTiposObjeto"></select>
+                </div>
+
+
+                <div class="col-sm-3">
+                    <label class="control-label">Nome</label>
+                    <input type="text" class="form-control" id="txtFiltroCodigo" maxlength="150" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Descrição</label>
+                    <input type="text" class="form-control" id="txtFiltroDescricao"  maxlength="255" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+
+                </div>
+
+
+
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltro();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltro();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        @*<div class="col-md-12">*@
+            <div class="box box-primary">
+                <div class="box-body">
+
+                    <table id="tblAtributos">
+                        <thead>
+                            <tr>
+                                <th>atr_id</th>
+                                <th>clo_id</th>
+                                <th>tip_id</th>
+                                <th>Classe</th>
+                                <th>Tipo</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Itens</th>
+                                <th>Apresentacao dos itens</th>
+                                <th>Máscara Textbox</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                    @{
+                        if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                        {
+                            <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="Inserir();">Novo Atributo</button>
+                        }
+                    }
+
+                </div>
+            </div>
+        @*</div>*@
+    </div>
+</section>
+
+<input type="hidden" id="hddnSelectedatr_id" name="hddnSelectedatr_id" value="-1" />
+<input type="hidden" id="hddnSelectedclo_id" name="hddnSelectedclo_id" value="-1" />
+<input type="hidden" id="hddnSelectedtip_id" name="hddnSelectedtip_id" value="-1" />
+
+<input type="hidden" id="hddnSelectedatr_atributo_fixo_Item_id" name="hddnSelectedatr_atributo_fixo_Item_id" value="-1" />
+
+
+
+
+<style>
+    .dataTables_filter {
+        display: none
+    }
+
+    #modalSalvarRegistro .dataTables_scrollHead,
+    #modalSalvarRegistro .dataTables_scrollHeadInner {
+        width: 100% !important;
+    }
+
+    #modalSalvarRegistro .dataTable {
+        width: 100% !important;
+    }
+</style>
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+
+        var permissaoConfiguracaoAtributosLeitura = 0;
+        var permissaoConfiguracaoAtributosEscrita = 0;
+        var permissaoConfiguracaoAtributosInsercao = 0;
+        var permissaoConfiguracaoAtributosExclusao = 0;
+
+        // checa null
+            permissaoConfiguracaoAtributosLeitura = parseInt(@permissoesConfiguracaoAtributos.mfl_leitura);
+            permissaoConfiguracaoAtributosEscrita = parseInt(@permissoesConfiguracaoAtributos.mfl_escrita);
+            permissaoConfiguracaoAtributosInsercao = parseInt(@permissoesConfiguracaoAtributos.mfl_inserir);
+            permissaoConfiguracaoAtributosExclusao = parseInt(@permissoesConfiguracaoAtributos.mfl_excluir);
+        
+
+    </script>
+
+
+}
+
+<script src="~/Scripts/Base.js"></script>
+<script src="~/Scripts/Objeto/ObjAtributo.js"></script>
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:800px;">
+            <div class="modal-header">
+                <button type="button" class="close"  id="btnModalAtributoClose" onclick="btnModalAtributoClose_onclick()" ><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Editar ATRIBUTO</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <div class="modal-body form-group" style="padding-top:3px; padding-bottom: 0; margin: 5px;">
+
+                    <div class="form-group" style="display:none;">
+                        <label class="control-label col-sm-3" for="atr_id">ID</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="txt_id" placeholder="Id" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Classe<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("cmbClassesObjeto", null, "Selecionar Classe de Objeto", new { @class = "form-control", @onchange = "cmbClassesObjeto_onchange(this)" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Tipo</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbTiposObjeto"
+                                    placeholder="Selecionar Tipo de Objeto"
+                                    name="cmbTiposObjeto"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Nome<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9">
+                            <input id="txtcodigo" name="txtcodigo" class="form-control"
+                                   placeholder="Nome" data-val="true"
+                                   data-val-required="Nome" required
+                                   maxlength="50"
+                                   autocomplete="off"
+                                   onkeyup="txtcodigo_onkeyup()" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Descrição<span class="text-danger">*</span> </label>
+                        <div class="col-sm-9">
+                            <input id="txtdescricao" name="txtdescricao" class="form-control"
+                                   placeholder="Descrição" data-val="true" required
+                                   maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                   autocomplete="off"  
+                                   onkeyup="txtdescricao_onkeyup()" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Ativo </label>
+                        <div class="col-sm-9">
+                            <input type="checkbox" id="chkativo" checked="checked" style="margin-top: 10px;">
+                        </div>
+
+
+                        @*por enquanto isso ficar oculto*@
+                        <div id="divHerdavel" style="display:none">
+                            <label class="control-label col-sm-2">Herdável </label>
+                            <div class="col-sm-4">
+                                <input type="checkbox" id="chkherdavel" checked="checked" style="margin-top: 10px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+            <label class="control-label col-sm-2">Herdável </label>
+            <div class="col-sm-10">
+                <input type="checkbox" id="chkherdavel" checked="checked" style="margin-top: 10px;">
+            </div>
+        </div>*@
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Apresentação</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="cmbApresentacaoItens" name="cmbApresentacaoItens"
+                                    placeholder="--Selecione--"
+                                    onchange="cmbApresentacaoItens_onchange(this)">
+                                <option value="-1" selected>Texto (textbox)</option>
+                                <option value="0">Escolha Simples (combobox)</option>
+                                <option value="1">Escolha Múltipla (checkbox)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="divMascaraTexto" style="visibility:visible">
+                        <label class="control-label col-sm-3">Máscara de campos Texto</label>
+                        <div class="col-sm-9">
+                            <input id="txtatr_mascara_texto" name="txtatr_mascara_texto" class="form-control"
+                                   placeholder="Máscara de texto"
+                                   maxlength="50" pattern=".{1,50}" title="Padrão de codificação de Documentos: S(alfabético), A(alfanumérico), 0(numérico), 9(opcional numérico), outros = Letra Fixa. Exceções tratadas individualmente."
+                                   autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" style=" width:100%; text-align:center;padding-top: 10px !important;">
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-4">
+                            <button id="bntSalvar" name="bntSalvar" onclick="return Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                        </div>
+                    </div>
+
+                    @*SOMENTE PARA O PERFIL DE CONFIGURACOES DO SISTEMA*@
+                    <div id="divConfiguracoes" style="display:none">
+                        <hr style="margin:0" />
+                        <div class="form-group" style=" width:100%; text-align:center; margin-bottom: 0; margin-top:10px">
+                            <label class="control-label">ITENS</label>
+                        </div>
+
+                        <div class="form-group" id="divItens" style="min-height:30px; max-height:310px; ">
+                            <div class="col-sm-12">
+                                <table id="tblAtributosItens" style="font-size: 12px;">
+                                    <thead>
+                                        <tr>
+                                            <th>ati_id</th>
+                                            <th>atr_id</th>
+                                            <th>Item</th>
+                                            <th>Opções</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                @{
+                                    if ((permissoesConfiguracaoAtributos != null) && (permissoesConfiguracaoAtributos.mfl_inserir > 0))
+                                    {
+                                        <button type="button" id="btnInserirItem" class="btn btn-primary  botaoInserir" disabled data-toggle="modal" data-target="#myModalItem" onclick="InserirItem();">Novo Item</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        @*<div class="form-group" style=" width:100%; text-align:center">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <button id="bntFechar" name="bntFechar" onclick="function dois() { $('#modalSalvarRegistro').modal('hide');  return false;" class="btn btn-primary btn-block btn-flat">Fechar</button>
+                </div>
+            </div>*@
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSalvarRegistroItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"  data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeaderItem">Editar Item</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group" style="display:none;">
+                        <label class="control-label col-sm-2">ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txt_ati_id" placeholder="Id" disabled="disabled" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Item<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10">
+                            <input id="txtati_item" name="txtati_item" class="form-control"
+                                   placeholder=""
+                                   minlength="1" maxlength="1000" pattern=".{1,1000}" title="1 a 1000 caracteres"
+                                   autocomplete="off"
+                                   onkeyup="txtati_item_onkeyup()" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="atr_ativo">Ativo </label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="chkati_ativo" checked="checked" style="margin-top: 10px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvarItem" name="bntSalvarItem" onclick="return SalvarItem();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

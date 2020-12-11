@@ -1,0 +1,150 @@
+﻿
+<style>
+    .tableFixHead {
+        overflow-y: auto;
+        height: 300px;
+    }
+
+        .tableFixHead thead th {
+            position: sticky !important;
+            top: 0;
+            background-color:white !important;
+        }
+
+
+    .uppercase {
+        text-transform: uppercase;
+    }
+
+    /*.  {
+        font-family: 'Lucida Console';
+        padding-top: 7px;
+    }*/
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    option {
+        color: black !important;
+    }
+
+        option:first-child {
+            color: grey !important;
+        }
+
+    .empty {
+        color: #a3a3a3 !important;
+    }
+
+    .padrao {
+        color: black !important;
+    }
+
+
+    .dataTables_filter {
+        display: none
+    }
+
+    #tblPastas.dataTable > thead > tr > th[class*="sort"]:before,
+    #tblPastas.dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+    }
+
+    #tblArquivos.dataTable > thead > tr > th[class*="sort"]:before,
+    #tblArquivos.dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+    }
+
+    #divArquivos {
+        margin-right: 0px !important;
+        margin-left: 0px !important;
+    }
+
+    .tabela {
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .bordaTop {
+        border-top: solid 1px black;
+        text-align: center;
+    }
+
+    .bordaBottom {
+        border-bottom: solid 1px black;
+        text-align: center;
+    }
+
+    .espacador {
+        width: 10px;
+    }
+
+    .caminho {
+        font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
+        font-size: 20px;
+    }
+</style>
+
+
+<script src="~/Scripts/Shared/_SelecionarDocumento.js"></script>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    <br />
+
+    <div class="modal-body form-group">
+        <div class="form-group" style="text-align:left !important; width:95%; font-size:20px; margin-left:30px">
+            <i class="fa fa-folder-open-o" aria-hidden="true">
+                <label id="txtTituloBrowser" name="txtTituloBrowser" class="caminho" />
+            </i>
+        </div>
+
+        <div class="tableFixHead" id="divPastas" style="width:95%; height:200px">
+            <table id="tblPastas" style="width:90%">
+                <thead>
+                    <tr>
+                        <th>Diretório</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <br />
+        <hr />
+        <br />
+
+        <div class="tableFixHead" id="divArquivos" style="width:95%;">
+            <table id="tblArquivos" style="width:90%">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="chk_selectAll" value="1" id="chk_selectAll" onclick="return chk_selectAll_click(this);" style="margin-left: -5px !important;"> Todos</th>
+                        <th>Arquivo</th>
+                        <th>Opções</th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="modal-footer">
+            <div class="col-md-3 col-md-offset-4">
+                <button id="bntSelDocsOK" name="bntSelDocsOK" onclick="return bntSelDocsOK_click();" class="btn btn-primary btn-block btn-flat">Associar</button>
+            </div>
+        </div>
+    </div>
+</form>
+

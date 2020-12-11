@@ -1,0 +1,66 @@
+﻿
+
+    .desabilitado { color:lightgray !important }
+    /*.moduloFilho:before { padding-left:30px !important; content: " + ";}*/
+
+    hr {
+	border: 0;
+	border-top: 1px solid #000000 !important;
+}
+
+    .centro-horizontal { text-align:center !important; }
+
+    .hide_column { display : none; }
+
+    table.dataTable tbody tr:hover {
+        background-color: #acacac !important;
+    }
+ 
+    table.dataTable tbody tr:hover > .sorting_1 {
+        background-color: #acacac !important;
+    }
+
+    tr.even {
+        background-color: #F5F5F5 !important;
+    }
+
+tr.moduloPai {
+    background-color: lightgray !important;
+    font-weight: bold;
+}
+    .moduloFilho { padding-left:30px !important;}
+
+
+    tr.selected{background-color:grey !important; font-weight:bold;}
+tr.even.selected {
+    background-color: grey !important;
+    font-weight: bold;
+}
+
+
+    div.dataTables_paginate {
+        float: left !important;
+        margin: 0;
+    }
+
+    span.paginate_button {
+        padding: 5px !important;
+    }
+
+    div.dataTables_info {
+        float: right !important;
+        margin: 0;
+        margin-top: -35px;
+    }
+
+    div.dataTables_length {
+        float: left !important;
+        margin: 0;
+        margin-top: 10px;
+    }
+
+    input.paginate_input {
+        width: 30px;
+        text-align: center;
+    }
+
