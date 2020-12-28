@@ -339,6 +339,7 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="aca_id">Filtro por Id da Causa de Anomalia, null para todos</param>
         /// <param name="aca_descricao">Filtro por Descricao da Causa de Anomalia, vazio para todos</param>
+        /// <param name="leg_id">Filtro por Legenda de Anomalia, opcional</param>
         /// <returns>Lista de Causas de Anomalias</returns>
         public List<AnomCausa> AnomCausa_ListAll(string aca_descricao, int? aca_id, int? leg_id = null)
         {

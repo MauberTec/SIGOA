@@ -122,7 +122,6 @@ namespace WebApp.DAO
                             }
 
                             valor = dt1.Rows[li]["atv_valor"].ToString().Trim();
-                            string texto = "";
                             if (valor.Length > 0)
                             {
                                 if (valor.Substring(0, 1) == "0")
@@ -131,13 +130,14 @@ namespace WebApp.DAO
                                     if (valor.Length <= 2)
                                         valor = "1";
                                     else
-                                        texto = valor.Substring(3);                            }
+                                        valor = valor.Substring(2);
+                            }
                             
                             // chk_atr_id_30_48
                             listaSaida.Add(new KeyValuePair<string, string>(nomecontrole, valor));
 
                             //txt_atr_id_30_48
-                           listaSaida.Add(new KeyValuePair<string, string>(nomecontrole.Replace("chk", "txt"), texto));
+                          // listaSaida.Add(new KeyValuePair<string, string>(nomecontrole.Replace("chk", "txt"), texto));
 
 
                             break;
@@ -192,7 +192,7 @@ namespace WebApp.DAO
                 DataRow row = dt2.NewRow();
                 for (var i = 0; i < listaSaida.Count; i++)
                     if (dt2.Columns.Contains(listaSaida[i].Key).ToString().Trim() != "")
-                        row[listaSaida[i].Key] = listaSaida[i].Value;
+                       row[listaSaida[i].Key] = listaSaida[i].Value;
 
                 dt2.Rows.Add(row);
                 dt2.AcceptChanges();

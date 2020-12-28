@@ -166,9 +166,11 @@ namespace WebApp.Controllers
         }
 
         /// <summary>
-        /// Lista de todas as Causas não deletadas
+        ///  Lista de todas as Causas não deletadas
         /// </summary>
-        /// <returns>JsonResult Lista de AnomCausas</returns>
+        /// <param name="aca_descricao">Filtro por Descricao da Causa de Anomalia, vazio para todos</param>
+        /// <param name="leg_id">Filtro por Legenda de Anomalia, opcional</param>
+        /// <returns>JsonResult</returns>
         public JsonResult AnomCausa_ListAll(string aca_descricao = "", int? leg_id = null)
         {
             return Json(new { data = new AnomaliaBLL().AnomCausa_ListAll(aca_descricao, leg_id) }, JsonRequestBehavior.AllowGet);

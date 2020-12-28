@@ -159,6 +159,12 @@ namespace WebApp.Models
         /// </summary>
         public int tip_ativo { get; set; }
 
+        /// <summary>
+        /// Tem variável de inspecao?
+        /// </summary>
+        public int tem_var_inspecao { get; set; }
+
+
     }
 
 

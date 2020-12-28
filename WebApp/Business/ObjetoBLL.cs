@@ -404,12 +404,12 @@ namespace WebApp.Business
         ///  Complemento do método PreencheCmbTiposObjeto pois é chamado também em outra classe (GetbyID)
         /// </summary>
         /// <param name="clo_id">Classe do ATRIBUTO</param>
-        /// <param name="comMascara">Adiciona Mascara de Codificacao de Objeto</param>
         /// <param name="tip_pai">id do tipo pai</param>
         /// <param name="excluir_existentes">Menos os valores já existentes</param>
         /// <param name="obj_id">Id do objeto selecionado</param>
+        /// <param name="somente_com_variaveis_inspecao">Somente se possuir variaveis inspecao</param>
         /// <returns>Lista de SelectListItem</returns>
-        public List<SelectListItem> CriaListaCmbTiposObjeto(int? clo_id, int? tip_pai = 0, int? excluir_existentes = 0, int? obj_id = 0)
+        public List<SelectListItem> CriaListaCmbTiposObjeto(int? clo_id, int? tip_pai = 0, int? excluir_existentes = 0, int? obj_id = 0, int? somente_com_variaveis_inspecao = 0)
         {
             List<ObjTipo> lstObjTipo = new ObjetoDAO().ObjTipo_ListAll(clo_id, null, tip_pai, excluir_existentes, obj_id);
 
@@ -423,7 +423,17 @@ namespace WebApp.Business
                 string txt = temp.tip_nome; // + "-" + temp.tip_descricao;
                 string valor = temp.tip_id.ToString() + ":" + temp.tip_codigo;
 
-                lstListaCmbTiposObjeto.Add(new SelectListItem() { Text = txt, Value = valor });
+                if (somente_com_variaveis_inspecao == 0)
+                    lstListaCmbTiposObjeto.Add(new SelectListItem() { Text = txt, Value = valor });
+                else
+                {
+                    if (clo_id != 9)
+                           lstListaCmbTiposObjeto.Add(new SelectListItem() { Text = txt, Value = valor });
+                    else
+                        if (temp.tem_var_inspecao > 0)
+                            lstListaCmbTiposObjeto.Add(new SelectListItem() { Text = txt, Value = valor });
+
+                }
             }
 
             return lstListaCmbTiposObjeto;

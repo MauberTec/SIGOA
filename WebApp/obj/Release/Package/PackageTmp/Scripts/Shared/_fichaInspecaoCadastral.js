@@ -317,7 +317,8 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
     if (moduloCorrente == 'OrdemServico')
     {
         var StatusOS = parseInt(filtroStatusOS);
-        if (StatusOS == 11) {
+        if (StatusOS == 11) // executada
+        {
             url = "/Inspecao/InspecaoAtributosValores_ListAll";
             data = { "ord_id": selectedId_ord_id };
         }
@@ -694,7 +695,7 @@ function SalvarDados_FichaInspecaoCadastral(tabela) {
                 if (!chk)  // nao tem
                 {
                     var valor = lstInputs[i].value;
-                    if (valor.trim() == ",")
+                    if ((valor.trim() == ",") || (valor.trim() == "."))
                         valor = "";
 
                     saida = saida + ";" + lstInputs[i].id + ":" + valor;

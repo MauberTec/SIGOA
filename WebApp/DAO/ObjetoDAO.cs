@@ -728,7 +728,8 @@ namespace WebApp.DAO
                             tip_nome = rdr["tip_nome"].ToString(),
                             tip_descricao = rdr["tip_descricao"].ToString(),
                            // tip_mascara_codificacao = rdr["tip_mascara_codificacao"].ToString(),
-                            tip_ativo = Convert.ToInt16(rdr["tip_ativo"])
+                            tip_ativo = Convert.ToInt16(rdr["tip_ativo"]),
+                            tem_var_inspecao = Convert.ToInt16(rdr["tem_var_inspecao"])
                         });
                     }
                     return lst;

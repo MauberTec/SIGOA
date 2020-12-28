@@ -136,10 +136,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2014 11:18:48</publishTime>
     </File>
     <File Include="bin/WebApp.dll">
-      <publishTime>12/09/2020 18:52:18</publishTime>
+      <publishTime>12/21/2020 18:48:43</publishTime>
     </File>
     <File Include="bin/WebApp.pdb">
-      <publishTime>12/09/2020 18:52:18</publishTime>
+      <publishTime>12/21/2020 18:48:43</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>07/17/2013 17:03:52</publishTime>
@@ -634,7 +634,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2020 11:29:02</publishTime>
     </File>
     <File Include="Reports/Ficha_Cadastramento_Anomalias.xlsx">
-      <publishTime>12/05/2020 21:07:38</publishTime>
+      <publishTime>12/09/2020 20:34:35</publishTime>
     </File>
     <File Include="Reports/frmDownloadFile.aspx">
       <publishTime>09/30/2020 20:00:54</publishTime>
@@ -649,13 +649,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/08/2020 17:52:17</publishTime>
     </File>
     <File Include="Reports/rptFichaInspecaoCadastral_1.rdlc">
-      <publishTime>11/20/2020 17:07:33</publishTime>
+      <publishTime>12/10/2020 22:00:18</publishTime>
     </File>
     <File Include="Reports/rptFichaInspecaoCadastral_2.rdlc">
       <publishTime>11/02/2020 10:26:20</publishTime>
     </File>
     <File Include="Reports/rptFichaInspecaoEspecial.rdlc">
-      <publishTime>11/20/2020 21:56:30</publishTime>
+      <publishTime>12/11/2020 11:50:22</publishTime>
     </File>
     <File Include="Reports/rptFichaInspecaoEspecial_campo.rdlc">
       <publishTime>11/02/2020 14:33:11</publishTime>
@@ -898,10 +898,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/02/2020 10:39:57</publishTime>
     </File>
     <File Include="Scripts/Shared/_fichaInspecaoCadastral.js">
-      <publishTime>11/30/2020 13:39:27</publishTime>
+      <publishTime>12/13/2020 08:34:51</publishTime>
     </File>
     <File Include="Scripts/Shared/_fichaInspecaoCadastral2.js">
       <publishTime>10/09/2020 20:50:22</publishTime>
+    </File>
+    <File Include="Scripts/Shared/_fichaInspecaoEspecial.js">
+      <publishTime>12/15/2020 23:19:23</publishTime>
+    </File>
+    <File Include="Scripts/Shared/_fichaInspecaoEspecial_Anomalias.js">
+      <publishTime>12/18/2020 08:19:41</publishTime>
+    </File>
+    <File Include="Scripts/Shared/_fichaInspecaoRotineira.js">
+      <publishTime>12/16/2020 11:18:59</publishTime>
+    </File>
+    <File Include="Scripts/Shared/_fichasInspecao.js">
+      <publishTime>12/15/2020 23:22:30</publishTime>
     </File>
     <File Include="Scripts/Shared/_SelecionarDocumento.js">
       <publishTime>09/02/2020 08:52:48</publishTime>
@@ -1219,13 +1231,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/20/2020 17:04:29</publishTime>
     </File>
     <File Include="Views/Inspecao/Inspecao.cshtml">
-      <publishTime>11/23/2020 14:02:27</publishTime>
+      <publishTime>12/18/2020 10:12:09</publishTime>
     </File>
     <File Include="Views/Inspecao/InspecaoTipo.cshtml">
       <publishTime>07/13/2020 16:33:29</publishTime>
     </File>
     <File Include="Views/Login/Index.cshtml">
-      <publishTime>11/25/2020 18:21:32</publishTime>
+      <publishTime>12/18/2020 10:58:01</publishTime>
     </File>
     <File Include="Views/LogSistema/LogSistema.cshtml">
       <publishTime>10/10/2020 21:39:16</publishTime>
@@ -1261,7 +1273,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="Views/OrdemServico/OrdemServico.cshtml">
-      <publishTime>12/05/2020 08:41:28</publishTime>
+      <publishTime>12/16/2020 20:52:01</publishTime>
     </File>
     <File Include="Views/OrdemServico/OSFluxoStatus.cshtml">
       <publishTime>08/10/2020 10:53:45</publishTime>
@@ -1306,7 +1318,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/15/2020 16:17:27</publishTime>
     </File>
     <File Include="Views/Shared/_fichaInspecaoCadastral.cshtml">
-      <publishTime>11/30/2020 14:13:44</publishTime>
+      <publishTime>12/11/2020 11:13:04</publishTime>
     </File>
     <File Include="Views/Shared/_fichaInspecaoCadastral2.cshtml">
       <publishTime>11/02/2020 10:26:20</publishTime>
@@ -1315,10 +1327,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/20/2020 20:37:26</publishTime>
     </File>
     <File Include="Views/Shared/_fichaInspecaoEspecialCampo.cshtml">
-      <publishTime>12/03/2020 22:18:28</publishTime>
+      <publishTime>12/18/2020 07:38:42</publishTime>
     </File>
     <File Include="Views/Shared/_fichaInspecaoRotineira.cshtml">
-      <publishTime>11/23/2020 12:02:05</publishTime>
+      <publishTime>12/11/2020 11:23:16</publishTime>
     </File>
     <File Include="Views/Shared/_fichaInspecaoRotineira1.cshtml">
       <publishTime>01/01/0001 00:00:00</publishTime>
@@ -1348,7 +1360,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/27/2020 11:41:18</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/09/2020 18:52:24</publishTime>
+      <publishTime>12/21/2020 18:48:44</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -20,13 +20,20 @@ namespace WebApp.Business
         // *************** INSPECOES  *************************************************************
 
         /// <summary>
-        ///  Lista de todos os Tipos não deletados
+        ///  Lista de toda as Inspecoes não deletadas
         /// </summary>
         /// <param name="ins_id">Filtro por Id do Tipo, null para todos</param>
+        /// <param name="filtroOrdemServico_codigo">Código ou Parte a se localizar</param>
+        /// <param name="filtroObj_codigo">Código ou Parte a se localizar</param>
+        /// <param name="filtroTiposOS">Id do Tipo a se filtrar</param>
+        /// <param name="filtroStatusOS">Id do Status a se filtrar</param>
+        /// <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
+        /// <param name="filtroord_data_De">Filtro por Data: a de</param>
+        /// <param name="filtroord_data_Ate">Filtro por Data: até</param>
         /// <returns>Lista de Inspecao</returns>
-        public List<Inspecao> Inspecao_ListAll(int ins_id)
+        public List<Inspecao> Inspecao_ListAll(int ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
         {
-            return new InspecaoDAO().Inspecao_ListAll(ins_id);
+            return new InspecaoDAO().Inspecao_ListAll(ins_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS, filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate);
         }
 
         /// <summary>
@@ -112,7 +119,7 @@ namespace WebApp.Business
         /// <summary>
         /// lista concatenada dos tipos de anomalia por legenda
         /// </summary>
-        /// <param name="leg_codigo"></param>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
         /// <returns>string</returns>
         public string InspecaoAnomaliaTipos_by_Legenda(string leg_codigo)
         {
@@ -122,12 +129,27 @@ namespace WebApp.Business
         /// <summary>
         /// lista concatenada das causas de anomalia por legenda
         /// </summary>
-        /// <param name="leg_codigo"></param>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
         /// <returns>string</returns>
         public string InspecaoAnomaliaCausas_by_Legenda(string leg_codigo)
         {
             return new InspecaoDAO().InspecaoAnomaliaCausas_by_Legenda(leg_codigo);
         }
+
+
+        /// <summary>
+        /// Procura o Reparo Sugerido
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda</param>
+        /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
+        /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
+        /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <returns>List ReparoTipo</returns>
+        public List<ReparoTipo> InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        {
+            return new InspecaoDAO().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo);
+        }
+
 
 
 

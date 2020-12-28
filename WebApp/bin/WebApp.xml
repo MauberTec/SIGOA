@@ -9,11 +9,18 @@
             AnomLegendas de Perfis e/ou de Usuários
             </summary>
         </member>
-        <member name="M:WebApp.Business.InspecaoBLL.Inspecao_ListAll(System.Int32)">
+        <member name="M:WebApp.Business.InspecaoBLL.Inspecao_ListAll(System.Int32,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.String)">
             <summary>
-             Lista de todos os Tipos não deletados
+             Lista de toda as Inspecoes não deletadas
             </summary>
             <param name="ins_id">Filtro por Id do Tipo, null para todos</param>
+            <param name="filtroOrdemServico_codigo">Código ou Parte a se localizar</param>
+            <param name="filtroObj_codigo">Código ou Parte a se localizar</param>
+            <param name="filtroTiposOS">Id do Tipo a se filtrar</param>
+            <param name="filtroStatusOS">Id do Status a se filtrar</param>
+            <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
+            <param name="filtroord_data_De">Filtro por Data: a de</param>
+            <param name="filtroord_data_Ate">Filtro por Data: até</param>
             <returns>Lista de Inspecao</returns>
         </member>
         <member name="M:WebApp.Business.InspecaoBLL.InspecaoAtributosValores_ListAll(System.Int32)">
@@ -71,15 +78,25 @@
             <summary>
             lista concatenada dos tipos de anomalia por legenda
             </summary>
-            <param name="leg_codigo"></param>
+            <param name="leg_codigo">Código da Legenda de Anomalia</param>
             <returns>string</returns>
         </member>
         <member name="M:WebApp.Business.InspecaoBLL.InspecaoAnomaliaCausas_by_Legenda(System.String)">
             <summary>
             lista concatenada das causas de anomalia por legenda
             </summary>
-            <param name="leg_codigo"></param>
+            <param name="leg_codigo">Código da Legenda de Anomalia</param>
             <returns>string</returns>
+        </member>
+        <member name="M:WebApp.Business.InspecaoBLL.InspecaoAnomalia_ReparoSugerido(System.String,System.String,System.String,System.String)">
+            <summary>
+            Procura o Reparo Sugerido
+            </summary>
+            <param name="leg_codigo">Código da Legenda</param>
+            <param name="atp_codigo">Código do Tipo de Anomalia</param>
+            <param name="ale_codigo">Código do Alerta de Anomalia</param>
+            <param name="aca_codigo">Código da Causa da Anomalia</param>
+            <returns>List ReparoTipo</returns>
         </member>
         <member name="M:WebApp.Business.InspecaoBLL.limpaArquivosAntigos">
             <summary>
@@ -248,6 +265,7 @@
              Lista de todas as Causas não deletadas
             </summary>
             <param name="aca_descricao">Filtro por Descricao da Causa de Anomalia, vazio para todos</param>
+            <param name="leg_id">Filtro por Legenda de Anomalia, opcional</param>
             <returns>Lista de AnomCausas</returns>
         </member>
         <member name="M:WebApp.Business.AnomaliaBLL.AnomCausa_GetbyID(System.Int32)">
@@ -1020,15 +1038,15 @@
             <param name="clo_id">Id da Classe Selecionada, null para todas</param>
             <returns>Lista de SelectListItem</returns>
         </member>
-        <member name="M:WebApp.Business.ObjetoBLL.CriaListaCmbTiposObjeto(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:WebApp.Business.ObjetoBLL.CriaListaCmbTiposObjeto(System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
              Complemento do método PreencheCmbTiposObjeto pois é chamado também em outra classe (GetbyID)
             </summary>
             <param name="clo_id">Classe do ATRIBUTO</param>
-            <param name="comMascara">Adiciona Mascara de Codificacao de Objeto</param>
             <param name="tip_pai">id do tipo pai</param>
             <param name="excluir_existentes">Menos os valores já existentes</param>
             <param name="obj_id">Id do objeto selecionado</param>
+            <param name="somente_com_variaveis_inspecao">Somente se possuir variaveis inspecao</param>
             <returns>Lista de SelectListItem</returns>
         </member>
         <member name="M:WebApp.Business.ObjetoBLL.ObjAtributo_ListAll(System.Int32,System.String,System.String,System.Int32,System.Int32,System.Int32)">
@@ -1817,11 +1835,18 @@
             </summary>
             <returns>View</returns>
         </member>
-        <member name="M:WebApp.Controllers.InspecaoController.Inspecao_ListAll(System.Int32)">
+        <member name="M:WebApp.Controllers.InspecaoController.Inspecao_ListAll(System.Int32,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.String)">
             <summary>
             Lista de todos os Tipos não deletados
             </summary>
             <param name="ins_id">Id da inspeção selecionada</param>
+            <param name="filtroOrdemServico_codigo">Código ou Parte a se localizar</param>
+            <param name="filtroObj_codigo">Código ou Parte a se localizar</param>
+            <param name="filtroTiposOS">Id do Tipo a se filtrar</param>
+            <param name="filtroStatusOS">Id do Status a se filtrar</param>
+            <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
+            <param name="filtroord_data_De">Filtro por Data: a de</param>
+            <param name="filtroord_data_Ate">Filtro por Data: até</param>
             <returns>JsonResult Lista de Inspecao</returns>
         </member>
         <member name="M:WebApp.Controllers.InspecaoController.InspecaoAtributosValores_ListAll(System.Int32)">
@@ -1879,14 +1904,24 @@
             <summary>
             lista concatenada dos tipos de anomalia por legenda
             </summary>
-            <param name="leg_codigo"></param>
+            <param name="leg_codigo">Código da Legenda de Anomalia</param>
             <returns>JsonResult</returns>
         </member>
         <member name="M:WebApp.Controllers.InspecaoController.InspecaoAnomaliaCausas_by_Legenda(System.String)">
             <summary>
             lista concatenada das causas de anomalia por legenda
             </summary>
-            <param name="leg_codigo"></param>
+            <param name="leg_codigo">Código da Legenda de Anomalia</param>
+            <returns>JsonResult</returns>
+        </member>
+        <member name="M:WebApp.Controllers.InspecaoController.InspecaoAnomalia_ReparoSugerido(System.String,System.String,System.String,System.String)">
+            <summary>
+            Procura o Reparo Sugerido
+            </summary>
+            <param name="leg_codigo">Código da Legenda</param>
+            <param name="atp_codigo">Código do Tipo de Anomalia</param>
+            <param name="ale_codigo">Código do Alerta de Anomalia</param>
+            <param name="aca_codigo">Código da Causa da Anomalia</param>
             <returns>JsonResult</returns>
         </member>
         <member name="M:WebApp.Controllers.InspecaoController.FichaInspecaoEspecialAnomalias_ExportarXLS(System.Int32)">
@@ -2283,9 +2318,11 @@
         </member>
         <member name="M:WebApp.Controllers.AnomaliaController.AnomCausa_ListAll(System.String,System.Nullable{System.Int32})">
             <summary>
-            Lista de todas as Causas não deletadas
+             Lista de todas as Causas não deletadas
             </summary>
-            <returns>JsonResult Lista de AnomCausas</returns>
+            <param name="aca_descricao">Filtro por Descricao da Causa de Anomalia, vazio para todos</param>
+            <param name="leg_id">Filtro por Legenda de Anomalia, opcional</param>
+            <returns>JsonResult</returns>
         </member>
         <member name="M:WebApp.Controllers.AnomaliaController.AnomCausa_GetbyID(System.Int32)">
             <summary>
@@ -3005,7 +3042,7 @@
             <param name="ehAtributoFuncional">Flag de atributo funcional</param>
             <returns>JsonResult ObjAtributo</returns>
         </member>
-        <member name="M:WebApp.Controllers.ObjetoController.PreencheCmbTiposObjeto(System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+        <member name="M:WebApp.Controllers.ObjetoController.PreencheCmbTiposObjeto(System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32})">
             <summary>
              Preenchimento do combo Tipos de Objeto
             </summary>
@@ -3013,6 +3050,7 @@
             <param name="tip_pai">Id do Tipo Pai</param>
             <param name="excluir_existentes">Menos os valores já existentes</param>
             <param name="obj_id">Id do objeto selecionado</param>
+            <param name="somente_com_variaveis_inspecao">Somente se possuir variaveis inspecao</param>
             /// <returns>JsonResult</returns>
         </member>
         <member name="M:WebApp.Controllers.ObjetoController.ObjAtributo_Salvar(WebApp.Models.ObjAtributo)">
@@ -3564,11 +3602,18 @@
             ANOMALIAS
             </summary>
         </member>
-        <member name="M:WebApp.DAO.InspecaoDAO.Inspecao_ListAll(System.Nullable{System.Int32})">
+        <member name="M:WebApp.DAO.InspecaoDAO.Inspecao_ListAll(System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.String)">
             <summary>
                 Lista de todas os Inspeções não deletadas
             </summary>
             <param name="ins_id">Filtro por Id da Inspeção, null para todos</param>
+            <param name="filtroOrdemServico_codigo">Código ou Parte a se localizar</param>
+            <param name="filtroObj_codigo">Código ou Parte a se localizar</param>
+            <param name="filtroTiposOS">Id do Tipo a se filtrar</param>
+            <param name="filtroStatusOS">Id do Status a se filtrar</param>
+            <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
+            <param name="filtroord_data_De">Filtro por Data: a de</param>
+            <param name="filtroord_data_Ate">Filtro por Data: até</param>
             <returns>Lista de Inspecao</returns>
         </member>
         <member name="M:WebApp.DAO.InspecaoDAO.Inspecao_ListAll(System.Nullable{System.Int32},System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.String)">
@@ -3648,15 +3693,25 @@
             <summary>
             lista concatenada dos tipos de anomalia por legenda
             </summary>
-            <param name="leg_codigo"></param>
+            <param name="leg_codigo">Filtro por Legenda de Anomalia, opcional</param>
             <returns>string</returns>
         </member>
         <member name="M:WebApp.DAO.InspecaoDAO.InspecaoAnomaliaCausas_by_Legenda(System.String)">
             <summary>
             lista concatenada das causas de anomalia por legenda
             </summary>
-            <param name="leg_codigo"></param>
+            <param name="leg_codigo">Filtro por Legenda de Anomalia, opcional</param>
             <returns>string</returns>
+        </member>
+        <member name="M:WebApp.DAO.InspecaoDAO.InspecaoAnomalia_ReparoSugerido(System.String,System.String,System.String,System.String)">
+            <summary>
+            Procura o Reparo Sugerido
+            </summary>
+            <param name="leg_codigo">Código da Legenda</param>
+            <param name="atp_codigo">Código do Tipo de Anomalia</param>
+            <param name="ale_codigo">Código do Alerta de Anomalia</param>
+            <param name="aca_codigo">Código da Causa da Anomalia</param>
+            <returns>List ReparoTipo</returns>
         </member>
         <member name="M:WebApp.DAO.InspecaoDAO.InspecaoTipo_ListAll(System.Nullable{System.Int32})">
             <summary>
@@ -3860,6 +3915,7 @@
             </summary>
             <param name="aca_id">Filtro por Id da Causa de Anomalia, null para todos</param>
             <param name="aca_descricao">Filtro por Descricao da Causa de Anomalia, vazio para todos</param>
+            <param name="leg_id">Filtro por Legenda de Anomalia, opcional</param>
             <returns>Lista de Causas de Anomalias</returns>
         </member>
         <member name="M:WebApp.DAO.AnomaliaDAO.AnomCausa_Salvar(WebApp.Models.AnomCausa,System.Int32,System.String)">
@@ -5365,6 +5421,13 @@
             <param name="worksheet">Planilha</param>
             <returns>Cell</returns>
         </member>
+        <member name="M:WebApp.Helpers.Gerais.IsNumeric(System.String)">
+            <summary>
+            Checa se é numero
+            </summary>
+            <param name="s">string a testar</param>
+            <returns></returns>
+        </member>
         <member name="T:WebApp.Helpers.LogErro">
             <summary>
             Tipo LogErro
@@ -5531,6 +5594,11 @@
         <member name="P:WebApp.Models.ReparoTipo.rpt_ativo">
             <summary>
             Ativo?
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.ReparoTipo.rpt_unidade">
+            <summary>
+            Unidade
             </summary>
         </member>
         <member name="T:WebApp.Models.Documento">
@@ -6138,14 +6206,54 @@
             Ativo?
             </summary>
         </member>
-        <member name="P:WebApp.Models.InspecaoAnomalia.ire_id_sugerido">
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_sugerido">
             <summary>
             Id do reparo sugerido
             </summary>
         </member>
-        <member name="P:WebApp.Models.InspecaoAnomalia.ire_id_adotado">
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_sugerido_codigo">
+            <summary>
+            Codigo do reparo sugerido
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_sugerido_descricao">
+            <summary>
+            Descricao do reparo sugerido
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_sugerido_unidade">
+            <summary>
+            Unidade da Quantidade do reparo sugerido
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.ian_quantidade_sugerida">
+            <summary>
+            Quantidade do reparo sugerido
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_adotado">
             <summary>
             Id do reparo adotado
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_adotado_codigo">
+            <summary>
+            Codigo do reparo adotado
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_adotado_descricao">
+            <summary>
+            Descricao do reparo adotado
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.rpt_id_adotado_unidade">
+            <summary>
+            Unidade da Quantidade do reparo adotada
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.ian_quantidade_adotada">
+            <summary>
+            Quantidade do reparo adotado
             </summary>
         </member>
         <member name="P:WebApp.Models.InspecaoAnomalia.atp_codigo">
@@ -6188,16 +6296,6 @@
             Descrição da legenda da anomalia
             </summary>
         </member>
-        <member name="P:WebApp.Models.InspecaoAnomalia.ire_descricao_sugerido">
-            <summary>
-            Descricao do reparo sugerido
-            </summary>
-        </member>
-        <member name="P:WebApp.Models.InspecaoAnomalia.ire_descricao_adotado">
-            <summary>
-            Descricao do reparo adotado
-            </summary>
-        </member>
         <member name="P:WebApp.Models.InspecaoAnomalia.lstLegendas">
             <summary>
             Lista de legendas para preenchimento de combo
@@ -6216,6 +6314,11 @@
         <member name="P:WebApp.Models.InspecaoAnomalia.lstCausas">
             <summary>
             Lista de causas para preenchimento de combo
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.InspecaoAnomalia.lstReparoTipos">
+            <summary>
+            Lista de Tipos de Reparo para preenchimento de combo
             </summary>
         </member>
         <member name="P:WebApp.Models.InspecaoAnomalia.ins_anom_Responsavel">
@@ -6981,6 +7084,11 @@
         <member name="P:WebApp.Models.ObjTipo.tip_ativo">
             <summary>
             Ativo?
+            </summary>
+        </member>
+        <member name="P:WebApp.Models.ObjTipo.tem_var_inspecao">
+            <summary>
+            Tem variável de inspecao?
             </summary>
         </member>
         <member name="T:WebApp.Models.ObjClasse">

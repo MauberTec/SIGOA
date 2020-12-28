@@ -42,10 +42,17 @@ namespace WebApp.Controllers
         /// Lista de todos os Tipos não deletados
         /// </summary>
         /// <param name="ins_id">Id da inspeção selecionada</param>
+        /// <param name="filtroOrdemServico_codigo">Código ou Parte a se localizar</param>
+        /// <param name="filtroObj_codigo">Código ou Parte a se localizar</param>
+        /// <param name="filtroTiposOS">Id do Tipo a se filtrar</param>
+        /// <param name="filtroStatusOS">Id do Status a se filtrar</param>
+        /// <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
+        /// <param name="filtroord_data_De">Filtro por Data: a de</param>
+        /// <param name="filtroord_data_Ate">Filtro por Data: até</param>
         /// <returns>JsonResult Lista de Inspecao</returns>
-        public JsonResult Inspecao_ListAll(int ins_id)
+        public JsonResult Inspecao_ListAll(int ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
         {
-            return Json(new { data = new InspecaoBLL().Inspecao_ListAll(ins_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new InspecaoBLL().Inspecao_ListAll(ins_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS, filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -140,7 +147,7 @@ namespace WebApp.Controllers
         /// <summary>
         /// lista concatenada dos tipos de anomalia por legenda
         /// </summary>
-        /// <param name="leg_codigo"></param>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
         /// <returns>JsonResult</returns>
         public JsonResult InspecaoAnomaliaTipos_by_Legenda(string leg_codigo)
         {
@@ -151,13 +158,27 @@ namespace WebApp.Controllers
         /// <summary>
         /// lista concatenada das causas de anomalia por legenda
         /// </summary>
-        /// <param name="leg_codigo"></param>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
         /// <returns>JsonResult</returns>
         public JsonResult InspecaoAnomaliaCausas_by_Legenda(string leg_codigo)
         {
             return Json(new { data = new InspecaoBLL().InspecaoAnomaliaCausas_by_Legenda(leg_codigo) }, JsonRequestBehavior.AllowGet);
         }
 
+
+
+        /// <summary>
+        /// Procura o Reparo Sugerido
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda</param>
+        /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
+        /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
+        /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        {
+            return Json(new { data = new InspecaoBLL().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo) }, JsonRequestBehavior.AllowGet);
+        }
 
 
 

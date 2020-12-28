@@ -131,6 +131,7 @@ namespace WebApp.Business
         ///  Lista de todas as Causas não deletadas
         /// </summary>
         /// <param name="aca_descricao">Filtro por Descricao da Causa de Anomalia, vazio para todos</param>
+        /// <param name="leg_id">Filtro por Legenda de Anomalia, opcional</param>
         /// <returns>Lista de AnomCausas</returns>
         public List<AnomCausa> AnomCausa_ListAll(string aca_descricao = "", int? leg_id = null)
         {

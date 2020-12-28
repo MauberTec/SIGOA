@@ -31,6 +31,12 @@ namespace WebApp.Models
         /// </summary>
         public int rpt_ativo { get; set; }
 
+    
+        /// <summary>
+        /// Unidade
+        /// </summary>
+        public string rpt_unidade { get; set; }
+
     }
 
 

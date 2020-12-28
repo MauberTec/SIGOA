@@ -418,11 +418,12 @@ namespace WebApp.Controllers
         /// <param name="tip_pai">Id do Tipo Pai</param>
         /// <param name="excluir_existentes">Menos os valores já existentes</param>
         /// <param name="obj_id">Id do objeto selecionado</param>
+        /// <param name="somente_com_variaveis_inspecao">Somente se possuir variaveis inspecao</param>
         /// /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult PreencheCmbTiposObjeto(int clo_id, int? tip_pai = 0, int? excluir_existentes = 0, int? obj_id = 0)
+        public JsonResult PreencheCmbTiposObjeto(int clo_id, int? tip_pai = 0, int? excluir_existentes = 0, int? obj_id = 0, int? somente_com_variaveis_inspecao = 0)
         {
-            return Json(new ObjetoBLL().CriaListaCmbTiposObjeto(clo_id, tip_pai, excluir_existentes, obj_id), JsonRequestBehavior.AllowGet);
+            return Json(new ObjetoBLL().CriaListaCmbTiposObjeto(clo_id, tip_pai, excluir_existentes, obj_id, somente_com_variaveis_inspecao), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

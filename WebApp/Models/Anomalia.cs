@@ -394,12 +394,55 @@ namespace WebApp.Models
         /// <summary>
         /// Id do reparo sugerido
         /// </summary>
-        public int ire_id_sugerido { get; set; }
+        public int rpt_id_sugerido { get; set; }
+
+        /// <summary>
+        /// Codigo do reparo sugerido
+        /// </summary>
+        public string rpt_id_sugerido_codigo { get; set; }
+
+        /// <summary>
+        /// Descricao do reparo sugerido
+        /// </summary>
+        public string rpt_id_sugerido_descricao { get; set; }
+
+        /// <summary>
+        /// Unidade da Quantidade do reparo sugerido
+        /// </summary>
+        public string rpt_id_sugerido_unidade { get; set; }
+
+       /// <summary>
+        /// Quantidade do reparo sugerido
+        /// </summary>
+        public decimal ian_quantidade_sugerida { get; set; }
+
 
         /// <summary>
         /// Id do reparo adotado
         /// </summary>
-        public int ire_id_adotado { get; set; }
+        public int rpt_id_adotado { get; set; }
+
+        /// <summary>
+        /// Codigo do reparo adotado
+        /// </summary>
+        public string rpt_id_adotado_codigo { get; set; }
+
+        /// <summary>
+        /// Descricao do reparo adotado
+        /// </summary>
+        public string rpt_id_adotado_descricao { get; set; }
+
+        /// <summary>
+        /// Unidade da Quantidade do reparo adotada
+        /// </summary>
+        public string rpt_id_adotado_unidade { get; set; }
+ 
+        /// <summary>
+        /// Quantidade do reparo adotado
+        /// </summary>
+        public decimal ian_quantidade_adotada { get; set; }
+
+
 
         /// <summary>
         /// Código do tipo de anomalia
@@ -442,15 +485,6 @@ namespace WebApp.Models
         /// </summary>
         public string leg_descricao { get; set; }
 
-        /// <summary>
-        /// Descricao do reparo sugerido
-        /// </summary>
-        public int ire_descricao_sugerido { get; set; }
-
-        /// <summary>
-        /// Descricao do reparo adotado
-        /// </summary>
-        public int ire_descricao_adotado { get; set; }
 
         /// <summary>
         /// Lista de legendas para preenchimento de combo
@@ -471,6 +505,11 @@ namespace WebApp.Models
         /// Lista de causas para preenchimento de combo
         /// </summary>
         public string lstCausas { get; set; }
+
+        /// <summary>
+        /// Lista de Tipos de Reparo para preenchimento de combo
+        /// </summary>
+        public string lstReparoTipos { get; set; }
 
         /// <summary>
         /// Responsavel pela Inspeção

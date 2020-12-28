@@ -652,6 +652,17 @@ namespace WebApp.Helpers
             }
         }
 
+        /// <summary>
+        /// Checa se é numero
+        /// </summary>
+        /// <param name="s">string a testar</param>
+        /// <returns></returns>
+        public bool IsNumeric(string s)
+        {
+            float output;
+            return float.TryParse(s, out output);
+        }
+
 
 
     }

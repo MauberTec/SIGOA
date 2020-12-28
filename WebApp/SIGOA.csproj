@@ -437,6 +437,10 @@
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
+    <Content Include="Scripts\Shared\_fichasInspecao.js" />
     <Content Include="Scripts\Shared\_SelecionarDocumento.js" />
     <Content Include="Scripts\Unidade\Unidade.js" />
     <Content Include="Scripts\Grupo\Grupo.js" />

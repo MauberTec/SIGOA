@@ -24,8 +24,15 @@ namespace WebApp.DAO
         ///     Lista de todas os Inspeções não deletadas
         /// </summary>
         /// <param name="ins_id">Filtro por Id da Inspeção, null para todos</param>
+        /// <param name="filtroOrdemServico_codigo">Código ou Parte a se localizar</param>
+        /// <param name="filtroObj_codigo">Código ou Parte a se localizar</param>
+        /// <param name="filtroTiposOS">Id do Tipo a se filtrar</param>
+        /// <param name="filtroStatusOS">Id do Status a se filtrar</param>
+        /// <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
+        /// <param name="filtroord_data_De">Filtro por Data: a de</param>
+        /// <param name="filtroord_data_Ate">Filtro por Data: até</param>
         /// <returns>Lista de Inspecao</returns>
-        public List<Inspecao> Inspecao_ListAll(int? ins_id)
+        public List<Inspecao> Inspecao_ListAll(int? ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
         {
             try
             {
@@ -36,6 +43,26 @@ namespace WebApp.DAO
                     SqlCommand com = new SqlCommand("STP_SEL_INSPECOES", con);
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@ins_id", ins_id);
+
+                    com.Parameters.AddWithValue("@filtroOrdemServico_codigo", filtroOrdemServico_codigo != null ? filtroOrdemServico_codigo.Trim() : null);
+                    com.Parameters.AddWithValue("@filtroObj_codigo", filtroObj_codigo != null ? filtroObj_codigo.Trim() : null);
+
+                    if (filtroTiposOS >= 0)
+                        com.Parameters.AddWithValue("@filtroTiposOS", filtroTiposOS);
+
+                    if (filtroStatusOS >= 0)
+                        com.Parameters.AddWithValue("@filtroStatusOS", filtroStatusOS);
+
+                    if (filtroData != "")
+                    {
+                        com.Parameters.AddWithValue("@filtroData", filtroData);
+
+                        if (filtroord_data_De != "")
+                            com.Parameters.AddWithValue("@filtroord_data_De", filtroord_data_De);
+
+                        if (filtroord_data_Ate != "")
+                            com.Parameters.AddWithValue("@filtroord_data_Ate", filtroord_data_Ate);
+                    }
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -162,13 +189,11 @@ namespace WebApp.DAO
                         {
                             obj_id = (rdr["obj_id"] == DBNull.Value) ? -1 : Convert.ToInt32(rdr["obj_id"]),
                             atr_id = Convert.ToInt32(rdr["atr_id"]),
-                            clo_id = Convert.ToInt32(rdr["clo_id"]),
-                            tip_id = Convert.ToInt32(rdr["tip_id"]),
                             nItens = Convert.ToInt32(rdr["nItens"]),
 
                             atr_atributo_nome = rdr["atr_atributo_nome"].ToString(),
                             atr_descricao = rdr["atr_descricao"].ToString(),
-                            atr_mascara_texto = rdr["atr_mascara_texto"].ToString(),
+                            atr_mascara_texto = (rdr["atr_mascara_texto"] == DBNull.Value) ? string.Empty : rdr["atr_mascara_texto"].ToString(),
                             atv_controle = rdr["atv_controle"].ToString(),
 
                             ati_ids = (rdr["ati_ids"] == DBNull.Value) ? "" : rdr["ati_ids"].ToString(),
@@ -177,6 +202,24 @@ namespace WebApp.DAO
                             atr_apresentacao_itens = (rdr["atr_apresentacao_itens"] == DBNull.Value) ? string.Empty : rdr["atr_apresentacao_itens"].ToString(),
                             // ati_item = (rdr["ati_item"] == DBNull.Value) ? string.Empty : rdr["ati_item"].ToString(),
                             atr_itens_todos = rdr["atr_itens_todos"].ToString()
+
+                            //obj_id = (rdr["obj_id"] == DBNull.Value) ? -1 : Convert.ToInt32(rdr["obj_id"]),
+                            //atr_id = Convert.ToInt32(rdr["atr_id"]),
+                            //clo_id = Convert.ToInt32(rdr["clo_id"]),
+                            //tip_id = Convert.ToInt32(rdr["tip_id"]),
+                            //nItens = Convert.ToInt32(rdr["nItens"]),
+
+                            //atr_atributo_nome = rdr["atr_atributo_nome"].ToString(),
+                            //atr_descricao = rdr["atr_descricao"].ToString(),
+                            //atr_mascara_texto = rdr["atr_mascara_texto"].ToString(),
+                            //atv_controle = rdr["atv_controle"].ToString(),
+
+                            //ati_ids = (rdr["ati_ids"] == DBNull.Value) ? "" : rdr["ati_ids"].ToString(),
+                            //atv_valor = (rdr["atv_valor"] == DBNull.Value) ? string.Empty : rdr["atv_valor"].ToString(),
+                            //atv_valores = (rdr["atv_valores"] == DBNull.Value) ? string.Empty : rdr["atv_valores"].ToString(),
+                            //atr_apresentacao_itens = (rdr["atr_apresentacao_itens"] == DBNull.Value) ? string.Empty : rdr["atr_apresentacao_itens"].ToString(),
+                            //// ati_item = (rdr["ati_item"] == DBNull.Value) ? string.Empty : rdr["ati_item"].ToString(),
+                            //atr_itens_todos = rdr["atr_itens_todos"].ToString()
                         });
                     }
                     return lst;
@@ -340,13 +383,23 @@ namespace WebApp.DAO
 
                             ian_ativo = rdr["ian_ativo"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_ativo"]),
 
-                            ire_id_sugerido = rdr["ire_id_sugerido"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ire_id_sugerido"]),
-                            ire_id_adotado = rdr["ire_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ire_id_adotado"]),
+                            rpt_id_sugerido = rdr["rpt_id_sugerido"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_sugerido"]),
+                            rpt_id_sugerido_codigo = rdr["rpt_id_sugerido_codigo"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_codigo"].ToString(),
+                            rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
+                            rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
+                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"]),
+
+                            rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
+                            rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
+                            rpt_id_adotado_descricao = rdr["rpt_id_adotado_descricao"] == DBNull.Value ? "" : rdr["rpt_id_adotado_descricao"].ToString(),
+                            rpt_id_adotado_unidade = rdr["rpt_id_adotado_unidade"] == DBNull.Value ? "" : rdr["rpt_id_adotado_unidade"].ToString(),
+                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"]),
 
                             lstLegendas = rdr["lstLegendas"] == DBNull.Value ? "" : rdr["lstLegendas"].ToString(),
                             lstAlertas = rdr["lstAlertas"] == DBNull.Value ? "" : rdr["lstAlertas"].ToString(),
                             lstTipos = rdr["lstTipos"] == DBNull.Value ? "" : rdr["lstTipos"].ToString(),
-                            lstCausas = rdr["lstCausas"] == DBNull.Value ? "" : rdr["lstCausas"].ToString()
+                            lstCausas = rdr["lstCausas"] == DBNull.Value ? "" : rdr["lstCausas"].ToString(),
+                            lstReparoTipos = rdr["lstReparoTipos"] == DBNull.Value ? "" : rdr["lstReparoTipos"].ToString()
 
                         });
                     }
@@ -507,7 +560,7 @@ namespace WebApp.DAO
         /// <summary>
         /// lista concatenada dos tipos de anomalia por legenda
         /// </summary>
-        /// <param name="leg_codigo"></param>
+        /// <param name="leg_codigo">Filtro por Legenda de Anomalia, opcional</param>
         /// <returns>string</returns>
         public string InspecaoAnomaliaTipos_by_Legenda(string leg_codigo)
         {
@@ -538,7 +591,7 @@ namespace WebApp.DAO
         /// <summary>
         /// lista concatenada das causas de anomalia por legenda
         /// </summary>
-        /// <param name="leg_codigo"></param>
+        /// <param name="leg_codigo">Filtro por Legenda de Anomalia, opcional</param>
         /// <returns>string</returns>
         public string InspecaoAnomaliaCausas_by_Legenda(string leg_codigo)
         {
@@ -566,6 +619,54 @@ namespace WebApp.DAO
 
         }
 
+        /// <summary>
+        /// Procura o Reparo Sugerido
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda</param>
+        /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
+        /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
+        /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <returns>List ReparoTipo</returns>
+        public List<ReparoTipo> InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        {
+            try
+            {
+                List<ReparoTipo> lst = new List<ReparoTipo>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_INSPECAO_ANOMALIAS_REPARO_SUGERIDO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.CommandTimeout = 600; // (tempo em segundos)
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@leg_codigo", leg_codigo);
+                    com.Parameters.AddWithValue("@atp_codigo", atp_codigo);
+                    com.Parameters.AddWithValue("@ale_codigo", ale_codigo);
+                    com.Parameters.AddWithValue("@aca_codigo", aca_codigo);
+
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        lst.Add(new ReparoTipo
+                        {
+                            rpt_id = rdr["rpt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id"]),
+                            rpt_descricao = rdr["rpt_descricao"] == DBNull.Value ? "" : rdr["rpt_descricao"].ToString(),
+                            rpt_unidade = rdr["rpt_unidade"] == DBNull.Value ? "" : rdr["rpt_unidade"].ToString().Trim()
+                        });
+
+                    }
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
         //**************************************************************************

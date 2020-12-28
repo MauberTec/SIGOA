@@ -317,7 +317,8 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
     if (moduloCorrente == 'OrdemServico')
     {
         var StatusOS = parseInt(filtroStatusOS);
-        if (StatusOS == 11) {
+        if (StatusOS == 11) // executada
+        {
             url = "/Inspecao/InspecaoAtributosValores_ListAll";
             data = { "ord_id": selectedId_ord_id };
         }
