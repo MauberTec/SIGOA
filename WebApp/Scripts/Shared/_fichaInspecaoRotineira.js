@@ -1,6 +1,31 @@
-﻿    var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
-    var cabecalho2 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
-    var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+
+//var cabecalho2 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+var cabecalho2 =
+    ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
+    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "9" >' +
+    '     <table style="width:100%"> ' +
+    '      <tr> ' +
+    '        <td style="width:26px"> ' +
+    '          <button id="btn_ExcluirSubDivisao2_INSPECAO_ROTINEIRA_TIPP_IIDD" ' +
+    '            type="button" ' +
+    '             onclick="return Ficha2_ExcluirSubDivisao2(TIPP_IIDD)" ' +
+    '             title="Excluir Subdivisão" ' +
+    '             style="border:none; box-shadow:none; background-color:transparent; visibility:visibilitySubdivisao2"> ' +
+    '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
+    '          </button> ' +
+    '        </td> ' +
+    '        <td> ' +
+    '           <label class="lblsBold" > XXXXX</label >' +
+    '       </td> ' +
+    '     </tr> ' +
+    '   </table> ' +
+
+    ' </td >' +
+    ' </tr > ';
+
+
+var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
 
     var MesclarGrupo =
         '   <td class="borderLeft borderTop borderRight borderBottomPt" rowspan=N_ROWSPAN > ' +
@@ -681,7 +706,13 @@
                         linhas = linhas + cabecalho1.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
                     else
                         if (parseInt(result.data[i].nCabecalhoGrupo) == 2) // CABECALHO 2
-                            linhas = linhas + cabecalho2.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+                        {
+                            var visibilitySub2 = "hidden";
+                            //if ((parseInt(result.data[i].tip_pai) == 22) || (parseInt(result.data[i].tip_pai) == 23) )
+                            //    visibilitySub2 = "visible";
+
+                            linhas = linhas + cabecalho2.replace(/TIPP_IIDD/g, result.data[i].tip_pai).replace(/XXXXX/g, result.data[i].nome_pai).replace(/YYY/g, i).replace("visibilitySubdivisao2", visibilitySub2);
+                        }
                         else
                             if (parseInt(result.data[i].nCabecalhoGrupo) == 3) // CABECALHO 3
                                 linhas = linhas + cabecalho3.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
@@ -1231,6 +1262,46 @@
         preenchetblFicha2(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
     }
 
+    function Ficha2_ExcluirSubDivisao2(tip_id) {
+        var form = this;
+
+        swal({
+            title: "Excluir. Tem certeza?",
+            icon: "warning",
+            buttons: [
+                'Não',
+                'Sim'
+            ],
+            dangerMode: true,
+            focusCancel: true
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                var response = POST("/Objeto/Objeto_Subdivisao2_Excluir", JSON.stringify({ tip_id: tip_id, obj_id_tipoOAE: selectedId_obj_id }))
+                if (response.erroId.trim() == "") {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Registro excluído com sucesso'
+                    });
+
+                    // atualiza tabela grupos
+                    Ficha2_CriarTabelaGrupos();
+                    return false;
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'Erro ao excluir registro:' + response.erroId
+                    });
+                }
+                return false;
+            } else {
+                return false;
+            }
+        })
+        return false;
+    }
 
     // popup GRUPOS
     function Ficha2_preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) {

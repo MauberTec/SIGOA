@@ -240,6 +240,43 @@ namespace WebApp.DAO
         }
 
 
+
+        /// <summary>
+        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// </summary>
+        /// <param name="obj_id">Id do Objeto Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>string</returns>
+        public string Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_DEL_OBJETO_SUBDIVISAO2", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@tip_id", tip_id);
+                    com.Parameters.AddWithValue("@obj_id_tipoOAE", obj_id_tipoOAE);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i >0 ? "" : "Erro";
+            }
+            catch (Exception ex)
+            {
+                // int id = 0;
+                // new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                // throw new Exception(ex.Message);
+                return ex.Message;
+            }
+        }
+
+
         /// <summary>
         ///     Excluir (logicamente) Objeto
         /// </summary>

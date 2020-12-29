@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\WebApp",
-    "\\WebApp\\Views",
     "\\WebApp\\Views\\Shared"
   ],
-  "SelectedNode": "\\WebApp\\Views\\Shared\\_fichaInspecaoCadastral.cshtml",
+  "SelectedNode": "\\WebApp\\SIGOA.csproj",
   "PreviewInSolutionExplorer": false
 }

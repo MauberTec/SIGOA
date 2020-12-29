@@ -91,6 +91,20 @@ namespace WebApp.Business
             return new ObjetoDAO().Objeto_AtivarDesativar(obj_id, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
+
+        /// <summary>
+        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// </summary>
+        /// <param name="obj_id">Id do Objeto Selecionado</param>
+        /// <returns>string</returns>
+        public string Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
+        {
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().Objeto_Subdivisao2_Excluir(tip_id, obj_id_tipoOAE, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
+
         /// <summary>
         ///  Excluir (logicamente) Objeto
         /// </summary>

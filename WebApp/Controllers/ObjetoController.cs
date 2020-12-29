@@ -100,6 +100,19 @@ namespace WebApp.Controllers
         }
 
         /// <summary>
+        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// </summary>
+        /// <param name="obj_id">Id do objeto a ser deletado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
+        {
+            string retorno = new ObjetoBLL().Objeto_Subdivisao2_Excluir(tip_id, obj_id_tipoOAE);
+            bool valid = retorno.Trim() == "";
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
         ///  Excluir (logicamente) Objeto selecionado
         /// </summary>
         /// <param name="id">Id do Objeto selecionado</param>

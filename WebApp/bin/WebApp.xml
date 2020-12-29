@@ -870,6 +870,13 @@
             <param name="obj_id">Id do Objeto Selecionado</param>
             <returns>int</returns>
         </member>
+        <member name="M:WebApp.Business.ObjetoBLL.Objeto_Subdivisao2_Excluir(System.Int32,System.Int32)">
+            <summary>
+            Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+            </summary>
+            <param name="obj_id">Id do Objeto Selecionado</param>
+            <returns>string</returns>
+        </member>
         <member name="M:WebApp.Business.ObjetoBLL.Objeto_Excluir(System.Int32)">
             <summary>
              Excluir (logicamente) Objeto
@@ -2860,6 +2867,13 @@
             <param name="id">Id do Objeto Selecionado</param>
             <returns>JsonResult</returns>
         </member>
+        <member name="M:WebApp.Controllers.ObjetoController.Objeto_Subdivisao2_Excluir(System.Int32,System.Int32)">
+            <summary>
+            Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+            </summary>
+            <param name="obj_id">Id do objeto a ser deletado</param>
+            <returns>JsonResult</returns>
+        </member>
         <member name="M:WebApp.Controllers.ObjetoController.Objeto_Excluir(System.Int32)">
             <summary>
              Excluir (logicamente) Objeto selecionado
@@ -4426,6 +4440,15 @@
             <param name="obj_descricao">Descrição do Objeto (opcional)</param>
             <param name="obj_NumeroObjetoAte">No caso de inserção de item Número Objeto, é possível inserção em lote</param>
             <param name="obj_localizacaoAte">No caso de inserção de item Localização, é possível inserção em lote</param>
+            <param name="usu_id">Id do Usuário Logado</param>
+            <param name="ip">IP do Usuário Logado</param>
+            <returns>string</returns>
+        </member>
+        <member name="M:WebApp.DAO.ObjetoDAO.Objeto_Subdivisao2_Excluir(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+            </summary>
+            <param name="obj_id">Id do Objeto Selecionado</param>
             <param name="usu_id">Id do Usuário Logado</param>
             <param name="ip">IP do Usuário Logado</param>
             <returns>string</returns>
