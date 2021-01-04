@@ -1,0 +1,1383 @@
+﻿@{
+    ViewBag.Title = "::.. Ordens de Serviço ..::";
+}
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 540 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(540)); // id DO MODULO "O.S."
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 540 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<style>
+    .rotate-135-left {
+        -o-transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+        transform: rotate(-135deg);
+    }
+
+    .titulosAbas {
+        font-family: 'Source Sans Pro',sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+<h2></h2>
+<script>
+    // variavel usada para identificar a view origem da ficha cadastral shared
+    var paginaPai = "OrdemServico";
+    var qualFicha;
+    //  var selectedId_obj_id;
+
+</script>
+
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div id="divcontroles" class="row" style="margin:3px">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label class="control-label">Código O.S.</label>
+                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="control-label">Código Objeto</label>
+                        <input type="text" class="form-control" id="txtFiltroObj_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                    </div>
+
+                    <div class="col-sm-3 ">
+                        <label class="control-label">Tipo</label>
+                        @Html.DropDownList("cmbFiltroTiposOS", null, "-- Selecione --", new { @class = "form-control " })
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="control-label">Status</label>
+                        @Html.DropDownList("cmbFiltroStatusOS", null, "-- Selecione --", new { @class = "form-control " })
+                    </div>
+                </div>
+
+
+                <div class="form-group" style="padding-top:20px; margin-top:20px">
+                    <div class="col-sm-3">
+                        <label class="control-label">Data</label>
+                        <select name="cmbDatas" id="cmbDatas" class="form-control">
+                            <option value="">--Selecione--</option>
+                            <option value="Abertura">Data Abertura</option>
+                            <option value="Inicio_Programada">Data Início Planejada</option>
+                            <option value="Termino_Programada">Data Término Planejada</option>
+                            <option value="Inicio_Execucao">Data Início Execução</option>
+                            <option value="Termino_Execucao">Data Término Execução</option>
+                            <option value="Suspensao">Data Suspensão</option>
+                            <option value="Cancelamento">Data Cancelamento</option>
+                            <option value="Reinicio">Data Reinício</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="control-label">De</label>
+                        <input id="filtroord_data_De" name="filtroord_data_De"
+                               placeholder="De"
+                               class="form-control" style="background-color:white" />
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="control-label">Até</label>
+                        <input id="filtroord_data_Ate" name="filtroord_data_Ate"
+                               placeholder="Até"
+                               class="form-control" style="background-color:white" />
+                    </div>
+
+                    <div class="btn-box-tool pull-right" style="margin-top:20px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltro();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltro();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <table id="tblOrdemServicos">
+                    <thead>
+                        <tr>
+                            <th>row_numero</th>
+                            <th>temFilhos</th>
+                            <th>row_expandida</th>
+                            <th>ord_id</th>
+                            <th>ocl_id</th>
+                            <th>tos_id</th>
+                            <th>obj_id</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Objeto</th>
+                            <th>Tipo</th>
+                            <th>Status</th>
+                            <th>nNivel</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                @{
+                    if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                    {
+                        <button type="button" class="btn btn-primary botaoInserir" onclick="btnOSInserir_onclick();">Nova Ordem de Serviço</button>
+                    }
+                }
+                <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .altura30 {
+        height: 30px;
+    }
+
+    .backgrdTransparent {
+        background-color: transparent !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    .chklst {
+        /*font-family: 'Lucida Console';*/
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+</style>
+
+@***** SCRIPT FICHA todas as fichas ***********************@
+<script src="~/Scripts/Shared/_fichasInspecao.js"></script>
+
+<script>
+    function abreFicha(qualFicha1) {
+        // limpa todas as fichas
+        $('#partialFicha1').empty();
+        $('#partialFicha2').empty();
+        $('#partialFicha3').empty();
+        $('#partialFicha4').empty();
+        $('#partialFicha5').empty();
+        $('#partialFicha6').empty();
+
+        qualFicha = qualFicha1;
+
+        $.ajax({
+            type: 'GET',
+            "data": { qualFicha: qualFicha },
+            url: '@Url.Action("CarregaFicha", "OrdemServico")',
+            success: function (result) {
+                document.getElementById('partialFicha' + qualFicha).innerHTML = result;
+
+                switch (qualFicha) {
+                    case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
+                    case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
+                    case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
+                    case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
+                    case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
+                    case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
+                }
+
+                colocaDatePickers();
+
+            }
+        });
+    }
+
+</script>
+
+
+@***** SCRIPT FICHA 1 - CADASTRAL ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
+
+
+@***** SCRIPT FICHAS 2 e 3 - CADASTRAL 2 E ROTINEIRA ***********************@
+
+<script src="~/Scripts/Shared/_fichaInspecaoRotineira.js"></script>
+
+
+@***** SCRIPT FICHA 4 - ESPECIAL ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial.js"></script>
+
+
+@***** SCRIPT FICHA 5 - ESPECIAL CAMPO ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial_Anomalias.js"></script>
+
+
+@***** SCRIPT FICHA 6 - NOTIFICACAO OCORRENCIA ***********************@
+<script >
+
+    var sel_noc_id = -1;
+
+    var controlesReadOnly = ["txt_atr_txt_IdentificacaoOAEid_102", "txt_NomeOAE", "txt_CodigoRodovia", "txt_NomeRodovia", "txt_LocalizacaoKm", "txt_Municipio", "txt_Tipo"];
+
+    function setaReadWrite_FichaNotificacaoOcorrencia(tabela, ehRead) {
+
+        // habilita ou desabilita todos os controles editaveis
+        var lstTxtBoxes = tabela.getElementsByTagName('input');
+        var lstCombos = tabela.getElementsByTagName('select');
+        var lstTextareas = tabela.getElementsByTagName('textarea');
+
+        for (var i = 0; i < lstTxtBoxes.length; i++)
+            if (!controlesReadOnly.includes(lstTxtBoxes[i].id))
+                lstTxtBoxes[i].disabled = ehRead;
+
+        for (var i = 0; i < lstTextareas.length; i++)
+            if (!controlesReadOnly.includes(lstTextareas[i].id))
+                lstTextareas[i].disabled = ehRead;
+
+        for (var i = 0; i < lstCombos.length; i++)
+            if (!controlesReadOnly.includes(lstCombos[i].id))
+                lstCombos[i].disabled = ehRead;
+            else
+                lstCombos[i].disabled = true;
+
+    }
+
+    function limpatblFicha6() {
+
+        var tabela= document.getElementById("divFicha6"); 
+
+        // habilita ou desabilita todos os controles editaveis
+        if (tabela) {
+            var lstTxtBoxes = tabela.getElementsByTagName('input');
+            var lstCombos = tabela.getElementsByTagName('select');
+            var lstTextareas = tabela.getElementsByTagName('textarea');
+
+            for (var i = 0; i < lstTxtBoxes.length; i++)
+                lstTxtBoxes[i].value = "";
+
+            for (var i = 0; i < lstTextareas.length; i++)
+                lstTextareas[i].value = "";
+
+            for (var i = 0; i < lstCombos.length; i++)
+                lstCombos[i].innerText = null;
+        }
+    }
+
+    function preenchetblFicha6(obj_id, classe, tipo, ins_id) {
+        classe = parseInt(classe);
+        tipo = parseInt(tipo);
+        selectedId_clo_id = classe;
+        selectedId_tip_id = tipo;
+
+
+        // limpa antes de preencher
+        limpatblFicha6();
+
+        // datepickers da ficha NOTIFICACAO OCORRENCIAS
+        $('#txt_Data_Notificacao').datepicker({ dateFormat: 'dd/mm/yy' });
+        $('#txt_Solicitante_Data').datepicker({ dateFormat: 'dd/mm/yy' });
+        $('#txt_Responsavel_Recebimento_Data').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+        var ord_id = 0;
+        if (paginaPai == "OrdemServico")
+            ord_id = selectedId_ord_id;
+
+        var url = "/NotificacaoOcorrencia/NotificacaoOcorrencia_ListAll";
+        var data = { "ord_id": ord_id };
+
+        // dados da ocorrencia
+        $.ajax({
+            "url": url,
+            "type": "GET",
+            "datatype": "json",
+            "data": data,
+            "success": function (result) {
+                if (result.data.length > 0) {
+
+                    $('#txt_IdentificacaoOAE').val(result.data[0].IdentificacaoOAE);
+                    $('#txt_NomeOAE').val(result.data[0].NomeOAE);
+                    $('#txt_CodigoRodovia').val(result.data[0].CodigoRodovia);
+                    $('#txt_NomeRodovia').val(result.data[0].NomeRodovia);
+                    $('#txt_LocalizacaoKm').val(result.data[0].LocalizacaoKm);
+                    $('#txt_Municipio').val(result.data[0].Municipio);
+                    $('#txt_Tipo').val(result.data[0].Tipo);
+
+                    sel_noc_id = result.data[0].noc_id;
+                    $('#txt_Data_Notificacao').val(result.data[0].data_notificacao);
+                    $('#txt_Responsavel_Notificacao').val(result.data[0].responsavel_notificacao);
+                    $('#txt_Descricao_Ocorrencia').val(result.data[0].descricao_ocorrencia);
+                    $('#txt_Solicitante').val(result.data[0].solicitante);
+                    $('#txt_Solicitante_Data').val(result.data[0].solicitante_data);
+                    $('#txt_Responsavel_Recebimento').val(result.data[0].responsavel_recebimento);
+                    $('#txt_Responsavel_Recebimento_Data').val(result.data[0].responsavel_recebimento_data);
+                }
+            }
+        });
+
+
+
+    }
+
+    function CancelarDados_FichaNotificacaoOcorrencia(tabela) {
+        preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+
+        // alterna os campos para leitura
+        setaReadWrite_FichaNotificacaoOcorrencia(tabela, true);
+        document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
+        document.getElementById("btn_Cancelar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
+        document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
+
+    }
+    function SalvarDados_FichaNotificacaoOcorrencia(tabela) {
+
+
+
+        // ********* ENVIA OS DADOS PARA O BANCO **********************************************************************
+        var ord_id = -1;
+        if (moduloCorrente == 'OrdemServico')
+            ord_id = selectedId_ord_id;
+
+        var notOcor = {
+            noc_id: sel_noc_id,
+            ord_id: ord_id,
+            data_notificacao: $('#txt_Data_Notificacao').val(),
+            responsavel_notificacao: $('#txt_Responsavel_Notificacao').val(),
+            descricao_ocorrencia: $('#txt_Descricao_Ocorrencia').val(),
+            solicitante: $('#txt_Solicitante').val(),
+            solicitante_data: $('#txt_Solicitante_Data').val(),
+            responsavel_recebimento: $('#txt_Responsavel_Recebimento').val(),
+            responsavel_recebimento_data: $('#txt_Responsavel_Recebimento_Data').val()
+        };
+
+
+
+        $.ajax({
+            url: "/NotificacaoOcorrencia/NotificacaoOcorrencia_Salvar",
+            data: JSON.stringify(notOcor),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                preenchetblFicha6(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+
+                return false;
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                return false;
+            }
+        });
+
+
+        // alterna os campos para leitura
+        setaReadWrite_FichaNotificacaoOcorrencia(tabela, true);
+
+        // alterna para os botoes de salvar/cancelar
+        document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
+        document.getElementById("btn_Cancelar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
+        document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
+
+    }
+    function EditarDados_FichaNotificacaoOcorrencia(tabela) {
+        // alterna os campos para escrita
+        setaReadWrite_FichaNotificacaoOcorrencia(tabela, false);
+
+        // alterna para os botoes de salvar/cancelar
+        document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
+        document.getElementById("btn_Cancelar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
+        document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
+
+        return false;
+    }
+
+
+</script>
+
+
+
+
+@***** INICIO DAS ABAS ***********************@
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <ul class="nav nav-tabs" id="Tabs" role="tablist">
+                    <li class="active" id="liDetalhesOS">
+                        <a id="tabDetalhesOSheader" data-toggle="tab" href="#tabDetalhesOS" onclick="OrdemServico_setaReadWrite(true)">Detalhes O.S.</a>
+                    </li>
+                    <li style="display:none" id="liFichaInspecaoCadastral">
+                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral </a>
+                    </li>
+                    <li style="display:none" id="liFichaInspecao1aRotineira">
+                        <a id="tabFichaInspecao1aRotineiraheader" data-toggle="tab" href="#tabFichaInspecao1aRotineira" onclick="abreFicha(2);">Ficha Básica - Primeira Rotineira</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoRotineira">
+                        <a id="tabFichaInspecaoRotineiraheader" data-toggle="tab" href="#tabFichaInspecaoRotineira" onclick="abreFicha(3);">Ficha Básica - Inspeção Rotineira</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoEspecial">
+                        <a id="tabFichaInspecaoEspecialheader" data-toggle="tab" href="#tabFichaInspecaoEspecial" onclick="abreFicha(4);">Ficha de Informações Básicas - Inspeção Especial</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoEspecialAnomalias">
+                        <a id="tabFichaInspecaoEspecialAnomaliasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomalias" onclick="abreFicha(5);">Ficha de Cadastramento de Anomalias - Inspeção Especial</a>
+                    </li>
+
+
+                    <li style="display:none" id="liFichaNotificacaoOcorrencia">
+                        <a id="tabFichaNotificacaoOcorrenciaheader" data-toggle="tab" href="#tabFichaNotificacaoOcorrencia" onclick="abreFicha(6);">Ficha de Notificação de Ocorrência</a>
+                    </li>
+
+                    <li>
+                        <a id="tabDocumentosAssociadosOBJHeader" data-toggle="tab" href="#tabDocumentosAssociadosOBJ" onclick="$('#tblDocumentosAssociadosOBJ').DataTable().ajax.reload();">Documentos Associados ao Objeto</a>
+                    </li>
+                    <li>
+                        <a id="tabDocumentosAssociadosOSHeader" data-toggle="tab" href="#tabDocumentosAssociadosOS" onclick="$('#tblDocumentosAssociados').DataTable().ajax.reload();">Documentos Associados à Ordem de Serviço</a>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content" id="TabContent">
+                    <div class="tab-pane fade in active" id="tabDetalhesOS" role="tabpanel" aria-labelledby="tabDetalhesOS">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" id="btnEditar_Detalhes" style="display:inline" onclick="OrdemServico_Editar(selectedId_ord_id, 'btnEditar_Detalhes')">Editar</button>
+                                    <button type="button" class="btn btn-primary" id="btnSalvar_Detalhes" style="display:none" onclick="OrdemServico_Salvar()">Salvar</button>
+                                    <button type="button" class="btn btn-primary" id="btnCancelar_Detalhes" style="display:none" onclick="OrdemServico_Cancelar()">Cancelar</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas"></label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+
+                        <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                            <br />
+                            <div class="form-group" id="divDetalhes">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2">Código</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtord_codigo" name="txtord_codigo"
+                                                   style="margin-left: -3px !important;"
+                                                   class="form-control" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2">Descrição<span class="text-danger">*</span></label>
+                                        <div class="col-sm-10">
+                                            <input id="txtord_descricao" name="txtord_descricao" class="form-control"
+                                                   style="margin-left: -3px !important;"
+                                                   placeholder="Descrição" data-val="true" required
+                                                   maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                                   autocomplete="off"
+                                                   onkeyup="validaAlfaNumerico(this)" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Tipo de O.S.<span class="text-danger">*</span> </label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownList("cmbTiposOS", null, "-- Selecione --", new { @class = "form-control " })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Objeto<span class="text-danger">*</span> </label>
+                                        <div class="col-sm-8">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <td style="width:100%">
+                                                        <input id="txtobj_codigo_Novo2" name="txtobj_codigo_Novo2" class="form-control"
+                                                               placeholder="Objeto" disabled
+                                                               autocomplete="off" />
+                                                    </td>
+                                                    <td>
+                                                        <button id="btnAbrirLocalizarObjetos" disabled style="display:inline; width:40px; height:25px; margin-left:5px; display:inline" onclick="return abrirLocalizarObjetos();">...</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Status</label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownList("cmbStatusOS", null, "-- Selecione --", new { @class = "form-control " })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Aberta Por</label>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_aberta_por" name="txtord_aberta_por"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Responsável DER</label></nobr>
+                                        <div class="col-sm-8">
+                                            @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
+                                            <input id="txtord_responsavel_der" name="txtord_responsavel_der"
+                                                   class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Responsável Fiscalização</label></nobr>
+                                        <div class="col-sm-8">
+                                            @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
+                                            <input id="txtord_responsavel_fiscalizacao" name="txtord_responsavel_fiscalizacao"
+                                                   class="form-control" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr> <label class="control-label col-sm-4">Responsável Execução</label></nobr>
+                                        <div class="col-sm-8">
+                                            @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
+                                            <input id="txtord_responsavel_execucao" name="txtord_responsavel_execucao"
+                                                   class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Início Programada<span class="text-danger">*</span></label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_inicio_programada" name="txtord_data_inicio_programada" placeholder="Data Início Programada"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Início Execução</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_inicio_execucao" name="txtord_data_inicio_execucao" placeholder="Data Início Execução"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Suspensão</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_suspensao" name="txtord_data_suspensao" placeholder="Data Suspensão"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Cancelamento</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_cancelamento" name="txtord_data_cancelamento" placeholder="Data Cancelamento"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Reinício</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_reinicio" name="txtord_data_reinicio" placeholder="Data Reinício"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Criticidade (Nota OAE)</label>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade" />
+
+                                            @*@Html.DropDownList("cmbCriticidade", null, "-- Selecione --", new { @class = "form-control " })*@
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">OS de Orçamento</label>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_OSOrcamento" name="txtord_OSOrcamento" class="form-control" placeholder="OS de Orçamento" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Quantidade Estimada</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_quantidade_estimada" name="txtord_quantidade_estimada" class="form-control" placeholder="Quantidade Estimada" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Custo Estimado</label>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_custo_estimado" name="txtord_custo_estimado" class="form-control" placeholder="Custo Estimado" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none">
+                                        <label class="control-label col-sm-4">Valor TPU??</label>
+                                        <div class="col-sm-8">
+                                            <input id="txttpu_codigo_der" name="txttpu_codigo_der" class="form-control" placeholder="Valor TPU" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none">
+                                        <label class="control-label col-sm-4">Descrição TPU??</label>
+                                        <div class="col-sm-8">
+                                            <input id="txttpu_descricao" name="txttpu_descricao" class="form-control" placeholder="Descrição TPU" />
+                                            <button id="bntBuscarTPU" name="bntBuscarTPU">Buscar TPU</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="display:none">
+                                        <label class="control-label col-sm-4">Data Base TPU</label>
+                                        <div class="col-sm-8">
+                                            <input id="txttpu_data_base_der" name="txttpu_data_base_der" class="form-control" placeholder="Data Base TPU" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Classe</label>
+                                        <div class="col-sm-8">
+                                            @Html.DropDownList("cmbClassesOS", null, "-- Selecione --", new { @class = "form-control " })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">O.S. Principal</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_codigo_pai" name="txtord_codigo_pai" class="form-control"
+                                                   placeholder="Ordem de Serviço Principal" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtDummy12" class="form-control" style="visibility:hidden" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Abertura</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_abertura" name="txtord_data_abertura" placeholder="Data Abertura"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtDummy1" class="form-control" style="visibility:hidden" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Contrato de Fiscalização</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtcon_codigofiscalizacao" name="txtcon_codigofiscalizacao" class="form-control" placeholder="Contrato de Fiscalização" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Contrato de Execução</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtcon_codigoexecucao" name="txtcon_codigoexecucao"
+                                                   class="form-control" placeholder="Contrato de Execução" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Término Programada</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_termino_programada" name="txtord_data_termino_programada" placeholder="Data Término Programada"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Término Execução</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_termino_execucao" name="txtord_data_termino_execucao" placeholder="Data Término Execução"
+                                                   class="form-control" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Responsável Suspensão</label> </nobr>
+                                        <div class="col-sm-8">
+                                            @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
+                                            <input id="txtord_responsavel_suspensao" name="txtord_responsavel_suspensao"
+                                                   placeholder="Responsável Suspensão"
+                                                   class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr> <label class="control-label col-sm-4">Responsável Cancelamento</label></nobr>
+                                        <div class="col-sm-8">
+                                            @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
+                                            <input id="txtord_responsavel_cancelamento" name="txtord_responsavel_cancelamento"
+                                                   placeholder="Responsável Cancelamento"
+                                                   class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtDummy2" class="form-control" style="visibility:hidden" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtDummy3" class="form-control" style="visibility:hidden" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtDummy13" class="form-control" style="visibility:hidden" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Quantidade Executada</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_quantidade_executada" name="txtord_quantidade_executada" class="form-control"
+                                                   placeholder="Quantidade Executada" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Custo Final</label>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_custo_final" name="txtord_custo_final" class="form-control"
+                                                   placeholder="Custo Final" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoCadastral" role="tabpanel" aria-labelledby="tabFichaInspecaoCadastral">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoCadastral_1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha1">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecao1aRotineira" role="tabpanel" aria-labelledby="tabFichaInspecao1aRotineira">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira&tos_id=1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>
+                                </div>
+                                <div class="col-sm-7">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL (1ª ROTINEIRA)</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha2">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoRotineira" role="tabpanel" aria-labelledby="tabFichaInspecaoRotineira">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira&tos_id=2&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>
+                                </div>
+                                <div class="col-sm-7">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO ROTINEIRA EM CAMPO</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha3">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoEspecial" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecial2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Informações Básicas da OAE - Inspeção Especial</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha4">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoEspecialAnomalias" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecialAnomalias2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Ficha de Cadastramento de Anomalias - Inspeção Especial</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha5">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaNotificacaoOcorrencia" role="tabpanel" aria-labelledby="tabFichaNotificacaoOcorrencia">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=100000&ord_id=-1',  '_blank');">Imprimir Ficha em Branco</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Formulário de Notificação de Ocorrência em Obras de Arte Especiais</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha6">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabDocumentosAssociadosOBJ" role="tabpanel" aria-labelledby="tabDocumentosAssociadosOBJ">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <h2 class="modal-title" style="text-align:center"><label id="HeaderOS_DocumentosOBJ" class="titulosAbas">Documentos associados ao Objeto</label></h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+                        <table id="tblDocumentosAssociadosOBJ">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Documento</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                    <th>Caminho</th>
+                                    <th>Opções</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="tabDocumentosAssociadosOS" role="tabpanel" aria-labelledby="tabDocumentosAssociadosOS">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="AssociarDocumento()">Associar Documento(s)</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="HeaderOS_Documentos" class="titulosAbas">Documentos associados à Ordem de Serviço</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+                        <table id="tblDocumentosAssociados">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Documento</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                    <th>Caminho</th>
+                                    <th>Opções</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@***** FIM das ABAS ***********************@
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+
+}
+<script src="~/Scripts/Base.js"></script>
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Nova Ordem de Serviço</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+
+                <div class="modal-body form-group">
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Código</label>
+                            <div class="col-sm-9">
+                                <input id="txtord_codigo_Novo" name="txtord_codigo"
+                                       class="form-control" disabled />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Tipo de O.S.<span class="text-danger">*</span> </label>
+                            <div class="col-sm-9">
+                                @Html.DropDownList("cmbTiposOS_Novo", null, "-- Selecione --", new { @class = "form-control", @onchange = "cmbTiposOS_Novo_onchange()" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Descrição<span class="text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="txtord_descricao_Novo" name="txtord_descricao_Novo" class="form-control"
+                                       placeholder="Descrição" data-val="true" required
+                                       maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                       autocomplete="off"
+                                       onkeyup="$('#txtord_descricao_Novo').css('background-color', corBranca)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Objeto<span class="text-danger">*</span> </label>
+                            <div class="col-sm-9">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="width:100%">
+                                            <input id="txtobj_codigo_Novo" name="txtobj_codigo_Novo" class="form-control"
+                                                   placeholder="Objeto" readonly
+                                                   autocomplete="off" />
+                                        </td>
+                                        <td>
+                                            <button style="display:inline; width:40px; height:25px; margin-left:5px; display:inline" onclick="return abrirLocalizarObjetos();">...</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <nobr><label class="control-label col-sm-3">Data Início Planejada<span class="text-danger">*</span></label></nobr>
+                            <div class="col-sm-9">
+                                <input id="txtord_data_planejada_Novo" name="txtord_data_planejada_Novo" placeholder="Data Início Planejada"
+                                       class="form-control" readonly style="background-color:transparent" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Aberta Por</label>
+                            <div class="col-sm-9">
+                                <input id="txtusu_nome_Novo" name="txtusu_nome"
+                                       class="form-control" disabled value="@( @gUsuario.usu_nome)" title="@( gUsuario.usu_id)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <nobr><label class="control-label col-sm-3">Data Abertura</label></nobr>
+                            <div class="col-sm-9">
+                                <input id="txtord_data_abertura_Novo" name="txtord_data_abertura_Novo" placeholder="Data Abertura"
+                                       class="form-control" disabled value="@( DateTime.Now.ToShortDateString() )">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar_Novo" onclick="return bntSalvar_Novo_onclick();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAssociarDocumento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:650px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Associar Documento(s) a esta O.S.</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group" style="text-align:center;">
+                        <input id="txt_codigo" name="txt_codigo" class="txtdoc_codigoHeader" readonly style="text-align:center; width:95%" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:5px !important">Documento</label>
+                        <div class="col-sm-6" style="padding-left:0px !important">
+                            <input id="txtLocalizarDocumento" name="txtLocalizarDocumento" class="form-control col-sm-6"
+                                   placeholder="Digite o Código do Documento"
+                                   autocomplete="off"
+                                   onkeyup="if ((event.keyCode == 13)) { event.preventDefault(); if (!document.getElementById('btnLocalizarDocumentos').disabled) LocalizarDocumentos(); return false;} " />
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="btnLocalizarDocumentos" onclick="return LocalizarDocumentos();" class="btn btn-primary btn-block btn-flat col-sm-3" style="width:100px">Localizar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-3" style="text-align:right">
+                            <label class="control-label" style="text-align:right" id="lblTotalLocalizados">Localizados</label>
+                        </div>
+                        <div class="col-sm-9"
+                             style="width:72%; height:100px; overflow-y:auto; border:solid 1px lightgray; border-radius:4px !important;"
+                             id="divDocumentosLocalizados">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntAssociarDocumento" name="bntAssociarDocumento" onclick="return OrdemServico_AssociarDocumento_Salvar();" class="btn btn-primary btn-block btn-flat">Associar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalLocalizarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:0px !important">Localizar Objeto</label>
+                        <div class="col-sm-9" style="padding-left:0px !important">
+
+                            <input id="txtLocalizarObjeto" name="txtLocalizarObjeto" class="form-control"
+                                   placeholder="Digite o Código/Iniciais do Objeto"
+                                   autocomplete="off"
+                                   onkeyup="if ((event.keyCode == 13) || (this.value.length > 1) ) { event.preventDefault(); LocalizarObjetos(); return false;} " />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Localizados</label>
+                        <div class="col-sm-9"
+                             style="width:72%; height:100px; padding: 0px !important; border:solid 1px lightgray; border-radius:4px !important;"
+                             id="divObjetosLocalizados">
+
+                            <select multiple="multiple" size="5" id="lstObjetosLocalizados" style="margin-right:5px; width:100%; border:none;" onchange="OrdemServico_Objeto_Salvar();"></select>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntOrdemServico_Objeto" name="bntOrdemServico_Objeto" onclick="return OrdemServico_Objeto_Salvar();" class="btn btn-primary btn-block btn-flat">Selecionar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+<script src="~/Scripts/OrdemServico/OrdemServico.js"></script>
+@*<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>*@
+
+<script>
+
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    jQuery(function ($) {
+        $.datepicker.regional['pt-BR'] = datepicker_regional;
+        $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+    });
+
+    $('#txtord_data_planejada_Novo').datepicker({
+        minDate: 0,
+        dateFormat: 'dd/mm/yy',
+        onSelect: function () {
+            $('#txtord_data_planejada_Novo').css('background-color', corBranca);
+        }
+    });
+
+
+    $('#txtord_data_inicio_programada').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_inicio_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_suspensao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_cancelamento').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_reinicio').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_programada').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $('#filtroord_data_De').datepicker({
+        dateFormat: 'dd/mm/yy',
+        onSelect: function () {
+            var dt2 = $('#filtroord_data_Ate');
+
+            // seta a data inicial do txtdataExecucaoAte
+            var startDate = $(this).datepicker('getDate');
+            startDate.setDate(startDate.getDate() + 1);
+            var minDate = $(this).datepicker('getDate');
+            var dt2Date = dt2.datepicker('getDate');
+
+            dt2.datepicker("setDate", startDate);
+            dt2.datepicker('option', 'minDate', startDate);
+        }
+    });
+
+    $('#filtroord_data_Ate').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    // datepickers das fichas, aba DADOS GERAIS
+    $('#txt_atr_id_103').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_atr_id_104').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $('#txt_atr_id_1103').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_atr_id_1104').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    // datepickers da ficha NOTIFICACAO OCORRENCIAS
+    $('#txt_Data_Notificacao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_Solicitante_Data').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_Responsavel_Recebimento_Data').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+
+    moduloCorrente = 'OrdemServico';
+
+
+
+    function UploadEsquema() {
+
+        //campo "DE" vazio
+        if ($('#txtdoc_caminho9').val().trim() == "") {
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: "Selecione o arquivo para upload"
+            });
+            return false;
+        }
+
+        var file = $('#esquemaBrowse').get(0).files;
+
+        var porcentagem = 0;
+        let timerInterval
+        Swal.fire({
+            title: 'Enviando arquivo para o servidor',
+            html: '<b></b>%',
+            timer: 200000,
+            timerProgressBar: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {
+                    const content = Swal.getContent()
+                    if (content) {
+                        const b = content.querySelector('b')
+                        if (b) {
+                            b.textContent = porcentagem;
+                        }
+                    }
+                }, 100)
+            },
+            onClose: () => {
+                clearInterval(timerInterval)
+                return;
+            }
+        }).then((result) => {
+            Swal.close();
+            return;
+        })
+
+        var data = new FormData;
+        data.append("EsquemaEstrutural", file[0]);
+        data.append("obj_id", selectedId_obj_id);
+        data.append("atr_id", 159);
+
+
+        $.ajax({
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+
+                        porcentagem = percentComplete;
+                        if (percentComplete === 100) {
+                            Swal.close();
+                        }
+
+                    }
+                }, false);
+                return xhr;
+            },
+
+            type: "Post",
+            url: "/Objeto/EsquemaEstrutural_Upload",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response == "") {
+                    //alert("ok");
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Arquivo salvo com sucesso'
+                    });
+
+                    document.getElementById("img_atr_id_159").setAttribute('src', src);
+
+                    return false;
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: response
+                    });
+                    return false;
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                return false;
+            }
+        })
+
+        return false;
+    }
+
+</script>
+

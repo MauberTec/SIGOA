@@ -1,0 +1,466 @@
+﻿
+
+
+<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
+
+<style type="text/css">
+    #divFicha6 option:first-child {
+        color: black !important;
+    }
+
+    #divFicha6 option {
+        color: black !important;
+    }
+
+        #divFicha6 option::selection {
+            color: blue !important;
+        }
+
+    .centroH {
+        text-align: center;
+    }
+
+    .contornoBranco {
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+
+    .btnHeader1 {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: left
+    }
+
+    .btnHeader2 {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: center;
+    }
+
+    #divFicha6 button:focus {
+        outline: none;
+    }
+
+    #divFicha6 button[aria-expanded="true"] > .pull-right-container > .fa-angle-left {
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .rotate {
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .lblTitulos {
+        height: 25px;
+        color: #FFFFFF;
+        background-color: gray;
+        font-weight: bold;
+        /*border: solid 1px black;*/
+        padding-left: 5px;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos2 {
+        height: 25px;
+        background-color: #CCCCCC;
+        font-weight: bold;
+        text-align: center;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos3 {
+        height: 25px;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        text-align: left;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        padding-left: 5px;
+    }
+
+    .lblsBold {
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px !important;
+    }
+
+    .lblsNormal {
+        font-weight: normal;
+        height: 25px;
+        margin: 0 !important;
+        margin-top: 5px !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px;
+    }
+
+    input.txts, .txts {
+        border: solid 1px lightgray;
+        width: 75%;
+        height: 95%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        resize: none;
+    }
+
+    input.txts50, .txts50 {
+        border: solid 1px lightgray;
+        width: 50%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    input.txts25, .txts25 {
+        border: solid 1px lightgray;
+        width: 25%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    .cmbs {
+        border: solid 1px lightgray;
+        /*width: 50%;*/
+        margin: 0 !important;
+        margin-left: 3px;
+        margin-bottom: 0 !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .cmbsNoWidth {
+        border: solid 1px lightgray;
+        /*width: 10%;*/
+        margin-left: 3px;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue !important;
+    }
+
+    #divFicha6 .cmbs option:checked,
+    #divFicha6 .cmbsNoWidth option:checked {
+        border: solid 1px lightgray;
+        margin-left: 3px;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .txtsNoWidth {
+        border: solid 1px lightgray;
+        width: 10%;
+        margin-left: 3px;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        margin-top: 5px !important;
+    }
+
+    .larguraPadrao {
+        width: 16.66%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    .larguraPadrao2 {
+        width: 11.11%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    .altura50 {
+        height: 50px;
+    }
+
+    .borderBottom {
+        border-bottom: solid 1px black;
+    }
+
+    .borderTop {
+        border-top: solid 1px black;
+    }
+
+    .borderLeft {
+        border-left: solid 1px black;
+    }
+
+    .borderRight {
+        border-right: solid 1px black;
+    }
+
+    .borderBottomPt {
+        border-bottom: dotted 1px black;
+    }
+
+    .borderTopPt {
+        border-top: dotted 1px black;
+    }
+
+    .borderLeftPt {
+        border-left: dotted 1px black;
+    }
+
+    .borderRightPt {
+        border-right: dotted 1px black;
+    }
+
+    .borderNone {
+        border: none
+    }
+
+    #divFicha6 input:disabled,
+    #divFicha6 textarea:disabled,
+    #divFicha6 select:disabled {
+        background-color: transparent;
+        border: none !important;
+    }
+
+    #divFicha6 input:enabled,
+    #divFicha6 textarea:enabled,
+    #divFicha6 select:enabled {
+        background-color: white;
+        border: solid 1px black;
+        margin: 3px !important;
+    }
+
+    #divFicha6 select:disabled {
+        background-color: transparent;
+        border: none !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .paddingLeft5 {
+        padding-left: 5px !important
+    }
+</style>
+
+<div id="divFicha6" style="font-family:Calibri; font-size:10.5pt; ">
+
+
+    <table id="tblFicha_DADOS_GERAIS" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px; border-bottom:solid 1px black">
+        <tr style="visibility:hidden;">
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+        </tr>
+
+        <tr>
+            <td colspan="6" class="lblTitulos borderTop" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_DADOS_GERAIS"
+                                    onclick="return false"
+                                    type="button"
+                                    class="btnHeader1">
+                                DADOS GERAIS
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                        </td>
+
+                        <td style="width:25px !important; ">
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6" class="borderLeft borderBottom borderRight">
+                <label class="lblsBold" >IDENTIFICAÇÃO DA OBRA DE ARTE / CÓDIGO</label>
+                <input disabled readonly id="txt_IdentificacaoOAE" class="txts25" />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3" class="borderLeft borderBottom">
+                <label class="lblsBold" >Nome da Obra de Arte</label>
+                <input disabled id="txt_NomeOAE" class="txts" />
+            </td>
+            <td colspan="3" class="borderLeft borderBottom borderRight">
+                <label class="lblsBold" >Código da Rodovia</label>
+                <input disabled id="txt_CodigoRodovia" class="txts" readonly />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="borderLeft borderBottom">
+                <label class="lblsBold">Nome Rodovia</label>
+                <input disabled id="txt_NomeRodovia" class="txts" />
+            </td>
+
+            <td class="borderLeft borderBottom" colspan="2">
+                <label class="lblsBold">Localização - KM</label>
+                <input disabled id="txt_LocalizacaoKm" class="txts25" /> 
+            </td>
+
+            <td class="borderLeft borderBottom borderRight" colspan="2">
+                <label class="lblsBold" >Município</label>
+                <input disabled id="txt_Municipio" class="txts50" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="borderLeft borderRight" colspan="6">
+                <label class="lblsBold" >Tipo de OAE</label>
+                <input disabled id="txt_Tipo" class="txts50" />
+            </td>
+        </tr>
+    </table>
+
+
+    <table id="tblFicha_NOTIFICACAO_OCORRENCIA" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_NOTIFICACAO_OCORRENCIA"
+                                    onclick="return false"
+                                    type="button" 
+                                    class="btnHeader1">
+                                NOTIFICAÇÃO DE OCORRÊNCIA
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_NOTIFICACAO_OCORRENCIA"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaNotificacaoOcorrencia(tblFicha_NOTIFICACAO_OCORRENCIA)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="padding-right:5px !important; text-align:right !important; width:25px !important; ">
+                            <button id="btn_Cancelar_NOTIFICACAO_OCORRENCIA"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaNotificacaoOcorrencia(tblFicha_NOTIFICACAO_OCORRENCIA)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_NOTIFICACAO_OCORRENCIA"
+                                    type="button"
+                                    onclick="return EditarDados_FichaNotificacaoOcorrencia(tblFicha_NOTIFICACAO_OCORRENCIA)"
+                                    title="Editar"
+                                    style="border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_NOTIFICACAO_OCORRENCIA" >
+                    <table id="tblFicha_6" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" class="borderLeft borderBottom borderRight">
+                                <label class="lblsBold" >Data da Notificação:</label>
+                                <input disabled readonly id="txt_Data_Notificacao" class="txts25" />
+                            </td>
+
+                            <td colspan="4" class="borderLeft borderBottom borderRight">
+                                <label class="lblsBold" >Responsável pela Notificação / Departamento:</label>
+                                <input disabled  id="txt_Responsavel_Notificacao" class="txts" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderRight borderLeft" colspan="6">
+                                <label class="lblsBold" >Descrição da Ocorrência:</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottom altura50 borderRight borderLeft" colspan="6">
+                                <textarea disabled id="txt_Descricao_Ocorrencia" class="txts" rows="10" cols="200" maxlength="255" style="width:98%"></textarea>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="4" class="borderLeft borderBottom lblsBold" style="height:30px; background-color:#D9D9D9">ASSINATURAS</td>
+                            <td colspan="2" class="borderLeft borderBottom borderRight lblsBold centroH" style="height:30px; background-color:#D9D9D9">DATA</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="borderLeft borderBottom borderRight">
+                                <label class="lblsBold" id="lblSolicitante">Solicitante:</label>
+                                <input disabled id="txt_Solicitante" class="txts50" />
+                            </td>
+
+                            <td colspan="2" class="borderLeft borderBottom borderRight centroH">
+                                <input disabled readonly id="txt_Solicitante_Data" class="txts25 centroH" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="borderLeft borderBottom borderRight">
+                                <label class="lblsBold" >Responsável pelo Recebimento:</label>
+                                <input disabled id="txt_Responsavel_Recebimento" class="txts50" />
+                            </td>
+
+                            <td colspan="2" class="borderLeft borderBottom borderRight centroH">
+                                <input disabled readonly id="txt_Responsavel_Recebimento_Data" class="txts25 centroH" />
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+</div>

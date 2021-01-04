@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "::.. Login ..::";
+    Layout = null;
+}
+@using System.Reflection;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/ionicons.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-jvectormap.css" rel="stylesheet" />
+    <link href="~/Content/AdminLTE.min.css" rel="stylesheet" />
+    <link href="~/Content/skin-blue.min.css" rel="stylesheet" />
+    <link href="~/Content/Base.css" rel="stylesheet" />
+    <link href="~/Content/plugins/sweetalert2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+</head>
+<body class="hold-transition login-page">
+    <form onsubmit="Login()">
+        <div class="login-box">
+            <div class="login-box-body">
+                <div class="text-center">
+                    <img src="~/images/logo_der.png" width="150" />
+                </div>
+                <div class="text-center">
+                    <h3><b>SIGOA</b></h3>
+                    <h4 style="margin-top: -10px;">Sistema de Gerenciamento de Obras de Arte</h4>
+                    <br />
+                </div>
+                <div class="form-group has-feedback input-group">
+                    <input type="text" id="usu_usuario" name="usu_usuario" 
+                           class="form-control" placeholder="Usuário" ToolTip="Digite o Usuário" 
+                           data-val="true" data-val-required="- digite o usuário." required 
+                           pattern=".{3,20}" 
+                            maxlength="20" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                </div>
+                <div class="form-group has-feedback input-group">
+                    <input type="password" id="usu_senha" name="usu_senha" 
+                           class="form-control" placeholder="Senha" ToolTip="Digite a Senha"
+                           data-val="true" data-val-required="- digite a senha." required
+                           pattern=".{5,240}" 
+                            maxlength="240" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                </div>
+                <div class="form-group" style="margin-right: 5px;margin-left: 3px;">
+                    <div class="row">
+
+
+                        @{ // *****************************************************************************************
+                            // checa se tem conexao com o banco de dados
+                            bool temConexao = new WebApp.DAO.Conexao().ChecaBD();
+                            string display = "block";
+                            string disabled = "DISABLED";
+                            string divDisabled = "pointer-events: none;";
+                            if (temConexao)
+                            {
+                                display = "none";
+                                disabled = "";
+                                divDisabled = "";
+                            }
+
+                            //*******************************************************************************************
+                        }  
+
+
+                        <div class="col-xs-6 pull-left" style="margin-top: 5px; @divDisabled">
+                            <a href="#" onclick="return EsqueciSenha()">Esqueci a senha</a>
+                        </div>
+                        <div class="col-xs-6 pull-right">
+                            <button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled><i class="fa fa-sign-in"></i> Entrar</button>
+
+                            <div id="divDatabaseOFF" style="display: @display;" title="Sem Conexão com Banco de Dados">
+                                <span class="fa-stack fa-stack-2x">
+                                    <i class="fa fa-database fa-stack-1x"></i>
+                                    <i class="fa fa-times fa-stack-1x" style="color:Tomato"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        @Html.Hidden("hddnVersao", "build: " + File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString())
+                        <div class="col-xs-6 pull-left" id="divVersao">
+                            <b>Versão 1.5.0</b>
+                        </div>
+                        <div class="col-xs-6 pull-right">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+
+    <div class="modal fade" id="modalEsqueciSenha" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="margin-left:150px; width:550px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title text-center"><b><label id="lblModalHeader">Esqueci a senha</label></b></h3>
+                    <h4 class="modal-title text-center"><b><label id="lblModalHeader">Digite seu usuário</label></b></h4>
+                </div>
+                <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }" >
+                    <br />
+                    <div class="modal-body form-group">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Usuário<span class="text-danger">*</span> </label>
+                            <div class="col-sm-10">
+                                <input id="txtEsqueci_login" name="txtEsqueci_login" class="form-control"
+                                       placeholder="Usuário" data-val="true" data-val-required="- digite o usuário." required
+                                        maxlength="20" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <div class="col-md-3 col-md-offset-4">
+                            <button id="bntEnviar" onclick="return bntEnviar_click();" class="btn btn-primary btn-block btn-flat"><i class="fa fa-paper-plane-o"></i> Enviar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/fastclick.js"></script>
+    <script src="~/Content/js/adminlte.min.js"></script>
+    <script src="~/Content/js/jquery.sparkline.min.js"></script>
+    <script src="~/Content/js/jquery.slimscroll.min.js"></script>
+    <script src="~/Content/plugins/jquery.mask.js"></script>
+    <script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+    <script src="~/Content/DataTables/helperDataTable.js"></script>
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Scripts/Service.js"></script>
+    <script src="~/Scripts/Login/main.js"></script>
+
+    <script>
+        $(document).ready(function ()
+        {
+            var hddnVersao = document.getElementById('hddnVersao');
+            if (hddnVersao){
+                document.getElementById('divVersao').title = hddnVersao.value;
+            }
+            else {
+                document.getElementById('divVersao').title = "";
+            }
+        });
+
+    </script>
+</body>
+</html>

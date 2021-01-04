@@ -1,0 +1,832 @@
+﻿@{
+    ViewBag.Title = "::.. Resultados de Inspeção ..::";
+}
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 630 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(630)); // id DO MODULO "Resultados de Inspeção"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 630 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<style>
+    .rotate-135-left {
+        -o-transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+        transform: rotate(-135deg);
+    }
+
+    .titulosAbas {
+        font-family: 'Source Sans Pro',sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+<h2></h2>
+<script>
+    // variavel usada para identificar a view origem da ficha cadastral shared
+    var paginaPai = "Inspecao";
+    var qualFicha;
+    //  var selectedId_obj_id;
+
+</script>
+
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div id="divcontroles" class="row" style="margin:3px">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label class="control-label">Código O.S.</label>
+                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                    </div>
+                    <div class="col-sm-3">
+                        <label class="control-label">Código Objeto</label>
+                        <input type="text" class="form-control" id="txtFiltroObj_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                    </div>
+
+                    <div class="col-sm-3 ">
+                        <label class="control-label">Tipo O.S.</label>
+                        @Html.DropDownList("cmbFiltroTiposOS", null, "-- Selecione --", new { @class = "form-control " })
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="control-label">Status O.S</label>
+                        @Html.DropDownList("cmbFiltroStatusOS", null, "-- Selecione --", new { @class = "form-control " })
+                    </div>
+                </div>
+
+
+                <div class="form-group" style="padding-top:20px; margin-top:20px">
+                    <div class="col-sm-3">
+                        <label class="control-label">Data O.S.</label>
+                        <select name="cmbDatas" id="cmbDatas" class="form-control">
+                            <option value="">--Selecione--</option>
+                            <option value="Abertura">Data Abertura</option>
+                            <option value="Inicio_Programada">Data Início Planejada</option>
+                            <option value="Termino_Programada">Data Término Planejada</option>
+                            <option value="Inicio_Execucao">Data Início Execução</option>
+                            <option value="Termino_Execucao">Data Término Execução</option>
+                            <option value="Suspensao">Data Suspensão</option>
+                            <option value="Cancelamento">Data Cancelamento</option>
+                            <option value="Reinicio">Data Reinício</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="control-label">De</label>
+                        <input id="filtroord_data_De" name="filtroord_data_De"
+                               placeholder="De"
+                               class="form-control" style="background-color:white" />
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label class="control-label">Até</label>
+                        <input id="filtroord_data_Ate" name="filtroord_data_Ate"
+                               placeholder="Até"
+                               class="form-control" style="background-color:white" />
+                    </div>
+
+                    <div class="btn-box-tool pull-right" style="margin-top:20px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltro();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltro();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var selectedId_ins_id = 0;
+
+    function LimparFiltro() {
+
+        $('#txtFiltroOrdemServico_codigo').val('');
+        $('#txtFiltroObj_codigo').val('');
+        $('#filtroord_data_De').val('');
+        $('#filtroord_data_Ate').val('');
+
+        $("#cmbFiltroTiposOS").val(null);
+        $("#cmbFiltroStatusOS").val(null);
+
+        $("#cmbDatas").val('');
+
+        filtroRow_numeroMin = 0;
+        filtroRow_numeroMax = 1000;
+
+        selectedId_ord_id = 0;
+        selectedId_ord_pai = -1;
+        selectedId_ins_id = 0;
+
+        filtroOrdemServico_codigo = '';
+        filtroObj_codigo = '';
+        filtroTiposOS = -1;
+        filtroStatusOS = -1;
+        filtroord_data_De = '';
+        filtroord_data_Ate = '';
+
+        carregaGridInspecoes(0);
+
+        return false;
+    }
+    function ExecutarFiltro() {
+
+        filtroRow_numeroMin = 0;
+        filtroRow_numeroMax = 1000;
+
+        selectedId_ord_id = 0;
+        filtroOrdemServico_codigo = $('#txtFiltroOrdemServico_codigo').val().trim();
+        filtroObj_codigo = $('#txtFiltroObj_codigo').val().trim();
+        filtroTiposOS = $("#cmbFiltroTiposOS").val() == "" ? -1 : $("#cmbFiltroTiposOS").val();
+        filtroStatusOS = $("#cmbFiltroStatusOS").val() == "" ? -1 : $("#cmbFiltroStatusOS").val();
+        filtroord_data_De = $('#filtroord_data_De').val();
+        filtroord_data_Ate = $('#filtroord_data_Ate').val();
+
+        carregaGridInspecoes(selectedId_ins_id);
+
+    }
+
+
+    // ***************************************************
+
+    // montagem do gridview
+    function carregaGridInspecoes(selectedId_ins_id) {
+        filtroOrdemServico_codigo = $('#txtFiltroOrdemServico_codigo').val().trim();
+        filtroObj_codigo = $('#txtFiltroObj_codigo').val().trim();
+        filtroTiposOS = $("#cmbFiltroTiposOS").val() == "" ? -1 : $("#cmbFiltroTiposOS").val();
+        filtroStatusOS = $("#cmbFiltroStatusOS").val() == "" ? -1 : $("#cmbFiltroStatusOS").val();
+        filtroord_data_De = $('#filtroord_data_De').val();
+        filtroord_data_Ate = $('#filtroord_data_Ate').val();
+
+        $('#tblInspecoes').DataTable().destroy();
+        $('#tblInspecoes').DataTable({
+            "ajax": {
+                "url": "/Inspecao/Inspecao_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": {
+                    "ins_id": selectedId_ins_id,
+                    "filtroOrdemServico_codigo": filtroOrdemServico_codigo,
+                    "filtroObj_codigo": filtroObj_codigo,
+                    "filtroTiposOS": filtroTiposOS,
+                    "filtroStatusOS": filtroStatusOS,
+                    "filtroData": $("#cmbDatas").val(),
+                    "filtroord_data_De": filtroord_data_De,
+                    "filtroord_data_Ate": filtroord_data_Ate
+                }
+            }
+            , "columns": [
+                { data: "ins_id", "className": "hide_column", "searchable": true },
+                { data: "ord_id", "className": "hide_column", "searchable": true },
+                { data: "sos_id", "className": "hide_column", "searchable": true },
+                { data: "tos_id", "className": "hide_column", "searchable": true },
+                { data: "obj_id", "className": "hide_column", "searchable": true },
+
+                { data: "ord_codigo", "autoWidth": true, "searchable": true, "sortable": true },
+                { data: "ord_descricao", "autoWidth": true, "searchable": true, "sortable": true },
+                { data: "obj_codigo", "autoWidth": true, "searchable": false, "sortable": true },
+                { data: "tos_codigo", "width": "60px", "searchable": false, "sortable": true },
+                { data: "sos_descricao", "width": "60px", "searchable": false, "sortable": true }
+            ]
+            , "columnDefs": [
+                {
+                    targets: [6] // coloca tooltip no campo O.S.
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["ord_descricao"]);
+                    }
+                },
+                {
+                    targets: [7] // coloca tooltip no campo OBJ
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["obj_descricao"]);
+                    }
+                },
+                {
+                    targets: [8] // coloca tooltip no campo tos_codigo
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["tos_descricao"]);
+                    }
+                },
+                {
+                    targets: [9] // coloca tooltip no campo status
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["sos_descricao"]);
+                    }
+                }
+            ]
+            , "order": [0, "asc"]
+            , "rowId": "ord_id"
+            , "rowCallback": function (row, data) {
+                if (data.ins_id == selectedId_ins_id) {
+                    $(row).addClass('selected');
+                    //selectedId_obj_id = data.obj_id;
+                }
+            }
+            , "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: true
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+        });
+
+
+        //if ((selectedId_ord_id != 0) && (selectedId_obj_id > 0)) {
+        //    preenchetblFicha(selectedId_obj_id, 1, -1);
+    }
+
+
+    $(document).ready(function () {
+
+        // ****************************GRID tblInspecoes *****************************************************************************
+        carregaGridInspecoes(selectedId_ins_id);
+
+        var tblInspecoes = $('#tblInspecoes').DataTable();
+        $('#tblInspecoes tbody').on('click', 'tr', function () {
+
+            //// guarda os ids do objeto
+            //selectedId_ord_id = ord_rowId;
+            //selectedId_ocl_id = parseInt(tblInspecoes.row(this).selector.rows.children[4].innerText);
+            selectedId_tos_id = parseInt(tblInspecoes.row(this).selector.rows.children[3].innerText);
+            selectedId_ord_id = parseInt(tblInspecoes.row(this).selector.rows.children[1].innerText);
+            selectedId_ins_id = parseInt(tblInspecoes.row(this).selector.rows.children[0].innerText);
+
+            switch (selectedId_tos_id) {
+                case 5: break; // extraordinaria
+                case 7: abreFicha(1); break; // cadastral
+                case 8: abreFicha(3); break; // rotineira
+                case 9: abreFicha(4); break; // especial
+            }
+            //var ord_descricao = tblInspecoes.row(this).selector.rows.children[8].innerText;
+            //var ord_codigo = tblInspecoes.row(this).selector.rows.children[7].innerText;
+            //selectedord_descricao = ord_descricao;
+
+
+            selectedId_obj_id = parseInt(tblInspecoes.row(this).selector.rows.children[4].innerText);
+            selected_obj_codigo = tblInspecoes.row(this).selector.rows.children[7].innerText;
+
+            filtroOrdemServico_codigo = tblInspecoes.row(this).selector.rows.children[5].innerText;
+            filtroObj_codigo = selected_obj_codigo;
+            filtroTiposOS = parseInt(tblInspecoes.row(this).selector.rows.children[3].innerText);
+            filtroStatusOS = parseInt(tblInspecoes.row(this).selector.rows.children[2].innerText);
+            filtroord_data_De = '';
+            filtroord_data_Ate = '';
+
+            // limpa as tabulacoes e espacos
+            //   selectedord_codigo = ord_codigo;
+
+            // deseleciona a linha
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                // seleciona a linha
+                // remove a classe "selected" das linhas da tabela
+                var els = document.getElementById("tblInspecoes_wrapper").getElementsByClassName("selected");
+                for (var i = 0; i < els.length; i++)
+                    els[i].classList.remove('selected');
+
+                $(this).addClass('selected');
+
+                // preenche as caixas de filtro
+                $('#txtFiltroOrdemServico_codigo').val(filtroOrdemServico_codigo);
+                $('#txtFiltroObj_codigo').val(filtroObj_codigo);
+                $("#cmbFiltroTiposOS").val(filtroTiposOS);
+                $("#cmbFiltroStatusOS").val(filtroStatusOS);
+                $('#txtfiltroord_data_De').val("");
+                $('#txtfiltroord_data_Ate').val("");
+            }
+
+            carregaGridInspecoes(selectedId_ins_id);
+
+            // mostra as abas pertinentes ao tipo da O.S.
+            mostraAba(selectedId_tos_id, true);
+        });
+
+    });
+
+
+</script>
+
+@***** GRID tblInspecoes HTML ***********************@
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <table id="tblInspecoes">
+                    <thead>
+                        <tr>
+                            <th>ins_id</th>
+                            <th>ord_id</th>
+                            <th>sos_id</th>
+                            <th>tos_id</th>
+                            <th>obj_id</th>
+                            <th>Código O.S.</th>
+                            <th>O.S.</th>
+                            <th>Código Objeto</th>
+                            <th>Tipo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </table>
+                <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .altura30 {
+        height: 30px;
+    }
+
+    .backgrdTransparent {
+        background-color: transparent !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+</style>
+
+@***** SCRIPT FICHA todas as fichas ***********************@
+<script src="~/Scripts/Shared/_fichasInspecao.js"></script>
+
+<script>
+    function abreFicha(qualFicha1) {
+        // limpa todas as fichas
+        $('#partialFicha1').empty();
+        $('#partialFicha2').empty();
+        $('#partialFicha3').empty();
+        $('#partialFicha4').empty();
+        $('#partialFicha5').empty();
+
+        qualFicha = qualFicha1;
+
+        $.ajax({
+            type: 'GET',
+            "data": { qualFicha: qualFicha },
+            url: '@Url.Action("CarregaFicha", "OrdemServico")',
+            success: function (result) {
+                document.getElementById('partialFicha' + qualFicha).innerHTML = result;
+
+                switch (qualFicha) {
+                    case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
+                    case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
+                    case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
+                    case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
+                    case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
+                }
+
+                colocaDatePickers();
+
+            }
+        });
+    }
+
+
+
+    function mostraAba(selectedId_tos_id, bool_posicionar) {
+        // limpa todas as fichas
+        $('#partialFicha1').empty();
+        $('#partialFicha2').empty();
+        $('#partialFicha3').empty();
+        $('#partialFicha4').empty();
+        $('#partialFicha5').empty();
+
+        var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
+        var liFichaInspecao1aRotineira = document.getElementById("liFichaInspecao1aRotineira");
+        var liFichaInspecaoRotineira = document.getElementById("liFichaInspecaoRotineira");
+        var liFichaInspecaoEspecial = document.getElementById("liFichaInspecaoEspecial");
+        var liFichaInspecaoEspecialAnomalias = document.getElementById("liFichaInspecaoEspecialAnomalias");
+
+        //if (liDetalhesOS)
+        //    $('[href="#tabDetalhesOS"]').tab('show');
+
+        if (liFichaInspecaoCadastral)
+            liFichaInspecaoCadastral.style.display = "none";
+        if (liFichaInspecao1aRotineira)
+            liFichaInspecao1aRotineira.style.display = "none";
+
+        if (liFichaInspecaoRotineira)
+            liFichaInspecaoRotineira.style.display = "none";
+
+        if (liFichaInspecaoEspecial)
+            liFichaInspecaoEspecial.style.display = "none";
+
+        if (liFichaInspecaoEspecialAnomalias)
+            liFichaInspecaoEspecialAnomalias.style.display = "none";
+
+
+        switch (parseInt(selectedId_tos_id)) {
+            case 7: liFichaInspecaoCadastral.style.display = "unset";
+                liFichaInspecao1aRotineira.style.display = "unset";
+                if (bool_posicionar)
+                    $('[href="#tabFichaInspecaoCadastral"]').tab('show');
+                break;
+
+            case 8: liFichaInspecaoRotineira.style.display = "unset";
+                if (bool_posicionar)
+                    $('[href="#tabFichaInspecaoRotineira"]').tab('show');
+                break;
+
+            case 9: liFichaInspecaoEspecial.style.display = "unset";
+                liFichaInspecaoEspecialAnomalias.style.display = "unset";
+                if (bool_posicionar)
+                    $('[href="#tabFichaInspecaoEspecial"]').tab('show');
+                break;
+        }
+
+    }
+
+
+</script>
+
+
+
+@***** SCRIPT FICHA 1 - CADASTRAL ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
+
+
+@***** SCRIPT FICHAS 2 e 3 - CADASTRAL 2 E ROTINEIRA ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoRotineira.js"></script>
+
+
+@***** SCRIPT FICHA 4 - ESPECIAL ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial.js"></script>
+
+
+@***** SCRIPT FICHA 4 - ESPECIAL CAMPO ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial_Anomalias.js"></script>
+
+
+
+
+
+@***** INICIO DAS ABAS ***********************@
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <ul class="nav nav-tabs" id="Tabs" role="tablist">
+                    <li style="display:none" id="liFichaInspecaoCadastral">
+                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral </a>
+                    </li>
+                    <li style="display:none" id="liFichaInspecao1aRotineira">
+                        <a id="tabFichaInspecao1aRotineiraheader" data-toggle="tab" href="#tabFichaInspecao1aRotineira" onclick="abreFicha(2);">Ficha Básica - Primeira Rotineira</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoRotineira">
+                        <a id="tabFichaInspecaoRotineiraheader" data-toggle="tab" href="#tabFichaInspecaoRotineira" onclick="abreFicha(3);">Ficha Básica - Inspeção Rotineira</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoEspecial">
+                        <a id="tabFichaInspecaoEspecialheader" data-toggle="tab" href="#tabFichaInspecaoEspecial" onclick="abreFicha(4);">Ficha de Informações Básicas - Inspeção Especial</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoEspecialAnomalias">
+                        <a id="tabFichaInspecaoEspecialAnomaliasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomalias" onclick="abreFicha(5);">Ficha de Cadastramento de Anomalias - Inspeção Especial</a>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content" id="TabContent">
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoCadastral" role="tabpanel" aria-labelledby="tabFichaInspecaoCadastral">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoCadastral_1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha1">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecao1aRotineira" role="tabpanel" aria-labelledby="tabFichaInspecao1aRotineira">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira&tos_id=1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>
+                                </div>
+                                <div class="col-sm-7">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL (1ª ROTINEIRA)</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha2">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoRotineira" role="tabpanel" aria-labelledby="tabFichaInspecaoRotineira">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira&tos_id=2&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>
+                                </div>
+                                <div class="col-sm-7">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO ROTINEIRA EM CAMPO</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha3">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoEspecial" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecial2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Informações Básicas da OAE - Inspeção Especial</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha4">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoEspecialAnomalias" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecialAnomalias2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Ficha de Cadastramento de Anomalias - Inspeção Especial</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha5">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@***** FIM das ABAS ***********************@
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+
+}
+<script src="~/Scripts/Base.js"></script>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+@*<script src="~/Scripts/OrdemServico/OrdemServico.js"></script>
+    <script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>*@
+
+<script>
+
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    jQuery(function ($) {
+        $.datepicker.regional['pt-BR'] = datepicker_regional;
+        $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+    });
+
+    $('#txtord_data_planejada_Novo').datepicker({
+        minDate: 0,
+        dateFormat: 'dd/mm/yy',
+        onSelect: function () {
+            $('#txtord_data_planejada_Novo').css('background-color', corBranca);
+        }
+    });
+
+
+    $('#txtord_data_inicio_programada').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_inicio_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_suspensao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_cancelamento').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_reinicio').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_programada').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $('#filtroord_data_De').datepicker({
+        dateFormat: 'dd/mm/yy',
+        onSelect: function () {
+            var dt2 = $('#filtroord_data_Ate');
+
+            // seta a data inicial do txtdataExecucaoAte
+            var startDate = $(this).datepicker('getDate');
+            startDate.setDate(startDate.getDate() + 1);
+            var minDate = $(this).datepicker('getDate');
+            var dt2Date = dt2.datepicker('getDate');
+
+            dt2.datepicker("setDate", startDate);
+            dt2.datepicker('option', 'minDate', startDate);
+        }
+    });
+
+    $('#filtroord_data_Ate').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    // datepickers das fichas, aba DADOS GERAIS
+    $('#txt_atr_id_103').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_atr_id_104').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $('#txt_atr_id_1103').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_atr_id_1104').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+
+    moduloCorrente = 'OrdemServico';
+
+
+
+    function UploadEsquema() {
+
+        //campo "DE" vazio
+        if ($('#txtdoc_caminho9').val().trim() == "") {
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: "Selecione o arquivo para upload"
+            });
+            return false;
+        }
+
+        var file = $('#esquemaBrowse').get(0).files;
+
+        var porcentagem = 0;
+        let timerInterval
+        Swal.fire({
+            title: 'Enviando arquivo para o servidor',
+            html: '<b></b>%',
+            timer: 200000,
+            timerProgressBar: false,
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {
+                    const content = Swal.getContent()
+                    if (content) {
+                        const b = content.querySelector('b')
+                        if (b) {
+                            b.textContent = porcentagem;
+                        }
+                    }
+                }, 100)
+            },
+            onClose: () => {
+                clearInterval(timerInterval)
+                return;
+            }
+        }).then((result) => {
+            Swal.close();
+            return;
+        })
+
+        var data = new FormData;
+        data.append("EsquemaEstrutural", file[0]);
+        data.append("obj_id", selectedId_obj_id);
+        data.append("atr_id", 159);
+
+
+        $.ajax({
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+
+                        porcentagem = percentComplete;
+                        if (percentComplete === 100) {
+                            Swal.close();
+                        }
+
+                    }
+                }, false);
+                return xhr;
+            },
+
+            type: "Post",
+            url: "/Objeto/EsquemaEstrutural_Upload",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response == "") {
+                    //alert("ok");
+
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Arquivo salvo com sucesso'
+                    });
+
+                    document.getElementById("img_atr_id_159").setAttribute('src', src);
+
+                    return false;
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: response
+                    });
+                    return false;
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                return false;
+            }
+        })
+
+        return false;
+    }
+
+</script>
+

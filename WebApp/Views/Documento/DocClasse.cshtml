@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "::.. Classes de Documento ..::";
+}
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 705 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(705)); // id DO MODULO "Classe"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 705 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+
+
+                    <table id="tblDocClasses">
+                        <thead>
+                            <tr>
+                                <th>dcl_id</th>
+                                <th>Código</th>
+                                <th>Descrição</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    @{
+                        if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                        {
+                            <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="DocClasse_Inserir();">Nova Classe de Projeto</button>
+                        }
+                    }
+                    <input type="hidden" id="hddnSelecteddcl_id" name="hddnSelecteddcl_id" value="-1" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+<script src="~/Content/plugins/jquery.mask.min.js"></script>
+<script src="~/Content/plugins/jquery.mask.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+
+        var options = {
+            onKeyPress: function (val, e, field, options) {
+                var corBranca = "rgb(255, 255, 255)";
+                field.css("background-color", corBranca);
+            },
+            onInvalid: function (val, e, f, invalid, options) {
+                var corVermelho = "rgb(228, 88, 71)";
+                   f.css("background-color", corVermelho);
+            }
+        };
+
+        jQuery("#txtdcl_codigo").mask("S00", options);
+
+    </script>
+
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Scripts/Documento/DocClasse.js"></script>
+
+}
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:550px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader"></label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Código<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10">
+                            <input id="txtdcl_codigo" name="txtdcl_codigo" class="form-control"
+                                   title="Letra + Número + Número"
+                                   placeholder="Letra + Número + Número" required
+                                   minlength="3" maxlength="3" pattern=".{1,3}" 
+                                   autocomplete="off"
+                                   onkeyup="txtdcl_codigo_onKeyUP(this)"
+                                  />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Descrição<span class="text-danger">*</span></label>
+                        <div class="col-sm-10">
+                            <input id="txtdcl_descricao" name="txtdcl_descricao" class="form-control"
+                                   placeholder="Descrição" 
+                                   maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                   onkeyup="txtdcl_descricao_onKeyUP(this)" 
+                                   autocomplete="off" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="dcl_ativo">Ativo </label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="chkdcl_ativo" style="margin-top: 10px;">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar" onclick="return DocClasse_Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

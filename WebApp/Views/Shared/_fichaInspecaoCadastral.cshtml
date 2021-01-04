@@ -1,0 +1,1514 @@
+﻿
+
+
+<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
+
+
+<style type="text/css">
+    #divFicha1 option:first-child {
+        color: black !important;
+    }
+
+    #divFicha1 option {
+        color: black !important;
+    }
+
+        #divFicha1 option::selection {
+            color: blue !important;
+        }
+
+    .centroH {
+        text-align: center;
+    }
+
+    .contornoBranco {
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+
+    .btnHeader1 {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: left
+    }
+
+    .btnHeader2 {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: center;
+    }
+
+    #divFicha1 button:focus {
+        outline: none;
+    }
+
+    #divFicha1 button[aria-expanded="true"] > .pull-right-container > .fa-angle-left {
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .rotate {
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .lblTitulos {
+        height: 25px;
+        color: #FFFFFF;
+        background-color: gray;
+        font-weight: bold;
+        /*border: solid 1px black;*/
+        padding-left: 5px;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos2 {
+        height: 25px;
+        background-color: #CCCCCC;
+        font-weight: bold;
+        text-align: center;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos3 {
+        height: 25px;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        text-align: left;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        padding-left: 5px;
+    }
+
+    .lblsBold {
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px !important;
+    }
+
+    .lblsNormal {
+        font-weight: normal;
+        height: 25px;
+        margin: 0 !important;
+        margin-top: 5px !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px;
+    }
+
+    input.txts, .txts {
+        border: solid 1px lightgray;
+        width: 75%;
+        height: 95%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        resize: none;
+    }
+
+    input.txts50, .txts50 {
+        border: solid 1px lightgray;
+        width: 50%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    input.txts25, .txts25 {
+        border: solid 1px lightgray;
+        width: 25%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    .cmbs {
+        border: solid 1px lightgray;
+        /*width: 50%;*/
+        margin: 0 !important;
+        margin-left: 3px;
+        margin-bottom: 0 !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .cmbsNoWidth {
+        border: solid 1px lightgray;
+        /*width: 10%;*/
+        margin-left: 3px;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue !important;
+    }
+
+    #divFicha1 .cmbs option:checked,
+    #divFicha1 .cmbsNoWidth option:checked {
+        border: solid 1px lightgray;
+        margin-left: 3px;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .txtsNoWidth {
+        border: solid 1px lightgray;
+        width: 10%;
+        margin-left: 3px;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        margin-top: 5px !important;
+    }
+
+    .larguraPadrao {
+        width: 16.66%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    .larguraPadrao2 {
+        width: 11.11%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    .altura50 {
+        height: 50px;
+    }
+
+    .borderBottom {
+        border-bottom: solid 1px black;
+    }
+
+    .borderTop {
+        border-top: solid 1px black;
+    }
+
+    .borderLeft {
+        border-left: solid 1px black;
+    }
+
+    .borderRight {
+        border-right: solid 1px black;
+    }
+
+    .borderBottomPt {
+        border-bottom: dotted 1px black;
+    }
+
+    .borderTopPt {
+        border-top: dotted 1px black;
+    }
+
+    .borderLeftPt {
+        border-left: dotted 1px black;
+    }
+
+    .borderRightPt {
+        border-right: dotted 1px black;
+    }
+
+    .borderNone {
+        border: none
+    }
+
+    #divFicha1 input:disabled,
+    #divFicha1 textarea:disabled,
+    #divFicha1 select:disabled {
+        background-color: transparent;
+        border: none !important;
+    }
+
+    #divFicha1 input:enabled,
+    #divFicha1 textarea:enabled,
+    #divFicha1 select:enabled {
+        background-color: white;
+        border: solid 1px black;
+        margin: 3px !important;
+    }
+
+    #divFicha1 select:disabled {
+        background-color: transparent;
+        border: none !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .paddingLeft5 {
+        padding-left: 5px !important
+    }
+</style>
+
+<div id="divFicha1" style="font-family:Calibri; font-size:10.5pt; ">
+
+
+    <table id="tblFicha_DADOS_GERAIS" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px; border-bottom:solid 1px black">
+        <tr style="visibility:hidden;">
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"></td>
+        </tr>
+
+        <tr>
+            <td colspan="6" class="lblTitulos borderTop" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_DADOS_GERAIS"
+                                    onclick="return false"
+                                    type="button"
+                                    class="btnHeader1">
+                                1 - DADOS GERAIS
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_DADOS_GERAIS"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_DADOS_GERAIS)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_DADOS_GERAIS"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_DADOS_GERAIS)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_DADOS_GERAIS"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_DADOS_GERAIS)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3" class="borderLeft "><label class="lblsBold" id="lblatr_id_102">IDENTIFICAÇÃO DA OBRA DE ARTE / CÓDIGO</label></td>
+            <td colspan="3" class="borderLeft borderBottomPt borderRight"><label class="lblsBold" id="lblatr_id_103">Data do Projeto</label><input disabled readonly id="txt_atr_id_103" class="txts25" /></td>
+        </tr>
+
+        <tr>
+            <td colspan="3" class="borderLeft borderBottom"><input disabled id="txt_atr_id_102" class="txts" readonly /></td>
+            <td colspan="3" class="borderLeft borderBottom borderRight"><label class="lblsBold" id="lblatr_id_104">Data Provável da Execução</label><input disabled readonly id="txt_atr_id_104" class="txts25" /></td>
+        </tr>
+
+        <tr>
+            <td colspan="3" class="borderLeft borderBottom"><label class="lblsBold" id="lblatr_id_105">Nome da Obra de Arte</label><input disabled id="txt_atr_id_105" class="txts" /></td>
+            <td colspan="3" class="borderLeft borderBottom borderRight"><label class="lblsBold" id="lblatr_id_106">Código da Rodovia</label><input disabled id="txt_atr_id_106" class="txts" readonly /></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="borderLeft borderBottom"><label class="lblsBold" id="lblatr_id_107">Nome Rodovia</label><input disabled id="txt_atr_id_107" class="txts" /></td>
+            <td class="borderLeft borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_13">Localização - KM</label><input disabled id="txt_atr_id_13" class="txts25" /> </td>
+            <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_14">Município</label><select disabled id="cmb_atr_id_14" class="cmbs"></select></td>
+        </tr>
+
+        <tr>
+            <td class="borderLeft" colspan="3">
+                <label class="lblsBold" id="lblatr_id_98">Tipo de OAE</label>
+                <select disabled id="cmb_atr_id_98" class="cmbs" onchange="cmb_atr_id_98_onchange()"></select>
+            </td>
+            <td class="borderLeft borderRight" colspan="3">
+                <label class="lblsBold" id="lblatr_id_16">Pista</label>
+                <select disabled id="cmb_atr_id_15" class="cmbs"></select>
+                <select disabled id="cmb_atr_id_16" class="cmbs"></select>
+            </td>
+        </tr>
+    </table>
+
+    <table id="tblFicha_DOCUMENTOS" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos " style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_DOCUMENTOS"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_DOCUMENTOS"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                2 - DOCUMENTOS
+                            </button>
+                        </td>
+                        <td style="width:25px !important; "></td>
+                        <td style="width:25px !important; "></td>
+
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_DOCUMENTOS"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_DOCUMENTOS" class="collapse">
+                    <table id="tblFicha_2A" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottom altura50 borderRight borderLeft" colspan="6">
+                                <table id="tblDocumentosReferencia" style="border-bottom:none !important; margin-bottom:0px !important" >
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Documento</th>
+                                            <th>Tipo</th>
+                                            <th>Descrição</th>
+                                            <th>Caminho</th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+
+    <table id="tblFicha_ATRIBUTOS_FUNCIONAIS" cellpadding="0" cellspacing="1" style="width: 100%; ">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_ATRIBUTOS_FUNCIONAIS"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_ATRIBUTOS_FUNCIONAIS"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                3 - ATRIBUTOS DE IMPORTÂNCIA DA OBRA DE ARTE DENTRO DA MALHA VIÁRIA
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_ATRIBUTOS_FUNCIONAIS"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FUNCIONAIS)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_ATRIBUTOS_FUNCIONAIS"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FUNCIONAIS)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_ATRIBUTOS_FUNCIONAIS"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FUNCIONAIS)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_ATRIBUTOS_FUNCIONAIS"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="div_Ficha_ATRIBUTOS_FUNCIONAIS" class="collapse">
+                    <table id="tblFicha_1" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_82">Tipo de Rodovia</label><select disabled id="cmb_atr_id_82" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_85">Principal Utilização do Trecho</label><select disabled id="cmb_atr_id_85" class="cmbs"></select></td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_91">Facilidade de Execução de Desvio</label><select disabled id="cmb_atr_id_91" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_92">Barreira de Segurança (Tipo)</label><select disabled id="cmb_atr_id_92" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft lblsBold borderBottom" rowspan="3">Aspectos Operacionais:</td>
+                            <td class="borderLeftPt borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_87">Gabarito Vertical</label><select disabled id="cmb_atr_id_87" class="cmbsNoWidth"></select><input disabled id="txt_atr_id_165" class="txts25" style="width:50px;text-align:center;"  /> metro(m)</td>
+                            <td class="borderLeft borderRight borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_93" style="vertical-align:top">Agressividade Atmosférica</label><select disabled id="cmb_atr_id_93" class="cmbs"></select></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeftPt borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_88">Gabarito Horizontal / Vazão do curso d'água</label><select disabled id="cmb_atr_id_88" class="cmbsNoWidth"></select><input disabled id="txt_atr_id_166" class="txts25" style="width:50px;text-align:center;" /> metro(m)</td>
+                            <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_20">Classe de Obra / Trem Tipo de Projeto</label><select disabled id="cmb_atr_id_20" class="cmbs"></select></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderLeftPt borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_89">Largura da Plataforma</label><select disabled id="cmb_atr_id_89" class="cmbsNoWidth"></select><input disabled id="txt_atr_id_167" class="txts25" style="width:50px;text-align:center;" /> metro(m)</td>
+                            <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_94">Restrições ao Tráfego de Treminhões</label><select disabled id="cmb_atr_id_94" class="cmbs"></select></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table id="tblFicha_ATRIBUTOS_FIXOS" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_ATRIBUTOS_FIXOS"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_ATRIBUTOS_FIXOS"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                4 - ATRIBUTOS FIXOS
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_ATRIBUTOS_FIXOS"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FIXOS)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_ATRIBUTOS_FIXOS"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FIXOS)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_ATRIBUTOS_FIXOS"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FIXOS)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_ATRIBUTOS_FIXOS"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_ATRIBUTOS_FIXOS" class="collapse">
+                    <table id="tblFicha_2" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom lblsBold" rowspan="3">Dimensões Básicas:</td>
+                            <td class="borderLeftPt borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_17">Comprimento</label><input disabled id="txt_atr_id_17" class="txts25" /> metro(m)</td>
+                            <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_23">Desenvolvimento Altimétrico</label><select disabled id="cmb_atr_id_23" class="cmbs"></select></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeftPt borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_18">Largura</label><input disabled id="txt_atr_id_18" class="txts25" /> metro(m)</td>
+                            <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_24">Desenvolvimento Planialtimétrico</label><select disabled id="cmb_atr_id_24" class="cmbs"></select></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderLeftPt borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_19">Gabarito Atual</label><input disabled id="txt_atr_id_19" class="txts25" /> metro(m)</td>
+                            <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_25">Seção Transversal</label><select disabled id="cmb_atr_id_25" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom "><label class="lblsBold" id="lblatr_id_21">Carga Máxima de Operação por Eixo</label></td>
+                            <td class="borderBottom "><input disabled id="txt_atr_id_21" class="txts25" /> tonelada (t)</td>
+                            <td class="borderLeft borderBottom " colspan="2"><label class="lblsBold" id="lblatr_id_22">Espaçamento</label><input disabled id="txt_atr_id_22" class="txts25" /> metro(m)</td>
+                            <td class="borderLeft borderBottom borderRight" rowspan="3" colspan="2"><label class="lblsBold" id="lblatr_id_28" style="vertical-align:top">ATRIBUTOS | OBSERVAÇÕES </label><textarea disabled id="txt_atr_id_90" class="txts" maxlength="255" rows="4" cols="50"></textarea> </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom lblsBold" rowspan="2">Sinalização:</td>
+                            <td class="borderLeftPt borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_26">Sinalização Horizontal</label><select disabled id="cmb_atr_id_26" class="cmbs"></select></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeftPt borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_27">Sinalização Vertical</label><select disabled id="cmb_atr_id_27" class="cmbs"></select></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table id="tblFicha_SUPERESTRUTURA" cellpadding="0" cellspacing="1" style="width: 100%;">
+
+        <tr>
+            <td class="lblTitulos2" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_SUPERESTRUTURA"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_SUPERESTRUTURA"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader2">
+                                SUPERESTRUTURA
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_SUPERESTRUTURA"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_SUPERESTRUTURA)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_SUPERESTRUTURA"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_SUPERESTRUTURA)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_SUPERESTRUTURA"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_SUPERESTRUTURA)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_SUPERESTRUTURA"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_SUPERESTRUTURA" class="collapse">
+                    <table id="tblFicha_3" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom altura50" colspan="2"><label class="lblsBold" id="lblatr_id_29">Material da Estrutura</label><select disabled id="cmb_atr_id_29" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom lblsBold">Método Construtivo da Estrutura:</td>
+                            <td class="borderBottom borderRight" colspan="3">
+                                <table cellpadding="0" cellspacing="0" style="width: 100%;">
+                                    <tr>
+                                        <td><input disabled type="checkbox" id="chk_atr_id_30_44" /><label class="lblsNormal" id="lblatr_id_30_44">Moldada "in loco"</label></td>
+                                        <td><input disabled type="checkbox" id="chk_atr_id_30_45" /><label class="lblsNormal" id="lblatr_id_30_45">Pré-Moldada</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input disabled type="checkbox" id="chk_atr_id_30_46" /><label class="lblsNormal" id="lblatr_id_30_46">Balanços Sucessivos</label></td>
+                                        <td><input disabled type="checkbox" id="chk_atr_id_30_47" /><label class="lblsNormal" id="lblatr_id_30_47">Deslizante(empurrada)</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><input disabled type="checkbox" id="chk_atr_id_30_48" onclick="chk_tick(this.id)" /><label class="lblsNormal" id="lblatr_id_30_48">Mista</label><input disabled id="txt_atr_id_30_48" class="txts" maxlength="255" onkeyup="tica_chktxt(this.id)" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottomPt borderLeft borderRight lblsBold" colspan="6">Sistema Longitudinal:</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft lblsBold paddingLeft5" style="text-decoration:underline">Tipo Estrutural 1</td>
+                            <td class="borderRightPt lblsBold paddingLeft5" style="text-decoration:underline">Tipo Estrutural 2</td>
+
+                            <td class="borderTopPt borderRight lblsBold" colspan="4" ><label class="lblsBold" id="lblatr_id_112">Observação</label></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_49" /><label class="lblsNormal" id="lblatr_id_31_49">Viga Isostática</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_232" /><label class="lblsNormal" id="lblatr_id_31_232">Viga Isostática</label></td>
+
+                            <td class="lblsBold borderRight" colspan="4" rowspan="8">
+                                <textarea disabled id="txt_atr_id_112" class="txts" rows="4" cols="80" maxlength="255" style="width:95%"></textarea>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_50" /><label class="lblsNormal" id="lblatr_id_31_50">Viga Contínua</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_233" /><label class="lblsNormal" id="lblatr_id_31_233">Viga Contínua</label></td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_51" /><label class="lblsNormal" id="lblatr_id_31_51">Gerber</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_234" /><label class="lblsNormal" id="lblatr_id_31_234">Gerber</label></td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_52" /><label class="lblsNormal" id="lblatr_id_31_52">Arco Superior</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_235" /><label class="lblsNormal" id="lblatr_id_31_235">Arco Superior</label></td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_53" /><label class="lblsNormal" id="lblatr_id_31_53">Arco inferior</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_236" /><label class="lblsNormal" id="lblatr_id_31_236">Arco inferior</label></td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_229" /><label class="lblsNormal" id="lblatr_id_31_229">Arco Intermediário</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_237" /><label class="lblsNormal" id="lblatr_id_31_237">Arco Intermediário</label></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_230" /><label class="lblsNormal" id="lblatr_id_31_230">Pórtico</label></td>
+                            <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_238" /><label class="lblsNormal" id="lblatr_id_31_238">Pórtico</label></td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_231" /><label class="lblsNormal" id="lblatr_id_31_231">Treliça</label></td>
+                            <td class="borderBottomPt borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_239" /><label class="lblsNormal" id="lblatr_id_31_239">Treliça</label></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottomPt borderLeft borderRight lblsBold" colspan="6">Sistema Transversal:</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft  paddingLeft5 lblsBold" colspan="3" style="text-decoration:underline">Tipo Estrutural</td>
+
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_38">Largura total</label><input disabled id="txt_atr_id_38" class="txts25" /> metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5" colspan="3"><input disabled type="checkbox" id="chk_atr_id_32_56" /><label class="lblsNormal" id="lblatr_id_32_56">Laje - L</label></td>
+                            <td class="borderLeftPt borderBottomPt  borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_39">Balanço de</label><input disabled id="txt_atr_id_39" class="txts25" /> </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5" colspan="3"><input disabled type="checkbox" id="chk_atr_id_32_54" /><label class="lblsNormal" id="lblatr_id_32_54">Duas Vigas</label></td>
+                            <td class="borderLeftPt  borderBottomPt borderRightPt lblsBold" rowspan="2" id="lblatr_id_40"><label class="lblsBold">Faixas de Rolamento:</label></td>
+
+                            <td colspan="2" rowspan="2">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td class="borderBottomPt" rowspan="2"><label class="lblsBold" id="lblatr_id_12a">Direita</label></td>
+                                        <td class="borderRight"><label class="lblsBold" id="lblatr_id_123">Quantidade:</label><input disabled id="txt_atr_id_123" class="txts25" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="borderRight borderBottomPt"><label class="lblsBold" id="lblatr_id_124">Largura:</label><input disabled id="txt_atr_id_124" class="txts25" />  metro</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="borderBottomPt" rowspan="2"><label class="lblsBold" id="lblatr_id_12b">Esquerda</label></td>
+                                        <td class="borderRight"><label class="lblsBold" id="lblatr_id_177">Quantidade:</label><input disabled id="txt_atr_id_177" class="txts25" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="borderRight borderBottomPt"><label class="lblsBold" id="lblatr_id_178">Largura:</label><input disabled id="txt_atr_id_178" class="txts25" />  metro</td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_32_55" /><label class="lblsNormal" id="lblatr_id_32_55">Grelha</label></td>
+                            <td colspan="2"><input disabled type="checkbox" id="chk_atr_id_32_240" onclick="chk_tick(this.id)" /><label class="lblsNormal" id="lblatr_id_32_240">nº de vigas</label><input disabled id="txt_atr_id_32_240" class="txts25" onkeyup="tica_chktxt(this.id)" /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_32_57" /><label class="lblsNormal" id="lblatr_id_32_57">Seção Celular</label></td>
+                            <td><input disabled type="checkbox" id="chk_atr_id_32_58" onclick="chk_tick(this.id)" /><label class="lblsNormal" id="lblatr_id_32_58">nº de almas</label><input disabled id="txt_atr_id_32_58" class="txts25" onkeyup="tica_chktxt(this.id)" /></td>
+                            <td><input disabled type="checkbox" id="chk_atr_id_32_241" onclick="chk_tick(this.id)" /><label class="lblsNormal" id="lblatr_id_32_241">nº de celulas</label><input disabled id="txt_atr_id_32_241" class="txts25" onkeyup="tica_chktxt(this.id)" /></td>
+
+                            <td class="borderLeftPt borderBottomPt borderRightPt" rowspan="2"><label class="lblsBold" id="lblatr_id_39">Acostamento (Largura):</label></td>
+                            <td class="borderRight " colspan="2"><label class="lblsBold" id="lblatr_id_41">Direito:</label><input disabled id="txt_atr_id_41" class="txts25" />  metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt paddingLeft5" colspan="3"><input disabled type="checkbox" id="chk_atr_id_32_242" onclick="chk_tick(this.id)" /><label class="lblsNormal" id="lblatr_id_32_242">Outro</label><input disabled id="txt_atr_id_32_242" maxlength="255" class="txts25" onkeyup="tica_chktxt(this.id)" /></td>
+                            <td class="borderRight borderBottomPt" colspan="2"><label class="lblsBold" id="lblatr_id_42">Esquerdo:</label><input disabled id="txt_atr_id_42" class="txts25" />  metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_35">Pavimento</label><select disabled id="cmb_atr_id_35" class="cmbs"></select></td>
+
+                            <td class="borderLeftPt borderBottomPt lblsBold" rowspan="2">Faixa de Segurança:</td>
+                            <td class="lblsNormal borderLeftPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_43">Faixa de Segurança | Direita</label><input disabled id="txt_atr_id_43" class="txts25" /> metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt lblsBold" rowspan="3">Espessura do Pavimento</td>
+                            <td class="borderBottomPt borderLeftPt lblsNormal" colspan="2"><label class="lblsBold" id="lblatr_id_95">Ponto 1:</label><input disabled id="txt_atr_id_95" class="txts25" /> metro</td>
+                            <td class="lblsNormal borderBottomPt borderLeftPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_44">Faixa de Segurança | Esquerda</label><input disabled id="txt_atr_id_44" class="txts25" /> metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottomPt borderLeftPt lblsNormal" colspan="2"><label class="lblsBold" id="lblatr_id_96">Ponto 2:</label><input disabled id="txt_atr_id_96" class="txts25" /> metro</td>
+                            <td class="borderLeftPt borderBottomPt lblsBold" rowspan="2">Passeio (Largura):</td>
+                            <td class="borderLeftPt borderRight lblsNormal" colspan="2"> <label class="lblsBold" id="lblatr_id_45">Passeio (Largura) | Direito</label><input disabled id="txt_atr_id_45" class="txts25" /> metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottomPt borderLeftPt lblsNormal" colspan="2"><label class="lblsBold" id="lblatr_id_97">Ponto 3:</label><input disabled id="txt_atr_id_97" class="txts25" /> metro</td>
+                            <td class="borderBottomPt borderLeftPt borderRight lblsNormal" colspan="2"><label class="lblsBold" id="lblatr_id_46">Passeio (Largura) | Esquerdo</label><input disabled id="txt_atr_id_46" class="txts25" /> metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_47">Guarda Corpo (Tipo / Dim.)</label><select disabled id="cmb_atr_id_47" class="cmbs"></select></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_36">Juntas - Tipo</label><select disabled id="cmb_atr_id_36" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom"><label class="lblsBold" id="lblatr_id_113">Observação</label></td>
+                            <td class="borderRight borderBottom" colspan="5"><input disabled id="txt_atr_id_113" maxlength="255" class="txts" /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom borderRight lblsBold" colspan="6">Dados Complementares</td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt lblsBold" rowspan="2">Sistema de Drenagem:</td>
+                            <td class="lblsNormal borderLeftPt borderBottomPt borderRight" colspan="5"><label class="lblsBold" id="lblatr_id_49">Sistema de Drenagem | nos acessos</label><select disabled id="cmb_atr_id_49" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="lblsNormal borderLeftPt borderBottomPt borderRight" colspan="5"><label class="lblsBold" id="lblatr_id_50">Sistema de Drenagem | na estrutura</label><select disabled id="cmb_atr_id_50" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_51">Sistema de Iluminação</label><input disabled id="txt_atr_id_51" maxlength="255" class="txts" /></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_55">Utilidades</label><input disabled id="txt_atr_id_55" class="txts" maxlength="255" /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt " colspan="3"><label class="lblsBold" id="lblatr_id_53">Acessos</label><select disabled id="cmb_atr_id_53" class="cmbs"></select></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_52">Laje de Aproximação</label><select disabled id="cmb_atr_id_52" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom altura50" colspan="2"><label class="lblsBold" id="lblatr_id_54">Vinculação da Laje de Aproximação com a Obra</label></td>
+                            <td class="borderBottom altura50 borderRight" colspan="4"><select disabled id="cmb_atr_id_54" class="cmbs"></select></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table id="tblFicha_MESOESTRUTURA" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos2" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_MESOESTRUTURA"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_MESOESTRUTURA"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader2">
+                                MESOESTRUTURA
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_MESOESTRUTURA"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_MESOESTRUTURA)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_MESOESTRUTURA"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_MESOESTRUTURA)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_MESOESTRUTURA"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_MESOESTRUTURA)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_MESOESTRUTURA"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_MESOESTRUTURA" class="collapse">
+                    <table id="tblFicha_4" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom altura50" colspan="2"><label class="lblsBold" id="lblatr_id_56">Material da Estrutura</label><select disabled id="cmb_atr_id_56" class="cmbs"></select></td>
+                            <td class="borderLeft borderRight lblsBold" colspan="4"><label class="lblsBold" id="lblatr_id_57">Tipo Estrutural</label><select disabled id="cmb_atr_id_57" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom lblsBold" rowspan="3">Método Construtivo da Estrutura:</td>
+                            <td ><input disabled type="checkbox" id="chk_atr_id_59_102" /><label class="lblsNormal" id="lblatr_id_59_102">Moldada "in loco"</label></td>
+
+                            <td class="borderLeft " colspan="2"><label class="lblsBold" id="lblatr_id_168">Pilar</label><select disabled id="cmb_atr_id_168" class="cmbs"></select></td>
+                            <td class="borderRight" colspan="2">
+                                <label class="lblsBold" id="lblatr_id_58">Tipo de Seção dos Pilares</label>
+                                <select disabled id="cmb_atr_id_58" class="cmbs" onchange="cmb_atr_id_58_onchange()"></select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottom " rowspan="2" ><input disabled type="checkbox" id="chk_atr_id_59_103" /><label class="lblsNormal" id="lblatr_id_59_103">Pré-Moldada</label> </td>
+                            
+                            <td class="borderLeft " colspan="2" style="vertical-align:middle; text-align:center">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label class="lblsBold" id="lblatr_id_60">Dimensões dos Pilares</label>
+                                        </td>
+                                        <td>
+                                            <input disabled id="txt_atr_id_60" class="txtsNoWidth" style="width:50px; text-align:center;" />
+                                        </td>
+                                        <td>x</td>
+                                        <td>
+                                            <input disabled id="txt_atr_id_171" class="txtsNoWidth" style="width:50px; text-align:center;" />
+                                        </td>
+                                        <td >metro</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>L/D</td>
+                                        <td></td>
+                                        <td>C</td>
+                                        <td></td>
+                                    </tr>
+                                </table>                                 
+                            </td>
+
+                            <td class="borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_61">Quantidade de Pilares</label><input disabled id="txt_atr_id_61" class="txtsNoWidth" /> unidade</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_161">Viga Travessa</label><select disabled id="cmb_atr_id_161" class="cmbs"></select></td>
+                            <td class="borderBottom borderRight" colspan="2" style="vertical-align:middle; text-align:center">
+                                <table>
+                                    <tr>
+                                        <td><label class="lblsBold" id="lblatr_id_162" style="text-align:left">Dimensões das Vigas Travessas</label></td>
+                                        <td><input disabled id="txt_atr_id_162" class="txtsNoWidth" style="width:40px"  /></td>
+                                        <td style="width:10px" >x</td>
+                                        <td><input disabled id="txt_atr_id_172" class="txtsNoWidth" style="width:40px"   /></td>
+                                        <td style="width:10px" >x</td>
+                                        <td><input disabled id="txt_atr_id_173" class="txtsNoWidth" style="width:40px"   /></td>
+                                        <td>metro(m)</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>L</td>
+                                        <td></td>
+                                        <td>H</td>
+                                        <td></td>
+                                        <td>C</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                                
+                                
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_125">Consolo</label><select disabled id="cmb_atr_id_125" class="cmbs25"></select></td>
+                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_126">Observação</label><input disabled id="txt_atr_id_126" class="txts" maxlength="255" /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_62">Altura Acima do Terreno</label><input disabled id="txt_atr_id_62" class="txtsNoWidth" /> metro</td>
+                            <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_63">Altura Acima do Bloco</label><input disabled id="txt_atr_id_63" class="txtsNoWidth" /> metro</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderRight lblsBold" colspan="6">Aparelho de Apoio</td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_64">APARELHOS DE APOIO | Tipo</label><select disabled id="cmb_atr_id_64" class="cmbs"></select></td>
+
+                            <td class="borderLeft borderBottom" style="border-left:none" colspan="2"><label class="lblsBold" id="lblatr_id_65">APARELHOS DE APOIO | Quantidade</label><select disabled id="cmb_atr_id_65" class="cmbs25"></select> unidade</td>
+
+                            <td class="borderLeft borderBottom borderRight" style="border-left:none" colspan="2"><label class="lblsBold" id="lblatr_id_66">APARELHOS DE APOIO | Carga do Aparelho (max)</label><input disabled id="txt_atr_id_66" class="txtsNoWidth" /> tonelada(t)</td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_67">APARELHOS DE APOIO | Observação</label><input disabled id="txt_atr_id_67" maxlength="255" class="txts" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <style>
+        .chaveWidth1 {
+            width: 19px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            text-align: right;
+        }
+
+        .chaveWidth2 {
+            width: 7px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .altura15 {
+            height: 15px !important
+        }
+    </style>
+    <table id="tblFicha_INFRAESTRUTURA" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos2" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_INFRAESTRUTURA"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_INFRAESTRUTURA"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader2">
+                                INFRAESTRUTURA
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_INFRAESTRUTURA"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_INFRAESTRUTURA)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_INFRAESTRUTURA"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_INFRAESTRUTURA)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_INFRAESTRUTURA"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_INFRAESTRUTURA)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_INFRAESTRUTURA"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_INFRAESTRUTURA" class="collapse">
+                    <table id="tblFicha_5" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6" class="lblsBold borderLeft borderRight">FUNDAÇÃO</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6" class="lblsNormal borderLeft borderRight paddingLeft5">Tipo</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderRight" colspan="6">
+                                <table id="tblFundacaoTipos" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="lblsNormal"></td>
+                                        <td class="lblsNormal chaveWidth1"></td>
+                                        <td class="lblsNormal chaveWidth2"></td>
+                                        <td class="lblsNormal"> </td>
+                                        <td class="lblsNormal chaveWidth1"></td>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"> </td>
+                                        <td class="lblsNormal chaveWidth1"></td>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" colspan="10"><input disabled type="checkbox" id="chk_atr_id_128_345" /><label class="lblsNormal" id="lblatr_id_128_345">Bloco</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" rowspan="2"><input disabled type="checkbox" id="chk_atr_id_128_245" /><label class="lblsNormal" id="lbl_atr_id_128_245">Sapata</label></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight" rowspan="2">--</td>
+                                        <td class="lblsNormal chaveWidth2 borderTop"></td>
+                                        <td class="lblsNormal" colspan="7"><input disabled type="checkbox" id="chk_atr_id_128_246" /><label class="lblsNormal" id="lbl_atr_id_128_246">isolada</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal chaveWidth2 borderBottom"></td>
+                                        <td class="lblsNormal" colspan="7"><input disabled type="checkbox" id="chk_atr_id_128_247" /><label class="lblsNormal" id="lblatr_id_128_247">associada</label></td>
+                                    </tr>
+
+                                    <tr><td class="altura15" colspan="10"></td></tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" rowspan="3"><input disabled type="checkbox" id="chk_atr_id_128_248" /><label class="lblsNormal" id="lblatr_id_128_248">Tubulão</label></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight" rowspan="3">--</td>
+                                        <td class="lblsNormal chaveWidth2 borderTop"></td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_249" /><label class="lblsNormal" id="lblatr_id_128_249">a céu aberto</label></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight" rowspan="3">--</td>
+                                        <td class="lblsNormal chaveWidth2 borderTop"> </td>
+                                        <td class="lblsNormal" colspan="4"><input disabled type="checkbox" id="chk_atr_id_128_251" /><label class="lblsNormal" id="lblatr_id_128_251">sem camisa</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"> </td>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal" colspan="4"><input disabled type="checkbox" id="chk_atr_id_128_252" /><label class="lblsNormal" id="lblatr_id_128_252">com camisa metálica</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal chaveWidth2 borderBottom"> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_250" /><label class="lblsNormal" id="lblatr_id_128_250">a ar comprimido</label></td>
+                                        <td class="lblsNormal chaveWidth2 borderBottom"> </td>
+                                        <td class="lblsNormal" colspan="4"><input disabled type="checkbox" id="chk_atr_id_128_253" /><label class="lblsNormal" id="lblatr_id_128_253">com camisa de concreto</label></td>
+                                    </tr>
+
+                                    <tr><td class="altura15" colspan="10"></td></tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" rowspan="3"><input disabled type="checkbox" id="chk_atr_id_128_254" /><label class="lblsNormal" id="lblatr_id_128_254">Estacas de concreto</label></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight" rowspan="3">--</td>
+                                        <td class="lblsNormal chaveWidth2 borderTop"></td>
+                                        <td class="lblsNormal" colspan="7"><input disabled type="checkbox" id="chk_atr_id_128_255" /><label class="lblsNormal" id="lblatr_id_128_255">pré-moldadas</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"> </td>
+                                        <td class="lblsNormal chaveWidth1 borderRight"> </td>
+                                        <td class="lblsNormal chaveWidth2 borderTop"> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_257" /><label class="lblsNormal" id="lblatr_id_128_257">escavadas</label> </td>
+                                        <td class="lblsNormal chaveWidth1 borderRight">--</td>
+                                        <td class="lblsNormal chaveWidth2 borderTop"> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_261" /><label class="lblsNormal" id="lblatr_id_128_261">tipo estacões</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal chaveWidth2 borderBottom"> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_256" /><label class="lblsNormal" id="lblatr_id_128_256">moldadas in loco</label> </td>
+                                        <td class="lblsNormal borderRight chaveWidth1">--</td>
+                                        <td class="lblsNormal chaveWidth2"></td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_258" /><label class="lblsNormal" id="lblatr_id_128_258">tipo Franki</label></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight"></td>
+                                        <td class="lblsNormal chaveWidth2 borderBottom "> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_262" /><label class="lblsNormal" id="lblatr_id_128_262">tipo barrete</label> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_263" /><label class="lblsNormal" id="lblatr_id_128_263">Estacas de madeira</label></td>
+                                        <td class="lblsNormal chaveWidth1"></td>
+                                        <td class="lblsNormal chaveWidth2"></td>
+                                        <td class="lblsNormal"></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight"></td>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_259" /><label class="lblsNormal" id="lblatr_id_128_259">tipo Strauss</label></td>
+                                        <td class="lblsNormal chaveWidth1"> </td>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_264" /><label class="lblsNormal" id="lblatr_id_128_264">Estacas de Metálicas</label></td>
+                                        <td class="lblsNormal chaveWidth1"></td>
+                                        <td class="lblsNormal chaveWidth2"></td>
+                                        <td class="lblsNormal"></td>
+                                        <td class="lblsNormal chaveWidth1 borderRight"></td>
+                                        <td class="lblsNormal chaveWidth2 borderBottom"> </td>
+                                        <td class="lblsNormal"><input disabled type="checkbox" id="chk_atr_id_128_260" /><label class="lblsNormal" id="lblatr_id_128_260">tipo Raiz</label></td>
+                                        <td class="lblsNormal chaveWidth1"> </td>
+                                        <td class="lblsNormal chaveWidth2"> </td>
+                                        <td class="lblsNormal"> </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" colspan="10"><input disabled type="checkbox" id="chk_atr_id_128_265" /><label class="lblsNormal" id="lblatr_id_128_265">Estacas Mistas</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" colspan="10"><input disabled type="checkbox" id="chk_atr_id_128_266" /><label class="lblsNormal" id="lblatr_id_128_266">Paredes Diafragmas</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" colspan="10"><input disabled type="checkbox" id="chk_atr_id_128_267" /><label class="lblsNormal" id="lblatr_id_128_267">Cortinas de Concreto</label></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="lblsNormal" colspan="10"><input disabled type="checkbox" id="chk_atr_id_128_268" /><label class="lblsNormal" id="lblatr_id_128_268">Outras</label></td>
+                                    </tr>
+
+
+                                    <tr><td class="altura15" colspan="10"></td></tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_163">Viga Travessa</label><select disabled id="cmb_atr_id_163" class="cmbs"></select></td>
+                            <td class="borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_164">Dimensões das Vigas Travessas</label><input disabled id="txt_atr_id_164" class="txtsNoWidth" /> metro (m)</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações</td>
+                        </tr>
+                        <tr>
+                            <td class="lblsBold borderBottom borderLeft" rowspan="2">Profundidade da Fundação</td>
+                            <td colspan="2"><label class="lblsBold" id="lblatr_id_72">Abaixo do terreno</label><input disabled id="txt_atr_id_72" class="txts25" /> metro</td>
+                            <td class="borderLeftPt borderBottom borderRight" colspan="3" rowspan="2"><label class="lblsBold" id="lblatr_id_73">Condições Topográficas</label><select disabled id="cmb_atr_id_73" class="cmbs"></select></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_127">Abaixo do bloco</label><input disabled id="txt_atr_id_127" class="txts25" /> metro</td>
+                        </tr>
+
+                        @*<tr>
+            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_74">FUNDAÇÃO | Observação</label><input disabled id="txt_atr_id_74" class="txts" /></td>
+        </tr>*@
+
+                        <tr>
+                            <td colspan="6" class="borderLeft lblsBold borderRight borderBottomPt">Condição Geológico-Geotécnica</td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_75">Nível da Água - Profundidade </label><input disabled id="txt_atr_id_75" class="txts25" /> metro</td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_76">Material de Apoio</label><select disabled id="cmb_atr_id_76" class="cmbs"></select></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_77">CONDIÇÕES GEOLÓGICAS - Observação</label><input disabled id="txt_atr_id_77" maxlength="255" class="txts" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table id="tblFicha_ENCONTROS" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos2" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_ENCONTROS"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_ENCONTROS"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader2">
+                                ENCONTROS
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_ENCONTROS"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_ENCONTROS)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_ENCONTROS"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_ENCONTROS)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_ENCONTROS"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_ENCONTROS)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_ENCONTROS"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_ENCONTROS" class="collapse">
+                    <table id="tblFicha_6" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt borderRight" colspan="6">
+                                <label class="lblsBold" id="lblatr_id_78">Tipo de Encontro</label>
+                                <select disabled id="cmb_atr_id_78" class="cmbsNoWidth"></select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt borderRight" colspan="6">
+                                <label class="lblsBold" id="lblatr_id_79">Laje de transição</label>
+                                <select disabled id="cmb_atr_id_79" class="cmbsNoWidth"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ENCONTROS | Observação</label><input disabled id="txt_atr_id_80" class="txts" maxlength="255" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table id="tblFicha_HISTORICO_INTERVENCOES" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_HISTORICO_INTERVENCOES"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_HISTORICO_INTERVENCOES"
+                                    onclick="header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                5 - HISTÓRICO DE INTERVENÇÕES
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_HISTORICO_INTERVENCOES"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaInspecaoCadastral(tblFicha_HISTORICO_INTERVENCOES)"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_HISTORICO_INTERVENCOES"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaInspecaoCadastral(tblFicha_HISTORICO_INTERVENCOES)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_HISTORICO_INTERVENCOES"
+                                    type="button"
+                                    onclick="return EditarDados_FichaInspecaoCadastral(tblFicha_HISTORICO_INTERVENCOES)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_HISTORICO_INTERVENCOES"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_HISTORICO_INTERVENCOES" class="collapse">
+                    <table id="tblFicha_7" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                            <td class="larguraPadrao"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderBottom altura50 borderRight borderLeft" colspan="6">
+                                <input disabled id="txt_atr_id_174" class="txts" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+<script>
+    if (paginaPai == "Objeto")
+        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
+    else
+        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
+
+    //moment.locale('pt-br');         // pt-br
+    //$.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    //jQuery(function ($) {
+    //    $.datepicker.regional['pt-BR'] = datepicker_regional;
+    //    $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+    //});
+
+    //$('#txt_atr_id_103').datepicker({
+    //    dateFormat: 'dd/mm/yy'
+    //});
+
+    //$('#txt_atr_id_104').datepicker({
+    //    dateFormat: 'dd/mm/yy'
+    //});
+
+</script>
