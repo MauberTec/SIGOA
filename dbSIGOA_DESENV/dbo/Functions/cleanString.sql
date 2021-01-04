@@ -9,4 +9,5 @@ begin
   set @iPtr = patindex('%[^ -~0-9A-Z]%', @strIn COLLATE LATIN1_GENERAL_BIN)
  end
  return @strIn
+
 end
