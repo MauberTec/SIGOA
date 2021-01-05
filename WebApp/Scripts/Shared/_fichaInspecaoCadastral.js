@@ -51,7 +51,6 @@ function setaReadWrite_FichaInspecaoCadastral(tabela, ehRead) {
     jQuery('#txt_atr_id_32_240').mask('99');
     jQuery('#txt_atr_id_32_58').mask('99');
     jQuery('#txt_atr_id_32_241').mask('99');
-    jQuery('#txt_atr_id_164').mask('99.99');
 
 
 }
@@ -697,6 +696,11 @@ function SalvarDados_FichaInspecaoCadastral(tabela) {
                     var valor = lstInputs[i].value;
                     if ((valor.trim() == ",") || (valor.trim() == "."))
                         valor = "";
+                    else
+                        if (((valor.startsWith(",")) || (valor.startsWith("."))) && (!isNaN(valor.replace(",", "").replace(".", "")))) {
+                            valor = "0" + valor;
+                          //  valor = valor.replace(",", ".")
+                        }
 
                     saida = saida + ";" + lstInputs[i].id + ":" + valor;
                 }
