@@ -1,6 +1,6 @@
 ﻿
 
-
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial.js"></script>
 <style type="text/css">
     #divFicha4 option:first-child {
         color: black !important;
@@ -1166,7 +1166,7 @@
                         <td style="width:25px !important; ">
                             <button id="btn_Salvar_INFRAESTRUTURA"
                                     type="button"
-                                    onclick="return SalvarDados_Ficha4l(tblFicha4_INFRAESTRUTURA)"
+                                    onclick="return SalvarDados_Ficha4(tblFicha4_INFRAESTRUTURA)"
                                     title="Salvar"
                                     style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
@@ -1176,7 +1176,7 @@
                         <td style="width:25px !important; ">
                             <button id="btn_Cancelar_INFRAESTRUTURA"
                                     type="button"
-                                    onclick="return CancelarDados_Ficha4(tblFicha_INFRAESTRUTURA)"
+                                    onclick="return CancelarDados_Ficha4(tblFicha4_INFRAESTRUTURA)"
                                     title="Cancelar Edição"
                                     style="display:none; border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
@@ -1184,7 +1184,7 @@
 
                             <button id="btn_Editar_INFRAESTRUTURA"
                                     type="button"
-                                    onclick="return EditarDados_Ficha4(tblFicha_INFRAESTRUTURA)"
+                                    onclick="return EditarDados_Ficha4(tblFicha4_INFRAESTRUTURA)"
                                     title="Editar"
                                     style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-pencil"></span>
@@ -1362,9 +1362,8 @@
                             <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_163">Viga Travessa</label><select disabled id="cmb_atr_id_163" class="cmbs"></select></td>
                             <td class="borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_164">Dimensões das Vigas Travessas</label><input disabled id="txt_atr_id_164" class="txtsNoWidth" /> metro (m)</td>
                         </tr>
-
                         <tr>
-                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações</td>
+                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações<input disabled id="txt_atr_id_74" maxlength="255" class="txts" /></td>
                         </tr>
                         <tr>
                             <td class="lblsBold borderBottom borderLeft" rowspan="2">Profundidade da Fundação</td>
@@ -1377,8 +1376,8 @@
                         </tr>
 
                         @*<tr>
-                <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_74">FUNDAÇÃO | Observação</label><input disabled id="txt_atr_id_74" class="txts" /></td>
-            </tr>*@
+            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_74">FUNDAÇÃO | Observação</label><input disabled id="txt_atr_id_74" class="txts" /></td>
+        </tr>*@
 
                         <tr>
                             <td colspan="6" class="borderLeft lblsBold borderRight borderBottomPt">Condição Geológico-Geotécnica</td>
@@ -1954,13 +1953,4 @@
     </table>
 
 </div>
-
-<script>
-
-
-
-
-
-
-</script>
 
