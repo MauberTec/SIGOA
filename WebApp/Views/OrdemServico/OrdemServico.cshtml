@@ -40,7 +40,7 @@
     // variavel usada para identificar a view origem da ficha cadastral shared
     var paginaPai = "OrdemServico";
     var qualFicha;
-    //  var selectedId_obj_id;
+    var selectedId_obj_id;
 
 </script>
 
@@ -347,7 +347,6 @@
 
     function CancelarDados_FichaNotificacaoOcorrencia(tabela) {
         preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
-
         // alterna os campos para leitura
         setaReadWrite_FichaNotificacaoOcorrencia(tabela, true);
         document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
@@ -356,8 +355,6 @@
 
     }
     function SalvarDados_FichaNotificacaoOcorrencia(tabela) {
-
-
 
         // ********* ENVIA OS DADOS PARA O BANCO **********************************************************************
         var ord_id = -1;

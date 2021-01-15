@@ -594,6 +594,55 @@ namespace WebApp.Models
 
     }
 
-
+    /// <summary>
+    /// Valores das Conserrvas
+    /// </summary>
+    public class ConservaPolitica
+    {
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ocp_id { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ogv_id { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ogi_id_caracterizacao_situacao { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public string ocp_descricao_alerta { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public string ocp_descricao_servico { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public bool ocp_ativo { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public DateTime ocp_deletado { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public DateTime ocp_data_criacao { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ocp_criado_por { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public DateTime ocp_data_atualizacao { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ocp_atualizado_por { get; set; }
+    }
 
 }
