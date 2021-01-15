@@ -18,6 +18,7 @@ namespace WebApp.Controllers
         /// <summary>
         /// PoliticaConserva
         /// </summary>
+        [ValidateInput(false)]
         public ActionResult PoliticaConserva()
         {
             return View();
