@@ -1355,23 +1355,23 @@ function preencheConserva_onchange() {
             $("#txtCritica").val('');
             $.each(data, function (i, item) {                
                 if (item.ogi_id_caracterizacao_situacao == 2) {
-                    $("#txtNormal").val(item.ocp_descricao_alerta);
+                    $("#txtAlerta2").val(item.ocp_descricao_alerta);
                     $("#ocp_id2").val(item.ocp_id);
                     $("#descri2").val(item.ocp_descricao_servico);
-                    $("#txtNormal").prop('title', item.ocp_descricao_alerta);
+                    $("#txtAlerta2").prop('title', item.ocp_descricao_alerta);
                 }
                 else if (item.ogi_id_caracterizacao_situacao == 1) {
-                    $("#txtAtencao").val(item.ocp_descricao_alerta);
+                    $("#txtAlerta1").val(item.ocp_descricao_alerta);
                     $("#descri1").val(item.ocp_descricao_servico);
                     $("#ocp_id1").val(item.ocp_id);
-                    $("#txtAtencao").prop('title', item.ocp_descricao_alerta);
+                    $("#txtAlerta1").prop('title', item.ocp_descricao_alerta);
                    
                 }
                 else if (item.ogi_id_caracterizacao_situacao == 3) {
                     $("#ocp_id3").val(item.ocp_id);
                     $("#descri3").val(item.ocp_descricao_servico);
-                    $("#txtCritica").val(item.ocp_descricao_alerta);
-                    $("#txtCritica").prop('title', item.ocp_descricao_alerta);
+                    $("#txtAlerta3").val(item.ocp_descricao_alerta);
+                    $("#txtAlerta3").prop('title', item.ocp_descricao_alerta);
                     
                 }
 
@@ -1500,10 +1500,14 @@ function updateConserva_Click() {
     var descri2 = $('#descri2').val();
     var descri3 = $('#descri3').val();
 
+    var alerta1 = $('#txtAlerta1').val();
+    var alerta2 = $('#txtAlerta2').val();
+    var alerta3 = $('#txtAlerta3').val();
+
 
     Ficha2_LimparCampos();
     $.ajax({
-        url: '/Politicaconserva/UpdateConserva?ocp_id1=' + ocp_id1 + '&ocp_id2=' + ocp_id2 + '&ocp_id3=' + ocp_id3 + '&descri1=' + descri1 + '&descri2=' + descri2 + '&descri3=' + descri3,
+        url: '/Politicaconserva/UpdateConserva?ocp_id1=' + ocp_id1 + '&ocp_id2=' + ocp_id2 + '&ocp_id3=' + ocp_id3 + '&descri1=' + descri1 + '&descri2=' + descri2 + '&descri3=' + descri3 + '&alerta1=' + alerta1 + '&alerta2=' + alerta2 + '&alerta3=' + alerta3,
         type: "Get",
         dataType: "JSON",
         success: function (data) {

@@ -16,78 +16,7 @@ namespace WebApp.DAO
     /// </summary>
     public class PoliticaConservaDAO : Conexao
     {
-        /// <summary>
-        /// CmbSub1
-        /// </summary>
-        public List<ObjClasse> CmbSub1()
-        {
-            try
-            {
-                List<ObjClasse> objClasses = new List<ObjClasse>();
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand();
-                    com.CommandText = "Select clo_id, clo_nome From tab_objeto_classes";
-                    com.Connection = con;
-                    //com.Parameters.AddWithValue("@tos_id", tos_id);
-
-                    SqlDataReader reader = com.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        objClasses.Add(new ObjClasse
-                        {
-                            clo_nome = reader["clo_nome"].ToString(),
-                            clo_id = Convert.ToInt32(reader["clo_id"].ToString())
-                        }); ;
-                    }
-                    return objClasses;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// CmbSub1
-        /// </summary>
-        public List<ObjTipo> CmbSub2(int tip_id)
-        {
-            try
-            {
-                List<ObjTipo> objClasses = new List<ObjTipo>();
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand();
-                    com.CommandText = "Select tip_id, tip_nome From tab_objeto_tipos where tip_id= " + tip_id;
-                    com.Connection = con;
-                    //com.Parameters.AddWithValue("@tos_id", tos_id);
-
-                    SqlDataReader reader = com.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        objClasses.Add(new ObjTipo
-                        {
-                            tip_nome = reader["tip_nome"].ToString(),
-                            tip_id = Convert.ToInt32(reader["tip_id"].ToString())
-                        }); 
-                    }
-                    return objClasses;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
+    
         /// <summary>
         /// Conserva
         /// </summary>
@@ -99,10 +28,10 @@ namespace WebApp.DAO
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand();
-                    com.CommandText = "select * from tab_objeto_conserva_politica where ogv_id = " + ogv_id;
-                    com.Connection = con;
-                    //com.Parameters.AddWithValue("@tos_id", tos_id);
+                    SqlCommand com = new SqlCommand("STP_SEL_CONSERVAS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ogv_id", ogv_id);
 
                     SqlDataReader reader = com.ExecuteReader();
                     while (reader.Read())
@@ -128,17 +57,33 @@ namespace WebApp.DAO
         /// <summary>
         /// Edita conserva da pesquisa da home
         /// </summary>
-        public string EditConservaHome(string ocp_id, string alerta, string conserva)
+        public string EditConserva(string ocp_id, string alerta, string conserva)
         {
             string response;
             using (SqlConnection con = new SqlConnection(new Conexao().strConn))
             {
                 try
                 {
-                    string query = "update tab_objeto_conserva_politica set ocp_descricao_alerta = '" + alerta + "', ocp_descricao_servico = '" + conserva + "' where ocp_id = " + ocp_id;
+                    //string query = "update tab_objeto_conserva_politica set ocp_descricao_alerta = '" + alerta + "', ocp_descricao_servico = '" + conserva + "' where ocp_id = " + ocp_id;
                     con.Open();
-                    SqlCommand com = new SqlCommand(query, con);
-                    com.ExecuteNonQuery();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_UPD_CONSERVA";
+
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ocp_id", ocp_id);
+                    com.Parameters.AddWithValue("@ocp_descricao_alerta", alerta);
+                    com.Parameters.AddWithValue("@ocp_descricao_servico", conserva);
+                    com.ExecuteScalar();
+                    int id = Convert.ToInt32(p_return.Value);
+
                     response = "ok";
                 }
                 catch (Exception ex)
@@ -151,31 +96,7 @@ namespace WebApp.DAO
             return response;
         }
 
-        /// <summary>
-        /// Edita conserva da modal
-        /// </summary>
-        public int  EditConservaModal(string ocp_id, string descri)
-        {
-            int response;
-            using (SqlConnection con = new SqlConnection(new Conexao().strConn))
-            {
-                try
-                {
-                    string query = "update tab_objeto_conserva_politica set ocp_descricao_servico = '" + descri + "' where ocp_id = " + ocp_id;
-                    con.Open();
-                    SqlCommand com = new SqlCommand(query, con);
-                    com.ExecuteNonQuery();
-                    response = 0;
-                }
-                catch (Exception)
-                {
-                    response = 1;
-                }
-               
-            }
-            return response;
-        }
-
+       
         /// <summary>
         /// Lista Grupos e Variaveis sem parametro
         /// </summary>

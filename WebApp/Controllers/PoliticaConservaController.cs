@@ -23,21 +23,7 @@ namespace WebApp.Controllers
         {
             return View();
         }
-        /// <summary>
-        /// cmbSub1
-        /// </summary>
-        public JsonResult cmbSub1()
-        {
-            return Json(new PoliticaConservaDAO().CmbSub1(), JsonRequestBehavior.AllowGet);
-        }
-        /// <summary>
-        /// cmbSub2
-        /// </summary>
-        public JsonResult cmbSub2(int id)
-        {
-            return Json(new PoliticaConservaDAO().CmbSub2(id), JsonRequestBehavior.AllowGet);
-        }
-
+  
         /// <summary>
         /// cmbSub2
         /// </summary>
@@ -104,36 +90,38 @@ namespace WebApp.Controllers
         /// UpdateConserva
         /// </summary>
         /// 
-        public JsonResult UpdateConserva(string ocp_id1, string ocp_id2, string ocp_id3, string descri1, string descri2, string descri3)
+        public JsonResult UpdateConserva(string ocp_id1, string ocp_id2, string ocp_id3, string descri1, string descri2, string descri3, string alerta1, string alerta2, string alerta3)
         {
             int count = 3;
             string ocp_id = string.Empty;
             string descri = string.Empty;
+            string alerta = string.Empty;
             for (int i = 0; i < count; i++)
             {
                 if (i == 0)
                 {
                     ocp_id = ocp_id1;
                     descri = descri1;
+                    alerta = alerta1;
                 }
                 else if (i == 1)
                 {
                     ocp_id = ocp_id2;
                     descri = descri2;
+                    alerta = alerta3;
                 }
                 else if (i == 2)
                 {
                     ocp_id = ocp_id3;
                     descri = descri3;
+                    alerta = alerta3;
                 }
-                new PoliticaConservaDAO().EditConservaModal(ocp_id, descri);
+                new PoliticaConservaDAO().EditConserva(ocp_id, alerta, descri);
             }
 
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
-
-
         /// <summary>
         /// Listar
         /// </summary>
@@ -189,7 +177,7 @@ namespace WebApp.Controllers
             string response = string.Empty;
             if(!string.IsNullOrEmpty(ocp_id) && !string.IsNullOrEmpty(alerta) && !string.IsNullOrEmpty(conserva))
             {
-                response = new PoliticaConservaDAO().EditConservaHome(ocp_id, alerta, conserva);
+                response = new PoliticaConservaDAO().EditConserva(ocp_id, alerta, conserva);
             }
             else
             {
