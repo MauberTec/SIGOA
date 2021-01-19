@@ -1,0 +1,2082 @@
+﻿@{
+    ViewBag.Title = "::.. Orçamento ..::";
+}
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 1210 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(1210)); // id DO MODULO "cadastro de orcamento"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 1210 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<h2></h2>
+<style>
+    .codigoHeader {
+        color: red !important;
+        font-weight: bold;
+        font-size: 18pt !important;
+        margin: 0px;
+        background-color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .maxwidthDescricao {
+        max-width: 400px !important;
+    }
+
+    .dropbtn {
+        background-color: #3c8dbc;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        width: 98%;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+            }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .dropbtn {
+        background-color: #3c8dbc;
+    }
+
+    .visibilityHidden {
+        visibility: hidden !important;
+    }
+
+    .scroll {
+        width: auto;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+</style>
+
+
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <label class="control-label">Rodovia</label>
+                    <input type="text" class="form-control" id="txtFiltroRodovia" maxlength="150" onkeydown="if (event.keyCode == 13) { ExecutarFiltroOrcamento(); }">
+                </div>
+
+                <div class="col-sm-4">
+                    <label class="control-label">Objetos</label>
+                    <input type="text" class="form-control" id="txtFiltroObjetos" maxlength="255" onkeydown="if (event.keyCode == 13) { ExecutarFiltroOrcamento(); }">
+                </div>
+
+                <div class="col-sm-4 ">
+                    <label class="control-label">Status</label>
+                    @Html.DropDownList("cmbFiltroStatusOrcamento", null, "-- Selecione --", new { @class = "form-control " })
+                </div>
+
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltroOrcamento();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroOrcamento();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+                <table id="tblOrcamento">
+                    <thead>
+                        <tr>
+                            <th>orc_id</th>
+                            <th>ocs_id</th>
+                            <th style="width: 90px;">Orçamento</th>
+                            <th style="width: 46px;">Versão</th>
+                            <th style="width: 60px;">Data Criação</th>
+                            <th style="width: 60px;">Data Validade</th>
+                            <th>Status</th>
+                            <th>Valor Total</th>
+                            <th>OSs Associadas</th>
+                            <th>Objetos Associados</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                @{
+                    if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                    {
+                        <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="bntNovoOrcamento_click();">Novo Orçamento</button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #tblOrcamentoHeader.toolTip {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            border: 1px;
+            background-color: white;
+            border: 1px solid #ff6a00;
+            padding: 3px;
+            color: #ffd800;
+            top: 20px;
+            left: 20px;
+        }
+
+        #HASH1, #HASH1_nOrc, #HASH2, #HASH2_nOrc, #HASH3, #HASH4 {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid rgba(0,0,0,.125);
+            padding-left: 10px;
+            vertical-align: central;
+            margin-bottom: 5px;
+        }
+
+        .open ul.dropdown-menu {
+            display: block;
+        }
+    </style>
+
+    <div id="newOrcamento" class="scroll hidden">
+        <button id="btnNewOrcamento" type="button" onclick="btnCriaOrcOAE();">
+            @*<img id="imgOAE" src="~/images/oaePriorizacao01.png" style="width: 1500px;" />*@
+        </button>
+
+        <div id="frmNovoOrcamento" class="row hidden divInline">
+            <div style="padding-top: .6em;">
+                <div class="container-fluid">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <div id="HASH1_nOrc">
+                                <h3 class="card-title" style="display: inline-block;"><label id="trechoTitle">Novo Orçamento</label></h3>
+                                <div class="card-tools" style="display: inline;">
+                                    <button id="salvarNovoOrcamento" type="button" onclick="salvarNovoOrcamento()">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                    <div class="dropdown" style="display: inline;">
+                                        <button class="btn" type="button" data-toggle="dropdown">
+                                            <span class="fa fa-align-justify"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-header">Navegação Rápida</li>
+                                            <li class="divider"></li>
+                                            <li><a href="#sistemaTitulo">Lista de Orçamentos</a></li>
+                                            <li><a href="#HASH1">Orçamento #01/2020 v1</a></li>
+                                            <li><a href="#HASH2">Orçamento #01/2020 v2</a></li>
+                                            <li class="divider"></li>
+                                            <li class="dropdown-header">Edição de Orçamento</li>
+                                            <li><a href="#">Criar Nova Versão</a></li>
+                                            <li><a href="#" onclick="editarOrcamento()">Alterar Versão Atual</a></li>
+                                            <li><a href="#">Encaminhar Versão Atual Para Aprovação</a></li>
+                                        </ul>
+                                    </div>
+                                    <a href="#sistemaTitulo"><i class="fa fa-arrow-up"></i></a>
+                                    <a href="#HASH1"><i class="fa fa-arrow-down"></i></a>
+                                    <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#bodyTrechos_nOrc" onclick="clickedTrechos_nOrc()">
+                                        <i id="showHide_nOrc" class="fa fa-angle-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="bodyTrechos_nOrc" class="card-body  collapse in">
+
+                                <div id="orc01Edit_nOrc">
+                                    <div>
+                                        <table id="tblOrcamentoHeader" class="nowrap" style="margin-left: 10px; vertical-align: bottom;">
+                                            <tr>
+                                                <td style="font-weight: bold;">Orçamento</td>
+                                                <td style="padding: 10px 20px 0px 40px;">
+                                                    <input type="text" class="form-control" id="txtusu_id" value="#">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Versão</td>
+                                                <td style="padding: 10px 20px 0px 40px;">
+                                                    <input type="text" class="form-control" id="txtusu_id" value="v1">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Status</td>
+                                                <td style="padding: 10px 20px 0px 40px;">Elaboração</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-weight: bold;">Valor Total</td>
+                                                <td style="padding: 10px 20px 10px 40px;">0,00</td>
+                                            </tr>
+                                        </table>
+
+                                        <table id="tblEditOrcamento" class="dataTable table-responsive table-hover table-striped nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="7" style="border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgba(0,0,0,.125);">
+                                                    <th colspan="4" style="text-align: center;">Indicado</th>
+                                                    <th colspan="4" style="text-align: center;">Adotado</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>OAE 1</th>
+                                                    <th><input type="checkbox"></th>
+                                                    <th>Elemento</th>
+                                                    <th style="text-align: center;">Anomalia</th>
+                                                    <th style="text-align: center;">Alerta</th>
+                                                    <th style="text-align: center;">Qtde</th>
+                                                    <th style="text-align: center;">Causa</th>
+                                                    <th style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                                    <th style="text-align: center;">Qtde</th>
+                                                    <th>Val Unit</th>
+                                                    <th>Val Total</th>
+                                                    <th style="text-align: center;border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                                    <th style="text-align: center;">Qtde</th>
+                                                    <th>Val Unit</th>
+                                                    <th>Val Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="OrcamentoSelBody">
+                                                <tr style="vertical-align: text-top;">
+                                                    <td>SP 031-043,400-PTC</td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão 1  (Entre Junta de Dilatacão 1 e Junta de Dilatação 2)</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão 1(entre Junta de Dilatacão 2 e Junta de Dilatação 3)</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td>115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td>SP 031-043,400-PTC-SE-FS-JD</td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-JD-01<BR />Junta de dilatação<BR>- JD 1</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-JD-02<BR>Junta de dilatação<BR>- JD 2</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td>115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-JD-03<BR>Pavimento Flexível<BR>- JD 3</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td>SP 031-043,400-PTC-SE-FS-PS</td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-PS-01<BR>Passeio<BR>- Passeio 1</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td>115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-PS-02<BR>Passeio<BR>- Passeio 2</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td>SP 031-043,400-PTC-SE-FI</td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FI-LI-01<BR>Tabuleiro face inferior (Plataforma)<BR>- Laje -Entre junta de dilatação 1 e 2</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FI-LI-01<BR>Tabuleiro face inferior (Plataforma)<BR>- Laje - Entre Junta 2 e 3</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FI-VL-01<BR>Tabuleiro face inferior (Plataforma)<BR>- Viga Longarina - VL 1</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FI-VL-03<BR>Tabuleiro face inferior (Plataforma)<BR>- Viga Longarina - VL 3</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FI-VT-01<BR>Tabuleiro face inferior (Plataforma)<BR>- Viga Transversina - VT 1</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FI-VT-02<BR>Tabuleiro face inferior (Plataforma)<BR>- Viga Transversina - VT 2</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td>SP 031-043,400-PTC-ME</td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-ME-P-01<BR>MESOESTRUTURA<BR>- Pilares - P1</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-ME-P-02<BR>MESOESTRUTURA<BR>- Pilares - P2</td>
+                                                    <td style="text-align: center;">FA</td>
+                                                    <td style="text-align: center;">N</td>
+                                                    <td style="text-align: center;">2</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">21<BR>100</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-ME-P-03<BR>MESOESTRUTURA<BR>- Pilares - P3</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">
+                                                        <span style="color: red;">5</span><BR><span>47</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                    </td>
+                                                    <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;"><input type="checkbox"></td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">FA</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">N</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">2</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">1</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">270.000,00<BR>270.000,00</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                                    <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">270.000,00<BR>270.000,00</td>
+                                                </tr>
+                                                <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                                    <td></td>
+                                                    <td style="text-align: center;"><input type="checkbox"></td>
+                                                    <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                                    <td style="text-align: center;">FC</td>
+                                                    <td style="text-align: center;">A</td>
+                                                    <td style="text-align: center;">1</td>
+                                                    <td style="text-align: center;">3</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                    <td style="text-align: center;">7<BR>42</td>
+                                                    <td>15.000,00<BR>2.700,00</td>
+                                                    <td>105.000,00<BR>113.400,00</td>
+                                                    <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                        <span style="color: red;">17</span><BR><span>19</span>
+                                                    </td>
+                                                    <td style="text-align: center;color: red;">5<BR>47</td>
+                                                    <td>23.000,00<BR>2.700,00</td>
+                                                    <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <div id="HASH2_nOrc" class="card-footer">
+                                    <a href="#sistemaTitulo" style="display: inline;">Voltar ao topo.</a>
+                                    <div>
+                                        <a href="#sistemaTitulo"><i class="fa fa-arrow-up"></i></a>
+                                        <a href="#HASH1"><i class="fa fa-arrow-down"></i></a>
+                                        <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#bodyTrechos_nOrc" onclick="clickedTrechos_nOrc()">
+                                            <i id="showHide_nOrc2" class="fa fa-angle-down"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="OrcamentoSelected" class="row hidden divInline">
+
+        <div style="padding-top: .6em;">
+            <div class="container-fluid">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <div id="HASH1">
+                            <h3 class="card-title" style="display: inline-block;"><label id="trechoTitle">Orçamento #01/2020 v1</label></h3>
+                            <div class="card-tools" style="display: inline;">
+                                <div class="dropdown" style="display: inline;">
+                                    <button id="salvarNovoOrcamento" type="button" onclick="salvarEdicaoOrcamento()">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                    <button class="btn" type="button" data-toggle="dropdown">
+                                        <span class="fa fa-align-justify"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-header">Navegação Rápida</li>
+                                        <li class="divider"></li>
+                                        <li><a href="#sistemaTitulo">Lista de Orçamentos</a></li>
+                                        <li><a href="#HASH1">Orçamento #01/2020 v1</a></li>
+                                        <li><a href="#HASH2">Orçamento #01/2020 v2</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Edição de Orçamento</li>
+                                        <li><a href="#">Criar Nova Versão</a></li>
+                                        <li><a href="#" onclick="editarOrcamento()">Alterar Versão Atual</a></li>
+                                        <li><a href="#">Encaminhar Versão Atual Para Aprovação</a></li>
+                                    </ul>
+                                </div>
+                                <a href="#sistemaTitulo"><i class="fa fa-arrow-up"></i></a>
+                                <a href="#HASH2"><i class="fa fa-arrow-down"></i></a>
+                                <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#bodyTrechos" onclick="clickedTrechos()">
+                                    <i id="showHide" class="fa fa-angle-down"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="bodyTrechos" class="card-body  collapse in">
+
+                            <div id="orc01Viewer">
+                                <table id="tblOrcamentoHeader" class="nowrap" style="margin-left: 10px; vertical-align: bottom;">
+                                    <tr>
+                                        <td style="font-weight: bold;">Orçamento</td>
+                                        <td style="padding: 10px 20px 0px 40px;"> #01/2020"</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Versão</td>
+                                        <td style="padding: 10px 20px 0px 40px;">
+                                            v1
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Status</td>
+                                        <td style="padding: 10px 20px 0px 40px;">Elaboração</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">Valor Total</td>
+                                        <td style="padding: 10px 20px 10px 40px;">5.100.000,00</td>
+                                    </tr>
+                                </table>
+
+                                <table id="tblSelOrcamento" class="dataTable table-responsive table-hover table-striped nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="6" style="border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgba(0,0,0,.125);">
+                                            <th colspan="4" style="text-align: center;">Indicado</th>
+                                            <th colspan="4" style="text-align: center;">Adotado</th>
+                                        </tr>
+                                        <tr>
+                                            <th>OAE 1</th>
+                                            <th>Elemento</th>
+                                            <th style="text-align: center;">Anomalia</th>
+                                            <th style="text-align: center;">Alerta</th>
+                                            <th style="text-align: center;">Qtde</th>
+                                            <th style="text-align: center;">Causa</th>
+                                            <th style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                            <th style="text-align: center;">Qtde</th>
+                                            <th>Val Unit</th>
+                                            <th>Val Total</th>
+                                            <th style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                            <th style="text-align: center;">Qtde</th>
+                                            <th>Val Unit</th>
+                                            <th>Val Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="OrcamentoSelBody">
+                                        <tr style="vertical-align: text-top;">
+                                            <td>SP 031-043,400-PTC</td>
+                                            <td>SP 031-043,400-PTC-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                            <td style="text-align: center;">FA</td>
+                                            <td style="text-align: center;">N</td>
+                                            <td style="text-align: center;">2</td>
+                                            <td style="text-align: center;">1</td>
+                                            <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                            <td style="text-align: center;">21<BR>100</td>
+                                            <td>15.000,00<BR>2.700,00</td>
+                                            <td style="text-align: center;">270.000,00<BR>270.000,00</td>
+                                            <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                            <td style="text-align: center;">21<BR>100</td>
+                                            <td>15.000,00<BR>2.700,00</td>
+                                            <td style="text-align: center;">270.000,00<BR>270.000,00</td>
+                                        </tr>
+                                        <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                            <td></td>
+                                            <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                            <td style="text-align: center;">FC</td>
+                                            <td style="text-align: center;">A</td>
+                                            <td style="text-align: center;">1</td>
+                                            <td style="text-align: center;">3</td>
+                                            <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                            <td style="text-align: center;">7<BR>42</td>
+                                            <td>15.000,00<BR>2.700,00</td>
+                                            <td>105.000,00<BR>113.400,00</td>
+                                            <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                <span style="color: red;">17</span><BR><span>19</span>
+                                            </td>
+                                            <td style="text-align: center;color: red;">5<BR>47</td>
+                                            <td>23.000,00<BR>2.700,00</td>
+                                            <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">FA</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">N</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">2</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">1</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">270.000,00<BR>270.000,00</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                            <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">270.000,00<BR>270.000,00</td>
+                                        </tr>
+                                        <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                            <td></td>
+                                            <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                            <td style="text-align: center;">FC</td>
+                                            <td style="text-align: center;">A</td>
+                                            <td style="text-align: center;">1</td>
+                                            <td style="text-align: center;">3</td>
+                                            <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                            <td style="text-align: center;">7<BR>42</td>
+                                            <td>15.000,00<BR>2.700,00</td>
+                                            <td>105.000,00<BR>113.400,00</td>
+                                            <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                <span style="color: red;">17</span><BR><span>19</span>
+                                            </td>
+                                            <td style="text-align: center;color: red;">5<BR>47</td>
+                                            <td>23.000,00<BR>2.700,00</td>
+                                            <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="orc01Edit" class="hidden">
+                                <div>
+                                    <table id="tblOrcamentoHeader" class="nowrap" style="margin-left: 10px; vertical-align: bottom;">
+                                        <tr>
+                                            <td style="font-weight: bold;">Orçamento</td>
+                                            <td style="padding: 10px 20px 0px 40px;">
+                                                <input type="text" class="form-control" id="txtusu_id" value="#01/2020">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Versão</td>
+                                            <td style="padding: 10px 20px 0px 40px;">
+                                                <input type="text" class="form-control" id="txtusu_id" value="v1">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Status</td>
+                                            <td style="padding: 10px 20px 0px 40px;">Elaboração</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">Valor Total</td>
+                                            <td style="padding: 10px 20px 10px 40px;">5.100.000,00</td>
+                                        </tr>
+                                    </table>
+
+                                    <table id="tblEditOrcamento" class="dataTable table-responsive table-hover table-striped nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="7" style="border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgba(0,0,0,.125);">
+                                                <th colspan="3" style="text-align: center;">Indicado</th>
+                                                <th colspan="3 " style="text-align: center;">Adotado</th>
+                                                <th>Indicado</th>
+                                                <th>Adotado</th>
+                                            </tr>
+                                            <tr>
+                                                <th>OAE 1</th>
+                                                <th><input type="checkbox"></th>
+                                                <th>Elemento</th>
+                                                <th style="text-align: center;">Anomalia</th>
+                                                <th style="text-align: center;">Alerta</th>
+                                                <th style="text-align: center;">Qtde</th>
+                                                <th style="text-align: center;">Causa</th>
+                                                <th style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                                <th style="text-align: center;">Qtde</th>
+                                                <th>Val Unit</th>
+                                                <th style="text-align: center;border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                                <th style="text-align: center;">Qtde</th>
+                                                <th>Val Unit</th>
+                                                <th style=" border-left-style: solid; border-left-width: 1px; border-left-color: black;">Val Total</th>
+                                                <th style=" border-left-style: solid; border-left-width: 1px; border-left-color: black;">Val Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="OrcamentoSelBody">
+                                            <tr style="vertical-align: text-top;">
+                                                <td>SP 031-043,400-PTC</td>
+                                                <td style="text-align: center;"><input type="checkbox" checked></td>
+                                                <td>SP 031-043,400-PTC-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                                <td style="text-align: center;">FA</td>
+                                                <td style="text-align: center;">N</td>
+                                                <td style="text-align: center;">2</td>
+                                                <td style="text-align: center;">1</td>
+                                                <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                <td style="text-align: center;">21<BR>100</td>
+                                                <td>15.000,00<BR>2.700,00</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                                <td style=" border-left-style: solid; border-left-width: 1px; border-left-color: black;">270.000,00<BR>270.000,00</td>
+                                                <td style=" border-left-style: solid; border-left-width: 1px; border-left-color: black;">270.000,00<BR>270.000,00</td>
+                                            </tr>
+                                            <tr style="vertical-align: text-top;">
+                                                <td></td>
+                                                <td style="text-align: center;"><input type="checkbox" checked></td>
+                                                <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                                <td style="text-align: center;">FC</td>
+                                                <td style="text-align: center;">A</td>
+                                                <td style="text-align: center;">1</td>
+                                                <td style="text-align: center;">3</td>
+                                                <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                <td style="text-align: center;">7<BR>42</td>
+                                                <td>15.000,00<BR>2.700,00</td>
+                                                <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                    <span style="color: red;">17</span><BR><span>19</span>
+                                                </td>
+                                                <td style="text-align: center;color: red;">
+                                                    <span style="color: red;">5</span><BR><span>47</span>
+                                                </td>
+                                                <td>
+                                                    <span>23.000,00</span><BR><span style="color: red;">2.800,00</span>
+                                                </td>
+                                                <td style=" border-left-style: solid; border-left-width: 1px; border-left-color: black;">105.000,00<BR>113.400,00</td>
+                                                <td style="color: red; border-left-style: solid; border-left-width: 1px; border-left-color: black;">115.000,00<BR>126.900,00</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;"><input type="checkbox" checked></td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">FA</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">N</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">2</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">1</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); border-left-style: solid; border-left-width: 1px; border-left-color: black;">270.000,00<BR>270.000,00</td>
+                                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); border-left-style: solid; border-left-width: 1px; border-left-color: black;">270.000,00<BR>270.000,00</td>
+                                            </tr>
+                                            <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                                <td></td>
+                                                <td style="text-align: center;"><input type="checkbox" checked></td>
+                                                <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                                <td style="text-align: center;">FC</td>
+                                                <td style="text-align: center;">A</td>
+                                                <td style="text-align: center;">1</td>
+                                                <td style="text-align: center;">3</td>
+                                                <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                                <td style="text-align: center;">7<BR>42</td>
+                                                <td>15.000,00<BR>2.700,00</td>
+                                                <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                                    <span style="color: red;">17</span><BR><span>19</span>
+                                                </td>
+                                                <td style="text-align: center;color: red;">5<BR>47</td>
+                                                <td>23.000,00<BR>2.700,00</td>
+                                                <td style="border-left-style: solid; border-left-width: 1px; border-left-color: black;">105.000,00<BR>113.400,00</tdstyle>
+                                                <td style="color: red; border-left-style: solid; border-left-width: 1px; border-left-color: black;">115.000,00<BR>126.900,00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            <div id="HASH2" class="card-footer">
+                                <a href="#sistemaTitulo" style="display: inline;">Voltar ao topo.</a>
+                                <div>
+                                    <a href="#sistemaTitulo"><i class="fa fa-arrow-up"></i></a>
+                                    <a href="#HASH3"><i class="fa fa-arrow-down"></i></a>
+                                    <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#bodyTrechos" onclick="clickedTrechos()">
+                                        <i id="showHide2" class="fa fa-angle-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="OrcamentoSelected2" class="row hidden divInline">
+        <div style="padding-top: .6em;">
+            <div class="container-fluid">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <div id="HASH3">
+                            <h3 class="card-title" style="display: inline-block;"><label id="trechoTitle2">Orçamento #01/2020 v2</label></h3>
+                            <div class="card-tools" style="display: inline;">
+                                <div class="dropdown" style="display: inline;">
+                                    <button class="btn" type="button" data-toggle="dropdown">
+                                        <span class="fa fa-align-justify"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-header">Navegação Rápida</li>
+                                        <li class="divider"></li>
+                                        <li><a href="#sistemaTitulo">Lista de Orçamentos</a></li>
+                                        <li><a href="#HASH1">Orçamento #01/2020 v1</a></li>
+                                        <li><a href="#HASH4">Orçamento #01/2020 v2</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Edição de Orçamento</li>
+                                        <li><a href="#">Criar Nova Versão</a></li>
+                                        <li><a href="#" onclick="editarOrcamento()">Alterar Versão Atual</a></li>
+                                        <li><a href="#">Encaminhar Versão Atual Para Aprovação</a></li>
+                                    </ul>
+                                </div>
+                                <a href="#HASH1"><i class="fa fa-arrow-up"></i></a>
+                                <a href="#sistemaTitulo"><i class="fa fa-arrow-down"></i></a>
+                                <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#bodyTrechos2" onclick="clickedTrechos2()">
+                                    <i id="showHide3" class="fa fa-angle-down"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="bodyTrechos2" class="card-body  collapse in">
+                            <table id="tblOrcamentoHeader2">
+                                <tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Orçamento</td>
+                                    <td style="padding: 10px 20px 0px 40px;"> #01/2020"</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Versão</td>
+                                    <td style="padding: 10px 20px 0px 40px;">
+                                        v2
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Status</td>
+                                    <td style="padding: 10px 20px 0px 40px;">Elaboração</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Valor Total</td>
+                                    <td style="padding: 10px 20px 10px 40px;">5.100.000,00</td>
+                                </tr>
+                            </table>
+
+                            <table id="tblSelOrcamento2" class="display nowrap" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" style="border-bottom-style: solid; border-bottom-width: 1px; border-bottom-color: rgba(0,0,0,.125);">
+                                        <th colspan="4" style="text-align: center;">Indicado</th>
+                                        <th colspan="4 " style="text-align: center;">Adotado</th>
+                                    </tr>
+                                    <tr>
+                                        <th width="150px">OAE</th>
+                                        <th width="200px">Elemento</th>
+                                        <th style="text-align: center;">Anomalia</th>
+                                        <th style="text-align: center;">Alerta</th>
+                                        <th style="text-align: center;">Qtde</th>
+                                        <th style="text-align: center;">Causa</th>
+                                        <th style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                        <th style="text-align: center;">Qtde</th>
+                                        <th>Val Total</th>
+                                        <th>Val Unit</th>
+                                        <th style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">Reparo</th>
+                                        <th style="text-align: center;">Qtde</th>
+                                        <th>Val Unit</th>
+                                        <th>Val Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="OrcamentoSelBody2">
+                                    <tr style="vertical-align: text-top;">
+                                        <td>SP 031-043,400-PTC</td>
+                                        <td>SP 031-043,400-PTC-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                        <td style="text-align: center;">FA</td>
+                                        <td style="text-align: center;">N</td>
+                                        <td style="text-align: center;">2</td>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                        <td style="text-align: center;">21<BR>100</td>
+                                        <td>15.000,00<BR>2.700,00</td>
+                                        <td style="text-align: center;">270.000,00<BR>270.000,00</td>
+                                        <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                        <td style="text-align: center;">21<BR>100</td>
+                                        <td>15.000,00<BR>2.700,00</td>
+                                        <td style="text-align: center;">270.000,00<BR>270.000,00</tdstyle="text-align:>
+                                    </tr>
+                                    <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                        <td></td>
+                                        <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                        <td style="text-align: center;">FC</td>
+                                        <td style="text-align: center;">A</td>
+                                        <td style="text-align: center;">1</td>
+                                        <td style="text-align: center;">3</td>
+                                        <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">18<BR>19</td>
+                                        <td style="text-align: center;">7<BR>42</td>
+                                        <td>15.000,00<BR>2.700,00</td>
+                                        <td style="text-align: center;">105.000,00<BR>113.400,00</td>
+                                        <td style="text-align: center; border-left-style: solid; border-left-width: 1px; border-left-color: black;">
+                                            <span style="color: red;">17</span><BR><span>19</span>
+                                        </td>
+                                        <td style="text-align: center;color: red;">5<BR>47</td>
+                                        <td>23.000,00<BR>2.700,00</td>
+                                        <td style="color: red;">115.000,00<BR>126.900,00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="HASH4" class="card-footer">
+                                <a href="#sistemaTitulo" style="display: inline;">Voltar ao topo.</a>
+                                <div>
+                                    <a href="#HASH1"><i class="fa fa-arrow-up"></i></a>
+                                    <a href="#sistemaTitulo"><i class="fa fa-arrow-down"></i></a>
+                                    <button type="button" class="btn btn-tool" data-toggle="collapse" data-target="#bodyTrechos2" onclick="clickedTrechos2()">
+                                        <i id="showHide4" class="fa fa-angle-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*</div>
+        </div>*@
+</section>
+
+
+<style>
+    .altura30 {
+        height: 30px;
+    }
+
+    .backgrdTransparent {
+        background-color: transparent !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+</style>
+
+<br />
+<br />
+<br />
+
+
+<style>
+    .dataTables_filter {
+        display: none
+    }
+
+    #tblObjAtributosFixosPOPUP tr.even {
+        background-color: #ffffff !important;
+    }
+
+    .fonte14 {
+        font-size: 12.5pt;
+        font-weight: bold;
+    }
+
+    #tblObjAtributosFixosPOPUP tr:hover,
+    #tblObjAtributosFixosPOPUP td:hover,
+    #tblObjAtributosFixosPOPUP hover {
+        background-color: #ffffff !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    /*. {
+        font-family: 'Lucida Console';
+        padding-top: 7px;
+        font-weight: normal !important;
+    }*/
+
+    .chklst {
+        font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
+    }
+</style>
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+                var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+                var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+                var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+                var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+
+}
+<script src="~/Scripts/Base.js"></script>
+
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+<script src="~/Content/plugins/jquery.mask.min.js"></script>
+<script src="~/Content/plugins/jquery.mask.js"></script>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+
+<script>
+    var selectedId_orc_id = -1;
+    var filtroRodovia = '';
+    var filtroObjetos = '';
+    var filtroStatus = -1;
+
+
+    function posicionaLinha(tabela, id_linha, coluna_do_id) {
+        var dttable = $('#' + tabela).DataTable();
+
+        var coluna_do_id = 0; // indice da coluna que contem o id
+
+        // vai para a pagina
+        var pos = dttable.column(coluna_do_id, { order: 'current' }).data().indexOf(id_linha);
+        if (pos >= 0) {
+            var page = Math.floor(pos / dttable.page.info().length);
+            dttable.page(page).draw(false);
+        }
+
+        // remove selecao
+        dttable.$('tr.selected').removeClass('selected');
+
+        // seleciona a linha
+        var row = document.getElementById(id_linha);
+        if (row)
+            row.className += " selected";
+
+    }
+
+    function Inserir() {
+        ehInsercao = 1;
+        document.getElementById("divConfiguracoes").style.display = 'none';
+
+        var corBranca = "rgb(255, 255, 255)";
+        $('#txtcodigo').css("background-color", corBranca);
+        $('#txtdescricao').css("background-color", corBranca);
+        $('#cmbClassesObjeto').css("background-color", corBranca);
+        $('#cmbTiposObjeto').css("background-color", corBranca);
+
+        $("#cmbClassesObjeto").val(0);
+        $("#cmbTiposObjeto").val(0);
+        $("#cmbUnidade_Tipo").val(0);
+
+        $('#txt_id').val("");
+        $('#txtcodigo').val("");
+        $('#txtdescricao').val("");
+        $('#txtatr_mascara_texto').val("");
+        $('#chkativo').prop('checked', true);
+        $('#chkherdavel').prop('checked', true);
+
+        $('#rd_atr_valor_int').prop('checked', true);
+        $('#rd_atr_valor_real').prop('checked', false);
+        $('#rd_atr_valor_str').prop('checked', false);
+
+        $('#chkativo').css('border-color', 'lightgrey');
+        $('#chkherdavel').css('border-color', 'lightgrey');
+
+        $("#cmbApresentacaoItens").val("-1");
+        selectedId_ObjAtributo = -1;
+
+        $("#modalSalvarRegistro").modal('show');
+
+        document.getElementById("lblModalHeader").innerText = "Novo Orcamento";
+        selectedId_ObjAtributo = -1;
+
+    }
+
+
+    function Salvar() {
+
+        var cmbClassesObjeto = document.getElementById('cmbClassesObjeto');
+        var txtcodigo = document.getElementById('txtcodigo');
+        var txtdescricao = document.getElementById('txtdescricao');
+
+
+        // checa campos vazios
+        if (cmbClassesObjeto.selectedIndex <= 0) {
+            cmbClassesObjeto.style.backgroundColor = corVermelho;
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Classe é obrigatória'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+        else
+            if (txtcodigo.value.trim() == "") {
+                txtcodigo.style.backgroundColor = corVermelho;
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'O Nome é obrigatório'
+                }).then(
+                    function () {
+                        return false;
+                    });
+                return false;
+            }
+            else
+                if (txtdescricao.value.trim() == "") {
+                    txtdescricao.style.backgroundColor = corVermelho;
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'A Descrição é obrigatória'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                    return false;
+                }
+
+
+
+        var selectedClasseVal = $('#cmbClassesObjeto').val();
+        selectedId_clo_id = selectedClasseVal;
+
+        var cmbTiposObjeto = document.getElementById('cmbTiposObjeto');
+        if (cmbTiposObjeto.selectedIndex > 0) {
+            var selectedTipoVal = $('#cmbTiposObjeto').val();
+            if (selectedTipoVal.includes(':'))
+                selectedId_tip_id = parseInt(selectedTipoVal.substring(0, selectedTipoVal.indexOf(":")));
+            else
+                selectedId_tip_id = parseInt(selectedTipoVal);
+        }
+        else
+            selectedId_tip_id = -1;
+
+        var selecttedUnidade_Tipo = $('#cmbUnidade_Tipo').val();
+
+        var selectedatr_apresentacao_itens = "";
+        switch ($("#cmbApresentacaoItens").val()) {
+            case "-1": selectedatr_apresentacao_itens = ""; break;
+            case "0": selectedatr_apresentacao_itens = "combobox"; break;
+            case "1": selectedatr_apresentacao_itens = "checkbox"; break;
+        }
+
+
+        var param = {
+            "atr_id": -1,
+            "filtro_codigo": txtcodigo.value.trim(),
+            "filtro_descricao": '',
+            "filtro_clo_id": selectedId_clo_id,
+            "filtro_tip_id": -1,
+        };
+
+        $.ajax({
+            url: "/Orcamento/Orcamento_ListAll",
+            data: param,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var tem = 0
+                if (result.data.length == 0) // nao tem repetido
+                    tem = 0;
+                else {
+                    // checa se o campo txtcodigo está repetido (pode ser que tenha parecido pois é usado like% na procedure)
+                    for (j = 0; j < result.data.length; j++)
+                        if ((result.data[j].atr_atributo_nome.trim() == txtcodigo.value.trim()) && ($('#txt_id').val() != result.data[j].atr_id))
+                            tem = 1;
+                }
+
+                if (tem == 0) // entao pode salvar
+                {
+                    var param = {
+                        clo_id: selectedId_clo_id,
+                        tip_id: (selectedId_tip_id == null ? -1 : selectedId_tip_id),
+
+                        atr_id: $('#txt_id').val(),
+                        atr_atributo_nome: $('#txtcodigo').val(),
+                        atr_descricao: $('#txtdescricao').val(),
+                        atr_mascara_texto: $('#txtatr_mascara_texto').val(),
+                        atr_ativo: $('#chkativo').prop('checked') ? 1 : 0,
+                        atr_herdavel: $('#chkherdavel').prop('checked') ? 1 : 0,
+                        atr_atributo_funcional: ehAtributoFuncional,
+                        atr_apresentacao_itens: selectedatr_apresentacao_itens
+                    };
+
+                    $.ajax({
+                        url: "/Orcamento/Orcamento_Salvar",
+                        data: JSON.stringify(param),
+                        type: "POST",
+                        contentType: "application/json;charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+
+                            if (parseInt(result) > 0) {
+                                $('#tblOrcamento').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
+
+                                // espera 1 segundo para dar tempo do reload, nao funcionou colocando no "Null" do reload                            
+                                setTimeout(function () { posicionaLinha('tblOrcamento', result, 0); }, 1500);
+                            }
+
+                            selectedId_ObjAtributo = result;
+                            $('#txt_id').val(result);
+                            //}
+                            //else {
+                            //    document.getElementById("divConfiguracoes").style.display = 'none';
+                            $("#modalSalvarRegistro").modal('hide');
+                            //}
+                            return false;
+                        },
+                        error: function (errormessage) {
+                            alert(errormessage.responseText);
+                            return false;
+                        }
+                    });
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'Orcamento já cadastrado'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                    $("#modalSalvarRegistro").modal('show');
+                    return false;
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+                return false;
+            }
+        });
+
+
+        return false;
+    }
+
+    function Deletar(id) {
+        swal({
+            title: "Excluir. Tem certeza?",
+            icon: "warning",
+            buttons: [
+                'Não',
+                'Sim'
+            ],
+            dangerMode: true,
+            focusCancel: true
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                var response = POST("/Orcamento/Orcamento_Excluir", JSON.stringify({ id: id }))
+                if (response.erroId >= 1) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Registro excluído com sucesso'
+                    });
+
+                    $('#tblOrcamentos').DataTable().ajax.reload();
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'Erro ao excluir registro'
+                    });
+                }
+                return true;
+            } else {
+                return false;
+            }
+        })
+        return false;
+    }
+
+    function AtivarDesativarOrcamento(id, ativar) {
+
+        if (id >= 0) {
+            var form = this;
+            swal({
+                title: (ativar == 1 ? "Ativar" : "Desativar") + ". Tem certeza?",
+                icon: "warning",
+                buttons: [
+                    'Não',
+                    'Sim'
+                ],
+                dangerMode: true,
+                focusCancel: true
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+
+                    var url = "/Orcamento/Orcamento_AtivarDesativar";
+                    var response = POST(url, JSON.stringify({ id: id }))
+                    if (response.erroId == 1) {
+                        swal({
+                            type: 'success',
+                            title: 'Sucesso',
+                            text: ativar == 1 ? msgAtivacaoOK : msgDesativacaoOK
+                        });
+
+                        $('#tblOrcamento').DataTable().ajax.reload();
+                    }
+                    else {
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: ativar == 1 ? msgAtivacaoErro : msgDesativacaoErro
+                        });
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+        }
+
+        return false;
+    }
+
+    function Editar(id) {
+        ehInsercao = 0;
+
+        var corBranca = "rgb(255, 255, 255)";
+        $('#txtcodigo').css("background-color", corBranca);
+        $('#txtdescricao').css("background-color", corBranca);
+
+        $('#txtcodigo').css('border-color', 'lightgrey');
+        $('#txtdescricao').css('border-color', 'lightgrey');
+
+
+        document.getElementById("lblModalHeader").innerText = "Editar Orcamento";
+
+        selectedId_ObjAtributo = id;
+        $('#hddnSelectedatr_id').val(id);
+
+        var url = "/Orcamento/Orcamento_GetbyID";
+
+        $.ajax({
+            url: url,
+            "data": {
+                "id": id,
+            },
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success: function (result) {
+                $('#txt_id').val(result.atr_id);
+                $('#txtcodigo').val(result.atr_atributo_nome);
+                $('#txtdescricao').val(result.atr_descricao);
+                $('#txtatr_mascara_texto').val(result.atr_mascara_texto);
+
+                $("#cmbClassesObjeto").val(result.clo_id);
+
+                $('#chkativo').prop('checked', (result.atr_ativo == '1' ? true : false));
+
+                $("#cmbClassesObjeto").val(result.clo_id);
+                selectedId_clo_id = result.clo_id;
+
+                // preenche combo Tipos
+                var cmbTiposSelValue = "";
+                $("#cmbTiposObjeto").html("");
+                $("#cmbTiposObjeto").append($('<option></option>').val(-1).html(" ")); // 1o item vazio
+                $.each(result.lstTipos, function (i, subNivel) {
+                    $("#cmbTiposObjeto").append($('<option></option>').val(subNivel.Value).html(subNivel.Text));
+                    var aux = parseInt(subNivel.Value.substring(0, subNivel.Value.indexOf(":")));
+                    if (aux == parseInt(result.tip_id)) {
+                        selectedId_tip_id = aux; //result.tip_id;
+                        cmbTiposSelValue = subNivel.Value;
+                    }
+                });
+
+                $("#cmbTiposObjeto").val(cmbTiposSelValue);
+
+
+                $("#modalSalvarRegistro").modal('show');
+                return false;
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+
+        return false;
+    }
+
+    function ChecaRepetido(txtBox) {
+
+        var selectedId;
+        var tabela;
+        var campoId;
+        var texto;
+        selectedId = selectedId_ObjAtributo;
+        tabela = '#tblAtributos';
+        campoId = "atr_id";
+        texto = 'Atributo já cadastrado';
+
+        if (checaVazio(txtBox)) {
+            var corVermelho = "rgb(228, 88, 71)";
+            var corBranca = "rgb(255, 255, 255)";
+            var searchValue = '\\b' + txtBox.value + '\\b';
+
+            var rowId = $(tabela).DataTable().column(1).search(searchValue, true, false).rows({ filter: 'applied' }).data();
+            if (rowId.length > 0) { // ja tem
+                if (selectedId != rowId[0][campoId]) {
+                    $('#txtdescricao').css("background-color", corVermelho);
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: texto
+                    }).then(
+                        function () {
+                            $(tabela).DataTable().search('').columns().search('').draw();
+                            return false;
+                        });
+                }
+                else { // nao tem
+                    $(tabela).DataTable().search('').columns().search('').draw();
+                    return true;
+                }
+            }
+            else { // nao tem
+                $('#txtcodigo').css("background-color", corBranca);
+                $('#txtdescricao').css("background-color", corBranca);
+                $(tabela).DataTable().search('').columns().search('').draw();
+                return true;
+            }
+        }
+        else {
+            $("#modalSalvarRegistro").modal('show');
+            return false;
+        }
+
+    }
+
+    function LimparFiltroOrcamento() {
+
+        filtroRodovia = '';
+        filtroObjetos = '';
+        filtroStatus = -1;
+
+        $("#txtFiltroRodovia").val("");
+        $("#txtFiltroObjetos").val("");
+        $("#cmbFiltroStatusOrcamento").val(null);
+
+
+        carregaGridOrcamento();
+
+        return false;
+    }
+
+    function ExecutarFiltroOrcamento() {
+
+        filtroRodovia = $("#txtFiltroRodovia").val();
+        filtroObjetos = $("#txtFiltroObjetos").val();
+        filtroStatus = $("#cmbFiltroStatusOrcamento").val();
+
+        carregaGridOrcamento();
+        return false;
+    }
+
+    function txtcodigo_onkeyup() {
+        $('#txtcodigo').css("background-color", corBranca);
+    }
+    function txtdescricao_onkeyup() {
+        $('#txtdescricao').css("background-color", corBranca);
+    }
+
+    // ************************************ ********************** ********************************************************
+
+
+    function carregaGridOrcamento() {
+
+        $('#tblOrcamento').DataTable().destroy();
+        $('#tblOrcamento').DataTable({
+            "ajax": {
+                "url": "/Orcamento/Orcamento_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": {
+                    "orc_id": selectedId_orc_id,
+                    "filtroRodovia": filtroRodovia,
+                    "filtroObjetos": filtroObjetos,
+                    "filtroStatus": filtroStatus == null ? -1 : filtroStatus
+                }
+            }
+            , "columns": [
+                { data: "orc_id", "className": "hide_column", "searchable": false },
+                { data: "ocs_id", "className": "hide_column", "searchable": false },
+
+                { data: "orc_cod_orcamento", tooltip: "orc_descricao", "width": "80px", "searchable": true },
+                { data: "orc_versao", tooltip: "orc_versao", "width": "80px", "searchable": true },
+
+                { data: "orc_data_criacao", tooltip: "orc_data_criacao", "width": "30px", "searchable": true },
+                { data: "orc_data_validade", tooltip: "orc_data_validade", "width": "30px", "searchable": true },
+
+                { data: "ocs_codigo", tooltip: "ocs_descricao", "autoWidth": true, "searchable": true },
+
+                { data: "orc_valor_total", tooltip: "orc_valor_total", "width": "80px", "searchable": true },
+
+                { data: "orc_os_associadas", tooltip: "orc_os_associadas","autoWidth": true, "searchable": true },
+                { data: "orc_objetos_associados", tooltip: "orc_objetos_associados","autoWidth": true, "searchable": true }
+
+
+               , {
+                    data: "orc_id",
+                    "searchable": false,
+                    "sortable": false,
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        if (permissaoEscrita > 0) {
+                            retorno = '<a href="#" onclick="return Editar(' + data + ')" title="Editar" ><span class="glyphicon glyphicon-pencil"></span></a>' + '  ';
+
+                            if (row.orc_ativo == 1)
+                                retorno += '<a href="#" onclick="return AtivarDesativarOrcamento(' + data + ', 0)" title="Ativo" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
+                            else
+                                retorno += '<a href="#" onclick="return AtivarDesativarOrcamento(' + data + ', 1)" title="Desativado" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
+                        }
+                        else {
+                            retorno = '<span class="glyphicon glyphicon-pencil desabilitado"  ></span>' + '  ';
+
+                            if (row.orc_ativo == 1)
+                                retorno += '<span class="glyphicon glyphicon-ok text-success desabilitado" ></span>' + '  ';
+                            else
+                                retorno += '<span class="glyphicon glyphicon-remove text-danger desabilitado"  ></span>' + '  ';
+
+                        }
+
+                        if (permissaoExclusao > 0)
+                            retorno += '<a href="#" onclick="return Deletar(' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
+                        else
+                            retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
+
+                        return retorno;
+                    }
+                }
+            ]
+            , "rowId": "orc_id"
+            , "rowCallback": function (row, data) {
+                if (data.orc_id == selectedId_orc_id)
+                    $(row).addClass('selected');
+            }
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: true
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+        });
+
+
+    }
+
+    // montagem do gridview
+    $(document).ready(function () {
+
+        moduloId = parseInt(window.location.href.split('/').pop());
+
+        // ****************************GRID tblAtributos *****************************************************************************
+        carregaGridOrcamento();
+
+        var tblOrcamento = $('#tblOrcamento').DataTable();
+        $('#tblOrcamento tbody').on('click', 'tr', function () {
+
+            //// remove a classe "selected" de todas as linhas da tabela
+            //var els = document.getElementById("tblAtributos").getElementsByClassName("selected");
+            //for (var i = 0; i < els.length; i++)
+            //    els[i].classList.remove('selected');
+
+            //if ($(this).hasClass('selected')) {
+            //    $(this).removeClass('selected');
+            //}
+            //else {
+            //    tblAtributos.$('tr.selected').removeClass('selected');
+            //    $(this).addClass('selected');
+            //}
+
+            //var atr_id = parseInt(this.cells[0].innerText); //tblAtributos.row(this).data();
+            //$('#hddnSelectedatr_id').val(atr_id["atr_id"]);
+            //selectedId_ObjAtributo = atr_id["atr_id"];
+
+        });
+
+
+    }); // document.ready
+
+
+
+</script>
+
+
+<script>
+    // datepickers da ficha, aba DADOS GERAIS - POR ALGUM MOTIVO SÓ FUNCIONOU COLOCANDO AQUI
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    $("#searchOrcamentos").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#OrcamentoBody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    var table = $('#tblOrcamento').DataTable({
+        "paging": false,
+        "ordering": true,
+        "info": false,
+        "searching": true
+    });
+
+    var table2 = $('#tblSelOrcamento').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false,
+        "scrollX": true
+    });
+
+    var table3 = $('#tblSelOrcamento2').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false,
+        "scrollX": true
+    });
+
+    var table4 = $('#tblEditOrcamento').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false,
+        "scrollX": true,
+        "width": 1000
+    });
+
+    $('#tblOrcamento tbody').on('click', 'tr', function () {
+        var divOrcamento = $('#OrcamentoSelected');
+
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+
+            divOrcamento.addClass('hidden');
+            $('#OrcamentoSelected2').addClass('hidden');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+
+            divOrcamento.removeClass('hidden');
+            $('#OrcamentoSelected2').removeClass('hidden');
+
+            // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        }
+    });
+
+    function clickedTrechos() {
+        var canSee = $("#bodyTrechos").is(":visible");
+        if (canSee) {
+            $('#showHide').removeClass('fa-angle-down');
+            $('#showHide').addClass('fa-angle-left');
+
+            $('#showHide2').removeClass('fa-angle-down');
+            $('#showHide2').addClass('fa-angle-left');
+        }
+        else {
+            $('#showHide').removeClass('fa-angle-left');
+            $('#showHide').addClass('fa-angle-down');
+
+            $('#showHide2').removeClass('fa-angle-left');
+            $('#showHide2').addClass('fa-angle-down');
+        }
+    }
+
+    function clickedTrechos2() {
+        var canSee = $("#bodyTrechos2").is(":visible");
+        if (canSee) {
+            $('#showHide3').removeClass('fa-angle-down');
+            $('#showHide3').addClass('fa-angle-left');
+
+            $('#showHide4').removeClass('fa-angle-down');
+            $('#showHide4').addClass('fa-angle-left');
+        }
+        else {
+            $('#showHide3').removeClass('fa-angle-left');
+            $('#showHide3').addClass('fa-angle-down');
+
+            $('#showHide4').removeClass('fa-angle-left');
+            $('#showHide4').addClass('fa-angle-down');
+        }
+    }
+
+    function clickedTrechos_nOrc() {
+        var canSee = $("#bodyTrechos_nOrc").is(":visible");
+        if (canSee) {
+            $('#showHide_nOrc').removeClass('fa-angle-down');
+            $('#showHide_nOrc').addClass('fa-angle-left');
+
+            $('#showHide_nOrc2').removeClass('fa-angle-down');
+            $('#showHide_nOrc2').addClass('fa-angle-left');
+        }
+        else {
+            $('#showHide_nOrc').removeClass('fa-angle-left');
+            $('#showHide_nOrc').addClass('fa-angle-down');
+
+            $('#showHide_nOrc2').removeClass('fa-angle-left');
+            $('#showHide_nOrc2').addClass('fa-angle-down');
+        }
+    }
+
+    function editarOrcamento() {
+        $('#orc01Edit').removeClass('hidden');
+        $('#orc01Viewer').addClass('hidden');
+
+        // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+
+        //location.href = "#";
+        //location.href = "#orc01Edit";
+
+        var topdiv = $('#orc01Edit');
+
+        $('body').animate({ scrollTop: topdiv.position().top });
+        //$("#modalEditarOrcamento").modal('show');
+        //$('#tblEditOrcamento').css('display', 'table');
+    }
+
+    function bntNovoOrcamento_click() {
+        $('#newOrcamento').removeClass('hidden');
+        $('#btnNewOrcamento').removeClass('hidden');
+        $('#frmNovoOrcamento').addClass('hidden');
+        $('#newOrcamento').addClass('scroll');
+    }
+
+    function btnCriaOrcOAE() {
+        $('#btnNewOrcamento').addClass('hidden');
+        $('#frmNovoOrcamento').removeClass('hidden');
+        $('#newOrcamento').removeClass('scroll');
+
+        // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+    }
+
+    function salvarNovoOrcamento() {
+        $('#newOrcamento').addClass('hidden');
+        $('#OrcamentoSelected').removeClass('hidden');
+    }
+
+    function salvarEdicaoOrcamento() {
+        $('#orc01Edit').addClass('hidden');
+        $('#orc01Viewer').removeClass('hidden');
+    }
+</script>
+
+<div class="modal fade" id="modalEditarOrcamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin: 0px 15px 0px 15px; width: 1024px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Alteração do orçamento #01/2020 v1</label></b></h3>
+            </div>
+            <br />
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+
+                <div>
+                    <table id="tblEditOrcamento" class="dataTable table-responsive table-hover table-striped nowrap">
+                        <thead>
+                            <tr>
+                                <th>OAE 1</th>
+                                <th>Elemento</th>
+                                <th style="text-align: center;">Anomalia</th>
+                                <th style="text-align: center;">Alerta</th>
+                                <th style="text-align: center;">Qtde</th>
+                                <th style="text-align: center;">Causa</th>
+                                <th style="text-align: center;">Reparo</th>
+                                <th style="text-align: center;">Qtde</th>
+                                <th>Val Unit</th>
+                                <th style="text-align: center;">Reparo</th>
+                                <th style="text-align: center;">Qtde</th>
+                                <th>Val Unit</th>
+                                <th>Val Total</th>
+                                <th>Val Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="OrcamentoSelBody">
+                            <tr style="vertical-align: text-top;">
+                                <td>SP 031-043,400-PTC</td>
+                                <td>SP 031-043,400-PTC-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                <td style="text-align: center;">FA</td>
+                                <td style="text-align: center;">N</td>
+                                <td style="text-align: center;">2</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">18<BR>19</td>
+                                <td style="text-align: center;">21<BR>100</td>
+                                <td>15.000,00<BR>2.700,00</td>
+                                <td style="text-align: center;">18<BR>19</td>
+                                <td style="text-align: center;">21<BR>100</td>
+                                <td>15.000,00<BR>2.700,00</td>
+                                <td>270.000,00<BR>270.000,00</td>
+                                <td>270.000,00<BR>270.000,00</td>
+                            </tr>
+                            <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                <td></td>
+                                <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                <td style="text-align: center;">FC</td>
+                                <td style="text-align: center;">A</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">18<BR>19</td>
+                                <td style="text-align: center;">7<BR>42</td>
+                                <td>15.000,00<BR>2.700,00</td>
+                                <td style="text-align: center;color: red;">17<BR>19</td>
+                                <td style="text-align: center;color: red;">5<BR>47</td>
+                                <td>23.000,00<BR>2.700,00</td>
+                                <td>105.000,00<BR>113.400,00</td>
+                                <td style="color: red;">115.000,00<BR>126.900,00</td>
+                            </tr>
+                            <tr>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">SP 040-050,400-PAS-SE-FS-PF-V01<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">FA</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">N</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">2</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">1</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">18<BR>19</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">18<BR>19</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2); text-align: center;">21<BR>100</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">15.000,00<BR>2.700,00</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">270.000,00<BR>270.000,00</td>
+                                <td style="border-top-style: solid; border-top-width: 2px; border-top-color: rgba(0,0,0,0.2);">270.000,00<BR>270.000,00</td>
+                            </tr>
+                            <tr style="vertical-align: text-top; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: red;">
+                                <td></td>
+                                <td>SP 031-043,400-PTC-SE-FS-PF-V02<BR>Pavimento Flexível<BR>- PF Vão(entre a e b)</td>
+                                <td style="text-align: center;">FC</td>
+                                <td style="text-align: center;">A</td>
+                                <td style="text-align: center;">1</td>
+                                <td style="text-align: center;">3</td>
+                                <td style="text-align: center;">18<BR>19</td>
+                                <td style="text-align: center;">7<BR>42</td>
+                                <td>15.000,00<BR>2.700,00</td>
+                                <td style="text-align: center;color: red;">17<BR>19</td>
+                                <td style="text-align: center;color: red;">5<BR>47</td>
+                                <td>23.000,00<BR>2.700,00</td>
+                                <td>105.000,00<BR>113.400,00</td>
+                                <td style="color: red;">115.000,00<BR>126.900,00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar" onclick="return Usuario_Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

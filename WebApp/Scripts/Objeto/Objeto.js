@@ -620,8 +620,17 @@ function SalvarObjeto() {
                 $("#modalSalvarRegistro").modal('hide');
                 ehInsercao = 0;
 
-                var objid = result.substring(0, result.indexOf(";"));
-                var retornomsg = result.substring(result.indexOf(";")+1, 10000);
+
+                var objid = 0; 
+                var retornomsg = '';
+                var saida = result + '';
+
+                if (saida.includes(";")) {
+                    objid = result.substring(0, result.indexOf(";"));
+                    retornomsg = result.substring(result.indexOf(";") + 1, 10000);
+                }
+                else
+                    objid = result;
 
                 // recarrega o grid
                 selectedId_obj_id = parseInt(objid);
@@ -640,7 +649,7 @@ function SalvarObjeto() {
                     swal({
                         type: 'success',
                         title: 'Sucesso',
-                        text: 'Objeto(s) Inserido(s) com sucesso'
+                        text: 'Objeto(s) Atualizado(s) com sucesso'
                     });
                 }
 
@@ -1025,6 +1034,27 @@ function LimparFiltro() {
    $("#cmbClassesObjeto").val(null);
     $("#cmbTiposObjeto").html(""); // apaga os itens existentes
 
+
+    // limpa as tabs
+
+    //  preenche Ficha inspecao cadastral 
+    var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
+    var liDocumentosAssociados = document.getElementById("liDocumentosAssociados");
+
+    if (liDocumentosAssociados)
+        liDocumentosAssociados.style.display = "none";
+
+    if (liFichaInspecaoCadastral)
+        liFichaInspecaoCadastral.style.display = "none";
+
+        $("#liDocumentosAssociados").removeClass("active");
+        $("#tabDocumentosAssociados").removeClass("active in");
+
+        $("#liFichaInspecaoCadastral").removeClass("active");
+        $("#tabFichaInspecaoCadastral").removeClass("active in");
+
+
+
     return false;
 }
 
@@ -1321,10 +1351,50 @@ $(document).ready(function () {
             filtroRow_numeroMax = filtroRow_numeroMin + 1;
        }
 
-        if (selectedId_obj_id != 0) {
+        if (selectedId_obj_id != 0)
+        {
 
             //  preenche Ficha inspecao cadastral 
-            preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+            var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
+            var liDocumentosAssociados = document.getElementById("liDocumentosAssociados");
+
+            if (liDocumentosAssociados)
+                liDocumentosAssociados.style.display = "none";
+
+            if (liFichaInspecaoCadastral)
+                liFichaInspecaoCadastral.style.display = "none";
+
+            // ajusta as tabs
+            if (selectedId_clo_id >= 3)
+            {
+
+                liDocumentosAssociados.style.display = "unset";
+                liFichaInspecaoCadastral.style.display = "unset";
+
+                $("#liDocumentosAssociados").removeClass("active");
+                $("#tabDocumentosAssociados").removeClass("active in");
+
+                if (!liFichaInspecaoCadastral.classList.contains("active"))
+                {
+                    $("#liFichaInspecaoCadastral").addClass("active");
+                    $("#tabFichaInspecaoCadastral").addClass("active in");
+                }
+
+                preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+            }
+            else
+            {
+                $("#liFichaInspecaoCadastral").removeClass("active");
+                $("#tabFichaInspecaoCadastral").removeClass("active in");
+
+                if (!liDocumentosAssociados.classList.contains("active"))
+                {
+                    $("#liDocumentosAssociados").addClass("active");
+                    $("#tabDocumentosAssociados").addClass("active in");
+                }
+
+                liDocumentosAssociados.style.display = "unset";
+            }
 
 
             //  atualiza grid documentos

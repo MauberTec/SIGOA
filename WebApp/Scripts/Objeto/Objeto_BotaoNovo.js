@@ -260,8 +260,12 @@ function PreenchetxtCodigoDigitavel() {
                 }
 
                 // coloca a descricao
-                $('#txtNovoDescricao').val(localizacaoNome + " #" + $('#txtLocalizacao').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + (lstExcecoes.includes(obj_tipoGrupo) ? " " : " #" + $("#txtNumeroObjeto").val()) );
-                //  $('#txtNovoDescricao').val(localizacaoNome + " #" + $('#txtLocalizacao').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + " #" + $("#txtNumeroObjeto").val() + ' (' + txt.val() + ')' ) ;
+             //   $('#txtNovoDescricao').val(localizacaoNome + " #" + $('#txtLocalizacao').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + (lstExcecoes.includes(obj_tipoGrupo) ? " " : " #" + $("#txtNumeroObjeto").val()));
+                var descricao = nomeGrupo + (lstExcecoes.includes(obj_tipoGrupo) ? " " : " #" + $("#txtNumeroObjeto").val()) + " " + localizacaoNome + " #" + $('#txtLocalizacao').val() ;
+                $('#txtNovoDescricao').val(descricao);
+
+               // set @obj_descricaoX = @grupo_objetos_nome + ' #' + right('00' + convert(varchar(2), @inum), 2) +  ' ' + @tip_nome + ' #' + right('00' + convert(varchar(2), @i), 2); 
+
             }
             else
                 if ($("#txtNumeroObjeto").val() != "") {
