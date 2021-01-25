@@ -23,7 +23,7 @@ namespace WebApp.DAO
         public Conexao()
         {
             this.strConn = new Gerais().Decrypt(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["CONNECTION_DER"].ConnectionString);
-            this.strConn = @"Data Source=DESKTOP-LVBFKSQ\SQLEXPRESS;Database=SIGOA_DESENV;Integrated Security=True;";
+            //this.strConn = @"Data Source=DESKTOP-LVBFKSQ\SQLEXPRESS;Database=SIGOA_DESENV;Integrated Security=True;";
         }
 
         /// <summary>

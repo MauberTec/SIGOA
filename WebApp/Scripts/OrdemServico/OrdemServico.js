@@ -297,7 +297,8 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
 
     switch (parseInt(selectedId_tos_id)) {
-        case 7: liFichaInspecaoCadastral.style.display = "unset";
+        case 7:
+            liFichaInspecaoCadastral.style.display = "unset";
             liFichaInspecao1aRotineira.style.display = "unset";
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoCadastral"]').tab('show');

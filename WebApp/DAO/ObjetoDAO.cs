@@ -244,7 +244,8 @@ namespace WebApp.DAO
         /// <summary>
         /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
-        /// <param name="obj_id">Id do Objeto Selecionado</param>
+        /// <param name="tip_id">Id do tipo do Objeto Selecionado</param>
+        /// <param name="obj_id_tipoOAE">Id do Objeto Selecionado</param>
         /// <param name="usu_id">Id do Usuário Logado</param>
         /// <param name="ip">IP do Usuário Logado</param>
         /// <returns>string</returns>

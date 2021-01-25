@@ -213,6 +213,15 @@
         margin-bottom: 0px;
         font-weight: normal;
     }
+
+
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        color: #555;
+        cursor: default;
+        background-color: #fff;
+        border: 2px solid #ddd !important;
+        border-bottom-color: transparent !important;
+    }
 </style>
 
 
@@ -222,17 +231,18 @@
             <div class="box-body">
 
                 <ul class="nav nav-tabs" id="Tabs" role="tablist">
-                    <li class="active">
+                    <li id="liFichaInspecaoCadastral" style="display:none" >
                         <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral">Atributos</a>
                     </li>
-                    <li>
+
+                    <li id="liDocumentosAssociados" style="display:none"  >
                         <a id="tabDocumentosAssociadosHeader" data-toggle="tab" href="#tabDocumentosAssociados">Documentos Associados</a>
                     </li>
                 </ul>
 
                 <div class="tab-content" id="TabContent">
 
-                    <div class="tab-pane fade in active" id="tabFichaInspecaoCadastral" role="tabpanel" aria-labelledby="tabFichaInspecaoCadastral">
+                    <div class="tab-pane fade " id="tabFichaInspecaoCadastral" role="tabpanel" aria-labelledby="tabFichaInspecaoCadastral">
                         <br /><br />
                         @*<div class="col-sm-12">
                                 <div class="form-group">
