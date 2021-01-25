@@ -196,6 +196,7 @@
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
     <Compile Include="Controllers\PoliticaConservaController.cs" />
+    <Compile Include="Controllers\PoliticaReparosController.cs" />
     <Compile Include="Controllers\ReparoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\AnomaliaController.cs" />
@@ -237,6 +238,8 @@
     <Compile Include="Helpers\Gerais.cs" />
     <Compile Include="Helpers\LogErro.cs" />
     <Compile Include="Helpers\NamespaceHelpers.cs" />
+    <Compile Include="Models\ConservaDTO.cs" />
+    <Compile Include="Models\ConservaModel.cs" />
     <Compile Include="Models\ConservaPoliticaModel.cs" />
     <Compile Include="Models\NotificaoOcorrencia.cs" />
     <Compile Include="Models\Inspecao.cs" />
@@ -441,12 +444,13 @@
     <Content Include="Scripts\OrdemServico\OSTipo.js" />
     <Content Include="Scripts\Inspecao\InspecaoTipo.js" />
     <Content Include="Scripts\Politica\Politica.js" />
+    <Content Include="Scripts\Politica\ConservaTipo.js" />
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
-    <Content Include="Scripts\Shared\_PolitacaConserva .js" />
+    <Content Include="Scripts\Shared\_PolitacaConserva.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
     <Content Include="Scripts\Shared\_fichasInspecao.js" />
     <Content Include="Scripts\Shared\_SelecionarDocumento.js" />
@@ -642,6 +646,8 @@
     <Content Include="Views\Shared\_fichaInspecaoEspecialCampo.cshtml" />
     <Content Include="Views\Shared\_fichaNotificacaoOcorrencia.cshtml" />
     <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
+    <Content Include="Views\PoliticaReparos\Index.cshtml" />
+    <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

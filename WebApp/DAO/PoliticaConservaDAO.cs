@@ -16,12 +16,13 @@ namespace WebApp.DAO
     /// </summary>
     public class PoliticaConservaDAO : Conexao
     {
-    
+
         /// <summary>
         /// Conserva
         /// </summary>
         public List<ConservaPolitica> Conserva(int ogv_id)
         {
+
             try
             {
                 List<ConservaPolitica> Conserva = new List<ConservaPolitica>();
@@ -42,7 +43,7 @@ namespace WebApp.DAO
                             ogi_id_caracterizacao_situacao = Convert.ToInt32(reader["ogi_id_caracterizacao_situacao"].ToString()),
                             ocp_descricao_alerta = reader["ocp_descricao_alerta"].ToString(),
                             ocp_descricao_servico = reader["ocp_descricao_servico"].ToString()
-                        }) ;
+                        });
                     }
                     return Conserva;
                 }
@@ -96,7 +97,7 @@ namespace WebApp.DAO
             return response;
         }
 
-       
+
         /// <summary>
         /// Lista Grupos e Variaveis sem parametro
         /// </summary>
@@ -147,6 +148,174 @@ namespace WebApp.DAO
                 }
                 return lst;
             }
+        }
+
+        /// <summary>
+        /// GetAllConserva
+        /// </summary>
+        public List<ConservaModel> GetAllConserva()
+        {
+
+            try
+            {
+                List<ConservaModel> Conserva = new List<ConservaModel>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_ALLCONSERVAS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    //com.Parameters.Clear();
+                    //com.Parameters.AddWithValue("@ogv_id", ogv_id);
+
+                    SqlDataReader reader = com.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Conserva.Add(new ConservaModel
+                        {
+                          Alerta = reader["Alerta"].ToString(),
+                          ocp_id = reader["ocp_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["ocp_id"]),
+                          tip_nome = reader["tip_nome"] == DBNull.Value ? "" : reader["tip_nome"].ToString(),
+                          Grupo = reader["Grupo"]  == DBNull.Value ? "" : reader["Grupo"].ToString(),
+                          ogv_id = reader["ogv_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["ogv_id"]),
+                          Servico = reader["Servico"] == DBNull.Value ? "" : reader["Servico"].ToString(),
+                          Situacao = reader["Situacao"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Situacao"]),
+                          Variavel = reader["Variavel"] == DBNull.Value ? "" : reader["Variavel"].ToString(),
+                          ale_codigo = reader["ale_codigo"] == DBNull.Value ? "" : reader["ale_codigo"].ToString()
+                        });
+                    }
+                    return Conserva;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Inclui Conserva Tipo
+        /// </summary>
+        public string InsertConservaTipo(string oct_codigo, string oct_descricao, string oct_ativo, string oct_criado_por)
+        {
+            string response;
+            using (SqlConnection con = new SqlConnection(new Conexao().strConn))
+            {
+                try
+                {
+                   
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_INS_CONSERVA_TIPO";
+
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@oct_codigo", oct_codigo);
+                    com.Parameters.AddWithValue("@oct_descricao", oct_descricao);
+                    com.Parameters.AddWithValue("@oct_ativo", oct_ativo);
+                    com.Parameters.AddWithValue("@oct_criado_por", oct_criado_por);
+                    com.ExecuteScalar();
+                    int id = Convert.ToInt32(p_return.Value);
+
+                    response = "ok";
+                }
+                catch (Exception ex)
+                {
+                    response = ex.Message;
+                }
+
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Listar Conserva tipo
+        /// </summary>
+        public List<ConservaTipo> GetConservaTipo()
+        {
+
+            try
+            {
+                List<ConservaTipo> ConservaTipo = new List<ConservaTipo>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_CONSERVAS_TIPO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    SqlDataReader reader = com.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        ConservaTipo.Add(new ConservaTipo
+                        {
+                           oct_ativo = reader["oct_ativo"] == DBNull.Value ? false : Convert.ToBoolean(reader["oct_ativo"].ToString()),
+                           oct_codigo = reader["oct_codigo"] == DBNull.Value ? 0 : Convert.ToInt32(reader["oct_codigo"].ToString()),
+                            oct_criado_por = reader["oct_criado_por"] == DBNull.Value ? 0 : Convert.ToInt32(reader["oct_criado_por"].ToString()),
+                            oct_descricao = reader["oct_descricao"].ToString(),
+                            oct_id = reader["oct_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["oct_id"].ToString()),
+
+                        });
+                    }
+                    return ConservaTipo;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// UpdateConservaTipo
+        /// </summary>
+        public string UpdateConservaTipo(int oct_id,string oct_codigo, string oct_descricao, string oct_ativo, string oct_criado_por)
+        {
+            string response;
+            using (SqlConnection con = new SqlConnection(new Conexao().strConn))
+            {
+                try
+                {
+
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_UPD_CONSERVA_TIPO";
+
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+                    com.Parameters.AddWithValue("@oct_id", oct_id.ToString());
+                    com.Parameters.AddWithValue("@oct_codigo", oct_codigo);
+                    com.Parameters.AddWithValue("@oct_descricao", oct_descricao);
+                    com.Parameters.AddWithValue("@oct_ativo", oct_ativo);
+                    com.ExecuteScalar();
+                    int id = Convert.ToInt32(p_return.Value);
+
+                    response = "ok";
+                }
+                catch (Exception ex)
+                {
+                    response = ex.Message;
+                }
+
+            }
+
+            return response;
         }
     }
 }

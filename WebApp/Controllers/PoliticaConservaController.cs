@@ -32,6 +32,46 @@ namespace WebApp.Controllers
             List<ConservaPolitica> j = RequestConserva(id);
             return Json(j, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// GetAllConserva
+        /// </summary>
+        public JsonResult GetAllConserva()
+        {
+            List<ConservaModel> lista = new PoliticaConservaDAO().GetAllConserva();
+            
+            List<ConservaDTO> conservas = new List<ConservaDTO>();
+            var groups = lista.GroupBy(x => x.ogv_id);
+            List<ConservaModel> ConservasArray;
+            foreach (var _item in groups)
+            {
+                ConservasArray = new List<ConservaModel>();
+                foreach (var item in _item)
+                {
+                    ConservasArray.Add(new ConservaModel
+                    {
+                        Alerta = item.Alerta,
+                        ocp_id = item.ocp_id,
+                        tip_nome = item.tip_nome,
+                        Grupo = item.Grupo,
+                        ogv_id = item.ogv_id,
+                        Servico = item.Servico,
+                        Situacao = item.Situacao,
+                        Variavel = item.Variavel,
+                        ale_codigo = item.ale_codigo
+                    });
+                }
+                conservas.Add(new ConservaDTO
+                {
+                    Numero_Ogv = _item.Key,
+                    Conservas = ConservasArray
+
+                });
+               
+            }
+
+
+            return Json(conservas, JsonRequestBehavior.AllowGet);
+        }
 
         private static List<ConservaPolitica> RequestConserva(int id)
         {
@@ -122,6 +162,7 @@ namespace WebApp.Controllers
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
+        
         /// <summary>
         /// Listar
         /// </summary>
@@ -131,14 +172,7 @@ namespace WebApp.Controllers
             string tp = string.Empty;
             List<ConservaPoliticaModel> model = new List<ConservaPoliticaModel>();
             var lista = RequestConserva(variavelId);
-            if(sub2 == "--Selecione--")
-            {
-                sub2 = "";
-            }
-            if (sub3 == "--Selecione--")
-            {
-                sub3 = "";
-            }
+            
             foreach (var item in lista)
             {
                 if(item.ogi_id_caracterizacao_situacao == 1)
@@ -155,9 +189,7 @@ namespace WebApp.Controllers
                 }
                 model.Add(new ConservaPoliticaModel
                 {
-                    Sub1 = sub1,
-                    Sub2 = sub2,
-                    Sub3 = sub3,
+                   
                     Grupos = grupo,
                     Variavel = variavel,
                     ocp_id = item.ocp_id,
@@ -187,6 +219,48 @@ namespace WebApp.Controllers
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
-        
+        ///<sumary>
+        /// Tipo Conserva
+        ///</sumary>
+        public ActionResult ConservaTipo()
+        {
+            return View();
+        }
+        /// <summary>
+        /// UpdateConserva
+        /// </summary>
+        /// 
+        public JsonResult ConservaTipo_Salvar(string oct_cod, string oct_descricao, string oct_ativo, int oct_id = 0)
+        {
+            string resp = string.Empty;
+            if(oct_id == 0)
+            {
+                resp = new PoliticaConservaDAO().InsertConservaTipo(oct_cod, oct_descricao, oct_ativo, "4");
+            }
+            else if(oct_id > 0)
+            {
+                resp = new PoliticaConservaDAO().UpdateConservaTipo(oct_id,oct_cod, oct_descricao, oct_ativo, "4");
+            }
+               
+            return Json(resp, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// GetAllConservaTipo
+        /// </summary>
+        public JsonResult GetAllConservaTipo()
+        {           
+            return Json(new PoliticaConservaDAO().GetConservaTipo(), JsonRequestBehavior.AllowGet);
+        }
+
+        ///<summary>
+        ///Get Tipo Editar
+        /// </summary>
+        public ActionResult GetEdtit(int id)
+        {
+            var ret = new PoliticaConservaDAO().GetConservaTipo();
+            var resp = ret.FirstOrDefault(x => x.oct_id == id);
+            return Json(resp, JsonRequestBehavior.AllowGet);
+        }
     }
 }
