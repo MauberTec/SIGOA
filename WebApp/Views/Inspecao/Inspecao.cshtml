@@ -55,11 +55,11 @@
                 <div class="form-group">
                     <div class="col-sm-3">
                         <label class="control-label">Código O.S.</label>
-                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo"  maxlength="100"  onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
                     </div>
                     <div class="col-sm-3">
                         <label class="control-label">Código Objeto</label>
-                        <input type="text" class="form-control" id="txtFiltroObj_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                        <input type="text" class="form-control" id="txtFiltroObj_codigo"  maxlength="100"  onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
                     </div>
 
                     <div class="col-sm-3 ">
@@ -398,6 +398,7 @@
         $('#partialFicha3').empty();
         $('#partialFicha4').empty();
         $('#partialFicha5').empty();
+        $('#partialFicha7').empty();
 
         qualFicha = qualFicha1;
 
@@ -414,6 +415,7 @@
                     case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
                     case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
                     case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
+                    case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
                 }
 
                 colocaDatePickers();
@@ -431,12 +433,14 @@
         $('#partialFicha3').empty();
         $('#partialFicha4').empty();
         $('#partialFicha5').empty();
+        $('#partialFicha7').empty();
 
         var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
         var liFichaInspecao1aRotineira = document.getElementById("liFichaInspecao1aRotineira");
         var liFichaInspecaoRotineira = document.getElementById("liFichaInspecaoRotineira");
         var liFichaInspecaoEspecial = document.getElementById("liFichaInspecaoEspecial");
         var liFichaInspecaoEspecialAnomalias = document.getElementById("liFichaInspecaoEspecialAnomalias");
+        var liFichaInspecaoEspecialAnomaliasProvidencias = document.getElementById("liFichaInspecaoEspecialAnomaliasProvidencias");
 
         //if (liDetalhesOS)
         //    $('[href="#tabDetalhesOS"]').tab('show');
@@ -455,6 +459,8 @@
         if (liFichaInspecaoEspecialAnomalias)
             liFichaInspecaoEspecialAnomalias.style.display = "none";
 
+        if (liFichaInspecaoEspecialAnomaliasProvidencias)
+            liFichaInspecaoEspecialAnomaliasProvidencias.style.display = "none";
 
         switch (parseInt(selectedId_tos_id)) {
             case 7: liFichaInspecaoCadastral.style.display = "unset";
@@ -472,7 +478,12 @@
                 liFichaInspecaoEspecialAnomalias.style.display = "unset";
                 if (bool_posicionar)
                     $('[href="#tabFichaInspecaoEspecial"]').tab('show');
+
+                liFichaInspecaoEspecialAnomaliasProvidencias.style.display = "unset";
+                if (bool_posicionar)
+                    $('[href="#tabFichaInspecaoEspecialProvidencias"]').tab('show');
                 break;
+
         }
 
     }
@@ -497,7 +508,8 @@
 @***** SCRIPT FICHA 4 - ESPECIAL CAMPO ***********************@
 <script src="~/Scripts/Shared/_fichaInspecaoEspecial_Anomalias.js"></script>
 
-
+@***** SCRIPT FICHA 4 - ESPECIAL PROVIDENCIAS ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial_Providencias.js"></script>
 
 
 
@@ -526,6 +538,10 @@
 
                     <li style="display:none" id="liFichaInspecaoEspecialAnomalias">
                         <a id="tabFichaInspecaoEspecialAnomaliasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomalias" onclick="abreFicha(5);">Ficha de Cadastramento de Anomalias - Inspeção Especial</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaInspecaoEspecialAnomaliasProvidencias">
+                        <a id="tabFichaInspecaoEspecialAnomaliasProvidenciasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomaliasProvidencias" onclick="abreFicha(7);">Providências</a>
                     </li>
 
                 </ul>
@@ -618,8 +634,8 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
-                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha em Branco</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar XLS</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Ficha de Cadastramento de Anomalias - Inspeção Especial</label></h3>
@@ -630,6 +646,27 @@
                         <br /><br /><br />
 
                         <div id="partialFicha5">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoEspecialAnomaliasProvidencias" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecialAnomaliasProvidencias2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_Providencias&id=999999&ord_id=' + selectedId_ord_id, '_blank');">Imprimir</button>
+                                    @*    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>*@
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Providências</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha7">
                             @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
                         </div>
                     </div>

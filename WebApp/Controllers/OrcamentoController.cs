@@ -19,7 +19,6 @@ namespace WebApp.Controllers
         /// <summary>
         /// Orcamento
         /// </summary>
-        /// <returns></returns>
         public ActionResult Orcamento()
         {
             //OrcamentoBLL orcamento = new OrcamentoBLL();
@@ -73,7 +72,7 @@ namespace WebApp.Controllers
         /// <summary>
         ///  Insere ou Altera os dados do 
         /// </summary>
-        /// <param name="ocs">Dados do </param>
+        /// <param name="orcam">Dados do Orçamento</param>
         /// <returns>JsonResult</returns>
         public JsonResult Orcamento_Salvar(Orcamento orcam)
         {

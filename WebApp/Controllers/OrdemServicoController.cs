@@ -32,6 +32,7 @@ namespace WebApp.Controllers
                 case 4: ficha = "~/Views/Shared/_fichaInspecaoEspecial.cshtml";  break;
                 case 5: ficha = "~/Views/Shared/_fichaInspecaoEspecialCampo.cshtml";  break;
                 case 6: ficha = "~/Views/Shared/_fichaNotificacaoOcorrencia.cshtml";  break;
+                case 7: ficha = "~/Views/Shared/_fichaInspecaoEspecialProvidencias.cshtml";  break;
             }
 
                 return PartialView(ficha);

@@ -645,4 +645,129 @@ namespace WebApp.Models
         public int ocp_atualizado_por { get; set; }
     }
 
+    /// <summary>
+    /// Priorizacao dos objetos
+    /// </summary>
+    public class ObjPriorizacao
+    {
+        /// <summary>
+        /// Id da Priorização
+        /// </summary>
+       public int pri_id { get; set; }
+
+        /// <summary>
+        /// Id do Objeto ranqueado
+        /// </summary>
+       public int obj_id { get; set; }
+
+        /// <summary>
+        /// Ordem dos Objetos
+        /// </summary>
+       public int pri_ordem { get; set; }
+
+        /// <summary>
+        /// Classificação dos Objetos
+        /// </summary>
+       public int pri_classificacao { get; set; }
+
+        /// <summary>
+        /// Data da Classificação
+        /// </summary>
+       public string pri_data_classificacao { get; set; }
+
+        /// <summary>
+        /// Data da Inspeção do Objeto
+        /// </summary>
+       public string pri_data_inspecao { get; set; }
+
+        /// <summary>
+        /// Nota Final
+        /// </summary>
+       public  Double pri_nota_final { get; set; }
+
+        /// <summary>
+        /// Nota Estrutural
+        /// </summary>
+       public Double pri_nota_estrutura { get; set; }
+
+        /// <summary>
+        /// Nota Durabilidade
+        /// </summary>
+       public Double pri_nota_durabilidade { get; set; }
+
+        /// <summary>
+        /// Nota Funcionalidade
+        /// </summary>
+       public Double pri_nota_funcionalidade { get; set; }
+
+        /// <summary>
+        /// Nota da Importância da OAE
+        /// </summary>
+       public Double pri_nota_importancia_oae_malha { get; set; }
+
+        /// <summary>
+        /// Nota da VDM
+        /// </summary>
+       public Double pri_nota_vdm { get; set; }
+
+        /// <summary>
+        /// Nota da Principal Utilização
+        /// </summary>
+       public Double pri_nota_principal_utilizacao { get; set; }
+
+        /// <summary>
+        /// Nota da Facilidade de Desvio
+        /// </summary>
+       public Double pri_nota_facilidade_desvio { get; set; }
+
+        /// <summary>
+        /// Nota do Gabarito Vertical
+        /// </summary>
+       public Double pri_nota_gabarito_vertical { get; set; }
+
+        /// <summary>
+        /// Nota do Gabarito Horizontal
+        /// </summary>
+       public Double pri_nota_gabarito_horizontal { get; set; }
+
+        /// <summary>
+        /// Nota da Largura da Plataforma
+        /// </summary>
+       public Double pri_nota_largura_plataforma { get; set; }
+
+        /// <summary>
+        /// Nota da Agressividade Ambiental
+        /// </summary>
+       public Double pri_nota_agressividade_ambiental { get; set; }
+
+        /// <summary>
+        /// Nota do Trem Tipo
+        /// </summary>
+       public Double pri_nota_trem_tipo { get; set; }
+
+        /// <summary>
+        /// Nota da Barreira de Segurança
+        /// </summary>
+       public Double pri_nota_barreira_seguranca { get; set; }
+
+        /// <summary>
+        /// Nota da Restrição de Treminhões
+        /// </summary>
+       public Double pri_restricao_treminhoes { get; set; }
+			
+        /// <summary>
+        /// Código do Objeto
+        /// </summary>
+       public string obj_codigo { get; set; }
+
+        /// <summary>
+        /// Descrição do Objeto
+        /// </summary>
+       public string obj_descricao { get; set; }
+
+
+    }
+
+
+
 }

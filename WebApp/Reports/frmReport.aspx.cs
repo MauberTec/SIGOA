@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using WebApp.Business;
 using WebApp.DAO;
+using WebApp.Helpers;
 using WebApp.Models;
 
 namespace WebApp
@@ -57,7 +58,7 @@ namespace WebApp
                 if (obj_id > 0)
                 {
                     System.Data.DataSet ds = new System.Data.DataSet();
-                    if (relatorio.Trim() != "rptFichaNotificacaoOcorrencia")
+                    if ((relatorio.Trim() != "rptFichaNotificacaoOcorrencia") && (relatorio.Trim() != "rptFichaInspecaoEspecial_Providencias"))
                     {
                         ds = new RelatoriosDAO().FICHA_INSPECAO_CADASTRAL(obj_id, ord_id);
                     }
@@ -69,7 +70,7 @@ namespace WebApp
                         ReportViewer1.LocalReport.DataSources.Add(rds);
                         ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoCadastral_1.rdlc");
                     }
-                    else                       
+                    else
                     if (relatorio.Trim() == "rptFichaInspecaoRotineira")
                     {
                         string tos_id = Request["tos_id"];  // 1 = cadastral; 2 = rotineira
@@ -93,26 +94,43 @@ namespace WebApp
                         string imgBase64 = ds.Tables[0].Rows[0]["txt_atr_id_159"].ToString().Trim();
 
                         // se nao houver imagem, coloca uma imagem branca
-                        if (imgBase64 == "") 
+                        if (imgBase64 == "")
                             imgBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQECWAJYAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAZABkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooA//2Q==";
 
-                        ReportParameter par_img_esquema_estrutural = new ReportParameter("par_img_esquema_estrutural",(imgBase64.Replace("data:image/jpg;base64,", "").Replace("data:image/png;base64,", "")) );
+                        ReportParameter par_img_esquema_estrutural = new ReportParameter("par_img_esquema_estrutural", (imgBase64.Replace("data:image/jpg;base64,", "").Replace("data:image/png;base64,", "")));
                         ReportViewer1.LocalReport.SetParameters(new ReportParameter[] { par_img_esquema_estrutural });
                     }
                     else
                         if (relatorio.Trim() == "rptFichaInspecaoEspecial_campo")
-                        {
-                            ReportDataSource rds = new ReportDataSource("dtFicha2", ds.Tables[0]);
-                            ReportViewer1.LocalReport.DataSources.Add(rds);
-                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoEspecial_campo.rdlc");
-                        }
+                    {
+                        ReportDataSource rds = new ReportDataSource("dtFicha2", ds.Tables[0]);
+                        ReportViewer1.LocalReport.DataSources.Add(rds);
+                        ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoEspecial_campo.rdlc");
+                    }
                     else
                         if (relatorio.Trim() == "rptFichaNotificacaoOcorrencia")
+                    {
+                        System.Data.DataTable dtt = new RelatoriosDAO().FICHA_NotificacaoOcorrencia(ord_id);
+                        ReportDataSource rds = new ReportDataSource("DataSet1", dtt);
+                        ReportViewer1.LocalReport.DataSources.Add(rds);
+                        ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaNotificacaoOcorrencia.rdlc");
+                    }
+                    else
+                        if (relatorio.Trim() == "rptFichaInspecaoEspecial_Providencias")
                         {
-                            System.Data.DataTable dtt = new RelatoriosDAO().FICHA_NotificacaoOcorrencia(ord_id);
-                            ReportDataSource rds = new ReportDataSource("DataSet1", dtt);
+                        string sapt_id = Request["apt_id"];
+                        int apt_id = -1;
+                        if ((sapt_id != null) && (sapt_id.Trim() != ""))
+                            if (Int32.Parse(sapt_id) > 0)
+                                apt_id = Convert.ToInt32(sapt_id);
+
+
+                        System.Data.DataTable dtt = new RelatoriosDAO().FICHA_ESPECIAL_PROVIDENCIAS(ord_id, apt_id).Tables[0];
+
+                            ReportDataSource rds = new ReportDataSource("dtProvidencias", dtt);
+                            ReportViewer1.LocalReport.DataSources.Clear();
                             ReportViewer1.LocalReport.DataSources.Add(rds);
-                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaNotificacaoOcorrencia.rdlc");
+                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoEspecial_Providencias.rdlc");
                         }
 
 

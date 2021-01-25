@@ -195,6 +195,7 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
+    <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Helpers\LogErro.cs" />
     <Compile Include="Helpers\NamespaceHelpers.cs" />
     <Compile Include="Models\ConservaPoliticaModel.cs" />
+    <Compile Include="Models\Integracao.cs" />
     <Compile Include="Models\Inspecao.cs" />
     <Compile Include="Models\NotificaoOcorrencia.cs" />
     <Compile Include="Models\Orcamento.cs" />
@@ -452,6 +454,7 @@
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
     <Content Include="Scripts\Shared\_fichasInspecao.js" />
@@ -650,6 +653,12 @@
     <Content Include="Views\Orcamento\OrcamentoFluxoStatus.cshtml" />
     <Content Include="Views\Orcamento\OrcamentoStatus.cshtml" />
     <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoSirgeo.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoVDM.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoTPU.cshtml" />
+    <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
+    <Content Include="Views\Shared\_fichaInspecaoEspecialProvidencias.cshtml" />
+    <Content Include="Views\Shared\_fichaNotificacaoOcorrencia.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -682,6 +691,14 @@
     <Content Include="Reports\rptFichaInspecaoEspecial_campo.rdlc">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptFichaInspecaoEspecial_Providencias.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

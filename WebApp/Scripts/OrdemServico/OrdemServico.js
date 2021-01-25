@@ -273,6 +273,8 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     var liFichaInspecaoRotineira = document.getElementById("liFichaInspecaoRotineira");
     var liFichaInspecaoEspecial = document.getElementById("liFichaInspecaoEspecial");
     var liFichaInspecaoEspecialAnomalias = document.getElementById("liFichaInspecaoEspecialAnomalias");
+    var liFichaInspecaoEspecialAnomaliasProvidencias = document.getElementById("liFichaInspecaoEspecialAnomaliasProvidencias");
+
     var liFichaNotificacaoOcorrencia = document.getElementById("liFichaNotificacaoOcorrencia");
 
     //if (liDetalhesOS)
@@ -292,6 +294,10 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     if (liFichaInspecaoEspecialAnomalias)
         liFichaInspecaoEspecialAnomalias.style.display = "none";
 
+    if (liFichaInspecaoEspecialAnomaliasProvidencias)
+        liFichaInspecaoEspecialAnomaliasProvidencias.style.display = "none";
+
+
     if (liFichaNotificacaoOcorrencia)
         liFichaNotificacaoOcorrencia.style.display = "none";
 
@@ -309,10 +315,17 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
                 $('[href="#tabFichaInspecaoRotineira"]').tab('show');
             break;
 
-        case 9: liFichaInspecaoEspecial.style.display = "unset";
+        case 9:
+            liFichaInspecaoEspecial.style.display = "unset";
+
             liFichaInspecaoEspecialAnomalias.style.display = "unset";
              if (bool_posicionar)
-                 $('[href="#tabFichaInspecaoEspecial"]').tab('show');
+                $('[href="#tabFichaInspecaoEspecial"]').tab('show');
+
+            liFichaInspecaoEspecialAnomaliasProvidencias.style.display = "unset";
+            if (bool_posicionar)
+                $('[href="#tabFichaInspecaoEspecialProvidencias"]').tab('show');
+
             break;
 
         case 18: liFichaNotificacaoOcorrencia.style.display = "unset";

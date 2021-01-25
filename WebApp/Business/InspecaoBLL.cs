@@ -144,10 +144,11 @@ namespace WebApp.Business
         /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
         /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
         /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <param name="rpt_area">Área da Anomalia</param>
         /// <returns>List ReparoTipo</returns>
-        public List<ReparoTipo> InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        public List<ReparoTipo> InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo, double rpt_area)
         {
-            return new InspecaoDAO().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo);
+            return new InspecaoDAO().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo, rpt_area);
         }
 
 
@@ -400,6 +401,18 @@ namespace WebApp.Business
             return new InspecaoDAO().InspecaoTipo_Salvar(ipt, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
+
+        // *************** PROVIDENCIAS  *************************************************************
+
+        /// <summary>
+        /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.selecionada</param>
+        /// <returns>List InspecaoAnomalia</returns>
+        public List<InspecaoAnomalia> InspecaoAnomalias_Valores_Providencias_ListAll(int ord_id)
+        {
+            return new InspecaoDAO().InspecaoAnomalias_Valores_Providencias_ListAll(ord_id);
+        }
 
 
 

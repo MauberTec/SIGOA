@@ -29,6 +29,7 @@ namespace WebApp.Controllers
         /// <summary>
         /// Lista de todos as NotificacaoOcorrencia não deletadas
         /// </summary>
+        /// <param name="ord_id">id da O.S. da notificacao</param>
         /// <returns>JsonResult Lista de NotificacaoOcorrencia</returns>
         public JsonResult NotificacaoOcorrencia_ListAll(int ord_id)
         {

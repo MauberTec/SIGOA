@@ -174,10 +174,11 @@ namespace WebApp.Controllers
         /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
         /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
         /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <param name="rpt_area">Área da Anomalia</param>
         /// <returns>JsonResult</returns>
-        public JsonResult InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        public JsonResult InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo, string rpt_area)
         {
-            return Json(new { data = new InspecaoBLL().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new InspecaoBLL().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo, Convert.ToDouble(rpt_area.Replace(".",","))) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -261,6 +262,18 @@ namespace WebApp.Controllers
             return Json(new InspecaoBLL().InspecaoTipo_Salvar(atp), JsonRequestBehavior.AllowGet);
         }
 
+
+        // *************** PROVIDENCIAS  *************************************************************
+
+        /// <summary>
+        /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.selecionada</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult InspecaoAnomalias_Valores_Providencias_ListAll(int ord_id)
+        {
+            return Json(new { data = new InspecaoBLL().InspecaoAnomalias_Valores_Providencias_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
 
 
 

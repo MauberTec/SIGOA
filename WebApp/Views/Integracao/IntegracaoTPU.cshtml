@@ -1,0 +1,265 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 820 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(810)); // 820 = id DO MODULO "IntegracaoTPU"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 820 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+}
+
+<h2></h2>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Integração DER - TPUs ..::";
+    }
+</form>
+
+<style>
+    .Centralizado { text-align:center;}
+</style>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-3">
+                    <label class="control-label">Ano<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="txtAno" maxlength="4" onkeyup=" $('#txtAno').css('background-color', corBranca)" >
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Fase<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="txtFase" maxlength="2" value="23" onkeyup=" $('#txtFase').css('background-color', corBranca)" >
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Mês<span class="text-danger">*</span></label>
+                    <select class="form-control" id="cmbMes" name="cmbMes" onchange="$('#cmbMes').css('background-color', corBranca)" >
+                        <option value="00" selected disabled>-- Selecione --</option>
+                        <option value="01">Janeiro</option>
+                        <option value="02">Fevereiro</option>
+                        <option value="03">Março</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Maio</option>
+                        <option value="06">Junho</option>
+                        <option value="07">Julho</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Onerado</label>
+                    <select class="form-control" id="cmbOnerado" name="cmbOnerado">
+                        <option value="" selected disabled>-- Selecione --</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+
+
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltroTPU();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroTPU();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <table id="tblTPUs">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Código</th>
+                                <th>Nome</th>
+                                <th>Unidade</th>
+                                <th>Preço Unitário</th>
+                                <th>Onerado</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        @*</div>*@
+    </div>
+</section>
+
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+}
+
+<script src="~/Scripts/Base.js"></script>
+
+
+<script>
+    function LimparFiltroTPU() {
+
+        $('#txtAno').val("");
+        $('#txtFase').val("23");
+        $('#cmbMes').val("-1");
+        $('#cmbOnerado').val("-1");
+
+        $('#txtAno').css('background-color', corBranca);
+        $('#txtFase').css('background-color', corBranca);
+        $('#cmbMes').css('background-color', corBranca);
+
+        carregaGridTPU();
+
+        return false;
+    }
+
+    function ExecutarFiltroTPU() {
+
+        carregaGridTPU();
+        return false;
+    }
+
+    function carregaGridTPU() {
+        var txtAno = $('#txtAno').val();
+        var txtFase = $('#txtFase').val();
+        var cmbMes = $('#cmbMes').val();
+
+        if (txtAno.trim() == "") {
+            $('#txtAno').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'O Ano é Obrigatório'
+            }).then(
+                function () {
+                    return false;
+                });
+        }
+
+            if (txtFase.trim() == "") {
+                $('#txtFase').css("background-color", corVermelho);
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'A fase é  Obrigatória'
+                }).then(
+                    function () {
+                        return false;
+                    });
+            }
+ 
+                if ((parseInt(cmbMes) == 0) || (cmbMes == null)) {
+                    $('#cmbMes').css("background-color", corVermelho);
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'O Mês é  Obrigatório'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                }
+
+
+
+
+        $('#tblTPUs').DataTable().ajax.reload();  //false = sem reload na pagina.
+
+    }
+
+
+
+    // montagem do gridview
+    $(document).ready(function () {
+        $('#tblTPUs').DataTable({
+            "ajax": {
+                "url": "/Integracao/Integracao_TPUs_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": function (d)
+                {
+                    d.ano = $('#txtAno').val();
+                    d.fase = $('#txtFase').val();
+                    d.mes = $('#cmbMes').val();
+                    d.onerado = $('#cmbOnerado').val();
+                }
+            }
+            , "columns": [
+                { data: "DataTpu", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "CodSubItem", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "NomeSubItem", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "UnidMed", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "PrecoUnitario", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "Onerado", "className": "Centralizado", "autoWidth": true, "searchable": false }
+            ]
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+            , "createdRow": function (row, data, dataIndex) {
+                if (parseInt(data.DataTpu) == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: data.CodSubItem
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                }
+            }
+
+        });
+
+
+        // coloca mascara nos campos txt de alguns checkboxes
+        jQuery('#txtAno').mask('0000');
+        $("#txtAno").attr('placeholder', "0000");
+
+        jQuery('#txtFase').mask('0000');
+        $("#txtFase").attr('placeholder', "0000");
+
+    });
+
+
+</script>
+

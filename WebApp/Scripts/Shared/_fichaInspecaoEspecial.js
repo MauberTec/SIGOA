@@ -241,6 +241,17 @@ function preenchetblFicha4(obj_id, classe, tipo) {
     var url = "/Objeto/ObjAtributoValores_ListAll";
     var data = { "obj_id": obj_id, "ord_id": ord_id };
 
+    if (moduloCorrente == 'OrdemServico') {
+        var StatusOS = parseInt(filtroStatusOS);
+        if (StatusOS == 11) // executada
+        {
+            url = "/Inspecao/InspecaoAtributosValores_ListAll";
+            data = { "ord_id": selectedId_ord_id };
+        }
+    }
+
+
+
     $.ajax({
         "url": url,
         "type": "GET",

@@ -55,11 +55,11 @@
                 <div class="form-group">
                     <div class="col-sm-3">
                         <label class="control-label">Código O.S.</label>
-                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo"  maxlength="100" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
                     </div>
                     <div class="col-sm-3">
                         <label class="control-label">Código Objeto</label>
-                        <input type="text" class="form-control" id="txtFiltroObj_codigo" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                        <input type="text" class="form-control" id="txtFiltroObj_codigo"   maxlength="100" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
                     </div>
 
                     <div class="col-sm-3 ">
@@ -193,6 +193,7 @@
         $('#partialFicha4').empty();
         $('#partialFicha5').empty();
         $('#partialFicha6').empty();
+        $('#partialFicha7').empty();
 
         qualFicha = qualFicha1;
 
@@ -210,6 +211,7 @@
                     case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
                     case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
                     case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
+                    case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
                 }
 
                 colocaDatePickers();
@@ -238,8 +240,12 @@
 <script src="~/Scripts/Shared/_fichaInspecaoEspecial_Anomalias.js"></script>
 
 
+@***** SCRIPT FICHA 7 - ESPECIAL PROVIDENCIAS ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial_Providencias.js"></script>
+
+
 @***** SCRIPT FICHA 6 - NOTIFICACAO OCORRENCIA ***********************@
-<script >
+<script>
 
     var sel_noc_id = -1;
 
@@ -270,7 +276,7 @@
 
     function limpatblFicha6() {
 
-        var tabela= document.getElementById("divFicha6"); 
+        var tabela = document.getElementById("divFicha6");
 
         // habilita ou desabilita todos os controles editaveis
         if (tabela) {
@@ -420,7 +426,6 @@
 
 
 
-
 @***** INICIO DAS ABAS ***********************@
 
 <section class="content" style="min-height: 50px;">
@@ -451,6 +456,9 @@
                         <a id="tabFichaInspecaoEspecialAnomaliasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomalias" onclick="abreFicha(5);">Ficha de Cadastramento de Anomalias - Inspeção Especial</a>
                     </li>
 
+                    <li style="display:none" id="liFichaInspecaoEspecialAnomaliasProvidencias">
+                        <a id="tabFichaInspecaoEspecialAnomaliasProvidenciasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomaliasProvidencias" onclick="abreFicha(7);">Providências</a>
+                    </li>
 
                     <li style="display:none" id="liFichaNotificacaoOcorrencia">
                         <a id="tabFichaNotificacaoOcorrenciaheader" data-toggle="tab" href="#tabFichaNotificacaoOcorrencia" onclick="abreFicha(6);">Ficha de Notificação de Ocorrência</a>
@@ -905,6 +913,28 @@
                             @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="tabFichaInspecaoEspecialAnomaliasProvidencias" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecialAnomaliasProvidencias2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_Providencias&id=999999&ord_id=' + selectedId_ord_id, '_blank');">Imprimir</button>
+                                    @*    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>*@
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Providências</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha7">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
 
                     <div class="tab-pane fade" id="tabFichaNotificacaoOcorrencia" role="tabpanel" aria-labelledby="tabFichaNotificacaoOcorrencia">
                         <br /><br />

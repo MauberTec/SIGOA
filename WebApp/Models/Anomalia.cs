@@ -232,7 +232,6 @@ namespace WebApp.Models
     /// </summary>
     public class InspecaoAnomalia
     {
-                                  //   
 
         /// <summary>
         /// Número da linha, para manter a ordenação 
@@ -348,12 +347,12 @@ namespace WebApp.Models
         /// <summary>
         /// Abertura mímima da anomalia em mm
         /// </summary>
-        public int ian_abertura_minima { get; set; }
+        public Double ian_abertura_minima { get; set; }
 
         /// <summary>
         /// Abertura máxima da anomalia em mm
         /// </summary>
-        public int ian_abertura_maxima { get; set; }
+        public Double ian_abertura_maxima { get; set; }
 
         /// <summary>
         /// Id de causa provável
@@ -442,6 +441,21 @@ namespace WebApp.Models
         /// </summary>
         public decimal ian_quantidade_adotada { get; set; }
 
+
+        /// <summary>
+        /// Id da providencia sugerida
+        /// </summary>
+        public int apt_id { get; set; }
+
+        /// <summary>
+        /// Descrição da providencia sugerida
+        /// </summary>
+        public string apt_descricao { get; set; }
+
+        /// <summary>
+        /// Flag indicador de Reparo Sugerido ou Providencia sugerida
+        /// </summary>
+        public int ehReparoSugerido { get; set; }
 
 
         /// <summary>
@@ -536,7 +550,10 @@ namespace WebApp.Models
         /// </summary>
         public string ins_anom_quadroA_2 { get; set; }
 
-
+        /// <summary>
+        /// Texto de cabecalho se houver
+        /// </summary>
+        public string ehCabecalho { get; set; }
 
 
     }

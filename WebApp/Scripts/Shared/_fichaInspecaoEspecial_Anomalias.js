@@ -21,6 +21,7 @@
         ' <td class="borderLeft " id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft " id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft borderRight" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
+        ' <td class="borderLeft borderRight" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' </tr>';
 
     var linhaObjetos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
@@ -53,11 +54,13 @@
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Desenho_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Desenho_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse borderRight"><input disabled id="txt_Obs_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Obs_VVV" /></td> ' +
 
-        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_ReparoIndicado_ian_id_ZZZ">lbl_ReparoIndicado_VVV</label></td> ' +
+        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_ReparoIndicado_ian_id_ZZZ" title="TOOLTIP_ReparoIndicado_ian_id" >lbl_ReparoIndicado_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ><label class="centroH txts2" id="lbl_QuantidadeIndicada_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicada_VVV</label><label class="centroH txts2" id="lbl_QuantidadeIndicadaUnidade_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicadaUnidade_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><select disabled id="cmb_ReparoAdotado_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_ReparoAdotado" >OPCOES_cmb_ReparoAdotado</select></td> ' +
         //' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_ReparoAdotado_ian_id_ZZZ" class="centroH" style="width:94%;" value="txt_ReparoAdotado_VVV" /></td> ' +
         ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_QuantidadeAdotada_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_QuantidadeAdotada_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
+
         ' </tr>';
 
 
@@ -301,10 +304,10 @@ function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
                 opt = opt.replace("selectedXX", "selected");
                 linhaAux = linhaAux.replace(tooltip, aux[1]);
             }
-            else {
-                opt = opt.replace("selectedXX", "");
-                linhaAux = linhaAux.replace(tooltip, aux[1]);
-            }
+            //else {
+            //    opt = opt.replace("selectedXX", "");
+            //    linhaAux = linhaAux.replace(tooltip, aux[1]);
+            //}
             total = total + opt;
         }
     }
@@ -402,9 +405,17 @@ function preenchetblFicha4_CAMPO() {
                     linhaAux = linhaAux.replace(/txt_Croqui_VVV/g, result.data[i].ian_croqui);
                     linhaAux = linhaAux.replace(/txt_Desenho_VVV/g, result.data[i].ian_desenho);
                     linhaAux = linhaAux.replace(/txt_Obs_VVV/g, result.data[i].ian_observacoes);
-                    linhaAux = linhaAux.replace(/lbl_ReparoIndicado_VVV/g, result.data[i].rpt_id_sugerido_codigo);
 
-                    
+                    linhaAux = linhaAux.replace(/lbl_ReparoIndicado_VVV/g, result.data[i].rpt_id_sugerido_codigo);
+                    linhaAux = linhaAux.replace(/TOOLTIP_ReparoIndicado_ian_id/g, result.data[i].rpt_id_sugerido_descricao);
+
+                    if (result.data[i].apt_id == 0) 
+                        linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, '');
+                    else
+                        linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, result.data[i].apt_id);
+
+                    linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
+
                     if (!isNaN((result.data[i].ian_quantidade_adotada)))
                         linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, result.data[i].ian_quantidade_sugerida.toFixed(2));
                     else
@@ -448,7 +459,7 @@ function preenchetblFicha4_CAMPO() {
             celulaPai.insertAdjacentHTML('afterend', linhas);
 
             // coloca mascara no campo quantidade
-            var qts = $('[id^="txt_quantidade_"]');
+            var qts = $('[id^="txt_Quantidade"]');
             for (var i = 0; i < qts.length; i++) {
                 jQuery(qts[i]).attr('placeholder', "000.00");
                 jQuery(qts[i]).mask("999.99");
@@ -461,6 +472,7 @@ function preenchetblFicha4_CAMPO() {
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = '';
 
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = '';
@@ -470,18 +482,21 @@ function preenchetblFicha4_CAMPO() {
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = '';
 
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = '';
 
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = '';
             
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = '';
@@ -500,6 +515,7 @@ function preenchetblFicha4_CAMPO() {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = 'none';
@@ -509,18 +525,21 @@ function preenchetblFicha4_CAMPO() {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = 'none';
@@ -568,6 +587,9 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
     var lbl_QuantidadeIndicadaUnidade_id = "lbl_QuantidadeIndicadaUnidade" + sufixo;
     var lbl_QuantidadeIndicadaUnidade = document.getElementById(lbl_QuantidadeIndicadaUnidade_id);
 
+    // label Providencia Indicada
+    var lbl_Providencia_ian_id = "lbl_Providencia" + sufixo;
+    var lbl_Providencia = document.getElementById(lbl_Providencia_ian_id);
 
     // txt_Quantidade_ian_id_
     var txt_Quantidade_ian_id =  "txt_Quantidade" + sufixo;
@@ -590,39 +612,47 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
     if (Number.isNaN(f_Comprimento))
         f_Comprimento = 0;
 
+    var rpt_area = (f_Comprimento / 100) * (f_Largura / 100);
 
     $.ajax({
         url: '/Inspecao/InspecaoAnomalia_ReparoSugerido',
         type: "POST",
         dataType: "JSON",
-        data: { leg_codigo: leg_codigo, atp_codigo: atp_codigo, ale_codigo: ale_codigo, aca_codigo: aca_codigo },
+        data: { leg_codigo: leg_codigo, atp_codigo: atp_codigo, ale_codigo: ale_codigo, aca_codigo: aca_codigo, rpt_area: rpt_area },
         success: function (result) {
+            lbl_QuantidadeIndicada.innerHTML = "";
+            lbl_ReparoIndicado.innerHTML = "";
+            lbl_ReparoIndicado.title = "";
+            lbl_QuantidadeIndicadaUnidade.innerHTML = "";
+
+            lbl_Providencia.innerHTML = "";
+            lbl_Providencia.title = "";
 
             if (result.data.length > 0) {
-                lbl_ReparoIndicado.innerHTML = result.data[0].rpt_id;
-                lbl_ReparoIndicado.title = result.data[0].rpt_descricao;
-                lbl_QuantidadeIndicadaUnidade.innerHTML = result.data[0].rpt_unidade;
+                if (result.data[0].rpt_codigo != "") {
 
-                switch (result.data[0].rpt_unidade.toUpperCase()) {
-                    case "M":
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
-                        break;
+                    lbl_ReparoIndicado.innerHTML = result.data[0].rpt_id;
+                    lbl_ReparoIndicado.title = result.data[0].rpt_descricao;
+                    lbl_QuantidadeIndicadaUnidade.innerHTML = result.data[0].rpt_unidade;
 
-                    case "M2":
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
-                        break;
+                    switch (result.data[0].rpt_unidade.toUpperCase()) {
+                        case "M":
+                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                            break;
 
-                    default: // UM, UN
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
-                        break;
+                        case "M2":
+                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
+                            break;
+
+                        default: // UM, UN
+                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                            break;
+                    }
                 }
-            }
-            else {
-                lbl_QuantidadeIndicada.innerHTML = "";
-                lbl_ReparoIndicado.innerHTML = "";
-                lbl_ReparoIndicado.title = "";
-                lbl_QuantidadeIndicadaUnidade.innerHTML = "";
-
+                else {
+                    lbl_Providencia.innerHTML = result.data[0].rpt_id;
+                    lbl_Providencia.title = result.data[0].rpt_descricao;
+                }
             }
         }
     });

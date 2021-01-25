@@ -95,7 +95,8 @@ namespace WebApp.Business
         /// <summary>
         /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
-        /// <param name="obj_id">Id do Objeto Selecionado</param>
+        /// <param name="tip_id">Id Tipo do Objeto Selecionado</param>
+        /// <param name="obj_id_tipoOAE">Id Objeto Selecionado</param>
         /// <returns>string</returns>
         public string Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
         {
@@ -884,6 +885,20 @@ namespace WebApp.Business
                 return ex.Message;
             }
         }
+
+
+        /// <summary>
+        /// Lista de Objetos Priorizados
+        /// </summary>
+        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
+        /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <returns>List ObjPriorizacao</returns>
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE)
+        {
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, CodOAE);
+
+        }
+
 
 
     }

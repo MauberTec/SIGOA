@@ -1,0 +1,215 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 160 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(160)); // 160 = id DO MODULO 
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 160 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+}
+
+<h2></h2>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Priorização ..::";
+    }
+</form>
+
+<style>
+    .Centralizado { text-align:center;}
+</style>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-3">
+                    <label class="control-label">Rodovia</label>
+                    <input type="text" class="form-control" id="txtCodRodovia" maxlength="50" >
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">OAE</label>
+                    <input type="text" class="form-control" id="txtCodOAE" maxlength="50">
+
+                </div>
+                <div class="col-sm-3">
+                    @*<label class="control-label">Onerado</label>
+                    <select class="form-control" id="cmbOnerado" name="cmbOnerado" >
+                        <option value="" selected disabled>-- Selecione --</option>
+                        <option value="SIM">SIM</option>
+                        <option value="NÃO">NÃO</option>
+                        <option value="">Todos</option>
+                    </select>*@
+                </div>
+
+
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltroPriorizacao();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroPriorizacao();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <table id="tblPriorizacao">
+                        <thead>
+                            <tr>
+                                <th>pri_id</th>
+                                <th>obj_id</th>
+                                <th  title="Prioridade">Prioridade</th>
+                                <th  title="OAE">OAE</th>
+                                <th  title="Nota Final">Nota Final</th>
+                                <th  title="Nota Estrutura">Nota Estrut</th>
+                                <th title="Nota Durabilidade">Nota Durab</th>
+                                <th title="Nota Funcionalidade">Nota Func</th>
+                                <th title="Nota Importância OAE malha">Nota Import OAE</th>
+                                <th title="Nota VDM">Nota VDM</th>
+                                <th title="Nota Principal Utilização">Nota Princ Util</th>
+                                <th title="Nota Facilidade de Desvio">Nota Facili Desvio</th>
+                                <th title="Nota Gabarito Vertical">Nota Gab Vert</th>
+                                <th title="Nota Gabarito Horizontal">Nota Gab Horiz</th>
+                                <th title="Nota Largura da Plataforma">Nota Larg Plataf</th>
+                                <th title="Nota Agressividade Ambiental">Nota Agres Amb</th>
+                                <th title="Nota Trem Tipo">Nota Trem Tipo</th>
+                                <th title="Nota Barreira de Segurança">Nota Barr de Segur</th>
+                                <th title="Nota Restrição de Treminhões">Restr Tremi nhões</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        @*</div>*@
+    </div>
+</section>
+
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+}
+
+<script src="~/Scripts/Base.js"></script>
+
+
+<script>
+    function LimparFiltroPriorizacao() {
+
+        $('#txtCodRodovia').val("");
+        $('#txtCodOAE').val("");
+      //  $('#cmbOnerado').val("-1");
+        carregaGridPriorizacao();
+
+        return false;
+    }
+
+    function ExecutarFiltroPriorizacao() {
+        carregaGridPriorizacao();
+        return false;
+    }
+
+    function carregaGridPriorizacao() {
+
+        $('#tblPriorizacao').DataTable().ajax.reload();  //false = sem reload na pagina.
+
+    }
+
+
+
+    // montagem do gridview
+    $(document).ready(function () {
+        $('#tblPriorizacao').DataTable({
+            "ajax": {
+                "url": "/Objeto/ObjPriorizacao_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": function (d)
+                {
+                    d.CodRodovia = $('#txtCodRodovia').val();
+                    d.CodOAE = $('#txtCodOAE').val();
+                    //d.mes = $('#cmbMes').val();
+                    //d.onerado = $('#cmbOnerado').val();
+                }
+            }
+            , "columns": [
+                { data: "pri_id", "className": "hide_column", "searchable": false },
+                { data: "obj_id", "className": "hide_column", "searchable": false },
+                { data: "pri_ordem", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "obj_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_funcionalidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_importancia_oae_malha", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_vdm", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_principal_utilizacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_facilidade_desvio", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_gabarito_vertical", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_gabarito_horizontal", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_largura_plataforma", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_agressividade_ambiental", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_trem_tipo", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_barreira_seguranca", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_restricao_treminhoes", "className": "Centralizado", "autoWidth": true, "searchable": true }
+            ]
+            , "order": [2, "asc"]
+            , 'columnDefs': [
+                {
+                    targets: [3] // dcl_codigo
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["obj_descricao"]);
+                    }
+                }
+            ]
+
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+        });
+
+
+        // coloca mascara nos campos txt de alguns checkboxes
+        //jQuery('#txtAno').mask('0000');
+        //$("#txtAno").attr('placeholder', "0000");
+    });
+
+
+</script>
+

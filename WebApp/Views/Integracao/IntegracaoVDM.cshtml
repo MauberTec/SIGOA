@@ -1,0 +1,268 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 810 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(810)); // 810 = id DO MODULO "IntegracaoVDM"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 810 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+}
+
+<h2></h2>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Integração DER - VDMs ..::";
+    }
+</form>
+
+<style>
+    .Centralizado { text-align:center;}
+</style>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <label class="control-label">Rodovia<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="txtCodRodovia" maxlength="20" onkeyup=" $('#txtCodRodovia').css('background-color', corBranca)" placeholder="Codigo da Rodovia, por ex. SP 270" >
+                </div>
+
+                <div class="col-sm-4">
+                    <label class="control-label">Km Inicial<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="txtKmInicial" maxlength="3"  onkeyup=" $('#txtKmInicial').css('background-color', corBranca)"  placeholder="Digite o Km Inicial" >
+                </div>
+                <div class="col-sm-4">
+                    <label class="control-label">Km Final<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="txtKmFinal" maxlength="3"  onkeyup=" $('#txtKmFinal').css('background-color', corBranca)"  placeholder="Digite o Km Final" >
+                </div>
+
+
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltroVDM();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroVDM();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <table id="tblRodovias">
+                        <thead>
+                            <tr>
+                                <th>Ano</th>
+                                <th>Rodovia</th>
+                                <th>Numero</th>
+                                <th>Km Inicial</th>
+                                <th>Km Final</th>
+                                <th>Sentido 1</th>
+                                <th>Valor 1</th>
+                                <th>Sentido 2</th>
+                                <th>Valor 2</th>
+                                <th>Bidirecional</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        @*</div>*@
+    </div>
+</section>
+
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+}
+
+<script src="~/Scripts/Base.js"></script>
+
+
+<script>
+    var corVermelho = "rgb(228, 88, 71)";
+    var corBranca = "rgb(255, 255, 255)";
+
+    function LimparFiltroVDM() {
+
+        $('#txtCodRodovia').val("");
+        $('#txtKmInicial').val("");
+        $('#txtKmFinal').val("");
+
+        $('#txtCodRodovia').css('background-color', corBranca);
+        $('#txtKmInicial').css('background-color', corBranca);
+        $('#txtKmFinal').css('background-color', corBranca);
+
+        carregaGridVDM();
+
+
+        return false;
+    }
+
+    function ExecutarFiltroVDM() {
+        var txtCodRodovia =  $('#txtCodRodovia').val();
+        var txtKmInicial = $('#txtKmInicial').val();
+        var txtKmFinal = $('#txtKmFinal').val();
+
+        if (txtCodRodovia.trim() == "") {
+            $('#txtCodRodovia').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Código da Rodovia Obrigatório'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+       
+        if (!Number.isInteger(parseInt(txtKmInicial))) {
+            $('#txtCodRodovia').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Km Inicial Obrigatório'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+        
+        if (!Number.isInteger(parseInt(txtKmFinal))) {
+            $('#txtCodRodovia').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Km Final Obrigatório'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+       
+        if (parseInt(txtKmFinal) < parseInt(txtKmInicial)) {
+            $('#txtCodRodovia').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Km Final menor que Km Inicial'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+
+
+        carregaGridVDM();
+        return false;
+    }
+
+    function carregaGridVDM() {
+
+        $('#txtCodRodovia').css('background-color', corBranca);
+        $('#txtKmInicial').css('background-color', corBranca);
+        $('#txtKmFinal').css('background-color', corBranca);
+
+        $('#tblRodovias').DataTable().ajax.reload();  //false = sem reload na pagina.
+
+    }
+
+
+
+    // montagem do gridview
+    $(document).ready(function () {
+        $('#tblRodovias').DataTable({
+            "ajax": {
+                "url": "/Integracao/Integracao_VDMs_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": function (d)
+                {
+                    d.rod_codigo= $('#txtCodRodovia').val().trim();
+                    d.kminicial= $('#txtKmInicial').val().trim();
+                    d.kmfinal = $('#txtKmFinal').val().trim();
+                }
+            }
+            , "columns": [
+                { data: "vdm_ano", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "vdm_rodovia", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "pcl_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "pcl_kminicial", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "pcl_kmfinal", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "vdm_sentido1", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "vdm_valor1", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "vdm_sentido2", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "vdm_valor2", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "vdm_bidirecional", "className": "Centralizado", "autoWidth": true, "searchable": false }
+            ]
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+            ,"createdRow": function (row, data, dataIndex) {
+                if (parseInt(data.vdm_ano) == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: data.vdm_rodovia
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                }
+            }
+        });
+
+
+        // coloca mascara nos campos txt de alguns checkboxes
+    //    jQuery('#txtCodRodovia').mask('SP 000');
+        jQuery('#txtKmInicial').mask('999.9');
+        jQuery('#txtKmFinal').mask('990.9');
+
+        $("#txtKmInicial").attr('placeholder', "000.0");
+        $("#txtKmFinal").attr('placeholder', "000.0");
+    });
+
+
+</script>
+

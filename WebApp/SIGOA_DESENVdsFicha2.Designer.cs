@@ -26,6 +26,8 @@ namespace WebApp {
         
         private STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable tableSTP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES;
         
+        private STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS;
+        
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -57,6 +59,9 @@ namespace WebApp {
                 if ((ds.Tables["STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES"] != null)) {
                     base.Tables.Add(new STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable(ds.Tables["STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES"]));
                 }
+                if ((ds.Tables["STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS"] != null)) {
+                    base.Tables.Add(new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable(ds.Tables["STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -82,6 +87,16 @@ namespace WebApp {
         public STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES {
             get {
                 return this.tableSTP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Browsable(false)]
+        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS {
+            get {
+                return this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS;
             }
         }
         
@@ -155,6 +170,9 @@ namespace WebApp {
                 if ((ds.Tables["STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES"] != null)) {
                     base.Tables.Add(new STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable(ds.Tables["STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES"]));
                 }
+                if ((ds.Tables["STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS"] != null)) {
+                    base.Tables.Add(new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable(ds.Tables["STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -194,6 +212,12 @@ namespace WebApp {
                     this.tableSTP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES.InitVars();
                 }
             }
+            this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS = ((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable)(base.Tables["STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS"]));
+            if ((initTable == true)) {
+                if ((this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS != null)) {
+                    this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.InitVars();
+                }
+            }
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -206,11 +230,19 @@ namespace WebApp {
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableSTP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES = new STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable();
             base.Tables.Add(this.tableSTP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES);
+            this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS = new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable();
+            base.Tables.Add(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         private bool ShouldSerializeSTP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES() {
+            return false;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private bool ShouldSerializeSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS() {
             return false;
         }
         
@@ -271,6 +303,9 @@ namespace WebApp {
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
         public delegate void STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESRowChangeEventHandler(object sender, STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESRowChangeEvent e);
+        
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public delegate void STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEventHandler(object sender, STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
@@ -909,6 +944,1146 @@ namespace WebApp {
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
                 attribute2.FixedValue = "STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
+                if (xs.Contains(dsSchema.TargetNamespace)) {
+                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
+                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
+                    try {
+                        global::System.Xml.Schema.XmlSchema schema = null;
+                        dsSchema.Write(s1);
+                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
+                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
+                            s2.SetLength(0);
+                            schema.Write(s2);
+                            if ((s1.Length == s2.Length)) {
+                                s1.Position = 0;
+                                s2.Position = 0;
+                                for (; ((s1.Position != s1.Length) 
+                                            && (s1.ReadByte() == s2.ReadByte())); ) {
+                                    ;
+                                }
+                                if ((s1.Position == s1.Length)) {
+                                    return type;
+                                }
+                            }
+                        }
+                    }
+                    finally {
+                        if ((s1 != null)) {
+                            s1.Close();
+                        }
+                        if ((s2 != null)) {
+                            s2.Close();
+                        }
+                    }
+                }
+                xs.Add(dsSchema);
+                return type;
+            }
+        }
+        
+        /// <summary>
+        ///Represents the strongly named DataTable class.
+        ///</summary>
+        [global::System.Serializable()]
+        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable : global::System.Data.TypedTableBase<STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow> {
+            
+            private global::System.Data.DataColumn columnobj_codigo_TipoOAE;
+            
+            private global::System.Data.DataColumn columnins_anom_Responsavel;
+            
+            private global::System.Data.DataColumn columnins_anom_data;
+            
+            private global::System.Data.DataColumn columncol_Localizacao;
+            
+            private global::System.Data.DataColumn columnclo_id;
+            
+            private global::System.Data.DataColumn columnclo_nome;
+            
+            private global::System.Data.DataColumn columntip_id;
+            
+            private global::System.Data.DataColumn columntip_nome;
+            
+            private global::System.Data.DataColumn columnobj_id;
+            
+            private global::System.Data.DataColumn columnobj_codigo;
+            
+            private global::System.Data.DataColumn columnobj_descricao;
+            
+            private global::System.Data.DataColumn columnian_id;
+            
+            private global::System.Data.DataColumn columnobj_id1;
+            
+            private global::System.Data.DataColumn columnins_id;
+            
+            private global::System.Data.DataColumn columnian_numero;
+            
+            private global::System.Data.DataColumn columnatp_id;
+            
+            private global::System.Data.DataColumn columnian_sigla;
+            
+            private global::System.Data.DataColumn columnale_id;
+            
+            private global::System.Data.DataColumn columnian_quantidade;
+            
+            private global::System.Data.DataColumn columnian_espacamento;
+            
+            private global::System.Data.DataColumn columnian_largura;
+            
+            private global::System.Data.DataColumn columnian_comprimento;
+            
+            private global::System.Data.DataColumn columnian_abertura_minima;
+            
+            private global::System.Data.DataColumn columnian_abertura_maxima;
+            
+            private global::System.Data.DataColumn columnaca_id;
+            
+            private global::System.Data.DataColumn columnian_fotografia;
+            
+            private global::System.Data.DataColumn columnian_desenho;
+            
+            private global::System.Data.DataColumn columnian_observacoes;
+            
+            private global::System.Data.DataColumn columnleg_id;
+            
+            private global::System.Data.DataColumn columnian_ativo;
+            
+            private global::System.Data.DataColumn columnian_deletado;
+            
+            private global::System.Data.DataColumn columnian_data_criacao;
+            
+            private global::System.Data.DataColumn columnian_criado_por;
+            
+            private global::System.Data.DataColumn columnian_data_atualizacao;
+            
+            private global::System.Data.DataColumn columnian_atualizado_por;
+            
+            private global::System.Data.DataColumn columnian_croqui;
+            
+            private global::System.Data.DataColumn columnian_quantidade_adotada;
+            
+            private global::System.Data.DataColumn columnian_quantidade_sugerida;
+            
+            private global::System.Data.DataColumn columnrpt_id_adotado;
+            
+            private global::System.Data.DataColumn columnrpt_id_sugerido;
+            
+            private global::System.Data.DataColumn columnins_id1;
+            
+            private global::System.Data.DataColumn columnatp_codigo;
+            
+            private global::System.Data.DataColumn columnatp_descricao;
+            
+            private global::System.Data.DataColumn columnale_codigo;
+            
+            private global::System.Data.DataColumn columnale_descricao;
+            
+            private global::System.Data.DataColumn columnaca_codigo;
+            
+            private global::System.Data.DataColumn columnaca_descricao;
+            
+            private global::System.Data.DataColumn columnleg_codigo;
+            
+            private global::System.Data.DataColumn columnleg_descricao;
+            
+            private global::System.Data.DataColumn columnapt_id;
+            
+            private global::System.Data.DataColumn columnapt_descricao;
+            
+            private global::System.Data.DataColumn columnlstLegendas;
+            
+            private global::System.Data.DataColumn columnlstAlertas;
+            
+            private global::System.Data.DataColumn columnlstCausas;
+            
+            private global::System.Data.DataColumn columnlstTipos;
+            
+            private global::System.Data.DataColumn columnehCabecalho;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable() {
+                this.TableName = "STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            internal STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable(global::System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn obj_codigo_TipoOAEColumn {
+                get {
+                    return this.columnobj_codigo_TipoOAE;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ins_anom_ResponsavelColumn {
+                get {
+                    return this.columnins_anom_Responsavel;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ins_anom_dataColumn {
+                get {
+                    return this.columnins_anom_data;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn col_LocalizacaoColumn {
+                get {
+                    return this.columncol_Localizacao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn clo_idColumn {
+                get {
+                    return this.columnclo_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn clo_nomeColumn {
+                get {
+                    return this.columnclo_nome;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn tip_idColumn {
+                get {
+                    return this.columntip_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn tip_nomeColumn {
+                get {
+                    return this.columntip_nome;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn obj_idColumn {
+                get {
+                    return this.columnobj_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn obj_codigoColumn {
+                get {
+                    return this.columnobj_codigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn obj_descricaoColumn {
+                get {
+                    return this.columnobj_descricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_idColumn {
+                get {
+                    return this.columnian_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn obj_id1Column {
+                get {
+                    return this.columnobj_id1;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ins_idColumn {
+                get {
+                    return this.columnins_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_numeroColumn {
+                get {
+                    return this.columnian_numero;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn atp_idColumn {
+                get {
+                    return this.columnatp_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_siglaColumn {
+                get {
+                    return this.columnian_sigla;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ale_idColumn {
+                get {
+                    return this.columnale_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_quantidadeColumn {
+                get {
+                    return this.columnian_quantidade;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_espacamentoColumn {
+                get {
+                    return this.columnian_espacamento;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_larguraColumn {
+                get {
+                    return this.columnian_largura;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_comprimentoColumn {
+                get {
+                    return this.columnian_comprimento;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_abertura_minimaColumn {
+                get {
+                    return this.columnian_abertura_minima;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_abertura_maximaColumn {
+                get {
+                    return this.columnian_abertura_maxima;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn aca_idColumn {
+                get {
+                    return this.columnaca_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_fotografiaColumn {
+                get {
+                    return this.columnian_fotografia;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_desenhoColumn {
+                get {
+                    return this.columnian_desenho;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_observacoesColumn {
+                get {
+                    return this.columnian_observacoes;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn leg_idColumn {
+                get {
+                    return this.columnleg_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_ativoColumn {
+                get {
+                    return this.columnian_ativo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_deletadoColumn {
+                get {
+                    return this.columnian_deletado;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_data_criacaoColumn {
+                get {
+                    return this.columnian_data_criacao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_criado_porColumn {
+                get {
+                    return this.columnian_criado_por;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_data_atualizacaoColumn {
+                get {
+                    return this.columnian_data_atualizacao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_atualizado_porColumn {
+                get {
+                    return this.columnian_atualizado_por;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_croquiColumn {
+                get {
+                    return this.columnian_croqui;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_quantidade_adotadaColumn {
+                get {
+                    return this.columnian_quantidade_adotada;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ian_quantidade_sugeridaColumn {
+                get {
+                    return this.columnian_quantidade_sugerida;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn rpt_id_adotadoColumn {
+                get {
+                    return this.columnrpt_id_adotado;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn rpt_id_sugeridoColumn {
+                get {
+                    return this.columnrpt_id_sugerido;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ins_id1Column {
+                get {
+                    return this.columnins_id1;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn atp_codigoColumn {
+                get {
+                    return this.columnatp_codigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn atp_descricaoColumn {
+                get {
+                    return this.columnatp_descricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ale_codigoColumn {
+                get {
+                    return this.columnale_codigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ale_descricaoColumn {
+                get {
+                    return this.columnale_descricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn aca_codigoColumn {
+                get {
+                    return this.columnaca_codigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn aca_descricaoColumn {
+                get {
+                    return this.columnaca_descricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn leg_codigoColumn {
+                get {
+                    return this.columnleg_codigo;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn leg_descricaoColumn {
+                get {
+                    return this.columnleg_descricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn apt_idColumn {
+                get {
+                    return this.columnapt_id;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn apt_descricaoColumn {
+                get {
+                    return this.columnapt_descricao;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn lstLegendasColumn {
+                get {
+                    return this.columnlstLegendas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn lstAlertasColumn {
+                get {
+                    return this.columnlstAlertas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn lstCausasColumn {
+                get {
+                    return this.columnlstCausas;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn lstTiposColumn {
+                get {
+                    return this.columnlstTipos;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn ehCabecalhoColumn {
+                get {
+                    return this.columnehCabecalho;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            [global::System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow this[int index] {
+                get {
+                    return ((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(this.Rows[index]));
+                }
+            }
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEventHandler STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChanging;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEventHandler STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChanged;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEventHandler STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowDeleting;
+            
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public event STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEventHandler STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowDeleted;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void AddSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow(STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow AddSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow(
+                        string obj_codigo_TipoOAE, 
+                        string ins_anom_Responsavel, 
+                        string ins_anom_data, 
+                        string col_Localizacao, 
+                        int clo_id, 
+                        string clo_nome, 
+                        int tip_id, 
+                        string tip_nome, 
+                        long obj_id, 
+                        string obj_codigo, 
+                        string obj_descricao, 
+                        int ian_id, 
+                        long obj_id1, 
+                        long ins_id, 
+                        int ian_numero, 
+                        int atp_id, 
+                        string ian_sigla, 
+                        int ale_id, 
+                        int ian_quantidade, 
+                        int ian_espacamento, 
+                        int ian_largura, 
+                        int ian_comprimento, 
+                        float ian_abertura_minima, 
+                        float ian_abertura_maxima, 
+                        int aca_id, 
+                        string ian_fotografia, 
+                        string ian_desenho, 
+                        string ian_observacoes, 
+                        int leg_id, 
+                        bool ian_ativo, 
+                        System.DateTime ian_deletado, 
+                        System.DateTime ian_data_criacao, 
+                        int ian_criado_por, 
+                        System.DateTime ian_data_atualizacao, 
+                        int ian_atualizado_por, 
+                        string ian_croqui, 
+                        float ian_quantidade_adotada, 
+                        float ian_quantidade_sugerida, 
+                        int rpt_id_adotado, 
+                        int rpt_id_sugerido, 
+                        long ins_id1, 
+                        int atp_codigo, 
+                        string atp_descricao, 
+                        string ale_codigo, 
+                        string ale_descricao, 
+                        string aca_codigo, 
+                        string aca_descricao, 
+                        string leg_codigo, 
+                        string leg_descricao, 
+                        int apt_id, 
+                        string apt_descricao, 
+                        string lstLegendas, 
+                        string lstAlertas, 
+                        string lstCausas, 
+                        string lstTipos, 
+                        string ehCabecalho) {
+                STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow rowSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow = ((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(this.NewRow()));
+                object[] columnValuesArray = new object[] {
+                        obj_codigo_TipoOAE,
+                        ins_anom_Responsavel,
+                        ins_anom_data,
+                        col_Localizacao,
+                        clo_id,
+                        clo_nome,
+                        tip_id,
+                        tip_nome,
+                        obj_id,
+                        obj_codigo,
+                        obj_descricao,
+                        ian_id,
+                        obj_id1,
+                        ins_id,
+                        ian_numero,
+                        atp_id,
+                        ian_sigla,
+                        ale_id,
+                        ian_quantidade,
+                        ian_espacamento,
+                        ian_largura,
+                        ian_comprimento,
+                        ian_abertura_minima,
+                        ian_abertura_maxima,
+                        aca_id,
+                        ian_fotografia,
+                        ian_desenho,
+                        ian_observacoes,
+                        leg_id,
+                        ian_ativo,
+                        ian_deletado,
+                        ian_data_criacao,
+                        ian_criado_por,
+                        ian_data_atualizacao,
+                        ian_atualizado_por,
+                        ian_croqui,
+                        ian_quantidade_adotada,
+                        ian_quantidade_sugerida,
+                        rpt_id_adotado,
+                        rpt_id_sugerido,
+                        ins_id1,
+                        atp_codigo,
+                        atp_descricao,
+                        ale_codigo,
+                        ale_descricao,
+                        aca_codigo,
+                        aca_descricao,
+                        leg_codigo,
+                        leg_descricao,
+                        apt_id,
+                        apt_descricao,
+                        lstLegendas,
+                        lstAlertas,
+                        lstCausas,
+                        lstTipos,
+                        ehCabecalho};
+                rowSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow);
+                return rowSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public override global::System.Data.DataTable Clone() {
+                STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable cln = ((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override global::System.Data.DataTable CreateInstance() {
+                return new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable();
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            internal void InitVars() {
+                this.columnobj_codigo_TipoOAE = base.Columns["obj_codigo_TipoOAE"];
+                this.columnins_anom_Responsavel = base.Columns["ins_anom_Responsavel"];
+                this.columnins_anom_data = base.Columns["ins_anom_data"];
+                this.columncol_Localizacao = base.Columns["col_Localizacao"];
+                this.columnclo_id = base.Columns["clo_id"];
+                this.columnclo_nome = base.Columns["clo_nome"];
+                this.columntip_id = base.Columns["tip_id"];
+                this.columntip_nome = base.Columns["tip_nome"];
+                this.columnobj_id = base.Columns["obj_id"];
+                this.columnobj_codigo = base.Columns["obj_codigo"];
+                this.columnobj_descricao = base.Columns["obj_descricao"];
+                this.columnian_id = base.Columns["ian_id"];
+                this.columnobj_id1 = base.Columns["obj_id1"];
+                this.columnins_id = base.Columns["ins_id"];
+                this.columnian_numero = base.Columns["ian_numero"];
+                this.columnatp_id = base.Columns["atp_id"];
+                this.columnian_sigla = base.Columns["ian_sigla"];
+                this.columnale_id = base.Columns["ale_id"];
+                this.columnian_quantidade = base.Columns["ian_quantidade"];
+                this.columnian_espacamento = base.Columns["ian_espacamento"];
+                this.columnian_largura = base.Columns["ian_largura"];
+                this.columnian_comprimento = base.Columns["ian_comprimento"];
+                this.columnian_abertura_minima = base.Columns["ian_abertura_minima"];
+                this.columnian_abertura_maxima = base.Columns["ian_abertura_maxima"];
+                this.columnaca_id = base.Columns["aca_id"];
+                this.columnian_fotografia = base.Columns["ian_fotografia"];
+                this.columnian_desenho = base.Columns["ian_desenho"];
+                this.columnian_observacoes = base.Columns["ian_observacoes"];
+                this.columnleg_id = base.Columns["leg_id"];
+                this.columnian_ativo = base.Columns["ian_ativo"];
+                this.columnian_deletado = base.Columns["ian_deletado"];
+                this.columnian_data_criacao = base.Columns["ian_data_criacao"];
+                this.columnian_criado_por = base.Columns["ian_criado_por"];
+                this.columnian_data_atualizacao = base.Columns["ian_data_atualizacao"];
+                this.columnian_atualizado_por = base.Columns["ian_atualizado_por"];
+                this.columnian_croqui = base.Columns["ian_croqui"];
+                this.columnian_quantidade_adotada = base.Columns["ian_quantidade_adotada"];
+                this.columnian_quantidade_sugerida = base.Columns["ian_quantidade_sugerida"];
+                this.columnrpt_id_adotado = base.Columns["rpt_id_adotado"];
+                this.columnrpt_id_sugerido = base.Columns["rpt_id_sugerido"];
+                this.columnins_id1 = base.Columns["ins_id1"];
+                this.columnatp_codigo = base.Columns["atp_codigo"];
+                this.columnatp_descricao = base.Columns["atp_descricao"];
+                this.columnale_codigo = base.Columns["ale_codigo"];
+                this.columnale_descricao = base.Columns["ale_descricao"];
+                this.columnaca_codigo = base.Columns["aca_codigo"];
+                this.columnaca_descricao = base.Columns["aca_descricao"];
+                this.columnleg_codigo = base.Columns["leg_codigo"];
+                this.columnleg_descricao = base.Columns["leg_descricao"];
+                this.columnapt_id = base.Columns["apt_id"];
+                this.columnapt_descricao = base.Columns["apt_descricao"];
+                this.columnlstLegendas = base.Columns["lstLegendas"];
+                this.columnlstAlertas = base.Columns["lstAlertas"];
+                this.columnlstCausas = base.Columns["lstCausas"];
+                this.columnlstTipos = base.Columns["lstTipos"];
+                this.columnehCabecalho = base.Columns["ehCabecalho"];
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            private void InitClass() {
+                this.columnobj_codigo_TipoOAE = new global::System.Data.DataColumn("obj_codigo_TipoOAE", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnobj_codigo_TipoOAE);
+                this.columnins_anom_Responsavel = new global::System.Data.DataColumn("ins_anom_Responsavel", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnins_anom_Responsavel);
+                this.columnins_anom_data = new global::System.Data.DataColumn("ins_anom_data", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnins_anom_data);
+                this.columncol_Localizacao = new global::System.Data.DataColumn("col_Localizacao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columncol_Localizacao);
+                this.columnclo_id = new global::System.Data.DataColumn("clo_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnclo_id);
+                this.columnclo_nome = new global::System.Data.DataColumn("clo_nome", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnclo_nome);
+                this.columntip_id = new global::System.Data.DataColumn("tip_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columntip_id);
+                this.columntip_nome = new global::System.Data.DataColumn("tip_nome", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columntip_nome);
+                this.columnobj_id = new global::System.Data.DataColumn("obj_id", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnobj_id);
+                this.columnobj_codigo = new global::System.Data.DataColumn("obj_codigo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnobj_codigo);
+                this.columnobj_descricao = new global::System.Data.DataColumn("obj_descricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnobj_descricao);
+                this.columnian_id = new global::System.Data.DataColumn("ian_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_id);
+                this.columnobj_id1 = new global::System.Data.DataColumn("obj_id1", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnobj_id1);
+                this.columnins_id = new global::System.Data.DataColumn("ins_id", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnins_id);
+                this.columnian_numero = new global::System.Data.DataColumn("ian_numero", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_numero);
+                this.columnatp_id = new global::System.Data.DataColumn("atp_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnatp_id);
+                this.columnian_sigla = new global::System.Data.DataColumn("ian_sigla", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_sigla);
+                this.columnale_id = new global::System.Data.DataColumn("ale_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnale_id);
+                this.columnian_quantidade = new global::System.Data.DataColumn("ian_quantidade", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_quantidade);
+                this.columnian_espacamento = new global::System.Data.DataColumn("ian_espacamento", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_espacamento);
+                this.columnian_largura = new global::System.Data.DataColumn("ian_largura", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_largura);
+                this.columnian_comprimento = new global::System.Data.DataColumn("ian_comprimento", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_comprimento);
+                this.columnian_abertura_minima = new global::System.Data.DataColumn("ian_abertura_minima", typeof(float), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_abertura_minima);
+                this.columnian_abertura_maxima = new global::System.Data.DataColumn("ian_abertura_maxima", typeof(float), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_abertura_maxima);
+                this.columnaca_id = new global::System.Data.DataColumn("aca_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnaca_id);
+                this.columnian_fotografia = new global::System.Data.DataColumn("ian_fotografia", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_fotografia);
+                this.columnian_desenho = new global::System.Data.DataColumn("ian_desenho", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_desenho);
+                this.columnian_observacoes = new global::System.Data.DataColumn("ian_observacoes", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_observacoes);
+                this.columnleg_id = new global::System.Data.DataColumn("leg_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnleg_id);
+                this.columnian_ativo = new global::System.Data.DataColumn("ian_ativo", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_ativo);
+                this.columnian_deletado = new global::System.Data.DataColumn("ian_deletado", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_deletado);
+                this.columnian_data_criacao = new global::System.Data.DataColumn("ian_data_criacao", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_data_criacao);
+                this.columnian_criado_por = new global::System.Data.DataColumn("ian_criado_por", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_criado_por);
+                this.columnian_data_atualizacao = new global::System.Data.DataColumn("ian_data_atualizacao", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_data_atualizacao);
+                this.columnian_atualizado_por = new global::System.Data.DataColumn("ian_atualizado_por", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_atualizado_por);
+                this.columnian_croqui = new global::System.Data.DataColumn("ian_croqui", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_croqui);
+                this.columnian_quantidade_adotada = new global::System.Data.DataColumn("ian_quantidade_adotada", typeof(float), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_quantidade_adotada);
+                this.columnian_quantidade_sugerida = new global::System.Data.DataColumn("ian_quantidade_sugerida", typeof(float), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnian_quantidade_sugerida);
+                this.columnrpt_id_adotado = new global::System.Data.DataColumn("rpt_id_adotado", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnrpt_id_adotado);
+                this.columnrpt_id_sugerido = new global::System.Data.DataColumn("rpt_id_sugerido", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnrpt_id_sugerido);
+                this.columnins_id1 = new global::System.Data.DataColumn("ins_id1", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnins_id1);
+                this.columnatp_codigo = new global::System.Data.DataColumn("atp_codigo", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnatp_codigo);
+                this.columnatp_descricao = new global::System.Data.DataColumn("atp_descricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnatp_descricao);
+                this.columnale_codigo = new global::System.Data.DataColumn("ale_codigo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnale_codigo);
+                this.columnale_descricao = new global::System.Data.DataColumn("ale_descricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnale_descricao);
+                this.columnaca_codigo = new global::System.Data.DataColumn("aca_codigo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnaca_codigo);
+                this.columnaca_descricao = new global::System.Data.DataColumn("aca_descricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnaca_descricao);
+                this.columnleg_codigo = new global::System.Data.DataColumn("leg_codigo", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnleg_codigo);
+                this.columnleg_descricao = new global::System.Data.DataColumn("leg_descricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnleg_descricao);
+                this.columnapt_id = new global::System.Data.DataColumn("apt_id", typeof(int), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnapt_id);
+                this.columnapt_descricao = new global::System.Data.DataColumn("apt_descricao", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnapt_descricao);
+                this.columnlstLegendas = new global::System.Data.DataColumn("lstLegendas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnlstLegendas);
+                this.columnlstAlertas = new global::System.Data.DataColumn("lstAlertas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnlstAlertas);
+                this.columnlstCausas = new global::System.Data.DataColumn("lstCausas", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnlstCausas);
+                this.columnlstTipos = new global::System.Data.DataColumn("lstTipos", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnlstTipos);
+                this.columnehCabecalho = new global::System.Data.DataColumn("ehCabecalho", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnehCabecalho);
+                this.columnobj_codigo_TipoOAE.ReadOnly = true;
+                this.columnobj_codigo_TipoOAE.MaxLength = 50;
+                this.columnins_anom_Responsavel.ReadOnly = true;
+                this.columnins_anom_Responsavel.MaxLength = 255;
+                this.columnins_anom_data.ReadOnly = true;
+                this.columnins_anom_data.MaxLength = 15;
+                this.columncol_Localizacao.ReadOnly = true;
+                this.columncol_Localizacao.MaxLength = 255;
+                this.columnclo_id.AllowDBNull = false;
+                this.columnclo_nome.AllowDBNull = false;
+                this.columnclo_nome.MaxLength = 50;
+                this.columntip_id.AllowDBNull = false;
+                this.columntip_nome.AllowDBNull = false;
+                this.columntip_nome.MaxLength = 150;
+                this.columnobj_id.AllowDBNull = false;
+                this.columnobj_codigo.AllowDBNull = false;
+                this.columnobj_codigo.MaxLength = 200;
+                this.columnobj_descricao.AllowDBNull = false;
+                this.columnobj_descricao.MaxLength = 255;
+                this.columnian_id.AllowDBNull = false;
+                this.columnobj_id1.AllowDBNull = false;
+                this.columnins_id.AllowDBNull = false;
+                this.columnian_numero.AllowDBNull = false;
+                this.columnatp_id.AllowDBNull = false;
+                this.columnian_sigla.AllowDBNull = false;
+                this.columnian_sigla.MaxLength = 2;
+                this.columnale_id.AllowDBNull = false;
+                this.columnian_quantidade.AllowDBNull = false;
+                this.columnian_espacamento.AllowDBNull = false;
+                this.columnian_largura.AllowDBNull = false;
+                this.columnian_comprimento.AllowDBNull = false;
+                this.columnian_abertura_minima.AllowDBNull = false;
+                this.columnian_abertura_maxima.AllowDBNull = false;
+                this.columnaca_id.AllowDBNull = false;
+                this.columnian_fotografia.MaxLength = 255;
+                this.columnian_desenho.MaxLength = 255;
+                this.columnian_observacoes.MaxLength = 255;
+                this.columnleg_id.AllowDBNull = false;
+                this.columnian_croqui.MaxLength = 255;
+                this.columnins_id1.AllowDBNull = false;
+                this.columnatp_descricao.AllowDBNull = false;
+                this.columnatp_descricao.MaxLength = 255;
+                this.columnale_codigo.AllowDBNull = false;
+                this.columnale_codigo.MaxLength = 10;
+                this.columnale_descricao.AllowDBNull = false;
+                this.columnale_descricao.MaxLength = 255;
+                this.columnaca_codigo.AllowDBNull = false;
+                this.columnaca_codigo.MaxLength = 10;
+                this.columnaca_descricao.AllowDBNull = false;
+                this.columnaca_descricao.MaxLength = 255;
+                this.columnleg_codigo.AllowDBNull = false;
+                this.columnleg_codigo.MaxLength = 10;
+                this.columnleg_descricao.AllowDBNull = false;
+                this.columnleg_descricao.MaxLength = 255;
+                this.columnapt_id.AllowDBNull = false;
+                this.columnapt_descricao.AllowDBNull = false;
+                this.columnapt_descricao.MaxLength = 255;
+                this.columnlstLegendas.ReadOnly = true;
+                this.columnlstLegendas.MaxLength = 2147483647;
+                this.columnlstAlertas.ReadOnly = true;
+                this.columnlstAlertas.MaxLength = 2147483647;
+                this.columnlstCausas.ReadOnly = true;
+                this.columnlstCausas.MaxLength = 2147483647;
+                this.columnlstTipos.ReadOnly = true;
+                this.columnlstTipos.MaxLength = 2147483647;
+                this.columnehCabecalho.ReadOnly = true;
+                this.columnehCabecalho.MaxLength = 1;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow NewSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow() {
+                return ((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(this.NewRow()));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
+                return new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow(builder);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override global::System.Type GetRowType() {
+                return typeof(STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChanged != null)) {
+                    this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChanged(this, new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent(((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChanging != null)) {
+                    this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChanging(this, new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent(((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowDeleted != null)) {
+                    this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowDeleted(this, new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent(((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowDeleting != null)) {
+                    this.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowDeleting(this, new STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent(((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void RemoveSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow(STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
+                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
+                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
+                SIGOA_DESENVdsFicha2 ds = new SIGOA_DESENVdsFicha2();
+                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -1748,6 +2923,1069 @@ namespace WebApp {
         }
         
         /// <summary>
+        ///Represents strongly named DataRow class.
+        ///</summary>
+        public partial class STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow : global::System.Data.DataRow {
+            
+            private STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            internal STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow(global::System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS = ((STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable)(this.Table));
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string obj_codigo_TipoOAE {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_codigo_TipoOAEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'obj_codigo_TipoOAE\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VA" +
+                                "LORES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_codigo_TipoOAEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ins_anom_Responsavel {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_ResponsavelColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ins_anom_Responsavel\' in table \'STP_SEL_INSPECAO_ANOMALIAS_" +
+                                "VALORES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_ResponsavelColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ins_anom_data {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_dataColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ins_anom_data\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES" +
+                                "_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_dataColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string col_Localizacao {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.col_LocalizacaoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'col_Localizacao\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALOR" +
+                                "ES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.col_LocalizacaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int clo_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.clo_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.clo_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string clo_nome {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.clo_nomeColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.clo_nomeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int tip_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.tip_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.tip_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string tip_nome {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.tip_nomeColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.tip_nomeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public long obj_id {
+                get {
+                    return ((long)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string obj_codigo {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_codigoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_codigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string obj_descricao {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_descricaoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_descricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public long obj_id1 {
+                get {
+                    return ((long)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_id1Column]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_id1Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public long ins_id {
+                get {
+                    return ((long)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_numero {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_numeroColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_numeroColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int atp_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ian_sigla {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_siglaColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_siglaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ale_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ale_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ale_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_quantidade {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidadeColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidadeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_espacamento {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_espacamentoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_espacamentoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_largura {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_larguraColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_larguraColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_comprimento {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_comprimentoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_comprimentoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public float ian_abertura_minima {
+                get {
+                    return ((float)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_abertura_minimaColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_abertura_minimaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public float ian_abertura_maxima {
+                get {
+                    return ((float)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_abertura_maximaColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_abertura_maximaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int aca_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.aca_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.aca_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ian_fotografia {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_fotografiaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_fotografia\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORE" +
+                                "S_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_fotografiaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ian_desenho {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_desenhoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_desenho\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_P" +
+                                "ROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_desenhoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ian_observacoes {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_observacoesColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_observacoes\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALOR" +
+                                "ES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_observacoesColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int leg_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.leg_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.leg_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool ian_ativo {
+                get {
+                    try {
+                        return ((bool)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_ativoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_ativo\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_PRO" +
+                                "VIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_ativoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public System.DateTime ian_deletado {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_deletadoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_deletado\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_" +
+                                "PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_deletadoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public System.DateTime ian_data_criacao {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_criacaoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_data_criacao\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALO" +
+                                "RES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_criacaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_criado_por {
+                get {
+                    try {
+                        return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_criado_porColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_criado_por\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORE" +
+                                "S_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_criado_porColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public System.DateTime ian_data_atualizacao {
+                get {
+                    try {
+                        return ((global::System.DateTime)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_atualizacaoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_data_atualizacao\' in table \'STP_SEL_INSPECAO_ANOMALIAS_" +
+                                "VALORES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_atualizacaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int ian_atualizado_por {
+                get {
+                    try {
+                        return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_atualizado_porColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_atualizado_por\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VA" +
+                                "LORES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_atualizado_porColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ian_croqui {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_croquiColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_croqui\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_PR" +
+                                "OVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_croquiColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public float ian_quantidade_adotada {
+                get {
+                    try {
+                        return ((float)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_adotadaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_quantidade_adotada\' in table \'STP_SEL_INSPECAO_ANOMALIA" +
+                                "S_VALORES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_adotadaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public float ian_quantidade_sugerida {
+                get {
+                    try {
+                        return ((float)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_sugeridaColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ian_quantidade_sugerida\' in table \'STP_SEL_INSPECAO_ANOMALI" +
+                                "AS_VALORES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_sugeridaColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int rpt_id_adotado {
+                get {
+                    try {
+                        return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_adotadoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'rpt_id_adotado\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORE" +
+                                "S_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_adotadoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int rpt_id_sugerido {
+                get {
+                    try {
+                        return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_sugeridoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'rpt_id_sugerido\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALOR" +
+                                "ES_PROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_sugeridoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public long ins_id1 {
+                get {
+                    return ((long)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_id1Column]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_id1Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int atp_codigo {
+                get {
+                    try {
+                        return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_codigoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'atp_codigo\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_PR" +
+                                "OVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_codigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string atp_descricao {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_descricaoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_descricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ale_codigo {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ale_codigoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ale_codigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ale_descricao {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ale_descricaoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ale_descricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string aca_codigo {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.aca_codigoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.aca_codigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string aca_descricao {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.aca_descricaoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.aca_descricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string leg_codigo {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.leg_codigoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.leg_codigoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string leg_descricao {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.leg_descricaoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.leg_descricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public int apt_id {
+                get {
+                    return ((int)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.apt_idColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.apt_idColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string apt_descricao {
+                get {
+                    return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.apt_descricaoColumn]));
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.apt_descricaoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string lstLegendas {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstLegendasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'lstLegendas\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_P" +
+                                "ROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstLegendasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string lstAlertas {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstAlertasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'lstAlertas\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_PR" +
+                                "OVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstAlertasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string lstCausas {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstCausasColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'lstCausas\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_PRO" +
+                                "VIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstCausasColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string lstTipos {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstTiposColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'lstTipos\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROV" +
+                                "IDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstTiposColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string ehCabecalho {
+                get {
+                    try {
+                        return ((string)(this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ehCabecalhoColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ehCabecalho\' in table \'STP_SEL_INSPECAO_ANOMALIAS_VALORES_P" +
+                                "ROVIDENCIAS\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ehCabecalhoColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isobj_codigo_TipoOAENull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_codigo_TipoOAEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setobj_codigo_TipoOAENull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.obj_codigo_TipoOAEColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isins_anom_ResponsavelNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_ResponsavelColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setins_anom_ResponsavelNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_ResponsavelColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isins_anom_dataNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_dataColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setins_anom_dataNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ins_anom_dataColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Iscol_LocalizacaoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.col_LocalizacaoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setcol_LocalizacaoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.col_LocalizacaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_fotografiaNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_fotografiaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_fotografiaNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_fotografiaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_desenhoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_desenhoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_desenhoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_desenhoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_observacoesNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_observacoesColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_observacoesNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_observacoesColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_ativoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_ativoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_ativoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_ativoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_deletadoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_deletadoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_deletadoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_deletadoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_data_criacaoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_criacaoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_data_criacaoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_criacaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_criado_porNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_criado_porColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_criado_porNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_criado_porColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_data_atualizacaoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_atualizacaoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_data_atualizacaoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_data_atualizacaoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_atualizado_porNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_atualizado_porColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_atualizado_porNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_atualizado_porColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_croquiNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_croquiColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_croquiNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_croquiColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_quantidade_adotadaNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_adotadaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_quantidade_adotadaNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_adotadaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isian_quantidade_sugeridaNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_sugeridaColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setian_quantidade_sugeridaNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ian_quantidade_sugeridaColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isrpt_id_adotadoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_adotadoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setrpt_id_adotadoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_adotadoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isrpt_id_sugeridoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_sugeridoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setrpt_id_sugeridoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.rpt_id_sugeridoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool Isatp_codigoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_codigoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void Setatp_codigoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.atp_codigoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IslstLegendasNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstLegendasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetlstLegendasNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstLegendasColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IslstAlertasNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstAlertasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetlstAlertasNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstAlertasColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IslstCausasNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstCausasColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetlstCausasNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstCausasColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IslstTiposNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstTiposColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetlstTiposNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.lstTiposColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsehCabecalhoNull() {
+                return this.IsNull(this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ehCabecalhoColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetehCabecalhoNull() {
+                this[this.tableSTP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS.ehCabecalhoColumn] = global::System.Convert.DBNull;
+            }
+        }
+        
+        /// <summary>
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -1767,6 +4005,40 @@ namespace WebApp {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
             public STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        /// <summary>
+        ///Row event argument class
+        ///</summary>
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public class STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent : global::System.EventArgs {
+            
+            private STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow eventRow;
+            
+            private global::System.Data.DataRowAction eventAction;
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRowChangeEvent(STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow row, global::System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -1987,6 +4259,242 @@ namespace WebApp.SIGOA_DESENVdsFicha2TableAdapters {
                 this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
             }
             SIGOA_DESENVdsFicha2.STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable dataTable = new SIGOA_DESENVdsFicha2.STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORESDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+    }
+    
+    /// <summary>
+    ///Represents the connection and commands used to retrieve and save data.
+    ///</summary>
+    [global::System.ComponentModel.DesignerCategoryAttribute("code")]
+    [global::System.ComponentModel.ToolboxItem(true)]
+    [global::System.ComponentModel.DataObjectAttribute(true)]
+    [global::System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASTableAdapter : global::System.ComponentModel.Component {
+        
+        private global::System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private global::System.Data.SqlClient.SqlConnection _connection;
+        
+        private global::System.Data.SqlClient.SqlTransaction _transaction;
+        
+        private global::System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        protected internal global::System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        internal global::System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((global::System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        internal global::System.Data.SqlClient.SqlTransaction Transaction {
+            get {
+                return this._transaction;
+            }
+            set {
+                this._transaction = value;
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    this.CommandCollection[i].Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.DeleteCommand != null))) {
+                    this.Adapter.DeleteCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.InsertCommand != null))) {
+                    this.Adapter.InsertCommand.Transaction = this._transaction;
+                }
+                if (((this.Adapter != null) 
+                            && (this.Adapter.UpdateCommand != null))) {
+                    this.Adapter.UpdateCommand.Transaction = this._transaction;
+                }
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        protected global::System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private void InitAdapter() {
+            this._adapter = new global::System.Data.SqlClient.SqlDataAdapter();
+            global::System.Data.Common.DataTableMapping tableMapping = new global::System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS";
+            tableMapping.ColumnMappings.Add("obj_codigo_TipoOAE", "obj_codigo_TipoOAE");
+            tableMapping.ColumnMappings.Add("ins_anom_Responsavel", "ins_anom_Responsavel");
+            tableMapping.ColumnMappings.Add("ins_anom_data", "ins_anom_data");
+            tableMapping.ColumnMappings.Add("col_Localizacao", "col_Localizacao");
+            tableMapping.ColumnMappings.Add("clo_id", "clo_id");
+            tableMapping.ColumnMappings.Add("clo_nome", "clo_nome");
+            tableMapping.ColumnMappings.Add("tip_id", "tip_id");
+            tableMapping.ColumnMappings.Add("tip_nome", "tip_nome");
+            tableMapping.ColumnMappings.Add("obj_id", "obj_id");
+            tableMapping.ColumnMappings.Add("obj_codigo", "obj_codigo");
+            tableMapping.ColumnMappings.Add("obj_descricao", "obj_descricao");
+            tableMapping.ColumnMappings.Add("ian_id", "ian_id");
+            tableMapping.ColumnMappings.Add("obj_id1", "obj_id1");
+            tableMapping.ColumnMappings.Add("ins_id", "ins_id");
+            tableMapping.ColumnMappings.Add("ian_numero", "ian_numero");
+            tableMapping.ColumnMappings.Add("atp_id", "atp_id");
+            tableMapping.ColumnMappings.Add("ian_sigla", "ian_sigla");
+            tableMapping.ColumnMappings.Add("ale_id", "ale_id");
+            tableMapping.ColumnMappings.Add("ian_quantidade", "ian_quantidade");
+            tableMapping.ColumnMappings.Add("ian_espacamento", "ian_espacamento");
+            tableMapping.ColumnMappings.Add("ian_largura", "ian_largura");
+            tableMapping.ColumnMappings.Add("ian_comprimento", "ian_comprimento");
+            tableMapping.ColumnMappings.Add("ian_abertura_minima", "ian_abertura_minima");
+            tableMapping.ColumnMappings.Add("ian_abertura_maxima", "ian_abertura_maxima");
+            tableMapping.ColumnMappings.Add("aca_id", "aca_id");
+            tableMapping.ColumnMappings.Add("ian_fotografia", "ian_fotografia");
+            tableMapping.ColumnMappings.Add("ian_desenho", "ian_desenho");
+            tableMapping.ColumnMappings.Add("ian_observacoes", "ian_observacoes");
+            tableMapping.ColumnMappings.Add("leg_id", "leg_id");
+            tableMapping.ColumnMappings.Add("ian_ativo", "ian_ativo");
+            tableMapping.ColumnMappings.Add("ian_deletado", "ian_deletado");
+            tableMapping.ColumnMappings.Add("ian_data_criacao", "ian_data_criacao");
+            tableMapping.ColumnMappings.Add("ian_criado_por", "ian_criado_por");
+            tableMapping.ColumnMappings.Add("ian_data_atualizacao", "ian_data_atualizacao");
+            tableMapping.ColumnMappings.Add("ian_atualizado_por", "ian_atualizado_por");
+            tableMapping.ColumnMappings.Add("ian_croqui", "ian_croqui");
+            tableMapping.ColumnMappings.Add("ian_quantidade_adotada", "ian_quantidade_adotada");
+            tableMapping.ColumnMappings.Add("ian_quantidade_sugerida", "ian_quantidade_sugerida");
+            tableMapping.ColumnMappings.Add("rpt_id_adotado", "rpt_id_adotado");
+            tableMapping.ColumnMappings.Add("rpt_id_sugerido", "rpt_id_sugerido");
+            tableMapping.ColumnMappings.Add("ins_id1", "ins_id1");
+            tableMapping.ColumnMappings.Add("atp_codigo", "atp_codigo");
+            tableMapping.ColumnMappings.Add("atp_descricao", "atp_descricao");
+            tableMapping.ColumnMappings.Add("ale_codigo", "ale_codigo");
+            tableMapping.ColumnMappings.Add("ale_descricao", "ale_descricao");
+            tableMapping.ColumnMappings.Add("aca_codigo", "aca_codigo");
+            tableMapping.ColumnMappings.Add("aca_descricao", "aca_descricao");
+            tableMapping.ColumnMappings.Add("leg_codigo", "leg_codigo");
+            tableMapping.ColumnMappings.Add("leg_descricao", "leg_descricao");
+            tableMapping.ColumnMappings.Add("apt_id", "apt_id");
+            tableMapping.ColumnMappings.Add("apt_descricao", "apt_descricao");
+            tableMapping.ColumnMappings.Add("lstLegendas", "lstLegendas");
+            tableMapping.ColumnMappings.Add("lstAlertas", "lstAlertas");
+            tableMapping.ColumnMappings.Add("lstCausas", "lstCausas");
+            tableMapping.ColumnMappings.Add("lstTipos", "lstTipos");
+            tableMapping.ColumnMappings.Add("ehCabecalho", "ehCabecalho");
+            this._adapter.TableMappings.Add(tableMapping);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private void InitConnection() {
+            this._connection = new global::System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SIGOA_DESENVConnectionString"].ConnectionString;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        private void InitCommandCollection() {
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "dbo.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS";
+            this._commandCollection[0].CommandType = global::System.Data.CommandType.StoredProcedure;
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@RETURN_VALUE", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.ReturnValue, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[0].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@ord_id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 10, 0, null, global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, true)]
+        public virtual int Fill(SIGOA_DESENVdsFicha2.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable dataTable, global::System.Nullable<int> ord_id) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((ord_id.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(ord_id.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual SIGOA_DESENVdsFicha2.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable GetData(global::System.Nullable<int> ord_id) {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            if ((ord_id.HasValue == true)) {
+                this.Adapter.SelectCommand.Parameters[1].Value = ((int)(ord_id.Value));
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[1].Value = global::System.DBNull.Value;
+            }
+            SIGOA_DESENVdsFicha2.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable dataTable = new SIGOA_DESENVdsFicha2.STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }
