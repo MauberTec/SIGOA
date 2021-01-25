@@ -35,12 +35,6 @@ function Fechar() {
     $('#txtOctId').html('');
 }
 
-function EditShowModal(id) {
-
-   
-
-
-}
 
 function GetATipoEdit(id) {
     $("#ModalConservaTipo").modal('show');
