@@ -12,21 +12,19 @@ namespace WebApp.Models
     public class ConservaPoliticaModel
     {
         /// <summary>
-        /// Sub1
+        /// ale_codigo
         /// </summary>
-        public string Sub1 { get; set; }
-        /// <summary>
-        /// Sub2
-        /// </summary>
-        public string Sub2 { get; set; }
-        /// <summary>
-        /// Sub3
-        /// </summary>
-        public string Sub3 { get; set; }
+        public string ale_codigo { get; set; }
+      
         /// <summary>
         /// Grupos
         /// </summary>
         public string Grupos { get; set; }
+
+        /// <summary>
+        /// tip_nome
+        /// </summary>
+        public string tip_nome { get; set; }
         /// <summary>
         /// Variavel
         /// </summary>

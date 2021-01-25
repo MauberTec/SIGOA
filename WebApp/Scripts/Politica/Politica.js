@@ -1,4 +1,7 @@
 ﻿
+var tamanhoPagina = 10;
+
+var dados = [];
 
 
 //  var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_105", "txt_atr_id_106", "txt_atr_id_107", "cmb_atr_id_130", "cmb_atr_id_131",
@@ -9,6 +12,7 @@ var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_10
 
 var controlesExcecoes_Salvar = ["cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "cmb_atr_id_148", "cmb_atr_id_150", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153", "txt_atr_id_157"];
 
+GetAll();
 
 function preenchecmbTiposObjeto_FichaInspecaoRotineira() {
     $("#cmbTiposObjeto_FichaInspecaoRotineira").html(""); // limpa os itens existentes
@@ -171,6 +175,7 @@ function cmbSub1Proximo_onchange() {
         Ficha2_preencheCombo(9, 'cmbGrupos', '--Selecione--', ivalor);
 
 }
+
 function cmbSub2_onchange() {
 
     // oculta o divs Subdivisao3
@@ -192,6 +197,7 @@ function cmbSub2_onchange() {
 
 
 }
+
 function cmbSub3_onchange() {
 
     // preenche proximo combo
@@ -202,6 +208,43 @@ function cmbSub3_onchange() {
     Ficha2_preencheCombo(9, 'cmbGrupos', '--Selecione--', ivalor)
 }
 
+function GetAll() {
+
+    $.ajax({
+        url: '/Politicaconserva/getAllConserva',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            $("#corpo").html("");
+          
+            $.each(data, function (i, item) {
+
+                $("#divform").append(
+                    $.each(item.Conservas, function (x, valor) {
+                        $("#corpo").append($('<tr><td>' + valor.tip_nome + '</td><td>' + valor.Grupo + '</td><td>' + valor.Variavel +'</td><td style="text-align:center">' + valor.ale_codigo + '</td><td>' + valor.Alerta + '</td><td>' + valor.Servico + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + valor.Alerta + '\',\'' + valor.Servico + '\', \'' + valor.ocp_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
+                    })
+                );
+
+            });
+            paginar();
+        }
+    });
+}
+
+function paginar() {
+    $(document).ready(function () {
+        $('#tblSubs').DataTable({
+            "language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+            }
+        });
+    });
+}
 function cmbGrupos_onchange() {
 
     $("#cmbVrInspec").html("");
@@ -242,7 +285,7 @@ function pesquisar_click() {
             if (data.length !== 0) {
                 $("#corpo").html("");
                 $.each(data, function (i, item) {
-                    $("#corpo").append($('<tr><td>' + item.Sub1 + '</td><td>' + item.Sub2 + '</td><td>' + item.Sub3 + '</td><td>' + item.Grupos + '</td><td>' + item.tipo + '</td><td>' + item.alerta + '</td><td>' + item.servico + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + item.alerta + '\',\'' + item.servico + '\', \'' + item.ocp_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
+                    $("#corpo").append($('<tr><td>' + item.tip_nome + '</td><td>' + item.Grupo + '</td><td>' + item.Variavel + '</td><td style="text-align:center">' + item.tipo + '</td><td>' + item.alerta + '</td><td>' + item.servico + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + item.alerta + '\',\'' + item.servico + '\', \'' + item.ocp_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
                 });
             }
 
@@ -277,7 +320,8 @@ function btnEditSalvar_onclick() {
         success: function (data) {
             if (data == 'ok') {
                 $("#modalEdit").modal('hide');
-                pesquisar_click();
+                GetAll();
+                return false;
             }
             else {
                 alert(data)

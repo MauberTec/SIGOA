@@ -9,16 +9,17 @@
     if (Session["Usuario"] == null)
     {
         Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 3000 });
-       Response.Redirect("~/AcessoNegado/AcessoNegado");
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 
     Usuario gUsuario = (Usuario)Session["Usuario"];
     List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
-    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(3000)); // id DO MODULO "Tipo"
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(3000));
+    // id DO MODULO "Tipo"
     if (permissoesDesteModulo == null)
     {
         Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 3000 });
-       Response.Redirect("~/AcessoNegado/AcessoNegado");
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 }
 
