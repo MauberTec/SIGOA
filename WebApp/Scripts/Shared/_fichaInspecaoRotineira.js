@@ -333,7 +333,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         jQuery("#txt_historico_Pontuacao_Geral_OAE_3").mask("99.99");
 
         var ord_id = 0;
-        if (paginaPai == "OrdemServico")
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
             ord_id = selectedId_ord_id;
 
         var url = "/Objeto/ObjAtributoValores_ListAll";
@@ -478,7 +478,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
 
 
 
-        if (paginaPai == "OrdemServico") {
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
+        {
             if (qualFicha == 2) {
                 preenchecmbTiposObjeto_FichaInspecaoRotineira();
             }
@@ -692,7 +693,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         var celulaPai = document.getElementById("Ficha2_tr_Cabecalho");
 
         var ord_id = 0;
-        if (paginaPai == "OrdemServico")
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
             ord_id = selectedId_ord_id;
 
         $.ajax({
@@ -1080,7 +1081,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         //url: "/Objeto/GruposVariaveisValores_Salvar",
 
         var ord_id = 0;
-        if (paginaPai == "OrdemServico")
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
             ord_id = selectedId_ord_id;
 
         $.ajax({

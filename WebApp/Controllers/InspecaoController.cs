@@ -116,6 +116,32 @@ namespace WebApp.Controllers
             return Json(new InspecaoBLL().InspecaoAnomalias_Valores_Salvar(ord_id, ins_anom_Responsavel, ins_anom_data, ins_anom_quadroA_1, ins_anom_quadroA_2, listaConcatenada), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        ///  Excluir (logicamente) a Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult InspecaoAnomalia_Excluir(int id)
+        {
+            int retorno = new InspecaoBLL().InspecaoAnomalia_Excluir(id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+       /// <summary>
+        ///  Nova Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult InspecaoAnomalia_Nova(int id)
+        {
+            int retorno = new InspecaoBLL().InspecaoAnomalia_Nova(id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         /// <summary>
@@ -127,20 +153,6 @@ namespace WebApp.Controllers
         public JsonResult InspecaoAnomaliaObjetos_Salvar(int ord_id, string obj_ids)
         {
             return Json(new InspecaoBLL().InspecaoAnomaliaObjetos_Salvar(ord_id, obj_ids), JsonRequestBehavior.AllowGet);
-        }
-
-
-        /// <summary>
-        ///  Excluir (logicamente) Objeto da inspecao
-        /// </summary>
-        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
-        /// <returns>JsonResult</returns>
-        [HttpPost]
-        public JsonResult InspecaoAnomaliaObjetos_Excluir(int id)
-        {
-            int retorno = new InspecaoBLL().InspecaoAnomaliaObjetos_Excluir(id);
-            bool valid = retorno >= 0;
-            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -165,6 +177,16 @@ namespace WebApp.Controllers
             return Json(new { data = new InspecaoBLL().InspecaoAnomaliaCausas_by_Legenda(leg_codigo) }, JsonRequestBehavior.AllowGet);
         }
 
+
+        /// <summary>
+        /// lista concatenada dos alertas de anomalia por legenda
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult InspecaoAnomaliaAlertas_by_Legenda(string leg_codigo)
+        {
+            return Json(new { data = new InspecaoBLL().InspecaoAnomaliaAlertas_by_Legenda(leg_codigo) }, JsonRequestBehavior.AllowGet);
+        }
 
 
         /// <summary>

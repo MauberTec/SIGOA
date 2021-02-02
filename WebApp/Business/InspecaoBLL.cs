@@ -61,9 +61,6 @@ namespace WebApp.Business
         }
 
 
-
-
-
         //********************************************************************************************************
 
 
@@ -76,6 +73,29 @@ namespace WebApp.Business
         {
             return new InspecaoDAO().InspecaoAnomalias_Valores_ListAll(ord_id);
         }
+
+        /// <summary>
+        ///  Excluir (logicamente) Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
+        /// <returns>int</returns>
+        public int InspecaoAnomalia_Excluir(int id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new InspecaoDAO().InspecaoAnomalia_Excluir(id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+        /// <summary>
+        ///  Nova Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
+        /// <returns>int</returns>
+        public int InspecaoAnomalia_Nova(int ian_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new InspecaoDAO().InspecaoAnomalia_Nova(ian_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
 
         /// <summary>
         /// Salva os valores das anomalias
@@ -106,17 +126,6 @@ namespace WebApp.Business
         }
 
         /// <summary>
-        ///  Excluir (logicamente) Objeto da inspecao
-        /// </summary>
-        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
-        /// <returns>int</returns>
-        public int InspecaoAnomaliaObjetos_Excluir(int id)
-        {
-            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
-            return new InspecaoDAO().InspecaoAnomaliaObjetos_Excluir(id, paramUsuario.usu_id, paramUsuario.usu_ip);
-        }
-
-        /// <summary>
         /// lista concatenada dos tipos de anomalia por legenda
         /// </summary>
         /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
@@ -134,6 +143,16 @@ namespace WebApp.Business
         public string InspecaoAnomaliaCausas_by_Legenda(string leg_codigo)
         {
             return new InspecaoDAO().InspecaoAnomaliaCausas_by_Legenda(leg_codigo);
+        }
+
+        /// <summary>
+        /// lista concatenada dos Alertas de anomalia por legenda
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
+        /// <returns>string</returns>
+        public string InspecaoAnomaliaAlertas_by_Legenda(string leg_codigo)
+        {
+            return new InspecaoDAO().InspecaoAnomaliaAlertas_by_Legenda(leg_codigo);
         }
 
 

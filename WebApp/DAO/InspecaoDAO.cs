@@ -298,8 +298,7 @@ namespace WebApp.DAO
 
 
 
-        //********************************************************************************************************
-
+        //********** INSPECAO ANOMALIAS *********************************************************************************************
 
         /// <summary>
         /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
@@ -472,6 +471,89 @@ namespace WebApp.DAO
 
         }
 
+        /// <summary>
+        ///    Insere Anomalia na posicao da tabela
+        /// </summary>
+        /// <param name="ian_id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int InspecaoAnomalia_Nova(int ian_id, int usu_id, string ip)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_INS_INSPECAO_ANOMALIA";
+
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ian_id", ian_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+                    return Convert.ToInt32(p_return.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///    Exclui logicamente Anomalia
+        /// </summary>
+        /// <param name="ian_id">Id da linha da tabela inspecao_anomalias</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int InspecaoAnomalia_Excluir(int ian_id, int usu_id, string ip)
+        {
+            int i = 0;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+
+                    com.CommandText = "STP_DEL_INSPECAO_ANOMALIA";
+
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    com.Parameters.AddWithValue("@ian_id", ian_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
 
 
         /// <summary>
@@ -510,46 +592,6 @@ namespace WebApp.DAO
                     com.ExecuteScalar();
                     return Convert.ToInt32(p_return.Value);
                 }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        ///    Exclui logicamente Objeto
-        /// </summary>
-        /// <param name="ian_id">Id da linha da tabela inspecao_anomalias</param>
-        /// <param name="usu_id">Id do Usuário Logado</param>
-        /// <param name="ip">IP do Usuário Logado</param>
-        /// <returns>int</returns>
-        public int InspecaoAnomaliaObjetos_Excluir(int ian_id, int usu_id, string ip)
-        {
-            int i = 0;
-            try
-            {
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand();
-
-                    com.CommandText = "STP_DEL_INSPECAO_ANOMALIA";
-
-                    com.Connection = con;
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.Clear();
-
-                    com.Parameters.AddWithValue("@ian_id", ian_id);
-                    com.Parameters.AddWithValue("@usu_id", usu_id);
-                    com.Parameters.AddWithValue("@ip", ip);
-
-
-                    i = com.ExecuteNonQuery();
-                }
-                return i;
             }
             catch (Exception ex)
             {
@@ -622,6 +664,39 @@ namespace WebApp.DAO
 
         }
 
+
+        /// <summary>
+        /// lista concatenada dos Alertas de anomalia por legenda
+        /// </summary>
+        /// <param name="leg_codigo">Filtro por Legenda de Anomalia, opcional</param>
+        /// <returns>string</returns>
+        public string InspecaoAnomaliaAlertas_by_Legenda(string leg_codigo)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.ConcatenarAnomaliaAlertas_by_Legenda(@leg_codigo)", con);
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@leg_codigo", leg_codigo);
+
+                    string retorno =  com.ExecuteScalar().ToString();
+
+                    return retorno; 
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
         /// <summary>
         /// Procura o Reparo Sugerido
         /// </summary>
@@ -675,9 +750,116 @@ namespace WebApp.DAO
         }
 
 
-        //**************************************************************************
+        /// <summary>
+        /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.selecionada</param>
+        /// <returns>Lista de InspecaoAnomalia</returns>
+        public List<InspecaoAnomalia> InspecaoAnomalias_Valores_Providencias_ListAll(int ord_id)
+        {
+            try
+            {
+                int apt_id_anterior = 0;
+                List<InspecaoAnomalia> lst = new List<InspecaoAnomalia>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.CommandTimeout = 600; // (tempo em segundos)
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
 
-        // tipos de inspecao
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        if (apt_id_anterior != (rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"])))
+                        {
+                            lst.Add(new InspecaoAnomalia
+                            {
+                                ehCabecalho = "1",
+                                apt_id = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]),
+                                apt_descricao = rdr["apt_descricao"] == DBNull.Value ? "" : rdr["apt_descricao"].ToString()
+                            });
+                        }
+
+                        lst.Add(new InspecaoAnomalia
+                        {
+                            ehCabecalho = "",
+                            obj_codigo_TipoOAE = rdr["obj_codigo_TipoOAE"].ToString(),
+                            ins_anom_Responsavel = rdr["ins_anom_Responsavel"].ToString(),
+                            ins_anom_data = rdr["ins_anom_data"].ToString(),
+
+                            col_Localizacao = rdr["col_Localizacao"].ToString(),
+                            clo_id = Convert.ToInt32(rdr["clo_id"]),
+                            clo_nome = rdr["clo_nome"].ToString(),
+                            tip_id = Convert.ToInt32(rdr["tip_id"]),
+                            tip_nome = rdr["tip_nome"].ToString(),
+                            obj_id = Convert.ToInt32(rdr["obj_id"]),
+                            obj_codigo = rdr["obj_codigo"].ToString(),
+                            obj_descricao = rdr["obj_descricao"].ToString(),
+
+                            ian_id = rdr["ian_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_id"]),
+                            ian_numero = rdr["ian_numero"].ToString(),
+
+                            atp_id = rdr["atp_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["atp_id"]),
+                            atp_codigo = rdr["atp_codigo"] == DBNull.Value ? "" : rdr["atp_codigo"].ToString(),
+                            atp_descricao = rdr["atp_descricao"] == DBNull.Value ? "" : rdr["atp_descricao"].ToString(),
+
+                            ale_id = rdr["ale_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ale_id"]),
+                            ale_codigo = rdr["ale_codigo"] == DBNull.Value ? "" : rdr["ale_codigo"].ToString(),
+                            ale_descricao = rdr["ale_descricao"] == DBNull.Value ? "" : rdr["ale_descricao"].ToString(),
+
+                            aca_id = rdr["aca_id"] == DBNull.Value ? 1 : Convert.ToInt32(rdr["aca_id"]),
+                            aca_codigo = rdr["aca_codigo"] == DBNull.Value ? "" : rdr["aca_codigo"].ToString(),
+                            aca_descricao = rdr["aca_descricao"] == DBNull.Value ? "" : rdr["aca_descricao"].ToString(),
+
+                            leg_id = rdr["leg_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["leg_id"]),
+                            leg_codigo = rdr["leg_codigo"] == DBNull.Value ? "" : rdr["leg_codigo"].ToString(),
+                            leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
+
+                            ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
+                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
+                            ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
+                            ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
+                            ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
+                            ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]), 1),
+                            ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]), 1),
+                            ian_fotografia = rdr["ian_fotografia"] == DBNull.Value ? "" : rdr["ian_fotografia"].ToString(),
+                            ian_croqui = rdr["ian_croqui"] == DBNull.Value ? "" : rdr["ian_croqui"].ToString(),
+                            ian_desenho = rdr["ian_desenho"] == DBNull.Value ? "" : rdr["ian_desenho"].ToString(),
+                            ian_observacoes = rdr["ian_observacoes"] == DBNull.Value ? "" : rdr["ian_observacoes"].ToString(),
+
+                            ian_ativo = rdr["ian_ativo"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_ativo"]),
+                            apt_id = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]),
+                            apt_descricao = rdr["apt_descricao"] == DBNull.Value ? "" : rdr["apt_descricao"].ToString(),
+
+                            lstLegendas = rdr["lstLegendas"] == DBNull.Value ? "" : rdr["lstLegendas"].ToString(),
+                            lstAlertas = rdr["lstAlertas"] == DBNull.Value ? "" : rdr["lstAlertas"].ToString(),
+                            lstTipos = rdr["lstTipos"] == DBNull.Value ? "" : rdr["lstTipos"].ToString(),
+                            lstCausas = rdr["lstCausas"] == DBNull.Value ? "" : rdr["lstCausas"].ToString()
+
+                        });
+
+                        apt_id_anterior = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]);
+                    }
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+
+
+        // *********** tipos de inspecao ********************** *******************************
 
         /// <summary>
         ///     Lista de todos os Tipos de Inspecao não deletados
@@ -836,112 +1018,6 @@ namespace WebApp.DAO
 
 
 
-
-        /// <summary>
-        /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
-        /// </summary>
-        /// <param name="ord_id">Id da O.S.selecionada</param>
-        /// <returns>Lista de InspecaoAnomalia</returns>
-        public List<InspecaoAnomalia> InspecaoAnomalias_Valores_Providencias_ListAll(int ord_id)
-        {
-            try
-            {
-                int apt_id_anterior = 0;
-                List<InspecaoAnomalia> lst = new List<InspecaoAnomalia>();
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.CommandTimeout = 600; // (tempo em segundos)
-                    com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@ord_id", ord_id);
-
-                    SqlDataReader rdr = com.ExecuteReader();
-
-                    while (rdr.Read())
-                    {
-                        if (apt_id_anterior != (rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"])))
-                        {
-                            lst.Add(new InspecaoAnomalia
-                            {
-                                ehCabecalho = "1",
-                                apt_id = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]),
-                                apt_descricao = rdr["apt_descricao"] == DBNull.Value ? "" : rdr["apt_descricao"].ToString()
-                            });
-                        }
-
-                        lst.Add(new InspecaoAnomalia
-                        {
-                            ehCabecalho = "",
-                            obj_codigo_TipoOAE = rdr["obj_codigo_TipoOAE"].ToString(),
-                            ins_anom_Responsavel = rdr["ins_anom_Responsavel"].ToString(),
-                            ins_anom_data = rdr["ins_anom_data"].ToString(),
-
-                            col_Localizacao = rdr["col_Localizacao"].ToString(),
-                            clo_id = Convert.ToInt32(rdr["clo_id"]),
-                            clo_nome = rdr["clo_nome"].ToString(),
-                            tip_id = Convert.ToInt32(rdr["tip_id"]),
-                            tip_nome = rdr["tip_nome"].ToString(),
-                            obj_id = Convert.ToInt32(rdr["obj_id"]),
-                            obj_codigo = rdr["obj_codigo"].ToString(),
-                            obj_descricao = rdr["obj_descricao"].ToString(),
-
-                            ian_id = rdr["ian_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_id"]),
-                            ian_numero = rdr["ian_numero"].ToString(),
-
-                            atp_id = rdr["atp_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["atp_id"]),
-                            atp_codigo = rdr["atp_codigo"] == DBNull.Value ? "" : rdr["atp_codigo"].ToString(),
-                            atp_descricao = rdr["atp_descricao"] == DBNull.Value ? "" : rdr["atp_descricao"].ToString(),
-
-                            ale_id = rdr["ale_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ale_id"]),
-                            ale_codigo = rdr["ale_codigo"] == DBNull.Value ? "" : rdr["ale_codigo"].ToString(),
-                            ale_descricao = rdr["ale_descricao"] == DBNull.Value ? "" : rdr["ale_descricao"].ToString(),
-
-                            aca_id = rdr["aca_id"] == DBNull.Value ? 1 : Convert.ToInt32(rdr["aca_id"]),
-                            aca_codigo = rdr["aca_codigo"] == DBNull.Value ? "" : rdr["aca_codigo"].ToString(),
-                            aca_descricao = rdr["aca_descricao"] == DBNull.Value ? "" : rdr["aca_descricao"].ToString(),
-
-                            leg_id = rdr["leg_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["leg_id"]),
-                            leg_codigo = rdr["leg_codigo"] == DBNull.Value ? "" : rdr["leg_codigo"].ToString(),
-                            leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
-
-                            ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
-                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
-                            ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
-                            ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
-                            ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
-                            ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]), 1),
-                            ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]), 1),
-                            ian_fotografia = rdr["ian_fotografia"] == DBNull.Value ? "" : rdr["ian_fotografia"].ToString(),
-                            ian_croqui = rdr["ian_croqui"] == DBNull.Value ? "" : rdr["ian_croqui"].ToString(),
-                            ian_desenho = rdr["ian_desenho"] == DBNull.Value ? "" : rdr["ian_desenho"].ToString(),
-                            ian_observacoes = rdr["ian_observacoes"] == DBNull.Value ? "" : rdr["ian_observacoes"].ToString(),
-
-                            ian_ativo = rdr["ian_ativo"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_ativo"]),
-                            apt_id = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]),
-                            apt_descricao = rdr["apt_descricao"] == DBNull.Value ? "" : rdr["apt_descricao"].ToString(),
-
-                            lstLegendas = rdr["lstLegendas"] == DBNull.Value ? "" : rdr["lstLegendas"].ToString(),
-                            lstAlertas = rdr["lstAlertas"] == DBNull.Value ? "" : rdr["lstAlertas"].ToString(),
-                            lstTipos = rdr["lstTipos"] == DBNull.Value ? "" : rdr["lstTipos"].ToString(),
-                            lstCausas = rdr["lstCausas"] == DBNull.Value ? "" : rdr["lstCausas"].ToString()
-
-                        });
-
-                        apt_id_anterior = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]);
-                    }
-                    return lst;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-
-        }
 
 
     }

@@ -640,10 +640,11 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
         /// <returns>JsonResult</returns>
-        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string CodOAE)
+        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
         {
-            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, CodOAE) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, CodOAE, Criticidade) }, JsonRequestBehavior.AllowGet);
         }
 
 

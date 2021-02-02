@@ -200,6 +200,7 @@
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\PoliticaConservaController.cs" />
+    <Compile Include="Controllers\PoliticaReparosController.cs" />
     <Compile Include="Controllers\ReparoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\AnomaliaController.cs" />
@@ -242,6 +243,8 @@
     <Compile Include="Helpers\Gerais.cs" />
     <Compile Include="Helpers\LogErro.cs" />
     <Compile Include="Helpers\NamespaceHelpers.cs" />
+    <Compile Include="Models\ConservaDTO.cs" />
+    <Compile Include="Models\ConservaModel.cs" />
     <Compile Include="Models\ConservaPoliticaModel.cs" />
     <Compile Include="Models\Integracao.cs" />
     <Compile Include="Models\Inspecao.cs" />
@@ -449,6 +452,7 @@
     <Content Include="Scripts\OrdemServico\OrdemServico.js" />
     <Content Include="Scripts\OrdemServico\OSTipo.js" />
     <Content Include="Scripts\Inspecao\InspecaoTipo.js" />
+    <Content Include="Scripts\Politica\ConservaTipo.js" />
     <Content Include="Scripts\Politica\Politica.js" />
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
@@ -652,13 +656,15 @@
     <Content Include="Views\Orcamento\Orcamento.cshtml" />
     <Content Include="Views\Orcamento\OrcamentoFluxoStatus.cshtml" />
     <Content Include="Views\Orcamento\OrcamentoStatus.cshtml" />
-    <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
     <Content Include="Views\Integracao\IntegracaoSirgeo.cshtml" />
     <Content Include="Views\Integracao\IntegracaoVDM.cshtml" />
     <Content Include="Views\Integracao\IntegracaoTPU.cshtml" />
-    <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
+    <Content Include="Views\Shared\_ObjPriorizacao.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecialProvidencias.cshtml" />
     <Content Include="Views\Shared\_fichaNotificacaoOcorrencia.cshtml" />
+    <Content Include="Views\PoliticaReparos\Index.cshtml" />
+    <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
+    <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

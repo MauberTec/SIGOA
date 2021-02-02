@@ -307,7 +307,7 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
     limpatblFicha();
 
     var ord_id = 0;
-    if (paginaPai == "OrdemServico")
+    if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
         ord_id = selectedId_ord_id;
 
     var url = "/Objeto/ObjAtributoValores_ListAll";

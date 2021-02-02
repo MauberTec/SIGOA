@@ -892,10 +892,11 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
         /// <returns>List ObjPriorizacao</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
         {
-            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, CodOAE);
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, CodOAE, Criticidade);
 
         }
 

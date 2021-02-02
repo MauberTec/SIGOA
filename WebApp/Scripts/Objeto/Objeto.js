@@ -649,7 +649,7 @@ function SalvarObjeto() {
                     swal({
                         type: 'success',
                         title: 'Sucesso',
-                        text: 'Objeto(s) Atualizado(s) com sucesso'
+                        text: 'Objeto(s) Salvo(s) com sucesso'
                     });
                 }
 

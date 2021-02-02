@@ -1686,8 +1686,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
         /// <returns>Lista de Objetos</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
         {
             try
             {
@@ -1700,6 +1701,7 @@ namespace WebApp.DAO
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
                     com.Parameters.AddWithValue("@CodOAE", CodOAE);
+                    com.Parameters.AddWithValue("@Criticidade", Criticidade);
 
                     //com.Parameters.AddWithValue("@filtro_obj_codigo", filtro_obj_codigo);
                     //com.Parameters.AddWithValue("@filtro_obj_descricao", filtro_obj_descricao);
@@ -1722,21 +1724,21 @@ namespace WebApp.DAO
                             pri_classificacao = (rdr["pri_classificacao"] == DBNull.Value) ? -1 : Convert.ToInt16(rdr["pri_classificacao"]),
                             pri_data_classificacao = rdr["pri_data_classificacao"].ToString(),
                             pri_data_inspecao = rdr["pri_data_inspecao"].ToString(),
-                            pri_nota_final = (rdr["pri_nota_final"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_final"]), 1),
-                            pri_nota_estrutura = (rdr["pri_nota_estrutura"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_estrutura"]), 1),
-                            pri_nota_durabilidade = (rdr["pri_nota_durabilidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_durabilidade"]), 1),
-                            pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_funcionalidade"]), 1),
-                            pri_nota_importancia_oae_malha = (rdr["pri_nota_importancia_oae_malha"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_importancia_oae_malha"]), 1),
-                            pri_nota_vdm = (rdr["pri_nota_vdm"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_vdm"]), 1),
-                            pri_nota_principal_utilizacao = (rdr["pri_nota_principal_utilizacao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_principal_utilizacao"]), 1),
-                            pri_nota_facilidade_desvio = (rdr["pri_nota_facilidade_desvio"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_facilidade_desvio"]), 1),
-                            pri_nota_gabarito_vertical = (rdr["pri_nota_gabarito_vertical"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_gabarito_vertical"]), 1),
-                            pri_nota_gabarito_horizontal = (rdr["pri_nota_gabarito_horizontal"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_gabarito_horizontal"]), 1),
-                            pri_nota_largura_plataforma = (rdr["pri_nota_largura_plataforma"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_largura_plataforma"]), 1),
-                            pri_nota_agressividade_ambiental = (rdr["pri_nota_agressividade_ambiental"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_agressividade_ambiental"]), 1),
-                            pri_nota_trem_tipo = (rdr["pri_nota_trem_tipo"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_trem_tipo"]), 1),
-                            pri_nota_barreira_seguranca = (rdr["pri_nota_barreira_seguranca"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_barreira_seguranca"]), 1),
-                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 1)
+                            pri_nota_final = (rdr["pri_nota_final"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_final"]), 2),
+                            pri_nota_estrutura = (rdr["pri_nota_estrutura"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_estrutura"]), 2),
+                            pri_nota_durabilidade = (rdr["pri_nota_durabilidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_durabilidade"]), 2),
+                            pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_funcionalidade"]), 2),
+                            pri_nota_importancia_oae_malha = (rdr["pri_nota_importancia_oae_malha"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_importancia_oae_malha"]), 2),
+                            pri_nota_vdm = (rdr["pri_nota_vdm"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_vdm"]), 2),
+                            pri_nota_principal_utilizacao = (rdr["pri_nota_principal_utilizacao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_principal_utilizacao"]), 2),
+                            pri_nota_facilidade_desvio = (rdr["pri_nota_facilidade_desvio"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_facilidade_desvio"]), 2),
+                            pri_nota_gabarito_vertical = (rdr["pri_nota_gabarito_vertical"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_gabarito_vertical"]), 2),
+                            pri_nota_gabarito_horizontal = (rdr["pri_nota_gabarito_horizontal"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_gabarito_horizontal"]), 2),
+                            pri_nota_largura_plataforma = (rdr["pri_nota_largura_plataforma"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_largura_plataforma"]), 2),
+                            pri_nota_agressividade_ambiental = (rdr["pri_nota_agressividade_ambiental"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_agressividade_ambiental"]), 2),
+                            pri_nota_trem_tipo = (rdr["pri_nota_trem_tipo"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_trem_tipo"]), 2),
+                            pri_nota_barreira_seguranca = (rdr["pri_nota_barreira_seguranca"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_barreira_seguranca"]), 2),
+                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 2)
                         });
                     }
                     return lst;

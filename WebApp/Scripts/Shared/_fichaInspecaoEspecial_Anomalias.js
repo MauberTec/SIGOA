@@ -1,7 +1,7 @@
 ﻿    var linhaCabecalhos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
         ' <td class="qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
-        ' <td class="borderLeft qualClasse"><label class="lblsBold" id="lbl_Item_ian_id_ZZZ"></label>lbl_Item_VVV</td> ' +
-        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ"></label>lbl_Localizacao_VVV</td> ' +
+        ' <td class="borderLeft qualClasse"><label class="lblsBold" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label></td> ' +
+        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ">lbl_Localizacao_VVV</label></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
@@ -27,16 +27,25 @@
     var linhaObjetos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
         ' <td class=" qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
         ' <td class="borderLeft qualClasse"> ' +
-        '          <button id="btn_ExcluirObjeto_ian_id_ZZZ" ' +
+        '          <button id="btn_InserirAnomalia_ian_id_ZZZ" ' +
         '            type="button" ' +
-        '             onclick="return Ficha4_ExcluirObjeto(ZZZ)" ' +
-        '             title="Excluir Objeto" ' +
+        '             onclick="return Ficha4_InserirAnomalia(ZZZ)" ' +
+        '             title="Inserir Anomalia" ' +
+        '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
+        '             <span class="glyphicon glyphicon-plus text-success contornoBranco"> ' +
+        '          </button> ' +
+
+        '          <button id="btn_ExcluirAnomalia_ian_id_ZZZ" ' +
+        '            type="button" ' +
+        '             onclick="return Ficha4_ExcluirAnomalia(ZZZ)" ' +
+        '             title="Excluir Anomalia" ' +
         '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
         '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
         '          </button> ' +
-        '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ"></label>lbl_Item_VVV ' +
+
+        '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label> ' +
         ' </td > ' +
-        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" ></label>lbl_Localizacao_VVV</td> ' +
+        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
@@ -83,10 +92,8 @@ function Ficha4_CAMPO_ExportarXLS() {
 }
 
 function CancelarDados_Ficha4_CAMPO(tabela) {
-    preenchetblFicha4_CAMPO();
+    preenchetblFicha4_CAMPO(true);
 
-    // alterna os campos para leitura
-    Ficha4_CAMPO_setaReadWrite(tabela, true);
 }
 function EditarDados_Ficha4_CAMPO(tabela) {
     // alterna os campos para escrita
@@ -233,13 +240,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
         dataType: "json",
         success: function (result) {
 
-            preenchetblFicha4_CAMPO();
-
-            Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, true);
-
-            //document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-            //document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-            //document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
+            preenchetblFicha4_CAMPO(true);
 
             return false;
         },
@@ -320,7 +321,9 @@ function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
     return linhaAux;
 }
 
-function preenchetblFicha4_CAMPO() {
+function preenchetblFicha4_CAMPO(ehRead) {
+    if (ehRead == null)
+        ehRead = true;
 
     $("#lblOAE").text(selected_obj_codigo);
     $('#txt_ins_anom_data').datepicker({ dateFormat: 'dd/mm/yy' });
@@ -550,8 +553,16 @@ function preenchetblFicha4_CAMPO() {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = 'none';
                 }
-        }
-    });
+
+            // alterna os campos para leitura/edicao
+            var tblFicha4_INSPECAO_ESPECIAL_CAMPO = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
+            if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
+                Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
+         }
+   });
+
+
+
 
 }
 
@@ -706,10 +717,30 @@ function cmb_Sigla_onchange(quem) {
                         opt.title = aux[1].trim();
                         cmb_Causa.appendChild(opt);
                     }
+
+                    // preenche alerta
+                    var cmb_Alerta_id = quem.id.replace("cmb_Sigla", "cmb_Alerta")
+                    var cmb_Alerta = document.getElementById(cmb_Alerta_id);
+                    $.ajax({
+                        url: '/Inspecao/InspecaoAnomaliaAlertas_by_Legenda',
+                        type: "POST",
+                        dataType: "JSON",
+                        data: { leg_codigo: valor },
+                        success: function (result) {
+                            $('#' + cmb_Alerta_id).html('');
+                            var pedacos = result.data.split(";");
+                            for (k = 0; k < pedacos.length; k++) {
+                                var aux = pedacos[k].split(":");
+                                var opt = document.createElement('option');
+                                opt.value = aux[0].trim();
+                                opt.innerHTML = aux[0].trim();
+                                opt.title = aux[1].trim();
+                                cmb_Alerta.appendChild(opt);
+                            }
+                        }
+                    })
                 }
-            });
-
-
+            })
         }
     });
 
@@ -790,7 +821,8 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
     var lstButtons = tblFicha4_INSPECAO_ESPECIAL_CAMPO.getElementsByTagName('button');
 
     for (var i = 0; i < lstButtons.length; i++)
-        if (lstButtons[i].id.includes("btn_ExcluirObjeto_rownum")) {
+        if ((lstButtons[i].id.includes("btn_ExcluirAnomalia_ian_id_")) || (lstButtons[i].id.includes("btn_InserirAnomalia_ian_id_")) )
+        {
             lstButtons[i].style.display = ehRead ? 'none' : 'inline'; // aqui display block/none; na criacao da tabela visibility: visible/hidden (para nao misturar porque la existe validacao)
         }
 
@@ -870,48 +902,6 @@ function Ficha4_CAMPO_preencheLocalizacao(tip_id_Subdivisao1) {
             });
         }
     });
-}
-function Ficha4_ExcluirObjeto(qual_ian_id) {
-    var form = this;
-
-    swal({
-        title: "Excluir. Tem certeza?",
-        icon: "warning",
-        buttons: [
-            'Não',
-            'Sim'
-        ],
-        dangerMode: true,
-        focusCancel: true
-    }).then(function (isConfirm) {
-        if (isConfirm) {
-            var response = POST("/Inspecao/InspecaoAnomaliaObjetos_Excluir", JSON.stringify({ id: qual_ian_id }))
-            if (response.erroId >= 1) {
-                swal({
-                    type: 'success',
-                    title: 'Sucesso',
-                    text: 'Registro excluído com sucesso'
-                });
-
-                // atualiza tabela
-                preenchetblFicha4_CAMPO();
-
-                return false;
-            }
-            else {
-                swal({
-                    type: 'error',
-                    title: 'Aviso',
-                    text: 'Erro ao excluir registro'
-                });
-            }
-            return false;
-        } else {
-            return false;
-        }
-    })
-    return false;
-
 }
 
 function Ficha4_CAMPO_LimparCampos(aPartirDe) {
@@ -1068,7 +1058,7 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
                 success: function (result) {
 
                     // atualiza os dados
-                    preenchetblFicha4_CAMPO();
+                    preenchetblFicha4_CAMPO(true);
 
                     $("#modalSelecionarObjetoLocalizacao").modal('hide');
                     return false;
@@ -1094,5 +1084,72 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
     return false;
 }
 
+function Ficha4_ExcluirAnomalia(qual_ian_id) {
+    var form = this;
 
+    swal({
+        title: "Excluir. Tem certeza?",
+        icon: "warning",
+        buttons: [
+            'Não',
+            'Sim'
+        ],
+        dangerMode: true,
+        focusCancel: true
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            var response = POST("/Inspecao/InspecaoAnomalia_Excluir", JSON.stringify({ id: qual_ian_id }))
+            if (response.erroId >= 1) {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Registro excluído com sucesso'
+                });
+
+                // atualiza tabela
+                preenchetblFicha4_CAMPO(false);
+
+                return false;
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao excluir registro'
+                });
+            }
+            return false;
+        } else {
+            return false;
+        }
+    })
+    return false;
+
+}
+
+
+function Ficha4_InserirAnomalia(qual_ian_id) {
+
+    var response = POST("/Inspecao/InspecaoAnomalia_Nova", JSON.stringify({ id: qual_ian_id }))
+            if (response.erroId >= 1) {
+                //swal({
+                //    type: 'success',
+                //    title: 'Sucesso',
+                //    text: 'Registro Incluído com sucesso'
+                //});
+
+                // atualiza tabela
+                preenchetblFicha4_CAMPO(false);
+
+                return false;
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao Inserir Anomalia'
+                });
+            }
+            return false;
+}
 

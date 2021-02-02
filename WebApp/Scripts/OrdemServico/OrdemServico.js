@@ -933,6 +933,80 @@ function OrdemServico_Objeto_Salvar() {
         $('#txtobj_codigo_Novo').val(lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text);
         $('#txtobj_codigo_Novo2').val(lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text);
 
+
+        var selObj_id = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].value;
+        var sel_txt = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text;
+        var selObj_codigo = sel_txt.substring(0, sel_txt.indexOf("(")-1);
+
+        var selTipoOS = $("#cmbTiposOS_Novo").val() == "" ? -1 : $("#cmbFiltroTiposOS").val();
+        var selTipoOStxt = $("#cmbTiposOS_Novo").val() == "" ? "" : $("#cmbTiposOS_Novo option:selected").text();
+
+        // checa se ja tem O.S. com esse Objeto e Tipo O.S.
+        $.ajax({
+            "url": "/OrdemServico/OrdemServico_ListAll",
+            "type": "GET",
+            dataType: "JSON",
+            "data": {
+                "ord_id": 0,
+                "filtroOrdemServico_codigo": '',
+                "filtroObj_codigo": selObj_codigo,
+                "filtroTiposOS": selTipoOS,
+                "filtroStatusOS": -1,
+                "filtroData": "Inicio_Programada",
+                "filtroord_data_De": "01/01/2000",
+                "filtroord_data_Ate": "01/01/2100"
+            }
+            , success: function (result) {
+                if (result.data.length > 0) {
+                    //// retorno = lista de O.S. do tipo selecionado e com Objeto selecionado. Verifica se é possivel criar nova, checa o status das O.S.s retornadas
+                    ////2	Emergencial
+                    ////6	Superada
+                    ////7	Cancelada
+                    ////11	Executada
+                    ////12	Parcialmente Executada
+                    ////14	Encerrada
+
+                    //// verifica a ultima O.S. desse objeto
+                    //var podecriar = false;
+                    //var listasos_ids = [2,6,7,11,12,14];
+                    //for (k = 0; k < result.data.length; k++) {
+
+                    //    if (listasos_ids.includes(parseInt(result.data[k].sos_id)))
+                    //    {
+
+                    //    }
+                    //}
+
+                    // verifica a ultima O.S. desse Objeto
+                    var ultimoStatus = 0;
+                    var ultimaOS_id = -1;
+                    for (k = 0; k < result.data.length; k++) {
+                        if (parseInt(result.data[k].ord_id) > ultimaOS_id) {
+                            ultimaOS_id = parseInt(result.data[k].ord_id);
+                            ultimoStatus = parseInt(result.data[k].sos_id);
+                        }
+                    }
+
+                    if (ultimoStatus > 0) {
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'Já existe O.S. do tipo ' + selTipoOStxt + ' com o Objeto ' + selObj_codigo
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                    }
+
+                }
+                else
+                {
+                    // se for zero, entao nao tem O.S. com esse Objeto e do Tipo selecionado
+                }
+            }
+        });
+
+
      //   $('#txtobj_codigo').val(lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text);
 
         selectedId_obj_id = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].value;
