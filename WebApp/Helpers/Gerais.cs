@@ -763,13 +763,382 @@ namespace WebApp.Helpers
         }
 
 
+        /// <summary>
+        ///  Busca a lista de OAEs pela API
+        /// </summary>
+        /// <param name="rod_id">ID da Rodovia, vazio para todos</param>
+        /// <returns>List Rodovia</returns>
+        public List<OAE> get_OAEs(string rod_id)
+        {
+            string usu_id = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+            string urlPath =  new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+
+            try
+            {
+                string SIRGeo_URL = new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+                string SIRGeo_Usuario = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+
+
+                using (var client = new HttpClient())
+                {
+                    var contentString = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                       {
+                                                                            new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                       });
+
+                    client.BaseAddress = new Uri(urlPath + "/Token");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = client.PostAsync(new Uri(urlPath + "/Token?usu_id=" + usu_id.ToString()), contentString).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseBody = response.Content.ReadAsStringAsync().Result;
+                        token token_retorno = Newtonsoft.Json.JsonConvert.DeserializeObject<token>(responseBody);
+
+                        if (token_retorno.tok_valido)
+                        {
+                            string nToken_Atual = token_retorno.tok_token;
+
+                            using (var client2 = new HttpClient())
+                            {
+                                var contentString2 = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                                   {
+                                                                                        new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                                   });
+                                client2.BaseAddress = new Uri(urlPath + "/OaeLevantamento");
+                                client2.DefaultRequestHeaders.Accept.Clear();
+                                client2.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                                if ((rod_id.Trim() != "") && (IsNumeric(rod_id)))
+                                    rod_id = "&rod_id=" + rod_id.ToString();
+                                HttpResponseMessage response2 = client2.PostAsync(new Uri(urlPath + "/OaeLevantamento?usu_id=" + usu_id.ToString() + "&token=" + nToken_Atual + rod_id), contentString2).Result;
+
+                                if (response2.IsSuccessStatusCode)
+                                {
+                                    var responseBody2 = response2.Content.ReadAsStringAsync().Result;
+
+                                    // ajuste para deserializar a variavel em lista
+                                    responseBody2 = "{OAEs:" + responseBody2 + "}";
+
+                                    lstOAEs listaDeOAEs = Newtonsoft.Json.JsonConvert.DeserializeObject<lstOAEs>(responseBody2);
+
+                                    return listaDeOAEs.OAEs;
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        List<OAE> saida_erro = new List<OAE>();
+                        OAE err = new OAE();
+                        err.rod_id = -1;
+                        err.oae_km_inicial = response.ReasonPhrase;
+
+                        saida_erro.Add(err);
+                        return saida_erro;
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                List<OAE> saida_erro = new List<OAE>();
+                OAE err = new OAE();
+                err.rod_id = -1;
+                err.oae_km_inicial = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+            return null;
+        }
 
         /// <summary>
-        /// Retorna lista de Rodovias retornadas pela API SIRGeo
+        ///  Busca a lista de Regionais pela API
         /// </summary>
-        /// <param name="nToken_Atual"></param>
-        /// <param name="usu_id"></param>
-        /// <returns>vazio</returns>
+        /// <returns>List Regional</returns>
+        public List<Regional> get_Regionais()
+        {
+            string usu_id = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+            string urlPath =  new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+
+            try
+            {
+                string SIRGeo_URL = new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+                string SIRGeo_Usuario = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+
+
+                using (var client = new HttpClient())
+                {
+                    var contentString = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                       {
+                                                                            new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                       });
+
+                    client.BaseAddress = new Uri(urlPath + "/Token");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = client.PostAsync(new Uri(urlPath + "/Token?usu_id=" + usu_id.ToString()), contentString).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseBody = response.Content.ReadAsStringAsync().Result;
+                        token token_retorno = Newtonsoft.Json.JsonConvert.DeserializeObject<token>(responseBody);
+
+                        if (token_retorno.tok_valido)
+                        {
+                            string nToken_Atual = token_retorno.tok_token;
+
+                            using (var client2 = new HttpClient())
+                            {
+                                var contentString2 = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                                   {
+                                                                                        new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                                   });
+                                client2.BaseAddress = new Uri(urlPath + "/Dominio");
+                                client2.DefaultRequestHeaders.Accept.Clear();
+                                client2.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                                HttpResponseMessage response2 = client2.PostAsync(new Uri(urlPath + "/Dominio?dominio=regionais&usu_id=" + usu_id.ToString() + "&token=" + nToken_Atual), contentString2).Result;
+
+                                if (response2.IsSuccessStatusCode)
+                                {
+                                    var responseBody2 = response2.Content.ReadAsStringAsync().Result;
+
+                                    // ajuste para deserializar a variavel em lista
+                                    responseBody2 = "{Regionais:" + responseBody2 + "}";
+
+                                    lstRegionais listaDeRegionais = Newtonsoft.Json.JsonConvert.DeserializeObject<lstRegionais>(responseBody2);
+
+                                    return listaDeRegionais.Regionais;
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        List<Regional> saida_erro = new List<Regional>();
+                        Regional err = new Regional();
+                        err.reg_id = -1;
+                        err.reg_codigo = response.ReasonPhrase;
+
+                        saida_erro.Add(err);
+                        return saida_erro;
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                List<Regional> saida_erro = new List<Regional>();
+                Regional err = new Regional();
+                err.reg_id = -1;
+                err.reg_codigo = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+            return null;
+        }
+
+
+
+        /// <summary>
+        ///  Busca a lista de SentidoRodovias pela API
+        /// </summary>
+        /// <returns>List SentidoRodovia</returns>
+        public List<SentidoRodovia> get_SentidoRodovias()
+        {
+            string usu_id = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+            string urlPath =  new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+
+            try
+            {
+                string SIRGeo_URL = new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+                string SIRGeo_Usuario = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+
+
+                using (var client = new HttpClient())
+                {
+                    var contentString = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                       {
+                                                                            new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                       });
+
+                    client.BaseAddress = new Uri(urlPath + "/Token");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = client.PostAsync(new Uri(urlPath + "/Token?usu_id=" + usu_id.ToString()), contentString).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseBody = response.Content.ReadAsStringAsync().Result;
+                        token token_retorno = Newtonsoft.Json.JsonConvert.DeserializeObject<token>(responseBody);
+
+                        if (token_retorno.tok_valido)
+                        {
+                            string nToken_Atual = token_retorno.tok_token;
+
+                            using (var client2 = new HttpClient())
+                            {
+                                var contentString2 = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                                   {
+                                                                                        new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                                   });
+                                client2.BaseAddress = new Uri(urlPath + "/SentidoRodovias");
+                                client2.DefaultRequestHeaders.Accept.Clear();
+                                client2.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                                HttpResponseMessage response2 = client2.PostAsync(new Uri(urlPath + "/Dominio?dominio=rodovias_sentidos&usu_id=" + usu_id.ToString() + "&token=" + nToken_Atual), contentString2).Result;
+
+                                if (response2.IsSuccessStatusCode)
+                                {
+                                    var responseBody2 = response2.Content.ReadAsStringAsync().Result;
+
+                                    // ajuste para deserializar a variavel em lista
+                                    responseBody2 = "{SentidosRodovia:" + responseBody2 + "}";
+
+                                    lstSentidoRodovia listaDeSentidoRodovias = Newtonsoft.Json.JsonConvert.DeserializeObject<lstSentidoRodovia>(responseBody2);
+
+                                    return listaDeSentidoRodovias.SentidosRodovia;
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        List<SentidoRodovia> saida_erro = new List<SentidoRodovia>();
+                        SentidoRodovia err = new SentidoRodovia();
+                        err.sen_id = -1;
+                        err.sen_descricao = response.ReasonPhrase;
+
+                        saida_erro.Add(err);
+                        return saida_erro;
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                List<SentidoRodovia> saida_erro = new List<SentidoRodovia>();
+                SentidoRodovia err = new SentidoRodovia();
+                err.sen_id = -1;
+                err.sen_descricao = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        ///  Busca a lista de TipoOAE pela API
+        /// </summary>
+        /// <returns>List TipoOAE</returns>
+        public List<TipoOAE> get_TiposOAE()
+        {
+            string usu_id = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+            string urlPath =  new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+
+            try
+            {
+                string SIRGeo_URL = new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+                string SIRGeo_Usuario = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+
+
+                using (var client = new HttpClient())
+                {
+                    var contentString = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                       {
+                                                                            new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                       });
+
+                    client.BaseAddress = new Uri(urlPath + "/Token");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = client.PostAsync(new Uri(urlPath + "/Token?usu_id=" + usu_id.ToString()), contentString).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseBody = response.Content.ReadAsStringAsync().Result;
+                        token token_retorno = Newtonsoft.Json.JsonConvert.DeserializeObject<token>(responseBody);
+
+                        if (token_retorno.tok_valido)
+                        {
+                            string nToken_Atual = token_retorno.tok_token;
+
+                            using (var client2 = new HttpClient())
+                            {
+                                var contentString2 = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                                   {
+                                                                                        new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                                   });
+                                client2.BaseAddress = new Uri(urlPath + "/oae_tipos");
+                                client2.DefaultRequestHeaders.Accept.Clear();
+                                client2.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                                HttpResponseMessage response2 = client2.PostAsync(new Uri(urlPath + "/Dominio?dominio=oae_tipos&usu_id=" + usu_id.ToString() + "&token=" + nToken_Atual), contentString2).Result;
+
+                                if (response2.IsSuccessStatusCode)
+                                {
+                                    var responseBody2 = response2.Content.ReadAsStringAsync().Result;
+
+                                    // ajuste para deserializar a variavel em lista
+                                    responseBody2 = "{TiposOAE:" + responseBody2 + "}";
+
+                                    lstTipoOAE listaDeTipoOAEs = Newtonsoft.Json.JsonConvert.DeserializeObject<lstTipoOAE>(responseBody2);
+
+                                    return listaDeTipoOAEs.TiposOAE;
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        List<TipoOAE> saida_erro = new List<TipoOAE>();
+                        TipoOAE err = new TipoOAE();
+                        err.oat_id = -1;
+                        err.oat_descricao = response.ReasonPhrase;
+
+                        saida_erro.Add(err);
+                        return saida_erro;
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                List<TipoOAE> saida_erro = new List<TipoOAE>();
+                TipoOAE err = new TipoOAE();
+                err.oat_id = -1;
+                err.oat_descricao = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+            return null;
+        }
+
+
+
+
+
+
+
+
+
+
+
 
         // ***************  APIs DER **************
 
@@ -859,7 +1228,6 @@ namespace WebApp.Helpers
 
             return null;
         }
-
 
         /// <summary>
         /// Lista das TPUs

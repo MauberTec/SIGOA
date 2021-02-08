@@ -40,7 +40,55 @@ namespace WebApp.Controllers
             return Json(new { data = listaDeRodovias }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Lista das OAEs
+        /// </summary>
+        /// <param name="rod_id">Filtro por Id da Rodovia</param>
+        /// <returns>JsonResult Lista de Rodovias</returns>
+        public JsonResult Integracao_OAEs_ListAll(string rod_id = "")
+        {
+            Gerais saida = new Gerais();
+            List<OAE> listaDeOAEs = saida.get_OAEs(rod_id);
+            
+            return Json(new { data = listaDeOAEs }, JsonRequestBehavior.AllowGet);
+        }
 
+        /// <summary>
+        /// Lista das Regionais
+        /// </summary>
+        /// <returns>JsonResult Lista de OAEs</returns>
+        public JsonResult Integracao_Regionais_ListAll()
+        {
+            Gerais saida = new Gerais();
+            List<Regional> listaDeRegionais = saida.get_Regionais();
+            
+            return Json(new { data = listaDeRegionais }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Lista dos Sentidos das Rodovias
+        /// </summary>
+        /// <returns>JsonResult Lista de Rodovias</returns>
+        public JsonResult Integracao_SentidoRodovias_ListAll()
+        {
+            Gerais saida = new Gerais();
+            List<SentidoRodovia> listaDeSentidoRodovias = saida.get_SentidoRodovias();
+            
+            return Json(new { data = listaDeSentidoRodovias }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        /// Lista dos Tipos de OAE
+        /// </summary>
+        /// <returns>JsonResult Lista de TipoOAE</returns>
+        public JsonResult Integracao_TiposOAE_ListAll()
+        {
+            Gerais saida = new Gerais();
+            List<TipoOAE> listaDeTiposOAE = saida.get_TiposOAE();
+            
+            return Json(new { data = listaDeTiposOAE }, JsonRequestBehavior.AllowGet);
+        }
 
         // *************** Integracao DER - VDMs *************************************************************
 

@@ -39,12 +39,30 @@
             <div class="form-group">
                 <div class="col-sm-3">
                     <label class="control-label">Ano<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="txtAno" maxlength="4" onkeyup=" $('#txtAno').css('background-color', corBranca)" >
+                    <select class="form-control" id="cmbAno" name="cmbAno" onchange="$('#cmbAno').css('background-color', corBranca)">
+                        <option value="2000" selected disabled>-- Selecione --</option>
+
+                    </select>
                 </div>
 
                 <div class="col-sm-3">
                     <label class="control-label">Fase<span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="txtFase" maxlength="2" value="23" onkeyup=" $('#txtFase').css('background-color', corBranca)" >
+                    <select class="form-control" id="cmbFase" name="cmbFase" onchange="$('#cmbFase').css('background-color', corBranca)">
+                        <option value="00" selected disabled>-- Selecione --</option>
+                        <option value="21">21-SERVIÇOS PRELIMINARES</option>
+                        <option value="22">22-TERRAPLENAGEM</option>
+                        <option value="23">23-PAVIMENTAÇÃO</option>
+                        <option value="24">24-OBRAS DE ARTE CORRENTE E DRENAGEM</option>
+                        <option value="25">25-OBRAS DE CONTENÇÃO GEOTÉCNICA</option>
+                        <option value="26">26-OBRAS DE ARTE ESPECIAIS</option>
+                        <option value="27">27-RECUPERAÇÃO DE OBRAS DE ARTE ESPECIAIS</option>
+                        <option value="28">28-SINALIZAÇÃO E ELEMENTOS DE SEGURANÇA</option>
+                        <option value="30">30-SERVIÇOS DE PROTEÇÃO AO MEIO AMBIENTE</option>
+                        <option value="34">34-SERVIÇOS TERCEIRIZADOS</option>
+                        <option value="35">35-EQUIPE DE PROJETO, GERENCIAMENTO, MEIO AMBIENTE E OBRA</option>
+                        <option value="37">37-CONSERVAÇÃO RODOVIÁRIA</option>
+                        <option value="72">72-ALUGUEL DE MÁQUINAS, VEÍCULOS E EQUIPAMENTOS</option>
+                    </select>
                 </div>
 
                 <div class="col-sm-3">
@@ -131,34 +149,32 @@
 
 <script>
     function LimparFiltroTPU() {
+        var anoAtual = new Date().getFullYear();
 
-        $('#txtAno').val("");
-        $('#txtFase').val("23");
-        $('#cmbMes').val("-1");
-        $('#cmbOnerado').val("-1");
+    //    $('#cmbAno').val(anoAtual);
+        $('#cmbAno').val(2000);
+        $('#cmbFase').val("00");
+        $('#cmbMes').val("00");
+        $('#cmbOnerado').val("");
 
-        $('#txtAno').css('background-color', corBranca);
-        $('#txtFase').css('background-color', corBranca);
+        $('#cmbAno').css('background-color', corBranca);
+        $('#cmbFase').css('background-color', corBranca);
         $('#cmbMes').css('background-color', corBranca);
 
-        carregaGridTPU();
+       // carregaGridTPU();
+
+        $('#tblTPUs').DataTable().ajax.reload(false); 
 
         return false;
     }
 
     function ExecutarFiltroTPU() {
-
-        carregaGridTPU();
-        return false;
-    }
-
-    function carregaGridTPU() {
-        var txtAno = $('#txtAno').val();
-        var txtFase = $('#txtFase').val();
+        var cmbAno = $('#cmbAno').val();
+        var cmbFase = $('#cmbFase').val();
         var cmbMes = $('#cmbMes').val();
 
-        if (txtAno.trim() == "") {
-            $('#txtAno').css("background-color", corVermelho);
+        if ((parseInt(cmbAno) == 2000) || (cmbAno == null)) {
+            $('#cmbAno').css("background-color", corVermelho);
             swal({
                 type: 'error',
                 title: 'Aviso',
@@ -167,43 +183,75 @@
                 function () {
                     return false;
                 });
+            return false;
         }
 
-            if (txtFase.trim() == "") {
-                $('#txtFase').css("background-color", corVermelho);
-                swal({
-                    type: 'error',
-                    title: 'Aviso',
-                    text: 'A fase é  Obrigatória'
-                }).then(
-                    function () {
-                        return false;
-                    });
-            }
- 
-                if ((parseInt(cmbMes) == 0) || (cmbMes == null)) {
-                    $('#cmbMes').css("background-color", corVermelho);
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: 'O Mês é  Obrigatório'
-                    }).then(
-                        function () {
-                            return false;
-                        });
-                }
+        if ((parseInt(cmbFase) == 0) || (cmbFase == null)) {
+            $('#cmbFase').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'A fase é  Obrigatória'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+
+        if ((parseInt(cmbMes) == 0) || (cmbMes == null)) {
+            $('#cmbMes').css("background-color", corVermelho);
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'O Mês é  Obrigatório'
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
 
 
 
+        carregaGridTPU();
+        return false;
+    }
+
+    function carregaGridTPU() {
 
         $('#tblTPUs').DataTable().ajax.reload();  //false = sem reload na pagina.
 
     }
 
+    function preenchecmbAno()
+    {
+        var anoAtual = new Date().getFullYear();
 
+        var cmbAno = document.getElementById("cmbAno");
+        if (cmbAno)
+        {
+            if (cmbAno)
+                var idx = 0;
+                for (var i = 2040; i >= 2001; i--) {
+                    var opt = document.createElement("option");
+                    opt.value = i;
+                    opt.text = i;
+                    cmbAno.add(opt);
+
+                    //if (i == anoAtual)
+                    //    cmbAno.selectedIndex = idx+1;
+
+                    idx = idx + 1;
+                }
+        }
+
+    }
 
     // montagem do gridview
     $(document).ready(function () {
+        preenchecmbAno();
+
         $('#tblTPUs').DataTable({
             "ajax": {
                 "url": "/Integracao/Integracao_TPUs_ListAll",
@@ -211,8 +259,8 @@
                 "datatype": "json",
                 "data": function (d)
                 {
-                    d.ano = $('#txtAno').val();
-                    d.fase = $('#txtFase').val();
+                    d.ano = $('#cmbAno').val();
+                    d.fase = $('#cmbFase').val();
                     d.mes = $('#cmbMes').val();
                     d.onerado = $('#cmbOnerado').val();
                 }
@@ -256,7 +304,7 @@
         $("#txtAno").attr('placeholder', "0000");
 
         jQuery('#txtFase').mask('0000');
-        $("#txtFase").attr('placeholder', "0000");
+        $("#txtFase").attr('placeholder', "00");
 
     });
 
