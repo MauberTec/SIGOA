@@ -23,10 +23,9 @@ namespace WebApp.Controllers
         public ActionResult Index()
         {
             return View();
-        }      
-       
+        }  
         /// <summary>
-        /// LejendaJson
+        /// LegendaJson
         /// </summary>
         /// <returns></returns>       
         public JsonResult PreencheLeg()
@@ -34,8 +33,7 @@ namespace WebApp.Controllers
             List<PoliticaReparoModel> Conserva = new ReparoDAO().GetLegenda();
 
             return Json(Conserva, JsonRequestBehavior.AllowGet);
-        }      
-
+        }   
         /// <summary>
         /// LejendaJson
         /// </summary>
@@ -46,10 +44,6 @@ namespace WebApp.Controllers
 
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-
-      
-
-
         /// <summary>
         /// Alerta
         /// </summary>
@@ -60,9 +54,6 @@ namespace WebApp.Controllers
 
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-
-        
-
         /// <summary>
         /// Alerta
         /// </summary>
@@ -72,8 +63,7 @@ namespace WebApp.Controllers
             List<PoliticaReparoModel> lista = new ReparoDAO().GetCausa(ref id);
 
             return Json(lista, JsonRequestBehavior.AllowGet);
-        }       
-
+        }  
         /// <summary>
         /// Alerta
         /// </summary>
@@ -82,8 +72,7 @@ namespace WebApp.Controllers
         {
             List<PoliticaReparoModel> lista = new ReparoDAO().GerReparo();
             return Json(lista, JsonRequestBehavior.AllowGet);
-        }        
-
+        }  
         /// <summary>
         /// InsertPoliticaReparo
         /// </summary>
@@ -176,8 +165,7 @@ namespace WebApp.Controllers
         {
             string response = new ReparoDAO().DelReparo(rpp_id);
             return Json(response, JsonRequestBehavior.AllowGet);
-        }       
-
+        }   
         /// <summary>
         /// 
         /// </summary>
@@ -188,7 +176,6 @@ namespace WebApp.Controllers
             lista = new ReparoDAO().GetAllRepair();
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-
         /// <summary>
         /// Busca grid home
         /// </summary>
@@ -199,7 +186,5 @@ namespace WebApp.Controllers
             List<PoliticaReparoModel> lista = new ReparoDAO().GetReparo(model);
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-
-        
     }
 }
