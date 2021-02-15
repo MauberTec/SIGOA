@@ -102,7 +102,8 @@ namespace WebApp.Controllers
         /// <summary>
         /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
-        /// <param name="obj_id">Id do objeto a ser deletado</param>
+        /// <param name="tip_id">Id Tipo do Objeto Selecionado</param>
+        /// <param name="obj_id_tipoOAE">Id Objeto Selecionado</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
         public JsonResult Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
@@ -612,6 +613,39 @@ namespace WebApp.Controllers
             return Json(new { data = new ObjetoBLL().ObjFichaInspecaoRotineira_ExportarXLS(obj_id, ord_id) }, JsonRequestBehavior.AllowGet);
         }
 
+
+
+        // *************** Objetos  *************************************************************
+        /// <summary>
+        /// Inicio
+        /// </summary>
+        /// <returns>View</returns>
+        public ActionResult ObjPriorizacao()
+        {
+            //// preenche o combos
+            //List<SelectListItem> lstListacmbClassesObjeto = new ObjetoBLL().PreenchecmbClassesObjeto();
+            //ViewBag.cmbFiltroClassesObjeto = lstListacmbClassesObjeto;
+
+
+            //List<SelectListItem> lstListacmbTiposObjeto = new ObjetoBLL().CriaListaCmbTiposObjeto(null, null);
+            //ViewBag.cmbFiltroTiposObjeto = lstListacmbTiposObjeto;
+
+            //ViewBag.cmbClassesObjeto = lstListacmbClassesObjeto;
+
+            return View();
+        }
+
+        /// <summary>
+        /// Lista de Objetos Priorizados
+        /// </summary>
+        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
+        /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
+        {
+            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, CodOAE, Criticidade) }, JsonRequestBehavior.AllowGet);
+        }
 
 
     }

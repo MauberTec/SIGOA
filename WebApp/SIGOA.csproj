@@ -80,7 +80,8 @@
       <HintPath>..\packages\Microsoft.ReportViewer.Common.10.0.40219.1\lib\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\MicosoftReportViewerWebForms_v11.1.0.1\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.WebForms\11.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.WebForms.dll</HintPath>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.0.0\lib\net40\Swashbuckle.Core.dll</HintPath>
@@ -175,8 +176,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="Business\NotificacaoOcorrenciaBLL.cs" />
     <Compile Include="Business\InspecaoBLL.cs" />
+    <Compile Include="Business\NotificacaoOcorrenciaBLL.cs" />
+    <Compile Include="Business\OrcamentoBLL.cs" />
     <Compile Include="Business\ReparoBLL.cs" />
     <Compile Include="Business\AnomaliaBLL.cs" />
     <Compile Include="Business\PrecoUnitarioBLL.cs" />
@@ -193,9 +195,10 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
-    <Compile Include="Controllers\MultiselectController.cs" />
-    <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
+    <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
+    <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
+    <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\PoliticaConservaController.cs" />
     <Compile Include="Controllers\PoliticaReparosController.cs" />
     <Compile Include="Controllers\ReparoController.cs" />
@@ -214,14 +217,15 @@
     <Compile Include="Controllers\ModuloController.cs" />
     <Compile Include="Controllers\ParametroController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
-    <Compile Include="DAO\NotificacaoOcorrenciaDAO.cs" />
     <Compile Include="DAO\InspecaoDAO.cs" />
+    <Compile Include="DAO\NotificacaoOcorrenciaDAO.cs" />
+    <Compile Include="DAO\OrcamentoDAO.cs" />
+    <Compile Include="DAO\PoliticaConservaDAO.cs" />
     <Compile Include="DAO\RelatoriosDAO.cs" />
     <Compile Include="DAO\ReparoDAO.cs" />
     <Compile Include="DAO\Conexao.cs" />
     <Compile Include="DAO\AnomaliaDAO.cs" />
     <Compile Include="DAO\PrecoUnitarioDAO.cs" />
-    <Compile Include="DAO\PoliticaConservaDAO.cs" />
     <Compile Include="DAO\UnidadeDAO.cs" />
     <Compile Include="DAO\OrdemServicoDAO.cs" />
     <Compile Include="DAO\ObjetoDAO.cs" />
@@ -242,9 +246,10 @@
     <Compile Include="Models\ConservaDTO.cs" />
     <Compile Include="Models\ConservaModel.cs" />
     <Compile Include="Models\ConservaPoliticaModel.cs" />
-    <Compile Include="Models\NotificaoOcorrencia.cs" />
+    <Compile Include="Models\Integracao.cs" />
     <Compile Include="Models\Inspecao.cs" />
-    <Compile Include="Models\PoliticaReparoModel.cs" />
+    <Compile Include="Models\NotificaoOcorrencia.cs" />
+    <Compile Include="Models\Orcamento.cs" />
     <Compile Include="Models\Reparo.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\Anomalia.cs" />
@@ -440,20 +445,21 @@
     <Content Include="Scripts\Anomalia\AnomLegenda.js" />
     <Content Include="Scripts\Objeto\Objeto.js" />
     <Content Include="Scripts\Objeto\Objeto_BotaoNovo.js" />
+    <Content Include="Scripts\Orcamento\OrcamentoFluxoStatus.js" />
+    <Content Include="Scripts\Orcamento\OrcamentoStatus.js" />
     <Content Include="Scripts\OrdemServico\OSFluxoStatus.js" />
     <Content Include="Scripts\OrdemServico\OSStatus.js" />
     <Content Include="Scripts\OrdemServico\OrdemServico.js" />
     <Content Include="Scripts\OrdemServico\OSTipo.js" />
     <Content Include="Scripts\Inspecao\InspecaoTipo.js" />
-    <Content Include="Scripts\Politica\Politica.js" />
     <Content Include="Scripts\Politica\ConservaTipo.js" />
+    <Content Include="Scripts\Politica\Politica.js" />
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
-    <Content Include="Scripts\Reparo\PoliticaReparos.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
-    <Content Include="Scripts\Shared\_PolitacaConserva.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
     <Content Include="Scripts\Shared\_fichasInspecao.js" />
     <Content Include="Scripts\Shared\_SelecionarDocumento.js" />
@@ -587,7 +593,6 @@
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste4.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste5.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste6.png" />
-    <Content Include="Views\PoliticaReparos\multiselect.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -648,11 +653,18 @@
     <Content Include="Views\Shared\_fichaInspecaoEspecial.cshtml" />
     <Content Include="Views\Inspecao\Inspecao.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecialCampo.cshtml" />
+    <Content Include="Views\Orcamento\Orcamento.cshtml" />
+    <Content Include="Views\Orcamento\OrcamentoFluxoStatus.cshtml" />
+    <Content Include="Views\Orcamento\OrcamentoStatus.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoSirgeo.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoVDM.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoTPU.cshtml" />
+    <Content Include="Views\Shared\_ObjPriorizacao.cshtml" />
+    <Content Include="Views\Shared\_fichaInspecaoEspecialProvidencias.cshtml" />
     <Content Include="Views\Shared\_fichaNotificacaoOcorrencia.cshtml" />
-    <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
     <Content Include="Views\PoliticaReparos\Index.cshtml" />
     <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
-    <Content Include="Views\Multiselect\Index.cshtml" />
+    <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -687,9 +699,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\rptFichaNotificacaoOcorrencia.rdlc">
+    <Content Include="Reports\rptFichaInspecaoEspecial_Providencias.rdlc">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

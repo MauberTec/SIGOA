@@ -2,12 +2,15 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -656,13 +659,332 @@ namespace WebApp.Helpers
         /// Checa se é numero
         /// </summary>
         /// <param name="s">string a testar</param>
-        /// <returns></returns>
+        /// <returns>true/false</returns>
         public bool IsNumeric(string s)
         {
             float output;
             return float.TryParse(s, out output);
         }
 
+
+        // *************** INTEGRACAO APIS **************
+
+        /// <summary>
+        ///  Busca a lista de Rodovias pela API
+        /// </summary>
+        /// <param name="rod_Codigo">Codigo da Rodovia, vazio para todos</param>
+        /// <returns>List Rodovia</returns>
+        public List<Rodovia> get_Rodovias(string rod_Codigo = "")
+        {
+            string usu_id = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+            string urlPath =  new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+
+            try
+            {
+                string SIRGeo_URL = new ParametroDAO().Parametro_GetValor("SIRGeo_URL");
+                string SIRGeo_Usuario = new ParametroDAO().Parametro_GetValor("SIRGeo_Usuario");
+
+
+                using (var client = new HttpClient())
+                {
+                    var contentString = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                       {
+                                                                            new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                       });
+
+                    client.BaseAddress = new Uri(urlPath + "/Token");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpResponseMessage response = client.PostAsync(new Uri(urlPath + "/Token?usu_id=" + usu_id.ToString()), contentString).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseBody = response.Content.ReadAsStringAsync().Result;
+                        token token_retorno = Newtonsoft.Json.JsonConvert.DeserializeObject<token>(responseBody);
+
+                        if (token_retorno.tok_valido)
+                        {
+                            string nToken_Atual = token_retorno.tok_token;
+
+                            using (var client2 = new HttpClient())
+                            {
+                                var contentString2 = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
+                                                                                   {
+                                                                                        new KeyValuePair<string, string>("usu_id", usu_id.ToString())
+                                                                                   });
+                                client2.BaseAddress = new Uri(urlPath + "/Rodovias");
+                                client2.DefaultRequestHeaders.Accept.Clear();
+                                client2.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                                if (rod_Codigo.Trim() != "")
+                                    rod_Codigo = "&rod_Codigo=" + rod_Codigo;
+                                HttpResponseMessage response2 = client2.PostAsync(new Uri(urlPath + "/Rodovias?usu_id=" + usu_id.ToString() + "&token=" + nToken_Atual + rod_Codigo), contentString2).Result;
+
+                                if (response2.IsSuccessStatusCode)
+                                {
+                                    var responseBody2 = response2.Content.ReadAsStringAsync().Result;
+
+                                    // ajuste para deserializar a variavel em lista
+                                    responseBody2 = "{Rodovias:" + responseBody2 + "}";
+
+                                    lstRodovias listaDeRodovias = Newtonsoft.Json.JsonConvert.DeserializeObject<lstRodovias>(responseBody2);
+
+                                    return listaDeRodovias.Rodovias;
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        List<Rodovia> saida_erro = new List<Rodovia>();
+                        Rodovia err = new Rodovia();
+                        err.rod_codigo = "-1";
+                        err.rod_descricao = response.ReasonPhrase;
+
+                        saida_erro.Add(err);
+                        return saida_erro;
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                List<Rodovia> saida_erro = new List<Rodovia>();
+                Rodovia err = new Rodovia();
+                err.rod_codigo = "-1";
+                err.rod_descricao = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+            return null;
+        }
+
+
+
+        /// <summary>
+        /// Retorna lista de Rodovias retornadas pela API SIRGeo
+        /// </summary>
+        /// <param name="nToken_Atual"></param>
+        /// <param name="usu_id"></param>
+        /// <returns>vazio</returns>
+
+        // ***************  APIs DER **************
+
+        /// <summary>
+        /// Busca a lista de VDMs para a rodovia solicitada
+        /// </summary>
+        /// <param name="rod_codigo">Código da Rodovia</param>
+        /// <param name="kminicial">Km inicial solicitado</param>
+        /// <param name="kmfinal">Km final solicitado</param>
+        /// <returns>Lista vdm</returns>
+        public List<vdm> get_VDMs(string rod_codigo, decimal kminicial, decimal kmfinal)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+
+                    vdm_entrada VDMs_In = new vdm_entrada();
+                    VDMs_In.modo = "consolidado";
+                    VDMs_In.rodovia = rod_codigo.Replace(" ","");
+                    VDMs_In.kminicial = kminicial;
+                    VDMs_In.kmfinal = kmfinal;
+
+                    string DER_API_VDM_URL = new ParametroDAO().Parametro_GetValor("DER_API_VDM_URL");
+                    string DER_API_VDM_Usuario = new ParametroDAO().Parametro_GetValor("DER_API_VDM_Usuario");
+                    string DER_API_VDM_Senha = new ParametroDAO().Parametro_GetValor("DER_API_VDM_Senha");
+
+                    var stringContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(VDMs_In), Encoding.UTF8, "application/json");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Add("Auth", DER_API_VDM_Usuario + "-" + DER_API_VDM_Senha);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = client.PostAsync(new Uri(DER_API_VDM_URL), stringContent).Result;
+                    var content = response.Content;
+                    var headers = response.Headers;
+                    var status = response.StatusCode;
+
+                    var responseBody = response.Content.ReadAsStringAsync().Result;
+
+                    vdm_retorno retorno2 = null;
+                    retorno_erro error = null;
+
+                    // verifica se tem erro
+                    try
+                    {                       
+                       retorno2 = Newtonsoft.Json.JsonConvert.DeserializeObject<vdm_retorno>(responseBody);
+                    }
+                    catch
+                    {
+                        error = Newtonsoft.Json.JsonConvert.DeserializeObject<retorno_erro>(responseBody);
+                    }
+
+                    if (retorno2 != null) 
+                    {
+                        if (retorno2.status)
+                        {
+                            // retorna Lista<vdm>
+                            return retorno2.data.Vdms;
+                        }
+                    }
+                    else
+                    if (error != null)
+                        if (!error.status)
+                        {
+                            List<vdm> saida_erro = new List<vdm>();
+                            vdm err = new vdm();
+                            err.vdm_ano = -1;
+                            err.vdm_rodovia = error.data;
+
+                            saida_erro.Add(err);
+                            return saida_erro;
+                        }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                List<vdm> saida_erro = new List<vdm>();
+                vdm err = new vdm();
+                err.vdm_ano = -1;
+                err.vdm_rodovia = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// Lista das TPUs
+        /// </summary>
+        /// <param name="ano">Ano</param>
+        /// <param name="fase">fase = 23</param>
+        /// <param name="mes">Mês</param>
+        /// <param name="onerado">Onerado: SIM,NÃO, vazio para todos</param>
+        /// <returns>Lista tpu</returns>
+        public List<tpu> get_TPUs(string ano, string fase, string mes, string onerado = "")
+        {
+
+            try
+            {
+                string DER_API_TPU_URL = new ParametroDAO().Parametro_GetValor("DER_API_TPU_URL");
+                string DER_API_TPU_Usuario = new ParametroDAO().Parametro_GetValor("DER_API_TPU_Usuario");
+                string DER_API_TPU_Senha = new ParametroDAO().Parametro_GetValor("DER_API_TPU_Senha");
+
+                using (var client = new HttpClient())
+                {
+
+                    tpu_entrada tpus_In = new tpu_entrada();
+                    tpus_In.modo = "TPU";
+                    tpus_In.ano = ano;
+                    tpus_In.fase = fase;
+                    tpus_In.mes = mes;
+                    tpus_In.onerado = onerado;
+
+
+                    var stringContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(tpus_In), Encoding.UTF8, "application/json");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Add("Auth", DER_API_TPU_Usuario + "-" + DER_API_TPU_Senha);
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage response = client.PostAsync(new Uri(DER_API_TPU_URL), stringContent).Result;
+                    var content = response.Content;
+                    var headers = response.Headers;
+                    var status = response.StatusCode;
+
+                    var responseBody = response.Content.ReadAsStringAsync().Result;
+
+                    tpu_retorno retorno2 = null;
+                    retorno_erro error = null;
+
+                    // verifica se tem erro
+                    try
+                    {
+                        retorno2 = Newtonsoft.Json.JsonConvert.DeserializeObject<tpu_retorno>(responseBody);
+                    }
+                    catch
+                    {
+                        error = Newtonsoft.Json.JsonConvert.DeserializeObject<retorno_erro>(responseBody);
+                    }
+
+                    if (retorno2 != null)
+                    {
+                        if (retorno2.status)
+                        {
+                            List<tpu> retorno = retorno2.data.TpuPrecosSites;
+                            return retorno;
+                        }
+                    }
+                    else
+                    if (error != null)
+                        if (!error.status)
+                        {
+                            List<tpu> saida_erro = new List<tpu>();
+                            tpu err = new tpu();
+                            err.DataTpu = "-1";
+                            err.CodSubItem = error.data;
+
+                            saida_erro.Add(err);
+                            return saida_erro;
+                        }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                List<tpu> saida_erro = new List<tpu>();
+                tpu err = new tpu();
+                err.DataTpu = "-1";
+                err.CodSubItem = ex.InnerException.Message;
+
+                saida_erro.Add(err);
+                return saida_erro;
+            }
+
+            return null;
+        }
+
+
+        /// <summary>
+        /// Converte Lista para Datatable
+        /// </summary>
+        /// <typeparam name="T">Tipo da Lista</typeparam>
+        /// <param name="items">Lista de entrada</param>
+        /// <returns>Datatable</returns>
+        public  DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Defining type of data column gives proper data table 
+                var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name, type);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
 
 
     }

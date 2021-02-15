@@ -155,7 +155,7 @@
                 @{
                     if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
                     {
-                        <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="bntNovoOrcamento_click();">Novo Orçamento</button>
+                        <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#modalSalvarRegistro" onclick="bntNovoOrcamento_click();">Novo Orçamento</button>
                     }
                 }
             </div>
@@ -1108,8 +1108,6 @@
         </div>
     </div>
 
-    @*</div>
-        </div>*@
 </section>
 
 
@@ -1407,7 +1405,7 @@
                             if (parseInt(result) > 0) {
                                 $('#tblOrcamento').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
 
-                                // espera 1 segundo para dar tempo do reload, nao funcionou colocando no "Null" do reload                            
+                                // espera 1 segundo para dar tempo do reload, nao funcionou colocando no "Null" do reload
                                 setTimeout(function () { posicionaLinha('tblOrcamento', result, 0); }, 1500);
                             }
 
@@ -1711,11 +1709,11 @@
 
                 { data: "orc_valor_total", tooltip: "orc_valor_total", "width": "80px", "searchable": true },
 
-                { data: "orc_os_associadas", tooltip: "orc_os_associadas","autoWidth": true, "searchable": true },
-                { data: "orc_objetos_associados", tooltip: "orc_objetos_associados","autoWidth": true, "searchable": true }
+                { data: "orc_os_associadas", tooltip: "orc_os_associadas", "autoWidth": true, "searchable": true },
+                { data: "orc_objetos_associados", tooltip: "orc_objetos_associados", "autoWidth": true, "searchable": true }
 
 
-               , {
+                , {
                     data: "orc_id",
                     "searchable": false,
                     "sortable": false,
@@ -2080,3 +2078,139 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Nova Ordem de Serviço</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+
+                <div class="modal-body form-group">
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Código</label>
+                            <div class="col-sm-9">
+                                <input id="txtorc_codigo_Novo" name="txtorc_codigo" maxlength="20"
+                                       class="form-control" disabled />
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Versão<span class="text-danger">*</span></label>
+                                <div class="col-sm-9">
+                                    <input id="txtorc_versao" name="txtorc_versao" maxlength="20"
+                                           class="form-control" disabled />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Descrição<span class="text-danger">*</span></label>
+                                <div class="col-sm-9">
+                                    <input id="txtorc_descricao_Novo" name="txtorc_descricao_Novo" class="form-control"
+                                           placeholder="Descrição" data-val="true" required
+                                           maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                           autocomplete="off"
+                                           onkeyup="$('#txtorc_descricao_Novo').css('background-color', corBranca)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Objeto(s)<span class="text-danger">*</span> </label>
+                                <div class="col-sm-9">
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td style="width:100%">
+                                                @*<input id="txtobj_codigo_Novo" name="txtobj_codigo_Novo" class="form-control"
+                                                       placeholder="Objeto" readonly maxlength="40"
+                                                       autocomplete="off" />*@
+                                            </td>
+                                            <td>
+                                                <button style="display:inline; width:40px; height:25px; margin-left:5px; display:inline" data-toggle="modal" data-target="#modalLocalizarObjeto" onclick="return abrirLocalizarObjetos();">...</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <nobr><label class="control-label col-sm-3">Data Validade<span class="text-danger">*</span></label></nobr>
+                                <div class="col-sm-9">
+                                    <input id="txtorc_Validade_Novo" name="txtorc_data_Validade_Novo" placeholder="Data Validade"
+                                           maxlength="20" class="form-control" readonly style="background-color:transparent" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Aberta Por</label>
+                                <div class="col-sm-9">
+                                    <input id="txtusu_nome_Novo" name="txtusu_nome" maxlength="100"
+                                           class="form-control" disabled value="@( @gUsuario.usu_nome)" title="@( gUsuario.usu_id)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <nobr><label class="control-label col-sm-3">Data Abertura</label></nobr>
+                                <div class="col-sm-9">
+                                    <input id="txtorc_data_abertura" name="txtorc_data_abertura" placeholder="Data Abertura"
+                                           maxlength="20" class="form-control" disabled value="@( DateTime.Now.ToShortDateString() )">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar_Novo" onclick="return bntSalvar_Novo_onclick();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalLocalizarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Objetos</label>
+                        <div class="col-sm-9"
+                             style="width:72%; height:100px; padding: 0px !important; border:solid 1px lightgray; border-radius:4px !important;"
+                             id="divObjetosLocalizados">
+
+                            <select multiple="multiple" size="5" id="lstObjetosLocalizados" style="margin-right:5px; width:100%; border:none;" onchange="OrdemServico_Objeto_Salvar();"></select>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntOrdemServico_Objeto" name="bntOrdemServico_Objeto" onclick="return OrdemServico_Objeto_Salvar();" class="btn btn-primary btn-block btn-flat">Selecionar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

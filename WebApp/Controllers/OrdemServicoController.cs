@@ -28,13 +28,14 @@ namespace WebApp.Controllers
             {
                 case 1: ficha = "~/Views/Shared/_fichaInspecaoCadastral.cshtml"; break;
                 case 2: ficha = "~/Views/Shared/_fichaInspecaoRotineira.cshtml"; break;
-                case 3: ficha = "~/Views/Shared/_fichaInspecaoRotineira.cshtml"; break;
-                case 4: ficha = "~/Views/Shared/_fichaInspecaoEspecial.cshtml"; break;
-                case 5: ficha = "~/Views/Shared/_fichaInspecaoEspecialCampo.cshtml"; break;
-                case 6: ficha = "~/Views/Shared/_fichaNotificacaoOcorrencia.cshtml"; break;
+                case 3: ficha = "~/Views/Shared/_fichaInspecaoRotineira.cshtml";break;
+                case 4: ficha = "~/Views/Shared/_fichaInspecaoEspecial.cshtml";  break;
+                case 5: ficha = "~/Views/Shared/_fichaInspecaoEspecialCampo.cshtml";  break;
+                case 6: ficha = "~/Views/Shared/_fichaNotificacaoOcorrencia.cshtml";  break;
+                case 7: ficha = "~/Views/Shared/_fichaInspecaoEspecialProvidencias.cshtml";  break;
             }
 
-            return PartialView(ficha);
+                return PartialView(ficha);
         }
 
 
@@ -49,7 +50,7 @@ namespace WebApp.Controllers
             ViewBag.cmbFiltroTiposOS = new OrdemServicoBLL().PreencheCmbTiposOS();
             ViewBag.cmbTiposOS = new OrdemServicoBLL().PreencheCmbTiposOS();
             ViewBag.cmbTiposOS_Novo = new OrdemServicoBLL().PreencheCmbTiposOS();
-
+            
 
             ViewBag.cmbFiltroStatusOS = new OrdemServicoBLL().PreencheCmbStatusOS();
             ViewBag.cmbStatusOS = new OrdemServicoBLL().PreencheCmbStatusOS();

@@ -1,7 +1,7 @@
 ﻿    var linhaCabecalhos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
         ' <td class="qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
-        ' <td class="borderLeft qualClasse"><label class="lblsBold" id="lbl_Item_ian_id_ZZZ"></label>lbl_Item_VVV</td> ' +
-        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ"></label>lbl_Localizacao_VVV</td> ' +
+        ' <td class="borderLeft qualClasse"><label class="lblsBold" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label></td> ' +
+        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ">lbl_Localizacao_VVV</label></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
@@ -21,21 +21,31 @@
         ' <td class="borderLeft " id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft " id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft borderRight" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
+        ' <td class="borderLeft borderRight" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' </tr>';
 
     var linhaObjetos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
         ' <td class=" qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
         ' <td class="borderLeft qualClasse"> ' +
-        '          <button id="btn_ExcluirObjeto_ian_id_ZZZ" ' +
+        '          <button id="btn_InserirAnomalia_ian_id_ZZZ" ' +
         '            type="button" ' +
-        '             onclick="return Ficha4_ExcluirObjeto(ZZZ)" ' +
-        '             title="Excluir Objeto" ' +
+        '             onclick="return Ficha4_InserirAnomalia(ZZZ)" ' +
+        '             title="Inserir Anomalia" ' +
+        '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
+        '             <span class="glyphicon glyphicon-plus text-success contornoBranco"> ' +
+        '          </button> ' +
+
+        '          <button id="btn_ExcluirAnomalia_ian_id_ZZZ" ' +
+        '            type="button" ' +
+        '             onclick="return Ficha4_ExcluirAnomalia(ZZZ)" ' +
+        '             title="Excluir Anomalia" ' +
         '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
         '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
         '          </button> ' +
-        '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ"></label>lbl_Item_VVV ' +
+
+        '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label> ' +
         ' </td > ' +
-        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" ></label>lbl_Localizacao_VVV</td> ' +
+        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
@@ -53,11 +63,13 @@
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Desenho_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Desenho_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse borderRight"><input disabled id="txt_Obs_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Obs_VVV" /></td> ' +
 
-        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_ReparoIndicado_ian_id_ZZZ">lbl_ReparoIndicado_VVV</label></td> ' +
+        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_ReparoIndicado_ian_id_ZZZ" title="TOOLTIP_ReparoIndicado_ian_id" >lbl_ReparoIndicado_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ><label class="centroH txts2" id="lbl_QuantidadeIndicada_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicada_VVV</label><label class="centroH txts2" id="lbl_QuantidadeIndicadaUnidade_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicadaUnidade_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><select disabled id="cmb_ReparoAdotado_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_ReparoAdotado" >OPCOES_cmb_ReparoAdotado</select></td> ' +
         //' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_ReparoAdotado_ian_id_ZZZ" class="centroH" style="width:94%;" value="txt_ReparoAdotado_VVV" /></td> ' +
         ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_QuantidadeAdotada_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_QuantidadeAdotada_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
+
         ' </tr>';
 
 
@@ -80,10 +92,8 @@ function Ficha4_CAMPO_ExportarXLS() {
 }
 
 function CancelarDados_Ficha4_CAMPO(tabela) {
-    preenchetblFicha4_CAMPO();
+    preenchetblFicha4_CAMPO(true);
 
-    // alterna os campos para leitura
-    Ficha4_CAMPO_setaReadWrite(tabela, true);
 }
 function EditarDados_Ficha4_CAMPO(tabela) {
     // alterna os campos para escrita
@@ -230,13 +240,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
         dataType: "json",
         success: function (result) {
 
-            preenchetblFicha4_CAMPO();
-
-            Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, true);
-
-            //document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-            //document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-            //document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
+            preenchetblFicha4_CAMPO(true);
 
             return false;
         },
@@ -301,10 +305,10 @@ function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
                 opt = opt.replace("selectedXX", "selected");
                 linhaAux = linhaAux.replace(tooltip, aux[1]);
             }
-            else {
-                opt = opt.replace("selectedXX", "");
-                linhaAux = linhaAux.replace(tooltip, aux[1]);
-            }
+            //else {
+            //    opt = opt.replace("selectedXX", "");
+            //    linhaAux = linhaAux.replace(tooltip, aux[1]);
+            //}
             total = total + opt;
         }
     }
@@ -317,7 +321,9 @@ function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
     return linhaAux;
 }
 
-function preenchetblFicha4_CAMPO() {
+function preenchetblFicha4_CAMPO(ehRead) {
+    if (ehRead == null)
+        ehRead = true;
 
     $("#lblOAE").text(selected_obj_codigo);
     $('#txt_ins_anom_data').datepicker({ dateFormat: 'dd/mm/yy' });
@@ -402,9 +408,17 @@ function preenchetblFicha4_CAMPO() {
                     linhaAux = linhaAux.replace(/txt_Croqui_VVV/g, result.data[i].ian_croqui);
                     linhaAux = linhaAux.replace(/txt_Desenho_VVV/g, result.data[i].ian_desenho);
                     linhaAux = linhaAux.replace(/txt_Obs_VVV/g, result.data[i].ian_observacoes);
-                    linhaAux = linhaAux.replace(/lbl_ReparoIndicado_VVV/g, result.data[i].rpt_id_sugerido_codigo);
 
-                    
+                    linhaAux = linhaAux.replace(/lbl_ReparoIndicado_VVV/g, result.data[i].rpt_id_sugerido_codigo);
+                    linhaAux = linhaAux.replace(/TOOLTIP_ReparoIndicado_ian_id/g, result.data[i].rpt_id_sugerido_descricao);
+
+                    if (result.data[i].apt_id == 0) 
+                        linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, '');
+                    else
+                        linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, result.data[i].apt_id);
+
+                    linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
+
                     if (!isNaN((result.data[i].ian_quantidade_adotada)))
                         linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, result.data[i].ian_quantidade_sugerida.toFixed(2));
                     else
@@ -448,7 +462,7 @@ function preenchetblFicha4_CAMPO() {
             celulaPai.insertAdjacentHTML('afterend', linhas);
 
             // coloca mascara no campo quantidade
-            var qts = $('[id^="txt_quantidade_"]');
+            var qts = $('[id^="txt_Quantidade"]');
             for (var i = 0; i < qts.length; i++) {
                 jQuery(qts[i]).attr('placeholder', "000.00");
                 jQuery(qts[i]).mask("999.99");
@@ -461,6 +475,7 @@ function preenchetblFicha4_CAMPO() {
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = '';
 
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = '';
@@ -470,18 +485,21 @@ function preenchetblFicha4_CAMPO() {
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = '';
 
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = '';
 
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = '';
+                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = '';
             
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = '';
                 document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = '';
@@ -500,6 +518,7 @@ function preenchetblFicha4_CAMPO() {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = 'none';
@@ -509,18 +528,21 @@ function preenchetblFicha4_CAMPO() {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = 'none';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = 'none';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = 'none';
@@ -531,8 +553,16 @@ function preenchetblFicha4_CAMPO() {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = 'none';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = 'none';
                 }
-        }
-    });
+
+            // alterna os campos para leitura/edicao
+            var tblFicha4_INSPECAO_ESPECIAL_CAMPO = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
+            if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
+                Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
+         }
+   });
+
+
+
 
 }
 
@@ -568,6 +598,9 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
     var lbl_QuantidadeIndicadaUnidade_id = "lbl_QuantidadeIndicadaUnidade" + sufixo;
     var lbl_QuantidadeIndicadaUnidade = document.getElementById(lbl_QuantidadeIndicadaUnidade_id);
 
+    // label Providencia Indicada
+    var lbl_Providencia_ian_id = "lbl_Providencia" + sufixo;
+    var lbl_Providencia = document.getElementById(lbl_Providencia_ian_id);
 
     // txt_Quantidade_ian_id_
     var txt_Quantidade_ian_id =  "txt_Quantidade" + sufixo;
@@ -590,39 +623,47 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
     if (Number.isNaN(f_Comprimento))
         f_Comprimento = 0;
 
+    var rpt_area = (f_Comprimento / 100) * (f_Largura / 100);
 
     $.ajax({
         url: '/Inspecao/InspecaoAnomalia_ReparoSugerido',
         type: "POST",
         dataType: "JSON",
-        data: { leg_codigo: leg_codigo, atp_codigo: atp_codigo, ale_codigo: ale_codigo, aca_codigo: aca_codigo },
+        data: { leg_codigo: leg_codigo, atp_codigo: atp_codigo, ale_codigo: ale_codigo, aca_codigo: aca_codigo, rpt_area: rpt_area },
         success: function (result) {
+            lbl_QuantidadeIndicada.innerHTML = "";
+            lbl_ReparoIndicado.innerHTML = "";
+            lbl_ReparoIndicado.title = "";
+            lbl_QuantidadeIndicadaUnidade.innerHTML = "";
+
+            lbl_Providencia.innerHTML = "";
+            lbl_Providencia.title = "";
 
             if (result.data.length > 0) {
-                lbl_ReparoIndicado.innerHTML = result.data[0].rpt_id;
-                lbl_ReparoIndicado.title = result.data[0].rpt_descricao;
-                lbl_QuantidadeIndicadaUnidade.innerHTML = result.data[0].rpt_unidade;
+                if (result.data[0].rpt_codigo != "") {
 
-                switch (result.data[0].rpt_unidade.toUpperCase()) {
-                    case "M":
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
-                        break;
+                    lbl_ReparoIndicado.innerHTML = result.data[0].rpt_id;
+                    lbl_ReparoIndicado.title = result.data[0].rpt_descricao;
+                    lbl_QuantidadeIndicadaUnidade.innerHTML = result.data[0].rpt_unidade;
 
-                    case "M2":
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
-                        break;
+                    switch (result.data[0].rpt_unidade.toUpperCase()) {
+                        case "M":
+                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                            break;
 
-                    default: // UM, UN
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
-                        break;
+                        case "M2":
+                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
+                            break;
+
+                        default: // UM, UN
+                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                            break;
+                    }
                 }
-            }
-            else {
-                lbl_QuantidadeIndicada.innerHTML = "";
-                lbl_ReparoIndicado.innerHTML = "";
-                lbl_ReparoIndicado.title = "";
-                lbl_QuantidadeIndicadaUnidade.innerHTML = "";
-
+                else {
+                    lbl_Providencia.innerHTML = result.data[0].rpt_id;
+                    lbl_Providencia.title = result.data[0].rpt_descricao;
+                }
             }
         }
     });
@@ -676,10 +717,30 @@ function cmb_Sigla_onchange(quem) {
                         opt.title = aux[1].trim();
                         cmb_Causa.appendChild(opt);
                     }
+
+                    // preenche alerta
+                    var cmb_Alerta_id = quem.id.replace("cmb_Sigla", "cmb_Alerta")
+                    var cmb_Alerta = document.getElementById(cmb_Alerta_id);
+                    $.ajax({
+                        url: '/Inspecao/InspecaoAnomaliaAlertas_by_Legenda',
+                        type: "POST",
+                        dataType: "JSON",
+                        data: { leg_codigo: valor },
+                        success: function (result) {
+                            $('#' + cmb_Alerta_id).html('');
+                            var pedacos = result.data.split(";");
+                            for (k = 0; k < pedacos.length; k++) {
+                                var aux = pedacos[k].split(":");
+                                var opt = document.createElement('option');
+                                opt.value = aux[0].trim();
+                                opt.innerHTML = aux[0].trim();
+                                opt.title = aux[1].trim();
+                                cmb_Alerta.appendChild(opt);
+                            }
+                        }
+                    })
                 }
-            });
-
-
+            })
         }
     });
 
@@ -760,7 +821,8 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
     var lstButtons = tblFicha4_INSPECAO_ESPECIAL_CAMPO.getElementsByTagName('button');
 
     for (var i = 0; i < lstButtons.length; i++)
-        if (lstButtons[i].id.includes("btn_ExcluirObjeto_rownum")) {
+        if ((lstButtons[i].id.includes("btn_ExcluirAnomalia_ian_id_")) || (lstButtons[i].id.includes("btn_InserirAnomalia_ian_id_")) )
+        {
             lstButtons[i].style.display = ehRead ? 'none' : 'inline'; // aqui display block/none; na criacao da tabela visibility: visible/hidden (para nao misturar porque la existe validacao)
         }
 
@@ -840,48 +902,6 @@ function Ficha4_CAMPO_preencheLocalizacao(tip_id_Subdivisao1) {
             });
         }
     });
-}
-function Ficha4_ExcluirObjeto(qual_ian_id) {
-    var form = this;
-
-    swal({
-        title: "Excluir. Tem certeza?",
-        icon: "warning",
-        buttons: [
-            'Não',
-            'Sim'
-        ],
-        dangerMode: true,
-        focusCancel: true
-    }).then(function (isConfirm) {
-        if (isConfirm) {
-            var response = POST("/Inspecao/InspecaoAnomaliaObjetos_Excluir", JSON.stringify({ id: qual_ian_id }))
-            if (response.erroId >= 1) {
-                swal({
-                    type: 'success',
-                    title: 'Sucesso',
-                    text: 'Registro excluído com sucesso'
-                });
-
-                // atualiza tabela
-                preenchetblFicha4_CAMPO();
-
-                return false;
-            }
-            else {
-                swal({
-                    type: 'error',
-                    title: 'Aviso',
-                    text: 'Erro ao excluir registro'
-                });
-            }
-            return false;
-        } else {
-            return false;
-        }
-    })
-    return false;
-
 }
 
 function Ficha4_CAMPO_LimparCampos(aPartirDe) {
@@ -1038,7 +1058,7 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
                 success: function (result) {
 
                     // atualiza os dados
-                    preenchetblFicha4_CAMPO();
+                    preenchetblFicha4_CAMPO(true);
 
                     $("#modalSelecionarObjetoLocalizacao").modal('hide');
                     return false;
@@ -1064,5 +1084,72 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
     return false;
 }
 
+function Ficha4_ExcluirAnomalia(qual_ian_id) {
+    var form = this;
 
+    swal({
+        title: "Excluir. Tem certeza?",
+        icon: "warning",
+        buttons: [
+            'Não',
+            'Sim'
+        ],
+        dangerMode: true,
+        focusCancel: true
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            var response = POST("/Inspecao/InspecaoAnomalia_Excluir", JSON.stringify({ id: qual_ian_id }))
+            if (response.erroId >= 1) {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Registro excluído com sucesso'
+                });
+
+                // atualiza tabela
+                preenchetblFicha4_CAMPO(false);
+
+                return false;
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao excluir registro'
+                });
+            }
+            return false;
+        } else {
+            return false;
+        }
+    })
+    return false;
+
+}
+
+
+function Ficha4_InserirAnomalia(qual_ian_id) {
+
+    var response = POST("/Inspecao/InspecaoAnomalia_Nova", JSON.stringify({ id: qual_ian_id }))
+            if (response.erroId >= 1) {
+                //swal({
+                //    type: 'success',
+                //    title: 'Sucesso',
+                //    text: 'Registro Incluído com sucesso'
+                //});
+
+                // atualiza tabela
+                preenchetblFicha4_CAMPO(false);
+
+                return false;
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao Inserir Anomalia'
+                });
+            }
+            return false;
+}
 

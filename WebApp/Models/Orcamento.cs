@@ -7,7 +7,7 @@ namespace WebApp.Models
 {
     // *************  ORCAMENTO  ***************************************
     /// <summary>
-    /// 
+    /// Orçamento
     /// </summary>
     public class Orcamento
     {

@@ -289,6 +289,42 @@ namespace WebApp.DAO
         }
 
 
+        /// <summary>
+        /// Lista Grupos/Variáveis do Objeto Selecionado
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Serviço selecionada</param> 
+        /// <param name="apt_id">Id da Providência selecionada, -1 para todos</param> 
+        /// <returns>System.Data.DataSet</returns>
+        public System.Data.DataSet FICHA_ESPECIAL_PROVIDENCIAS(int ord_id, int apt_id)
+        {
+            try
+            {
+                DataSet ds = new System.Data.DataSet();
+                SqlDataAdapter adapter = new SqlDataAdapter();
+
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@apt_id", apt_id);
+
+                    adapter.SelectCommand = com;
+                    adapter.Fill(ds);
+
+                    return ds;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
 
     }
 }

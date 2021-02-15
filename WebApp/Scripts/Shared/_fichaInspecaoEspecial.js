@@ -235,11 +235,22 @@ function preenchetblFicha4(obj_id, classe, tipo) {
     $('#txt_historico_data_1').datepicker({ dateFormat: 'dd/mm/yy' });
 
     var ord_id = 0;
-    if (paginaPai == "OrdemServico")
+    if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
         ord_id = selectedId_ord_id;
 
     var url = "/Objeto/ObjAtributoValores_ListAll";
     var data = { "obj_id": obj_id, "ord_id": ord_id };
+
+    if (moduloCorrente == 'OrdemServico') {
+        var StatusOS = parseInt(filtroStatusOS);
+        if (StatusOS == 11) // executada
+        {
+            url = "/Inspecao/InspecaoAtributosValores_ListAll";
+            data = { "ord_id": selectedId_ord_id };
+        }
+    }
+
+
 
     $.ajax({
         "url": url,
@@ -251,7 +262,9 @@ function preenchetblFicha4(obj_id, classe, tipo) {
 
                 // coloca a imagem ESQUEMA_ESTRUTURAL
                 if (parseInt(result.data[i].atr_id) == 159) {
-                    document.getElementById("img_atr_id_159").setAttribute('src', result.data[i].atv_valor);
+                    var img_atr_id_159 = document.getElementById("img_atr_id_159");
+                    if (img_atr_id_159)
+                        img_atr_id_159.setAttribute('src', result.data[i].atv_valor);
                 }
 
                 // preenche os LABELS
