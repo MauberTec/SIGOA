@@ -45,6 +45,24 @@ namespace WebApp.DAO
                 }
             }
         }
+
+        /// <summary>
+        /// Retorna o nome do banco de dados da connectionstring
+        /// </summary>
+        public string QualBD()
+        {
+            this.strConn = new Gerais().Decrypt(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["CONNECTION_DER"].ConnectionString);
+
+            if (strConn.IndexOf("_DESENV") > 0)
+                return "Desenv";
+            else
+            if (strConn.IndexOf("_MBT") > 0)
+                return "MBT";
+            else
+                return "";
+        }
+
+
     }
 }
 

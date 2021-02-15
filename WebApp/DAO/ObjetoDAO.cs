@@ -527,9 +527,9 @@ namespace WebApp.DAO
         ///     Lista de Objeto Localizacao
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do Objeto do Tipo OAE</param> 
-        /// <param name="tip_id_Subdivisao1">Id do tipo de Objeto, nivel subdivisao1</param> 
+        /// <param name="tip_id_Grupo">Id do tipo do Grupo de Objeto</param> 
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_Localizacao_ListAll(int obj_id_TipoOAE, int tip_id_Subdivisao1 )
+        public List<Objeto> Objeto_Localizacao_ListAll(int obj_id_TipoOAE, int tip_id_Grupo)
         {
             try
             {
@@ -541,7 +541,7 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@obj_id_TipoOAE", obj_id_TipoOAE);
-                    com.Parameters.AddWithValue("@tip_id_Subdivisao1", tip_id_Subdivisao1);
+                    com.Parameters.AddWithValue("@tip_id_Grupo", tip_id_Grupo);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())

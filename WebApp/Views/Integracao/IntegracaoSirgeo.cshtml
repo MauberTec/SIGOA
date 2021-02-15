@@ -63,7 +63,7 @@
     <div class="row">
             <div class="box box-primary">
                 <div class="box-body">
-
+                    <label class="control-label">Rodovias</label>
                     <table id="tblRodovias">
                         <thead>
                             <tr>
@@ -76,6 +76,71 @@
                             </tr>
                         </thead>
                     </table>
+
+                    <br /><br /><br />
+                    <label class="control-label">Sentido Rodovias</label>
+                    <table id="tblSentidoRodovia">
+                        <thead>
+
+                            <tr>
+                                <th>Id</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <br /><br /><br />
+                    <label class="control-label">OAEs</label>
+                    <table id="tblOAEs">
+                        <thead>
+                            <tr>
+                                <th>rod_id</th>
+                                <th>Km Inicial</th>
+                                <th>Km Final</th>
+                                <th>sen_id</th>
+                                <th>reg_id</th>
+                                <th>oae_data_levantamento</th>
+                                <th>Extensão</th>
+                                <th>oat_id</th>
+                                <th>Data Criação</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <br /><br /><br />
+                    <label class="control-label">Tipos OAE</label>
+                    <table id="tblTiposOAE">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <br /><br /><br />
+                    <label class="control-label">Regionais</label>
+                    <table id="tblRegionais">
+                        <thead>
+                            <tr>
+                                <th>reg_id</th>
+                                <th>Código</th>
+                                <th>Descrição</th>
+                                <th>Logradouro</th>
+                                <th>Bairro</th>
+                                <th>CEP</th>
+                                <th>Email</th>
+                                <th>DDD</th>
+                                <th>Telefone</th>
+                                <th>DDD CCO</th>
+                                <th>Telefone CCO</th>
+                                <th>DDD Fax</th>
+                                <th>Fax</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
                 </div>
             </div>
         @*</div>*@
@@ -168,6 +233,172 @@
 
         });
 
+        $('#tblSentidoRodovia').DataTable({
+            "ajax": {
+                "url": "/Integracao/Integracao_SentidoRodovias_ListAll",
+                "type": "GET",
+                "datatype": "json"
+            }
+            , "columns": [
+                { data: "sen_id", "className": "Centralizado", "searchable": false },
+                { data: "sen_descricao", "autoWidth": true, "searchable": false }
+            ]
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+            , "createdRow": function (row, data, dataIndex) {
+                if (parseInt(data.rod_descricao) == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: data.sen_descricao
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                }
+            }
+
+        });
+
+
+        $('#tblOAEs').DataTable({
+            "ajax": {
+                "url": "/Integracao/Integracao_OAEs_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": function (d) {
+                    d.rod_id = $('#txtCodRodovia').val().trim();
+                }
+            }
+            , "columns": [
+                { data: "rod_id", "className": "Centralizado", "searchable": false },
+                { data: "oae_km_inicial", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "oae_km_final", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "sen_id", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "reg_id", "width": "200px", "searchable": false },
+                { data: "oae_data_levantamento", "autoWidth": true, "searchable": false },
+                { data: "oae_extensao", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "oat_id", "className": "Centralizado",  "searchable": false },
+                { data: "oae_data_criacao", "className": "Centralizado",  "searchable": false }
+            ]
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+            , "createdRow": function (row, data, dataIndex) {
+                if (parseInt(data.rod_codigo) == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: data.rod_descricao
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                }
+            }
+
+        });
+
+        $('#tblRegionais').DataTable({
+            "ajax": {
+                "url": "/Integracao/Integracao_Regionais_ListAll",
+                "type": "GET",
+                "datatype": "json"
+                
+                //,"data": function (d) {
+                //    d.rod_id = $('#txtCodRodovia').val().trim();
+                //}
+            }
+
+            , "columns": [
+                { data: "reg_id", "className": "Centralizado", "searchable": false },
+                { data: "reg_codigo", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "reg_descricao", "className": "Centralizado", "width": "150px", "searchable": false },
+                { data: "reg_logradouro", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "reg_bairro", "className": "Centralizado", "width": "140px", "searchable": false },
+                { data: "reg_cep", "width": "30px", "searchable": false },
+                { data: "reg_email", "className": "Centralizado", "width": "150px", "searchable": false },
+                { data: "reg_ddd_telefone", "className": "Centralizado", "width": "20px", "searchable": false },
+                { data: "reg_telefone", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "reg_ddd_telefone_cco", "className": "Centralizado", "width": "20px", "searchable": false },
+                { data: "reg_telefone_cco", "className": "Centralizado", "width": "80px", "searchable": false },
+                { data: "reg_ddd_fax", "className": "Centralizado", "width": "20px", "searchable": false },
+                { data: "reg_fax", "className": "Centralizado", "width": "80px", "searchable": false }
+            ]
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+            , "createdRow": function (row, data, dataIndex) {
+                if (parseInt(data.rod_codigo) == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: data.rod_descricao
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                }
+            }
+
+        });
+
+        $('#tblTiposOAE').DataTable({
+            "ajax": {
+                "url": "/Integracao/Integracao_TiposOAE_ListAll",
+                "type": "GET",
+                "datatype": "json"
+            }
+            , "columns": [
+                { data: "oat_id", "className": "Centralizado", "searchable": false },
+                { data: "oat_descricao", "autoWidth": true, "searchable": false }
+            ]
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+            , "createdRow": function (row, data, dataIndex) {
+                if (parseInt(data.oat_descricao) == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: data.oat_descricao
+                    }).then(
+                        function () {
+                            return false;
+                        });
+
+                }
+            }
+
+        });
 
     });
 

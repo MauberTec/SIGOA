@@ -48,7 +48,7 @@
         ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
-        ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
+        ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  title="TOOLTIP_cmb_Cod"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Alerta_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Alerta"  onchange="cmb_Alerta_onchange(this)" >OPCOES_cmb_Alerta</select></td > ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Quantidade_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Quantidade_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_EspacamentoMedio_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_EspacamentoMedio_VVV" /></td> ' +
@@ -828,59 +828,62 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
 
 }
 
-//function Ficha4_CAMPO_preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) {
-//    if (tip_pai == null)
-//        tip_pai = -1;
+function Ficha4_CAMPO_preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) {
+    if (tip_pai == null)
+        tip_pai = -1;
 
-//    //   var excluir_existentes = qualCombo == 'divFicha2_GrupoObjetos' ? 1 : 0;
-//    var excluir_existentes = 0;
+    //   var excluir_existentes = qualCombo == 'divFicha2_GrupoObjetos' ? 1 : 0;
+    var excluir_existentes = 0;
 
-//    var cmb = $("#" + qualCombo);
-//    cmb.html(""); // limpa os itens existentes
-//    cmb.append($('<option selected ></option>').val(-1).html(txtPlaceholder)); // 1o item vazio
+    // limpa os itens da localizacao
+    $("#divFicha4_CAMPO_LocalizacaoObjeto").empty();
 
-//    $.ajax({
-//        url: '/Objeto/PreenchecmbTiposObjeto',
-//        type: "POST",
-//        dataType: "JSON",
-//        data: { clo_id: clo_id, tip_pai: tip_pai, excluir_existentes: excluir_existentes, obj_id: selectedId_obj_id },
-//        success: function (lstSubNiveis) {
+    var cmb = $("#" + qualCombo);
+    cmb.html(""); // limpa os itens existentes
+    cmb.append($('<option selected ></option>').val(-1).html(txtPlaceholder)); // 1o item vazio
 
-//            if (clo_id != 10) {
-//                $.each(lstSubNiveis, function (i, subNivel) {
-//                    cmb.append($('<option></option>').val(subNivel.Value.trim()).html(subNivel.Text.trim()));
-//                });
-//            }
-//            else {
-//                var i = 0;
-//                $("#divFicha4_CAMPO_LocalizacaoObjeto").empty();
-//                $.each(lstSubNiveis, function (i, objeto) {
-//                    i++;
-//                    if (i < 50) {
-//                        var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-//                        tagchk = tagchk.replace("idXXX", "chk" + i);
-//                        tagchk = tagchk.replace("nameXXX", "chk" + i);
-//                        tagchk = tagchk.replace("valueXXX", objeto.Value);
+    $.ajax({
+        url: '/Objeto/PreenchecmbTiposObjeto',
+        type: "POST",
+        dataType: "JSON",
+        data: { clo_id: clo_id, tip_pai: tip_pai, excluir_existentes: excluir_existentes, obj_id: selectedId_obj_id },
+        success: function (lstSubNiveis) {
 
-//                        var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-//                        taglbl = taglbl.replace("idXXX", "chk" + i);
-//                        taglbl = taglbl.replace("TextoXXX", objeto.Text);
+            if (clo_id != 10) {
+                $.each(lstSubNiveis, function (i, subNivel) {
+                    cmb.append($('<option></option>').val(subNivel.Value.trim()).html(subNivel.Text.trim()));
+                });
+            }
+            else {
+                var i = 0;
+                $("#divFicha4_CAMPO_LocalizacaoObjeto").empty();
+                $.each(lstSubNiveis, function (i, objeto) {
+                    i++;
+                    if (i < 50) {
+                        var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+                        tagchk = tagchk.replace("idXXX", "chk" + i);
+                        tagchk = tagchk.replace("nameXXX", "chk" + i);
+                        tagchk = tagchk.replace("valueXXX", objeto.Value);
 
-//                        $("#divFicha4_CAMPO_LocalizacaoObjeto").append(tagchk + taglbl);
-//                    }
-//                });
-//            }
-//        }
-//    });
-//}
+                        var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
+                        taglbl = taglbl.replace("idXXX", "chk" + i);
+                        taglbl = taglbl.replace("TextoXXX", objeto.Text);
 
-function Ficha4_CAMPO_preencheLocalizacao(tip_id_Subdivisao1) {
+                        $("#divFicha4_CAMPO_LocalizacaoObjeto").append(tagchk + taglbl);
+                    }
+                });
+            }
+        }
+    });
+}
+
+function Ficha4_CAMPO_preencheLocalizacao(tip_id_Grupo) {
 
     $.ajax({
         url: '/Objeto/PreencheCmbObjetoLocalizacao',
         type: "POST",
         dataType: "JSON",
-        data: { obj_id_TipoOAE: selectedId_obj_id, tip_id_Subdivisao1: tip_id_Subdivisao1 },
+        data: { obj_id_TipoOAE: selectedId_obj_id, tip_id_Grupo: tip_id_Grupo },
         success: function (lstSubNiveis) {
 
             var i = 0;
@@ -936,44 +939,44 @@ function Ficha4_CAMPO_cmbSubdivisao1_onchange() {
     var valor = document.getElementById("Ficha4_CAMPO_cmbSubdivisao1").value;
     var ivalor = parseInt(valor);
 
-    Ficha4_CAMPO_preencheLocalizacao(ivalor);
+    //Ficha4_CAMPO_preencheLocalizacao(ivalor);
 
-    //// oculta o divs Ficha2_Subdivisao2
-    //document.getElementById("Ficha4_CAMPO_divSubdivisao2").style.display = 'none';
-    //document.getElementById("Ficha4_CAMPO_divSubdivisao3").style.display = 'none';
-    //document.getElementById("Ficha4_CAMPO_divGrupoObjetos").style.display = 'block';
-    //document.getElementById("Ficha4_CAMPO_divLocalizacaoObjeto").style.display = 'block';
+    // oculta o divs Ficha2_Subdivisao2
+    document.getElementById("Ficha4_CAMPO_divSubdivisao2").style.display = 'none';
+    document.getElementById("Ficha4_CAMPO_divSubdivisao3").style.display = 'none';
+    document.getElementById("Ficha4_CAMPO_divGrupoObjetos").style.display = 'block';
+    document.getElementById("Ficha4_CAMPO_divLocalizacaoObjeto").style.display = 'block';
 
-    //// superestrutura
-    //if (ivalor == 11) {
-    //    // mostra Subdivisao2
-    //    document.getElementById("Ficha4_CAMPO_divSubdivisao2").style.display = 'block';
-    //    Ficha4_CAMPO_preencheCombo(7, 'Ficha4_CAMPO_cmbSubdivisao2', '--Selecione--', ivalor);
-    //}
-    //else
-    //    // ENCONTROS
-    //    if (ivalor == 14) {
-    //        // mostra Subdivisao2 e 3
-    //        document.getElementById("Ficha4_CAMPO_divSubdivisao2").style.display = 'block';
+    // superestrutura
+    if (ivalor == 11) {
+        // mostra Subdivisao2
+        document.getElementById("Ficha4_CAMPO_divSubdivisao2").style.display = 'block';
+        Ficha4_CAMPO_preencheCombo(7, 'Ficha4_CAMPO_cmbSubdivisao2', '--Selecione--', ivalor);
+    }
+    else
+        // ENCONTROS
+        if (ivalor == 14) {
+            // mostra Subdivisao2 e 3
+            document.getElementById("Ficha4_CAMPO_divSubdivisao2").style.display = 'block';
 
-    //        Ficha4_CAMPO_preencheCombo(7, 'Ficha4_CAMPO_cmbSubdivisao2', '--Selecione--', ivalor);
+            Ficha4_CAMPO_preencheCombo(7, 'Ficha4_CAMPO_cmbSubdivisao2', '--Selecione--', ivalor);
 
-    //        //// preenche combo manualmente, tip_id = 22,23,24 ESTRUTURAS DE TERRRA, DE CONCRETO E ACESSOS
-    //        //$("#Ficha4_CAMPO_cmbSubdivisao2").append($('<option></option>').val("").html("--Selecione--"));
-    //        //for (var i = 0; i < cmbTiposObjeto_FichaInspecaoRotineira.options.length; i++) {
-    //        //    if ((getTipoId(cmbTiposObjeto_FichaInspecaoRotineira.options[i].value) == 22)
-    //        //        || (getTipoId(cmbTiposObjeto_FichaInspecaoRotineira.options[i].value) == 23)
-    //        //        || (getTipoId(cmbTiposObjeto_FichaInspecaoRotineira.options[i].value) == 24)
-    //        //    ) {
-    //        //        var option = document.createElement("option");
-    //        //        option.text = cmbTiposObjeto_FichaInspecaoRotineira.options[i].text;
-    //        //        option.value = cmbTiposObjeto_FichaInspecaoRotineira.options[i].value;
-    //        //        $("#Ficha4_CAMPO_cmbSubdivisao2").append($('<option></option>').val(option.value).html(option.text));
-    //        //    }
-    //        //}
-    //    }
-    //    else
-    //        Ficha4_CAMPO_preencheCombo(9, 'Ficha4_CAMPO_cmbGrupoObjetos', '--Selecione--', ivalor);
+            //// preenche combo manualmente, tip_id = 22,23,24 ESTRUTURAS DE TERRRA, DE CONCRETO E ACESSOS
+            //$("#Ficha4_CAMPO_cmbSubdivisao2").append($('<option></option>').val("").html("--Selecione--"));
+            //for (var i = 0; i < cmbTiposObjeto_FichaInspecaoRotineira.options.length; i++) {
+            //    if ((getTipoId(cmbTiposObjeto_FichaInspecaoRotineira.options[i].value) == 22)
+            //        || (getTipoId(cmbTiposObjeto_FichaInspecaoRotineira.options[i].value) == 23)
+            //        || (getTipoId(cmbTiposObjeto_FichaInspecaoRotineira.options[i].value) == 24)
+            //    ) {
+            //        var option = document.createElement("option");
+            //        option.text = cmbTiposObjeto_FichaInspecaoRotineira.options[i].text;
+            //        option.value = cmbTiposObjeto_FichaInspecaoRotineira.options[i].value;
+            //        $("#Ficha4_CAMPO_cmbSubdivisao2").append($('<option></option>').val(option.value).html(option.text));
+            //    }
+            //}
+        }
+        else
+            Ficha4_CAMPO_preencheCombo(9, 'Ficha4_CAMPO_cmbGrupoObjetos', '--Selecione--', ivalor);
 
 }
 function Ficha4_CAMPO_cmbSubdivisao2_onchange() {

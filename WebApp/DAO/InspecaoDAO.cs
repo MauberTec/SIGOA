@@ -309,6 +309,10 @@ namespace WebApp.DAO
         {
             try
             {
+                int obj_id_anterior = -1;
+                int obj_id_atual = -1;
+
+
                 List<InspecaoAnomalia> lst = new List<InspecaoAnomalia>();
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
@@ -323,6 +327,8 @@ namespace WebApp.DAO
 
                     while (rdr.Read())
                     {
+                       obj_id_atual = Convert.ToInt32(rdr["obj_id"]);
+
                        lst.Add(new InspecaoAnomalia
                         {
                            //ins_id = Convert.ToInt32(rdr["ins_id"]),
@@ -334,10 +340,10 @@ namespace WebApp.DAO
                            ins_anom_quadroA_2 = rdr["ins_anom_quadroA_2"].ToString(),
 
                             rownum = Convert.ToInt32(rdr["rownum"]),
-                            obj_id = Convert.ToInt32(rdr["obj_id"]),
+                            obj_id = obj_id_atual,
                             obj_pai = Convert.ToInt32(rdr["obj_pai"]),
                             obj_codigo = rdr["obj_codigo"].ToString(),
-                            obj_descricao = rdr["obj_descricao"].ToString(),
+                            obj_descricao = obj_id_atual != obj_id_anterior ? rdr["obj_descricao"].ToString() : "",
 
                             level = Convert.ToInt32(rdr["level"]),
                             item = rdr["item"].ToString(),
@@ -404,6 +410,8 @@ namespace WebApp.DAO
                             lstReparoTipos = rdr["lstReparoTipos"] == DBNull.Value ? "" : rdr["lstReparoTipos"].ToString()
 
                         });
+
+                        obj_id_anterior = Convert.ToInt32(rdr["obj_id"]);
                     }
                     return lst;
                 }
@@ -486,7 +494,7 @@ namespace WebApp.DAO
                 {
                     con.Open();
                     SqlCommand com = new SqlCommand();
-                    com.CommandText = "STP_INS_INSPECAO_ANOMALIA";
+                    com.CommandText = "STP_INS_INSPECOES_ANOMALIA";
 
                     com.Connection = con;
                     com.CommandType = CommandType.StoredProcedure;
