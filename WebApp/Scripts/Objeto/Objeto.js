@@ -14,6 +14,9 @@ var selectedId_tip_id = -1;
 var selectedId_atr_id = -1;
 var selectedId_afn_id = -1;
 
+var selectedPageLen = 15;
+var selectedPage = 0;
+
 var selectedGrid = -1;
 var filtro_obj_codigo = '';
 var filtro_obj_descricao = '';
@@ -385,7 +388,9 @@ function preencheDescricao(vindo_de) {
 
                 // coloca a descricao
             //    $('#txtdescricao').val(localizacaoNome + " #" + $('#txtcodigo').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + " #" + pedacosCodigo[pedacosCodigo.length - 1]);
-                    $('#txtdescricao').val(localizacaoNome + " #" + $('#txtcodigo').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + (lstExcecoes_Tipos.includes(obj_tipoGrupo_id) ? " " : " #" + pedacosCodigo[pedacosCodigo.length - 1]) );
+                    $('#txtdescricao').val(
+                       nomeGrupo + (lstExcecoes_Tipos.includes(obj_tipoGrupo_id) ? " " : " #" + pedacosCodigo[pedacosCodigo.length - 1]) + " " + localizacaoNome + " #" + $('#txtcodigo').val()
+                    );
             }
 
         }
@@ -491,7 +496,9 @@ function Inserir(obj_id, clo_id, tip_id, obj_codigo) {
 }
 
 function SalvarObjeto() {
-    var cmbAEVCVG = document.getElementById("cmbAEVCVG");
+
+
+   var cmbAEVCVG = document.getElementById("cmbAEVCVG");
 
     var param;
     var obj_codigo = "";
@@ -1097,6 +1104,14 @@ function txtcodigo_onKeyUp() {
 
 // ****************************GRID tblObjetos *****************************************************************************
 function carregaGrid(id) {
+
+    // guarda os valores da paginacao
+    var tblObjetos = $('#tblObjetos').DataTable();
+    var info = tblObjetos.page.info();
+
+    selectedPageLen = tblObjetos.page.len();
+    selectedPage = info.page;
+
     $('#tblObjetos').DataTable().destroy();
     $('#tblObjetos').DataTable({
         "ajax": {
@@ -1238,6 +1253,8 @@ function carregaGrid(id) {
                 $(row).addClass('selected');
         }
         , "lengthMenu": [[15, 25, 50, 100], [15, 25, 50, 100]]
+        , "displayLength": selectedPageLen
+        , "displayStart": selectedPage * 10
         , select: {
             style: 'single'
         }
@@ -1414,6 +1431,7 @@ $(document).ready(function () {
         document.getElementById('txt_codigo').value = obj_codigo;
 
     });
+
 
 
 }); // document.ready

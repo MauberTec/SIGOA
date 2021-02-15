@@ -184,11 +184,11 @@ namespace WebApp.Controllers
         ///  Preenchimento do combo LocalizacaoObjeto
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do objeto selecionado</param>
-        /// <param name="tip_id_Subdivisao1">Tipo do Objeto Selecionado</param>
+        /// <param name="tip_id_Grupo">Tipo do Grupo do Objeto Selecionado</param>
         /// <returns>JsonResult</returns>
-        public JsonResult PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Subdivisao1)
+        public JsonResult PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Grupo)
         {
-            return Json(new ObjetoBLL().PreencheCmbObjetoLocalizacao(obj_id_TipoOAE, tip_id_Subdivisao1), JsonRequestBehavior.AllowGet);
+            return Json(new ObjetoBLL().PreencheCmbObjetoLocalizacao(obj_id_TipoOAE, tip_id_Grupo), JsonRequestBehavior.AllowGet);
         }
 
 

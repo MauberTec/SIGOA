@@ -180,11 +180,11 @@ namespace WebApp.Business
         /// Lista Objeto Localizacao
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do Objeto do Tipo OAE</param> 
-        /// <param name="tip_id_Subdivisao1">Id do tipo de Objeto, nivel subdivisao1</param> 
+        /// <param name="tip_id_Grupo">Id do tipo Grupo de Objeto, nivel subdivisao1</param> 
         /// <returns>List(SelectListItem)</returns>
-        public List<SelectListItem> PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Subdivisao1)
+        public List<SelectListItem> PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Grupo)
         {
-            List<Objeto> lstObjetosLocalizacao = new ObjetoDAO().Objeto_Localizacao_ListAll(obj_id_TipoOAE, tip_id_Subdivisao1);
+            List<Objeto> lstObjetosLocalizacao = new ObjetoDAO().Objeto_Localizacao_ListAll(obj_id_TipoOAE, tip_id_Grupo);
             List<SelectListItem> lstListaCmbObjetoLocalizacao = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstObjetosLocalizacao)
             {
@@ -253,6 +253,55 @@ namespace WebApp.Business
             return new ObjetoDAO().ObjAtributoValor_Salvar(ObjAtributoValor, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
+        /// <summary>
+        /// Busca o valor da VDM na API DER e retorna o valor ati_id do combo na ficha de inspecao
+        /// </summary>
+        /// <param name="obj_codigo_TipoOAE">Codigo do Objeto TIPO OAE</param>
+        /// <returns>int</returns>
+        public int BuscaValorVDM(string obj_codigo_TipoOAE)
+        {
+            int retorno = -1;
+            string[] pedacos = obj_codigo_TipoOAE.Trim().Split('-');
+
+            string rodovia = pedacos[0].ToUpper().Replace(" ", "");
+            string quilometragem = pedacos[1];
+            decimal km = Convert.ToDecimal(quilometragem.Replace(",", "."));
+
+            Gerais saida = new Gerais();
+            List<vdm> listaVDM = saida.get_VDMs(rodovia, 0 , 1500);
+
+            decimal valorVDM = 0;
+
+            // procura o intervalo correto
+            for (int i=0; i < listaVDM.Count; i++)
+            {
+                if ((Convert.ToDecimal(listaVDM[i].pcl_kminicial) >= km) && (Convert.ToDecimal(listaVDM[i].pcl_kmfinal) <= km))
+                {
+                    valorVDM = Convert.ToDecimal(listaVDM[i].vdm_bidirecional);
+                    if (valorVDM > 20000)
+                        retorno = 143;
+                    else
+                      if ((valorVDM >= 5000) && (valorVDM < 20000))
+                        retorno = 144;
+                    else
+                      if ((valorVDM >= 1000) && (valorVDM < 5000))
+                        retorno = 145;
+                    else
+                        if (valorVDM < 1000)
+                        retorno = 146;
+                }
+            }
+
+            /* ati_id  atr_id  valor
+               143     84      ACIMA DE 20.000
+               144     84      DE 5.000 A 20.000
+               145     84      DE 1.000 A 5.000
+               146     84      ATÉ 1.000
+           */
+
+            return retorno;
+
+        }
 
 
         /// <summary>
