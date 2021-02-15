@@ -250,6 +250,7 @@
     <Compile Include="Models\Inspecao.cs" />
     <Compile Include="Models\NotificaoOcorrencia.cs" />
     <Compile Include="Models\Orcamento.cs" />
+    <Compile Include="Models\PoliticaReparoModel.cs" />
     <Compile Include="Models\Reparo.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\Anomalia.cs" />
