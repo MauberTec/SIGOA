@@ -17,7 +17,7 @@ namespace WebApp.DAO
     public class ReparoDAO : Conexao
     {
 
-
+        Conexao conn = new Conexao();
         // *************** TIPO  *************************************************************
 
         /// <summary>
@@ -174,8 +174,310 @@ namespace WebApp.DAO
                 throw new Exception(ex.Message);
             }
         }
+        /// <summary>
+        /// Preenche Grid da Home Politica de Reparo
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GetReparo(PoliticaReparoModel model)
+        {
+           
+            int ale_id;
+            string ale_codigo = "";
+            string[] ale = model.ale_id.Split('-');
+            ale_id = Convert.ToInt32(ale[0]);
+            ale_codigo = ale[1];
+
+            int aca_id;
+            string[] aca = model.aca_id.Split('-');
+            aca_id = Convert.ToInt32(aca[0]);
+
+            string leg_codigo = "";
+            int leg_id;
+            string[] leg = model.leg_id.Split('-');
+            leg_id = Convert.ToInt32(leg[0]);
+            leg_codigo = leg[1];
 
 
+            int atp_id;
+            string atp_codigo = "";
+            string[] atp = model.atp_id.Split('-');
+            atp_id = Convert.ToInt32(atp[0]);
+            atp_codigo = atp[1];
+
+            int rpt_id;
+            string rpt_codigo = "";
+            string[] rpt = model.rpt_id.Split('-');
+            rpt_id = Convert.ToInt32(rpt[0]);
+            rpt_codigo = rpt[1];
+
+
+
+
+            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("STP_SEL_POLITICA_REPARO_PARAMETROS", con);
+                com.CommandType = CommandType.StoredProcedure;
+                System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                com.Parameters.Add(p_return);
+                com.Parameters[0].Size = 32000;
+
+                com.Parameters.AddWithValue("@ACA_ID", aca_id);
+
+                com.Parameters.AddWithValue("@ALE_ID", ale_id);
+                com.Parameters.AddWithValue("@ALE_CODIGO", ale_codigo);
+
+                com.Parameters.AddWithValue("@ATP_ID", atp_id);
+                com.Parameters.AddWithValue("@ATP_CODIGO", atp_codigo);
+
+                com.Parameters.AddWithValue("@RPT_ID", rpt_id);
+                com.Parameters.AddWithValue("@RPT_CODIGO", rpt_codigo);
+
+                com.Parameters.AddWithValue("@LEG_ID", leg_id);
+                com.Parameters.AddWithValue("@LEG_CODIGO", leg_codigo);
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new PoliticaReparoModel
+                    {
+                        aca_codigo = reader["aca_codigo"] == DBNull.Value ? string.Empty : reader["aca_codigo"].ToString(),
+                        aca_descricao = reader["aca_descricao"] == DBNull.Value ? string.Empty : reader["aca_descricao"].ToString(),
+                        ale_descricao = reader["ale_descricao"] == DBNull.Value ? string.Empty : reader["ale_descricao"].ToString(),
+                        ale_codigo = reader["ale_codigo"] == DBNull.Value ? string.Empty : reader["ale_codigo"].ToString(),
+                        atp_descricao = reader["atp_descricao"] == DBNull.Value ? string.Empty : reader["atp_descricao"].ToString(),
+                        atp_codigo = reader["atp_codigo"] == DBNull.Value ? string.Empty : reader["atp_codigo"].ToString(),
+                        leg_codigo = reader["leg_codigo"] == DBNull.Value ? string.Empty : reader["leg_codigo"].ToString(),
+                        leg_descricao = reader["leg_descricao"] == DBNull.Value ? string.Empty : reader["leg_descricao"].ToString(),
+                        rpp_id = reader["rpp_id"] == DBNull.Value ? string.Empty : reader["rpp_id"].ToString(),
+                        rpt_codigo = reader["rpt_codigo"] == DBNull.Value ? string.Empty : reader["rpt_codigo"].ToString(),
+                        rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString()
+
+                    });
+                }
+
+            }
+
+            return lista;
+        }
+        /// <summary>
+        /// Busca todos reparos
+        /// </summary>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GetAllRepair()
+        {
+            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("STP_SEL_POLITICA_REPARO", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new PoliticaReparoModel
+                    {
+                        aca_codigo = reader["aca_codigo"] == DBNull.Value ? string.Empty : reader["aca_codigo"].ToString(),
+                        aca_descricao = reader["aca_descricao"] == DBNull.Value ? string.Empty : reader["aca_descricao"].ToString(),
+                        ale_codigo = reader["ale_codigo"] == DBNull.Value ? string.Empty : reader["ale_codigo"].ToString(),
+                        atp_descricao = reader["atp_descricao"] == DBNull.Value ? string.Empty : reader["atp_descricao"].ToString(),
+                        atp_codigo = reader["atp_codigo"] == DBNull.Value ? string.Empty : reader["atp_codigo"].ToString(),
+                        leg_codigo = reader["leg_codigo"] == DBNull.Value ? string.Empty : reader["leg_codigo"].ToString(),
+                        leg_descricao = reader["leg_descricao"] == DBNull.Value ? string.Empty : reader["leg_descricao"].ToString(),
+                        rpp_id = reader["rpp_id"] == DBNull.Value ? string.Empty : reader["rpp_id"].ToString(),
+                        rpt_codigo = reader["rpt_codigo"] == DBNull.Value ? string.Empty : reader["rpt_codigo"].ToString(),
+                        rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString()
+                    });
+                }
+
+            }
+
+            return lista;
+        }
+        /// <summary>
+        /// Deleta reparo da grid home Reparo Politica
+        /// </summary>
+        /// <param name="rpp_id"></param>
+        /// <returns></returns>
+        public  string DelReparo(int rpp_id)
+        {
+            string response = string.Empty;
+            using (SqlConnection con = new SqlConnection(new Conexao().strConn))
+            {
+                try
+                {
+
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_DEL_REPARO_POLITICA";
+
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+                    com.Parameters.AddWithValue("@rpp_id", rpp_id);
+
+                    com.ExecuteScalar();
+                    int id = Convert.ToInt32(p_return.Value);
+                    response = "Reparo incluido com sucesso";
+                }
+                catch (Exception ex)
+                {
+                    response = ex.Message;
+                }
+
+            }
+
+            return response;
+        }
+        /// <summary>
+        /// Preeche combo home
+        /// </summary>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GerReparo()
+        {
+            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("select * from tab_reparo_tipos order by rpt_descricao asc ", con);
+                com.CommandType = CommandType.Text;
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new PoliticaReparoModel
+                    {
+                        rpt_id = reader["rpt_id"].ToString() + "-" + reader["rpt_codigo"].ToString(),
+                        rpt_descricao = reader["rpt_descricao"].ToString(),
+                        rpt_codigo = reader["rpt_codigo"].ToString()
+                    });
+                }
+            }
+
+            return lista;
+        }
+        /// <summary>
+        /// Preenche Causa
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GetCausa(ref string id)
+        {
+            string[] leg = id.Split('-');
+            id = leg[0];
+            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_causas where leg_id =" + id + " order by aca_codigo asc ", con);
+                com.CommandType = CommandType.Text;
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new PoliticaReparoModel
+                    {
+                        aca_id = reader["aca_id"].ToString() + "-" + reader["aca_codigo"].ToString(),
+                        aca_descricao = reader["aca_descricao"].ToString(),
+                        aca_codigo = reader["aca_codigo"].ToString()
+                    });
+                }
+            }
+
+            return lista;
+        }
+        /// <summary>
+        /// Preenche Causa
+        /// </summary>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GetAlerta()
+        {
+            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_alertas order by ale_codigo asc ", con);
+                com.CommandType = CommandType.Text;
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new PoliticaReparoModel
+                    {
+                        ale_id = reader["ale_id"].ToString() + "-" + reader["ale_codigo"].ToString(),
+                        ale_descricao = reader["ale_descricao"].ToString(),
+                        ale_codigo = reader["ale_codigo"].ToString()
+                    });
+                }
+            }
+
+            return lista;
+        }
+        /// <summary>
+        /// Preenche Anomalia
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GetAnomalia(ref string id)
+        {
+            string[] leg = id.Split('-');
+            id = leg[0];
+            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_tipos where leg_id = " + id + " order by atp_codigo asc", con);
+                com.CommandType = CommandType.Text;
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new PoliticaReparoModel
+                    {
+                        atp_id = reader["atp_id"].ToString() + "-" + reader["atp_codigo"].ToString(),
+                        atp_descricao = reader["atp_descricao"].ToString(),
+                        atp_codigo = reader["atp_codigo"].ToString()
+                    });
+                }
+            }
+
+            return lista;
+        }
+        /// <summary>
+        /// Preenche Legenda
+        /// </summary>
+        /// <returns></returns>
+        public List<PoliticaReparoModel> GetLegenda()
+        {
+            List<PoliticaReparoModel> Conserva = new List<PoliticaReparoModel>();
+            using (SqlConnection con = new SqlConnection(conn.strConn))
+            {
+                con.Open();
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_legendas order by leg_codigo asc ", con);
+                com.CommandType = CommandType.Text;
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    Conserva.Add(new PoliticaReparoModel
+                    {
+                        Id = reader["leg_id"].ToString() + "-" + reader["leg_codigo"].ToString(),
+                        leg_descricao = reader["leg_descricao"].ToString(),
+                        leg_codigo = reader["leg_codigo"].ToString()
+                    });
+                }
+            }
+
+            return Conserva;
+        }
     }
 
 }

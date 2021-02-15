@@ -193,6 +193,7 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
+    <Compile Include="Controllers\MultiselectController.cs" />
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
     <Compile Include="Controllers\PoliticaConservaController.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Models\ConservaPoliticaModel.cs" />
     <Compile Include="Models\NotificaoOcorrencia.cs" />
     <Compile Include="Models\Inspecao.cs" />
+    <Compile Include="Models\PoliticaReparoModel.cs" />
     <Compile Include="Models\Reparo.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\Anomalia.cs" />
@@ -446,6 +448,7 @@
     <Content Include="Scripts\Politica\Politica.js" />
     <Content Include="Scripts\Politica\ConservaTipo.js" />
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
+    <Content Include="Scripts\Reparo\PoliticaReparos.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
@@ -584,6 +587,7 @@
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste4.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste5.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste6.png" />
+    <Content Include="Views\PoliticaReparos\multiselect.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -648,6 +652,7 @@
     <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
     <Content Include="Views\PoliticaReparos\Index.cshtml" />
     <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
+    <Content Include="Views\Multiselect\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
