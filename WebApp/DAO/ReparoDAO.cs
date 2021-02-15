@@ -182,38 +182,40 @@ namespace WebApp.DAO
         public List<PoliticaReparoModel> GetReparo(PoliticaReparoModel model)
         {
            
-            int ale_id;
-            string ale_codigo = "";
-            string[] ale = model.ale_id.Split('-');
-            ale_id = Convert.ToInt32(ale[0]);
-            ale_codigo = ale[1];
+            string ale_id = "0";
+            if(model.ale_id != null)
+            {
+                string[] ale = model.ale_id.Split('-');
+                ale_id = ale[0];
+            }
+            string aca_id = "0";
+            if(model.aca_id != null)
+            {
+                string[] aca = model.aca_id.Split('-');
+                aca_id = aca[0];
+            }
+           
+            string leg_id = "0";
+            if(model.leg_id != null)
+            {
+                string[] leg = model.leg_id.Split('-');
+                leg_id = leg[0];
+            }
 
-            int aca_id;
-            string[] aca = model.aca_id.Split('-');
-            aca_id = Convert.ToInt32(aca[0]);
-
-            string leg_codigo = "";
-            int leg_id;
-            string[] leg = model.leg_id.Split('-');
-            leg_id = Convert.ToInt32(leg[0]);
-            leg_codigo = leg[1];
-
-
-            int atp_id;
-            string atp_codigo = "";
-            string[] atp = model.atp_id.Split('-');
-            atp_id = Convert.ToInt32(atp[0]);
-            atp_codigo = atp[1];
-
-            int rpt_id;
-            string rpt_codigo = "";
-            string[] rpt = model.rpt_id.Split('-');
-            rpt_id = Convert.ToInt32(rpt[0]);
-            rpt_codigo = rpt[1];
-
-
-
-
+            string atp_id = "0";
+            if(model.atp_id != null)
+            {
+                string[] atp = model.atp_id.Split('-');
+                atp_id = atp[0];
+            }
+           
+            string rpt_id = "0";
+            if(model.rpt_id != null)
+            {
+                string[] rpt = model.rpt_id.Split('-');
+                rpt_id = rpt[0];
+            }
+           
             List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
@@ -225,19 +227,19 @@ namespace WebApp.DAO
                 com.Parameters.Add(p_return);
                 com.Parameters[0].Size = 32000;
 
-                com.Parameters.AddWithValue("@ACA_ID", aca_id);
+                //com.Parameters.AddWithValue("@ACA_ID", aca_id);
 
-                com.Parameters.AddWithValue("@ALE_ID", ale_id);
-                com.Parameters.AddWithValue("@ALE_CODIGO", ale_codigo);
+                //com.Parameters.AddWithValue("@ALE_ID", ale_id);
+                //com.Parameters.AddWithValue("@ALE_CODIGO", ale_codigo);
 
-                com.Parameters.AddWithValue("@ATP_ID", atp_id);
-                com.Parameters.AddWithValue("@ATP_CODIGO", atp_codigo);
+                //com.Parameters.AddWithValue("@ATP_ID", atp_id);
+                //com.Parameters.AddWithValue("@ATP_CODIGO", atp_codigo);
 
-                com.Parameters.AddWithValue("@RPT_ID", rpt_id);
-                com.Parameters.AddWithValue("@RPT_CODIGO", rpt_codigo);
+                //com.Parameters.AddWithValue("@RPT_ID", rpt_id);
+                //com.Parameters.AddWithValue("@RPT_CODIGO", rpt_codigo);
 
-                com.Parameters.AddWithValue("@LEG_ID", leg_id);
-                com.Parameters.AddWithValue("@LEG_CODIGO", leg_codigo);
+                //com.Parameters.AddWithValue("@LEG_ID", leg_id);
+                //com.Parameters.AddWithValue("@LEG_CODIGO", leg_codigo);
 
                 SqlDataReader reader = com.ExecuteReader();
                 while (reader.Read())
@@ -254,14 +256,39 @@ namespace WebApp.DAO
                         leg_descricao = reader["leg_descricao"] == DBNull.Value ? string.Empty : reader["leg_descricao"].ToString(),
                         rpp_id = reader["rpp_id"] == DBNull.Value ? string.Empty : reader["rpp_id"].ToString(),
                         rpt_codigo = reader["rpt_codigo"] == DBNull.Value ? string.Empty : reader["rpt_codigo"].ToString(),
-                        rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString()
+                        rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString(),
+                        leg_id = reader["leg_id"] == DBNull.Value ? string.Empty : reader["leg_id"].ToString(),
+                        atp_id = reader["atp_id"] == DBNull.Value ? string.Empty : reader["atp_id"].ToString()
 
                     });
                 }
 
-            }
+                var query = lista;
+                //if(rpt_id != "0")
+                //{
+                //    query = query.Where(x => x.rpt_id == rpt_id).ToList();
+                //}
 
-            return lista;
+              
+                if(ale_id != "0")
+                {
+                    query = query.Where(x => x.ale_id.Equals(ale_id)).ToList();
+                }
+                if(aca_id != "0")
+                {
+                    query = query.Where(x => x.aca_id.Equals(aca_id)).ToList();
+                }
+                if(leg_id != "0")
+                {
+                    query = query.Where(x => x.leg_id.Equals(leg_id)).ToList();
+                }
+                if(atp_id != "0")
+                {
+                    query = query.Where(x => x.atp_id.Equals(atp_id)).ToList();
+                }
+                return query.ToList();
+
+            }
         }
         /// <summary>
         /// Busca todos reparos
@@ -377,7 +404,7 @@ namespace WebApp.DAO
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_anomalia_causas where leg_id =" + id + " order by aca_codigo asc ", con);
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_causas where leg_id =" + id + " and aca_id <> -1 order by aca_codigo asc ", con);
                 com.CommandType = CommandType.Text;
 
                 SqlDataReader reader = com.ExecuteReader();
@@ -404,7 +431,7 @@ namespace WebApp.DAO
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_anomalia_alertas order by ale_codigo asc ", con);
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_alertas where ale_id <> -1 order by ale_codigo asc ", con);
                 com.CommandType = CommandType.Text;
 
                 SqlDataReader reader = com.ExecuteReader();
@@ -434,7 +461,7 @@ namespace WebApp.DAO
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_anomalia_tipos where leg_id = " + id + " order by atp_codigo asc", con);
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_tipos where leg_id = " + id + " and atp_id <> -1 order by atp_codigo asc", con);
                 com.CommandType = CommandType.Text;
 
                 SqlDataReader reader = com.ExecuteReader();
@@ -454,14 +481,14 @@ namespace WebApp.DAO
         /// <summary>
         /// Preenche Legenda
         /// </summary>
-        /// <returns></returns>
+        /// <returns></returns>m
         public List<PoliticaReparoModel> GetLegenda()
         {
             List<PoliticaReparoModel> Conserva = new List<PoliticaReparoModel>();
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_anomalia_legendas order by leg_codigo asc ", con);
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_legendas where leg_id <> -1 order by leg_codigo asc ", con);
                 com.CommandType = CommandType.Text;
 
                 SqlDataReader reader = com.ExecuteReader();
