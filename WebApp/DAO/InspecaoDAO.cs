@@ -375,13 +375,22 @@ namespace WebApp.DAO
                             leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
 
                             ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
-                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
-                            ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
-                            ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
-                            ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
-                            ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]),1),
-                            ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]),1),
-                            ian_fotografia = rdr["ian_fotografia"] == DBNull.Value ? "" : rdr["ian_fotografia"].ToString(),
+
+                            //ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
+                            //ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
+                            //ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
+                            //ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
+                            //ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]),1),
+                            //ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]),1),
+
+                           ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? "" : rdr["ian_quantidade"].ToString(),
+                           ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? "" : rdr["ian_espacamento"].ToString(),
+                           ian_largura = rdr["ian_largura"] == DBNull.Value ? "" : rdr["ian_largura"].ToString(),
+                           ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? "" : rdr["ian_comprimento"].ToString(),
+                           ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? "" : rdr["ian_abertura_minima"].ToString(),
+                           ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? "" : rdr["ian_abertura_maxima"].ToString(),
+
+                           ian_fotografia = rdr["ian_fotografia"] == DBNull.Value ? "" : rdr["ian_fotografia"].ToString(),
                             ian_croqui = rdr["ian_croqui"] == DBNull.Value ? "" : rdr["ian_croqui"].ToString(),
                             ian_desenho = rdr["ian_desenho"] == DBNull.Value ? "" : rdr["ian_desenho"].ToString(),
                             ian_observacoes = rdr["ian_observacoes"] == DBNull.Value ? "" : rdr["ian_observacoes"].ToString(),
@@ -828,12 +837,22 @@ namespace WebApp.DAO
                             leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
 
                             ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
-                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
-                            ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
-                            ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
-                            ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
-                            ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]), 1),
-                            ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]), 1),
+
+                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? "" : rdr["ian_quantidade"].ToString(),
+                            ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? "" : rdr["ian_espacamento"].ToString(),
+                            ian_largura = rdr["ian_largura"] == DBNull.Value ? "" : rdr["ian_largura"].ToString(),
+                            ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? "" : rdr["ian_comprimento"].ToString(),
+                            ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? "" : rdr["ian_abertura_minima"].ToString(),
+                            ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? "" : rdr["ian_abertura_maxima"].ToString(),
+
+
+                            //ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
+                            //ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
+                            //ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
+                            //ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
+                            //ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]), 1),
+                            //ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]), 1),
+
                             ian_fotografia = rdr["ian_fotografia"] == DBNull.Value ? "" : rdr["ian_fotografia"].ToString(),
                             ian_croqui = rdr["ian_croqui"] == DBNull.Value ? "" : rdr["ian_croqui"].ToString(),
                             ian_desenho = rdr["ian_desenho"] == DBNull.Value ? "" : rdr["ian_desenho"].ToString(),

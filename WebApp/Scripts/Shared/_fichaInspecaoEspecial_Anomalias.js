@@ -53,7 +53,7 @@
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Quantidade_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Quantidade_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_EspacamentoMedio_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_EspacamentoMedio_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Largura_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Largura_VVV" /></td> ' +
-        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Comprimento_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Comprimento_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Comprimento_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Comprimento_VVV" onkeyup="txt_Comprimento_onKeyUP(this);" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_AberturaMinima_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_AberturaMinima_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_AberturaMaxima_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_AberturaMaxima_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Causa_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Causa"  onchange="cmb_Causa_onchange(this)" >OPCOES_cmb_Causa</select></td > ' +
@@ -72,6 +72,9 @@
 
         ' </tr>';
 
+function txt_Comprimento_onKeyUP(txt_Comprimento_ian_id) {
+    txt_Comprimento_ian_id.style.backgroundColor = corBranca;
+}
 
 function Ficha4_CAMPO_ExportarXLS() {
     $.ajax({
@@ -107,7 +110,6 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
     // monta lista de valores das linhas
     var saida = '';
     var table = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
-    var linhaGrupo = "";
 
     for (var i = 0; i < table.rows.length; i++) {
         if (table.rows[i].id.includes("trFICHA4_CAMPO_ian_id")) {
@@ -147,13 +149,29 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                 if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
                     ian_espacamento = " ";
 
+                // largura nao obrigatoria, metro linear para reparo rpt_id in (1,26,27,28,30,31)
                 valor = ian_largura;
                 if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
                     ian_largura = " ";
 
+                // comprimento é obrigatorio
                 valor = ian_comprimento;
                 if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                    ian_comprimento = " ";
+                {
+                    var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
+                    txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'O Comprimento é obrigatório'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+
+                  //  ian_comprimento = " ";
+                }
 
                 valor = ian_abertura_minima;
                 if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
@@ -175,16 +193,16 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                 if (ian_observacoes.trim() == "")
                     ian_observacoes = " ";
 
-                if (rpt_id_sugerido.trim() == "")
+                if ((rpt_id_sugerido == null) || (rpt_id_sugerido.trim() == ""))
                     rpt_id_sugerido = " ";
 
-                if (qt_sugerido.trim() == "")
+                if ((qt_sugerido == null) || (qt_sugerido.trim() == ""))
                     qt_sugerido = " ";
 
-                if (rpt_id_adotado.trim() == "")
+                if ((rpt_id_adotado == null) || (rpt_id_adotado.trim() == ""))
                     rpt_id_adotado = " ";
 
-                if (qt_adotado.trim() == "")
+                if ((qt_adotado == null) || (qt_adotado.trim() == ""))
                     qt_adotado = " ";
 
                 if (aca_codigo.trim() == "")
@@ -197,14 +215,14 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                     + ian_id + '<quebra>'
                     + ian_numero + '<quebra>' + leg_codigo + '<quebra>'
                     + atp_codigo + '<quebra>' + ale_codigo + '<quebra>'
-                    + ian_quantidade + '<quebra>' + ian_espacamento + '<quebra>'
-                    + ian_largura + '<quebra>' + ian_comprimento + '<quebra>'
-                    + ian_abertura_minima + '<quebra>' + ian_abertura_maxima + '<quebra>'
+                    + ian_quantidade.replace(',', '.') + '<quebra>' + ian_espacamento.replace(',', '.') + '<quebra>'
+                    + ian_largura.replace(',', '.') + '<quebra>' + ian_comprimento.replace(',', '.') + '<quebra>'
+                    + ian_abertura_minima.replace(',', '.') + '<quebra>' + ian_abertura_maxima.replace(',', '.') + '<quebra>'
                     + aca_codigo + '<quebra>' + ian_fotografia + '<quebra>'
                     + ian_croqui + '<quebra>' + ian_desenho + '<quebra>'
                     + ian_observacoes + '<quebra>'
                     + rpt_id_sugerido + '<quebra>' + rpt_id_adotado + '<quebra>'
-                    + qt_sugerido + '<quebra>' + qt_adotado + '<quebra>'
+                    + qt_sugerido.replace(',', '.') + '<quebra>' + qt_adotado.replace(',', '.') + '<quebra>'
                     + '</tr_linha>';
 
                 saida = saida + linhaMontada;
@@ -276,20 +294,21 @@ function limpatblFicha4_CAMPO() {
 
 }
 
-function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
+function Ficha4_CAMPO_prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
     var tooltip = 'TOOLTIP_' + qualCombo;
     var opcoes = 'OPCOES_' + qualCombo;
 
-    var op0 = ' <option selectedXX value="-1" ></option> ';
-    var op = ' <option selectedXX value="valor" title="tooltip">texto</option> ';
+    var op0 = ' <option selectedxx disabled value="-1" ></option> ';
+    var op = ' <option selectedxx value="valor" title="tooltip">texto</option> ';
     var total = op0;
 
     if (parseInt(selectedValue) == -1) {
-        total = total.replace("selectedXX", "selected");
+        total = total.replace("selectedxx", "selected");
         linhaAux = linhaAux.replace(tooltip, "");
     }
-    else
-        total = total.replace("selectedXX", "");
+    else {
+        total = total.replace("selectedxx", "");
+    }
 
     var pedacos = listadeValores.split(";");
     for (k = 0; k < pedacos.length; k++) {
@@ -302,13 +321,12 @@ function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
 
             // checa se é o item selecionado
             if ((selectedValue) == (aux[0].trim())) {
-                opt = opt.replace("selectedXX", "selected");
+                opt = opt.replace("selectedxx", "selected");
                 linhaAux = linhaAux.replace(tooltip, aux[1]);
             }
-            //else {
-            //    opt = opt.replace("selectedXX", "");
-            //    linhaAux = linhaAux.replace(tooltip, aux[1]);
-            //}
+            else {
+                opt = opt.replace("selectedxx", "");
+            }
             total = total + opt;
         }
     }
@@ -435,15 +453,15 @@ function preenchetblFicha4_CAMPO(ehRead) {
                     linhaAux = linhaAux.replace(/-1/g, '');
 
                     // cria os itens dos combos ========================================
-                    linhaAux = prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
+                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
 
-                    linhaAux = prenchetdCombos('cmb_Alerta', result.data[i].lstAlertas, result.data[i].ale_codigo, linhaAux);
+                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Alerta', result.data[i].lstAlertas, result.data[i].ale_codigo, linhaAux);
 
-                    linhaAux = prenchetdCombos('cmb_Cod', result.data[i].lstTipos, result.data[i].atp_codigo, linhaAux);
+                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Cod', result.data[i].lstTipos, result.data[i].atp_codigo, linhaAux);
 
-                    linhaAux = prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
+                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
 
-                    linhaAux = prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
+                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
                 }
 
 
@@ -464,8 +482,12 @@ function preenchetblFicha4_CAMPO(ehRead) {
             // coloca mascara no campo quantidade
             var qts = $('[id^="txt_Quantidade"]');
             for (var i = 0; i < qts.length; i++) {
-                jQuery(qts[i]).attr('placeholder', "000.00");
-                jQuery(qts[i]).mask("999.99");
+                if (!ehRead)
+                    jQuery(qts[i]).attr('placeholder', "000,00");
+                else
+                    jQuery(qts[i]).attr('placeholder', "");
+
+                jQuery(qts[i]).mask("999,99");
             }
             
             if (paginaPai == "Inspecao")
@@ -646,18 +668,25 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
                     lbl_ReparoIndicado.title = result.data[0].rpt_descricao;
                     lbl_QuantidadeIndicadaUnidade.innerHTML = result.data[0].rpt_unidade;
 
-                    switch (result.data[0].rpt_unidade.toUpperCase()) {
-                        case "M":
-                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
-                            break;
+                    // metro linear para reparo rpt_id in (1, 26, 27, 28, 30, 31) 2021/fev/15
+                    var rpt_id = parseInt(result.data[0].rpt_id);
+                    if ((rpt_id == 1) || (rpt_id == 26) || (rpt_id == 27) || (rpt_id == 28) || (rpt_id == 30) || (rpt_id == 31)) {
+                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                    }
+                    else {
+                        switch (result.data[0].rpt_unidade.toUpperCase()) {
+                            case "M":
+                                lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                                break;
 
-                        case "M2":
-                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
-                            break;
+                            case "M2":
+                                lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
+                                break;
 
-                        default: // UM, UN
-                            lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
-                            break;
+                            default: // UM, UN
+                                lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                                break;
+                        }
                     }
                 }
                 else {
@@ -694,7 +723,8 @@ function cmb_Sigla_onchange(quem) {
                 var opt = document.createElement('option');
                 opt.value = aux[0].trim();
                 opt.innerHTML = aux[0].trim();
-                opt.title = aux[1].trim();
+                if (aux.length > 1)
+                    opt.title = aux[1].trim();
                 cmb_Cod.appendChild(opt);
             }
 
@@ -714,7 +744,8 @@ function cmb_Sigla_onchange(quem) {
                         var opt = document.createElement('option');
                         opt.value = aux[0].trim();
                         opt.innerHTML = aux[0].trim();
-                        opt.title = aux[1].trim();
+                        if (aux.length > 1)
+                            opt.title = aux[1].trim();
                         cmb_Causa.appendChild(opt);
                     }
 
@@ -734,7 +765,8 @@ function cmb_Sigla_onchange(quem) {
                                 var opt = document.createElement('option');
                                 opt.value = aux[0].trim();
                                 opt.innerHTML = aux[0].trim();
-                                opt.title = aux[1].trim();
+                                if (aux.length > 1)
+                                    opt.title = aux[1].trim();
                                 cmb_Alerta.appendChild(opt);
                             }
                         }
@@ -745,15 +777,12 @@ function cmb_Sigla_onchange(quem) {
     });
 
 }
-
 function cmb_Codigo_onchange(quem) {
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
 }
-
 function cmb_Alerta_onchange(quem) {
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
 }
-
 function cmb_Causa_onchange(quem) {
 
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
@@ -777,22 +806,27 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
                 mascara = "999";
             else
                 if (str.startsWith("txt_EspacamentoMedio_ian_id_"))
-                    mascara = "9999";
+                    mascara = "999,99";
                 else
                     if (str.startsWith("txt_Largura_ian_id_"))
-                        mascara = "9999";
+                        mascara = "999,99";
                     else
                         if (str.startsWith("txt_Comprimento_ian_id_"))
-                            mascara = "9999";
+                            mascara = "999,99";
                         else
                             if (str.startsWith("txt_AberturaMinima_ian_id_"))
-                                mascara = "99.99";
+                                mascara = "999,99";
                             else
                                 if (str.startsWith("txt_AberturaMaxima_ian_id_"))
-                                    mascara = "99.99";
+                                    mascara = "999,99";
 
             if (mascara != "")
                 jQuery("#" + str).mask(mascara);
+
+            //if (!ehRead)
+            //    jQuery("#" + str).attr('placeholder', mascara.replace(/9/g,'0'));
+            //else
+            //    jQuery("#" + str).attr('placeholder', "");
         }
     }
 
@@ -1087,6 +1121,7 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
     return false;
 }
 
+
 function Ficha4_ExcluirAnomalia(qual_ian_id) {
     var form = this;
 
@@ -1129,8 +1164,6 @@ function Ficha4_ExcluirAnomalia(qual_ian_id) {
     return false;
 
 }
-
-
 function Ficha4_InserirAnomalia(qual_ian_id) {
 
     var response = POST("/Inspecao/InspecaoAnomalia_Nova", JSON.stringify({ id: qual_ian_id }))

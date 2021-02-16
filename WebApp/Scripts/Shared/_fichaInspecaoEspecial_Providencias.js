@@ -86,7 +86,7 @@ function limpatblFicha4_PROVIDENCIAS() {
 
 }
 
-function prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
+function tblFicha4_PROVIDENCIA_prenchetdCombos(qualCombo, listadeValores, selectedValue, linhaAux) {
     var tooltip = 'TOOLTIP_' + qualCombo;
     var opcoes = 'OPCOES_' + qualCombo;
 
@@ -223,13 +223,13 @@ function preenchetblFicha4_PROVIDENCIAS() {
 
                         // cria os itens dos combos ========================================
 
-                        linhaAux = prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
+                        linhaAux = tblFicha4_PROVIDENCIA_prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
 
-                        linhaAux = prenchetdCombos('cmb_Alerta', result.data[i].lstAlertas, result.data[i].ale_codigo, linhaAux);
+                        linhaAux = tblFicha4_PROVIDENCIA_prenchetdCombos('cmb_Alerta', result.data[i].lstAlertas, result.data[i].ale_codigo, linhaAux);
 
-                        linhaAux = prenchetdCombos('cmb_Cod', result.data[i].lstTipos, result.data[i].atp_codigo, linhaAux);
+                        linhaAux = tblFicha4_PROVIDENCIA_prenchetdCombos('cmb_Cod', result.data[i].lstTipos, result.data[i].atp_codigo, linhaAux);
 
-                        linhaAux = prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
+                        linhaAux = tblFicha4_PROVIDENCIA_prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
                     }
                 }
 
