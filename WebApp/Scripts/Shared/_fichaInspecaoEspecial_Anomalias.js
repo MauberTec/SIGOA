@@ -46,11 +46,12 @@
         '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label> ' +
         ' </td > ' +
         ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
-        ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse" > <label id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " >txt_Numero_VVV</label></td> ' +
+        //' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  title="TOOLTIP_cmb_Cod"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Alerta_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Alerta"  onchange="cmb_Alerta_onchange(this)" >OPCOES_cmb_Alerta</select></td > ' +
-        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Quantidade_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Quantidade_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Quantidade_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Quantidade_VVV"  onkeyup="txt_Quantidade_onKeyUP(this);" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_EspacamentoMedio_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_EspacamentoMedio_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Largura_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Largura_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Comprimento_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Comprimento_VVV" onkeyup="txt_Comprimento_onKeyUP(this);" /></td> ' +
@@ -72,8 +73,12 @@
 
         ' </tr>';
 
-function txt_Comprimento_onKeyUP(txt_Comprimento_ian_id) {
-    txt_Comprimento_ian_id.style.backgroundColor = corBranca;
+function txt_Comprimento_onKeyUP(quem) {
+    quem.style.backgroundColor = corBranca;
+}
+
+function txt_Quantidade_onKeyUP(quem) {
+    quem.style.backgroundColor = corBranca;
 }
 
 function Ficha4_CAMPO_ExportarXLS() {
@@ -138,12 +143,89 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                 var rpt_id_adotado = $("#cmb_ReparoAdotado_ian_id_" + ian_id).val();
                 var qt_adotado = $("#txt_QuantidadeAdotada_ian_id_" + ian_id).val();
 
+
+                if ((leg_codigo + " ").trim() == "-1") // campo Sigla
+                {
+                    var cmb_Sigla = document.getElementById("cmb_Sigla_ian_id_" + ian_id);
+                    cmb_Sigla.style.backgroundColor = corVermelho;
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'A Sigla é obrigatória'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                    return false;
+                }
+
+                if ((atp_codigo + " ").trim() == "-1") // campo Codigo
+                {
+                    var cmb_Cod = document.getElementById("cmb_Cod_ian_id_" + ian_id);
+                    cmb_Cod.style.backgroundColor = corVermelho;
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'O Código é obrigatório'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                    return false;
+                }
+
+                if ((ale_codigo + " ").trim() == "-1") // campo Alerta
+                {
+                   var cmb_Alerta = document.getElementById("cmb_Alerta_ian_id_" + ian_id);
+                   cmb_Alerta.style.backgroundColor = corVermelho;
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'O Alerta é obrigatório'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                    return false;
+                }
+
+                if ((aca_codigo + " ").trim() == "-1") // campo Causa
+                {
+                    var cmb_Causa = document.getElementById("cmb_Causa_ian_id_" + ian_id);
+                    cmb_Causa.style.backgroundColor = corVermelho;
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'A Causa é obrigatória'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                    return false;
+                }
+
+
                 if (ian_numero.trim() == "")
                     ian_numero = " ";
 
+                // quantidade obrigatoria
                 var valor = ian_quantidade;
                 if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                    ian_quantidade = " ";
+                {
+
+                    var txt_Quantidade = document.getElementById("txt_Quantidade_ian_id_" + ian_id);
+                    txt_Quantidade.style.backgroundColor = corVermelho;
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'A Quantidade é obrigatória'
+                    }).then(
+                        function () {
+                            return false;
+                        });
+                    return false;
+                    //ian_quantidade = " ";
+                }
 
                 valor = ian_espacamento;
                 if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
@@ -700,6 +782,9 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
 }
 
 function cmb_Sigla_onchange(quem) {
+
+    quem.style.backgroundColor = corBranca;
+
     var seltooltip = quem.options[quem.selectedIndex].title;
     quem.title = seltooltip;
 
@@ -778,16 +863,20 @@ function cmb_Sigla_onchange(quem) {
 
 }
 function cmb_Codigo_onchange(quem) {
+    quem.style.backgroundColor = corBranca;
+
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
 }
 function cmb_Alerta_onchange(quem) {
+    quem.style.backgroundColor = corBranca;
+
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
 }
 function cmb_Causa_onchange(quem) {
 
+    quem.style.backgroundColor = corBranca;
+
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
-
-
 }
 
 function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
