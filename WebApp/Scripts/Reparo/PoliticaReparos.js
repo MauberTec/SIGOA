@@ -21,9 +21,9 @@ function preencheLegenda() {
         dataType: "JSON",
         success: function (data) {
             $('#cmdLegAdd').empty();
-            $('#cmdLegAdd').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
+            $('#cmdLegAdd').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $('#cmdLegAdd_in').empty();
-            $('#cmdLegAdd_in').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
+            $('#cmdLegAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmdLegAdd').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
                 $('#cmdLegAdd_in').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
@@ -68,7 +68,7 @@ function preencheAnomalia_in() {
         dataType: "JSON",
         success: function (data) {
             $('#cmdCodAnomaliaAdd_in').empty();
-            $('#cmdCodAnomaliaAdd_in').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
+            $('#cmdCodAnomaliaAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmdCodAnomaliaAdd_in').append($('<option value=' + item.atp_id + '> ' + item.atp_codigo + ' - ' + item.atp_descricao + ' </option>'));
                 
@@ -90,9 +90,6 @@ function preencheAlerta() {
         dataType: "JSON",
         success: function (data) {
             $('#divAlertaAdd').empty();
-           
-            $('#cmdAlertaAdd_in').empty();
-            $('#cmdAlertaAdd_in').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
                 tagchk = tagchk.replace("idXXX", "chk" + i);
@@ -103,7 +100,7 @@ function preencheAlerta() {
                 taglbl = taglbl.replace("TextoXXX", item.ale_descricao);
                 $("#divAlertaAdd").append(tagchk + taglbl);
 
-                $('#cmdAlertaAdd_in').append($('<option value=' + item.ale_id + '> ' + item.ale_codigo + ' - ' + item.ale_descricao + ' </option>'));
+               
             });
         }
     });
@@ -141,7 +138,7 @@ function preencheCausa_in() {
         success: function (data) {
            
             $('#cmdCausaAdd_in').empty();
-            $('#cmdCausaAdd_in').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
+            $('#cmdCausaAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
 
             $.each(data, function (i, item) {
                 $('#cmdCausaAdd_in').append($('<option value=' + item.aca_id + '>' + item.aca_descricao + ' </option>'));
@@ -157,9 +154,9 @@ function preencheRep() {
         dataType: "JSON",
         success: function (data) {
             $('#cmbReparoAdd').empty();
-            $('#cmbReparoAdd').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
+            $('#cmbReparoAdd').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $('#cmbReparoAdd_in').empty();
-            $('#cmbReparoAdd_in').append($('<option selected disabled></option>').val(-1).html("--Selecione--")); // 1o item vazio
+            $('#cmbReparoAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmbReparoAdd').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
                 $('#cmbReparoAdd_in').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
@@ -341,10 +338,31 @@ function Buscar() {
         data: { rpt_id: $('#cmbReparoAdd_in').val(), leg_id: $('#cmdLegAdd_in').val(), atp_id: $('#cmdCodAnomaliaAdd_in').val(), ale_id: $('#cmdAlertaAdd_in').val(), aca_id: $('#cmdCausaAdd_in').val() },
         dataType: "JSON",
         success: function (data) {
-            $('#GridHome').html("");
+            $('#DivGrid').empty();
+            $('#DivGrid').append('<table id="tblSubs" class="no-footer dataTable">' +
+                '<thead>' +
+                '<tr>' +
+                '<th style="width:40px; text-align:center">Reparo</th>' +
+                '<th style="width:70px; text-align:center">Legenda</th>' +
+                '<th style="width:70px; text-align:center">Cod Anom</th>' +
+                '<th style="width:70px; text-align:center">Alerta</th>' +
+                '<th style="text-align:center">Causa</th>' +
+                '<th style="text-align:center">Opções</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody id="GridHome">' +
+                '</tbody>' +
+                '</table >');
             $.each(data, function (i, valor) {
-                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + '</td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
+                $('#GridHome').append($(
+
+
+                    '<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + '</td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
+                )
+
+                );
             });
+            paginar();
 
         },
         error: function (erro) {
