@@ -696,14 +696,34 @@ namespace WebApp.Models
        public Double pri_nota_durabilidade { get; set; }
 
         /// <summary>
-        /// Nota Funcionalidade
+        /// Nota Ação
         /// </summary>
-       public Double pri_nota_funcionalidade { get; set; }
+        public Double pri_nota_acao { get; set; }
 
+        /// <summary>
+        /// Descrição da Ação
+        /// </summary>
+        public string pri_acao { get; set; }
+
+        /// <summary>
+        /// Status
+        /// </summary>
+        public string pri_status { get; set; }
+
+        /// <summary>
+        /// Descrição do Status
+        /// </summary>
+        public string status_descricao { get; set; }
+
+
+        // /// <summary>
+        // /// Nota Funcionalidade
+        // /// </summary>
+        //public Double pri_nota_funcionalidade { get; set; }
         /// <summary>
         /// Nota da Importância da OAE
         /// </summary>
-       public Double pri_nota_importancia_oae_malha { get; set; }
+        public Double pri_nota_importancia_oae_malha { get; set; }
 
         /// <summary>
         /// Nota da VDM

@@ -622,15 +622,9 @@ namespace WebApp.Controllers
         /// <returns>View</returns>
         public ActionResult ObjPriorizacao()
         {
-            //// preenche o combos
-            //List<SelectListItem> lstListacmbClassesObjeto = new ObjetoBLL().PreenchecmbClassesObjeto();
-            //ViewBag.cmbFiltroClassesObjeto = lstListacmbClassesObjeto;
-
-
-            //List<SelectListItem> lstListacmbTiposObjeto = new ObjetoBLL().CriaListaCmbTiposObjeto(null, null);
-            //ViewBag.cmbFiltroTiposObjeto = lstListacmbTiposObjeto;
-
-            //ViewBag.cmbClassesObjeto = lstListacmbClassesObjeto;
+            // preenche o combos
+            List<SelectListItem> lstListacmbFiltroRegionais = new ObjetoBLL().PreenchecmbFiltroRegionais();
+            ViewBag.cmbFiltroRegionais = lstListacmbFiltroRegionais;
 
             return View();
         }
@@ -640,11 +634,10 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
-        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
         /// <returns>JsonResult</returns>
-        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
+        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Regionais)
         {
-            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, CodOAE, Criticidade) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, CodOAE) }, JsonRequestBehavior.AllowGet);
         }
 
 

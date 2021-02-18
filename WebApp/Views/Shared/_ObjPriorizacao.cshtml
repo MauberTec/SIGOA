@@ -33,6 +33,8 @@
     .Centralizado {
         text-align: center;
     }
+
+
 </style>
 
 <div style="width:100%;" id="divFiltros">
@@ -41,32 +43,15 @@
             <div class="form-group">
                 <div class="col-sm-3">
                     <label class="control-label">Rodovia</label>
-                    <input type="text" class="form-control" id="txtCodRodovia" maxlength="50">
+                    <input type="text" class="form-control" id="txtCodRodovia" maxlength="50" onkeydown="if (event.keyCode == 13) { ExecutarFiltroPriorizacao(); }" >
                 </div>
 
                 <div class="col-sm-3">
-                    <label class="control-label">OAE</label>
-                    <input type="text" class="form-control" id="txtCodOAE" maxlength="50">
-
+                    <label class="control-label">Regional</label><br />
+                    @*<input type="text" class="form-control" id="txtCodOAE" maxlength="50" onkeydown="if (event.keyCode == 13) { ExecutarFiltroPriorizacao(); }" >*@
+                    @Html.DropDownList("cmbFiltroRegionais", null, null, new { @class = "form-control", @multiple = "multiple", @style="width:150px !important;"})
                 </div>
-                <div class="col-sm-3">
-                    <label class="control-label">Criticidade</label><br />
-                    <select class="form-control" id="cmbCriticidade" name="cmbCriticidade" multiple="multiple" >
-                        <option value="0">0 a 0.99</option>
-                        <option value="1">1 a 1.99</option>
-                        <option value="2">2 a 2.99</option>
-                        <option value="3">3 a 3.99</option>
-                        <option value="4">4 a 4.99</option>
-                        <option value="5">5 a 5.99</option>
-                        <option value="6">6 a 6.99</option>
-                        <option value="7">7 a 7.99</option>
-                        <option value="8">8 a 8.99</option>
-                        <option value="9">9 a 9.99</option>
-                        <option value="10">>= 10</option>
-                    </select>
-                </div>
-
-
+ 
                 <div>
                     <div class="btn-box-tool pull-right" style="margin-top:10px">
                         <button type="reset" class="btn btn-info" onclick="LimparFiltroPriorizacao();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
@@ -89,11 +74,12 @@
                             <th>obj_id</th>
                             <th title="Prioridade">Prioridade</th>
                             <th title="OAE">OAE</th>
-                            <th title="Nota Final">Nota Final</th>
+                            <th title="Nota Final">Nota Geral</th>
                             <th title="Nota Estrutura">Nota Estrut</th>
                             <th title="Nota Durabilidade">Nota Durab</th>
-                            <th title="Nota Funcionalidade">Nota Func</th>
-                            <th title="Nota Importância OAE malha">Nota Import OAE</th>
+                            <th title="Ação">Ação</th>
+                            <th title="Status">Status</th>
+                            <th title="Nota Importância na Malha">Importância na Malha</th>
                             <th title="Nota VDM">Nota VDM</th>
                             <th title="Nota Principal Utilização">Nota Princ Util</th>
                             <th title="Nota Facilidade de Desvio">Nota Facili Desvio</th>
@@ -144,7 +130,6 @@
         $('#txtCodRodovia').val("");
         $('#txtCodOAE').val("");
 
-        $("#cmbCriticidade").multiselect("clearSelection");
         carregaGridPriorizacao();
 
         return false;
@@ -157,8 +142,9 @@
     }
 
     function carregaGridPriorizacao() {
+        var FiltroRegionais = ($("#cmbFiltroRegionais").val() + ';').replaceAll(",", ";");
 
-        var criticid = ($("#cmbCriticidade").val() + ';').replaceAll(",", ";");
+
         $('#tblPriorizacao').DataTable().destroy();
         $('#tblPriorizacao').DataTable({
             "ajax": {
@@ -167,9 +153,8 @@
                 "datatype": "json",
                 "data": function (d) {
                     d.CodRodovia = $('#txtCodRodovia').val();
-                    d.CodOAE = $('#txtCodOAE').val();
-                    d.Criticidade = criticid;
-                    //d.onerado = $('#cmbOnerado').val();
+                    //d.CodOAE = $('#txtCodOAE').val();
+                    d.Regionais = FiltroRegionais;
                 }
             }
             , "columns": [
@@ -180,7 +165,8 @@
                 { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "pri_nota_funcionalidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_acao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_status", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_importancia_oae_malha", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_vdm", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_principal_utilizacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
@@ -194,12 +180,27 @@
                 { data: "pri_restricao_treminhoes", "className": "Centralizado", "autoWidth": true, "searchable": true }
             ]
             , "order": [2, "asc"]
+           // , "ordering": false
             , 'columnDefs': [
                 {
-                    targets: [3] // dcl_codigo
-                    , "createdCell": function (td, cellData, rowData, row, col) {
+                    targets: [3] // obj_codigo
+                    ,"createdCell": function (td, cellData, rowData, row, col) {
                         $(td).attr('title', rowData["obj_descricao"]);
                     }
+
+                    ,targets: [7] // pri_nota_acao
+                    ,"createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["pri_acao"]);
+                    }
+
+                    ,targets: [8] // pri_status
+                    ,"createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["status_descricao"]);
+                    }                    
+                    
+                    ,"targets": [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+                    ,"orderable": false
+
                 }
             ]
 
@@ -226,7 +227,7 @@
 
     // transforma o combo em multipla escolha
     $(function () {
-        $('#cmbCriticidade').multiselect({
+        $('#cmbFiltroRegionais').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
             delimiterText: '; '

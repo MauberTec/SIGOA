@@ -941,12 +941,31 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
-        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
         /// <returns>List ObjPriorizacao</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE)
         {
-            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, CodOAE, Criticidade);
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, CodOAE);
 
+        }
+
+
+
+        /// <summary>
+        /// Preenchimento do combo Filtro Regionais 
+        /// </summary>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbFiltroRegionais()
+        {
+            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
+            List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
+
+            foreach (var temp in lstRegionais)
+            {
+                string txt = temp.reg_codigo + "-" + temp.reg_descricao;
+                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+            }
+
+            return lstListacmbFiltroRegionais;
         }
 
 
