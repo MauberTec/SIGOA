@@ -123,16 +123,16 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
             var txt_Numero_ian_id = document.getElementById("txt_Numero_ian_id_" + ian_id);
             if (txt_Numero_ian_id) {
                 var ian_numero = $("#txt_Numero_ian_id_" + ian_id).val();
-                var leg_codigo = $("#cmb_Sigla_ian_id_" + ian_id).val();
-                var atp_codigo = $("#cmb_Cod_ian_id_" + ian_id).val();
-                var ale_codigo = $("#cmb_Alerta_ian_id_" + ian_id).val();
+                var leg_codigo = $("#cmb_Sigla_ian_id_" + ian_id).val() + '';
+                var atp_codigo = $("#cmb_Cod_ian_id_" + ian_id).val() + '';
+                var ale_codigo = $("#cmb_Alerta_ian_id_" + ian_id).val() + '';
                 var ian_quantidade = $("#txt_Quantidade_ian_id_" + ian_id).val();
                 var ian_espacamento = $("#txt_EspacamentoMedio_ian_id_" + ian_id).val();
                 var ian_largura = $("#txt_Largura_ian_id_" + ian_id).val();
                 var ian_comprimento = $("#txt_Comprimento_ian_id_" + ian_id).val();
                 var ian_abertura_minima = $("#txt_AberturaMinima_ian_id_" + ian_id).val();
                 var ian_abertura_maxima = $("#txt_AberturaMaxima_ian_id_" + ian_id).val();
-                var aca_codigo = $("#cmb_Causa_ian_id_" + ian_id).val();
+                var aca_codigo = $("#cmb_Causa_ian_id_" + ian_id).val() + '';
                 var ian_fotografia = $("#txt_Foto_ian_id_" + ian_id).val();
                 var ian_croqui = $("#txt_Croqui_ian_id_" + ian_id).val();
                 var ian_desenho = $("#txt_Desenho_ian_id_" + ian_id).val();
@@ -143,8 +143,29 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                 var rpt_id_adotado = $("#cmb_ReparoAdotado_ian_id_" + ian_id).val();
                 var qt_adotado = $("#txt_QuantidadeAdotada_ian_id_" + ian_id).val();
 
+                var ehLinhaVazia = true;
 
-                if ((leg_codigo + " ").trim() == "-1") // campo Sigla
+                if ((leg_codigo != "") 
+                    || (atp_codigo != "null")
+                    || (ale_codigo != "null")
+                    || (ian_quantidade.replace(".","").replace(",","") != "")
+                    || (ian_espacamento.replace(".", "").replace(",", "") != "")
+                    || (ian_largura.replace(".", "").replace(",", "") != "")
+                    || (ian_comprimento.replace(".", "").replace(",", "") != "")
+                    || (ian_abertura_minima.replace(".", "").replace(",", "") != "")
+                    || (ian_abertura_maxima.replace(".", "").replace(",", "") != "")
+                    || (aca_codigo != "null")
+                    || (ian_fotografia.trim() != "")
+                    || (ian_croqui.trim() != "")
+                    || (ian_desenho.trim() != "")
+                    || (ian_observacoes.trim() != "")
+                )
+                    ehLinhaVazia = false;
+
+                if (ehLinhaVazia) // se for linha vazia, nao precisa salvar
+                    continue;
+
+                if (leg_codigo == "-1") // campo Sigla
                 {
                     var cmb_Sigla = document.getElementById("cmb_Sigla_ian_id_" + ian_id);
                     cmb_Sigla.style.backgroundColor = corVermelho;
@@ -159,7 +180,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                     return false;
                 }
 
-                if ((atp_codigo + " ").trim() == "-1") // campo Codigo
+                if ((atp_codigo) == "-1") // campo Codigo
                 {
                     var cmb_Cod = document.getElementById("cmb_Cod_ian_id_" + ian_id);
                     cmb_Cod.style.backgroundColor = corVermelho;
@@ -174,7 +195,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                     return false;
                 }
 
-                if ((ale_codigo + " ").trim() == "-1") // campo Alerta
+                if ((ale_codigo) == "-1") // campo Alerta
                 {
                    var cmb_Alerta = document.getElementById("cmb_Alerta_ian_id_" + ian_id);
                    cmb_Alerta.style.backgroundColor = corVermelho;
@@ -189,7 +210,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                     return false;
                 }
 
-                if ((aca_codigo + " ").trim() == "-1") // campo Causa
+                if ((aca_codigo) == "-1") // campo Causa
                 {
                     var cmb_Causa = document.getElementById("cmb_Causa_ian_id_" + ian_id);
                     cmb_Causa.style.backgroundColor = corVermelho;
@@ -287,7 +308,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                 if ((qt_adotado == null) || (qt_adotado.trim() == ""))
                     qt_adotado = " ";
 
-                if (aca_codigo.trim() == "")
+                if (aca_codigo == "-1")
                     aca_codigo = " ";
 
                 //if (isNaN(ovv_tpu_quantidade))
@@ -1043,13 +1064,13 @@ function Ficha4_CAMPO_LimparCampos(aPartirDe) {
 
 function Ficha4_CAMPO_btn_Adicionar_Objeto_Anomalia_onclick() {
     var Ficha4_CAMPO_cmbSubdivisao1 = document.getElementById("Ficha4_CAMPO_cmbSubdivisao1");
-    Ficha4_CAMPO_cmbSubdivisao1.selectedIndex = -1;
 
     // limpa os itens existentes;
-    $("#Ficha4_CAMPO_cmbSubdivisao2").html("");
-    $("#Ficha4_CAMPO_cmbSubdivisao3").html("");
-    $("#Ficha4_CAMPO_cmbGrupoObjetos").html("");
-    $("#divFicha4_CAMPO_LocalizacaoObjeto").html("");
+    ////Ficha4_CAMPO_cmbSubdivisao1.selectedIndex = -1;
+    ////$("#Ficha4_CAMPO_cmbSubdivisao2").html("");
+    ////$("#Ficha4_CAMPO_cmbSubdivisao3").html("");
+    ////$("#Ficha4_CAMPO_cmbGrupoObjetos").html("");
+    ////$("#divFicha4_CAMPO_LocalizacaoObjeto").html("");
 
     $("#modalSelecionarObjetoLocalizacao").modal('show');
 
@@ -1184,7 +1205,7 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
                 success: function (result) {
 
                     // atualiza os dados
-                    preenchetblFicha4_CAMPO(true);
+                    preenchetblFicha4_CAMPO(false);
 
                     $("#modalSelecionarObjetoLocalizacao").modal('hide');
                     return false;
