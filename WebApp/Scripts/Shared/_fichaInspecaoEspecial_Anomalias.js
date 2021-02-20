@@ -46,8 +46,8 @@
         '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label> ' +
         ' </td > ' +
         ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
-        ' <td class="borderLeft centroH qualClasse" > <label id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " >txt_Numero_VVV</label></td> ' +
-        //' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
+        // ' <td class="borderLeft centroH qualClasse" > <label id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " >txt_Numero_VVV</label></td> ' +
+       ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  title="TOOLTIP_cmb_Cod"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Alerta_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Alerta"  onchange="cmb_Alerta_onchange(this)" >OPCOES_cmb_Alerta</select></td > ' +

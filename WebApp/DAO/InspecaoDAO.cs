@@ -356,7 +356,8 @@ namespace WebApp.DAO
                             col_Localizacao = rdr["col_Localizacao"].ToString() ,
                            
                             ian_id = rdr["ian_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ian_id"]),
-                            ian_numero = rdr["ian_numero"].ToString(),
+                          //  ian_numero = rdr["ian_numero"].ToString(),
+                             ian_numero = ((rdr["ian_numero"] == DBNull.Value) || (Convert.ToInt32(rdr["ian_numero"]) == 0)) ? "" : rdr["ian_numero"].ToString(),
 
                             atp_id = rdr["atp_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["atp_id"]),
                             atp_codigo = rdr["atp_codigo"] == DBNull.Value ? "" : rdr["atp_codigo"].ToString(),
