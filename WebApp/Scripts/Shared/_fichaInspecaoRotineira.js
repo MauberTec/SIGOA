@@ -664,6 +664,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         var lbl_id = quem.id.replace("cmb_situacao", "lbl_servico");
         var lbl = document.getElementById(lbl_id);
         lbl.innerText = "";
+        lbl.title = "";
 
         var cmb2_id = quem.id.replace("cmb_situacao", "cmb_tpu_descricao_itens");
         var cmb2 = document.getElementById(cmb2_id);
@@ -671,6 +672,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
             if ((parseInt(valor) <= 3) && (cmb2.options.length >= parseInt(valor))) {
                 cmb2.value = valor;
                 lbl.innerText = cmb2.options[cmb2.selectedIndex].text;
+                lbl.title = cmb2.options[cmb2.selectedIndex].text;
             }
         }
     }

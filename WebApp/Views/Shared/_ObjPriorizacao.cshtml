@@ -77,8 +77,10 @@
                             <th title="Nota Final">Nota Geral</th>
                             <th title="Nota Estrutura">Nota Estrut</th>
                             <th title="Nota Durabilidade">Nota Durab</th>
+
                             <th title="Ação">Ação</th>
                             <th title="Status">Status</th>
+
                             <th title="Nota Importância na Malha">Importância na Malha</th>
                             <th title="Nota VDM">Nota VDM</th>
                             <th title="Nota Principal Utilização">Nota Princ Util</th>
@@ -165,8 +167,10 @@
                 { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
                 { data: "pri_nota_acao", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_status", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
                 { data: "pri_nota_importancia_oae_malha", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_vdm", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_principal_utilizacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
@@ -184,26 +188,34 @@
             , 'columnDefs': [
                 {
                     targets: [3] // obj_codigo
-                    ,"createdCell": function (td, cellData, rowData, row, col) {
+                    , "createdCell": function (td, cellData, rowData, row, col) {
                         $(td).attr('title', rowData["obj_descricao"]);
                     }
-
-                    ,targets: [7] // pri_nota_acao
-                    ,"createdCell": function (td, cellData, rowData, row, col) {
+                }
+                ,{
+                    targets: [7] // pri_nota_acao
+                    , "createdCell": function (td, cellData, rowData, row, col) {
                         $(td).attr('title', rowData["pri_acao"]);
                     }
-
-                    ,targets: [8] // pri_status
-                    ,"createdCell": function (td, cellData, rowData, row, col) {
+                }
+                ,{
+                    targets: [8] // pri_status
+                    , "createdCell": function (td, cellData, rowData, row, col) {
                         $(td).attr('title', rowData["status_descricao"]);
-                    }                    
-                    
-                    ,"targets": [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-                    ,"orderable": false
-
+                    }
+                }
+                ,{
+                    "targets": [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+                    , "orderable": false
                 }
             ]
 
+            , "createdRow": function (row, data, dataIndex) {
+              //  $(row).removeAttr('even');
+               // $(row).removeAttr('odd');
+              //  $(row).css("background-color", data["corFundo"]);
+                $(row).attr('style', 'background-color:' + data["corFundo"] + ' !important');
+            }
             , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
             , select: {
                 style: 'single'

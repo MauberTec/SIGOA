@@ -1721,8 +1721,10 @@ namespace WebApp.DAO
                             pri_nota_acao = (rdr["pri_nota_acao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_acao"]), 2),
                             pri_acao = rdr["pri_acao"].ToString(),
 
+                            prs_id = rdr["prs_id"].ToString(),
                             pri_status = rdr["pri_status"].ToString(),
                             status_descricao = rdr["status_descricao"].ToString(),
+                            corFundo = rdr["corFundo"].ToString(),
 
                             //pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_funcionalidade"]), 2),
                             pri_nota_importancia_oae_malha = (rdr["pri_nota_importancia_oae_malha"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_importancia_oae_malha"]), 2),

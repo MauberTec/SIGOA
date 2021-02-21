@@ -705,6 +705,12 @@ namespace WebApp.Models
         /// </summary>
         public string pri_acao { get; set; }
 
+
+        /// <summary>
+        /// Id do Status da Prioridade
+        /// </summary>
+        public string prs_id { get; set; }
+
         /// <summary>
         /// Status
         /// </summary>
@@ -714,6 +720,12 @@ namespace WebApp.Models
         /// Descrição do Status
         /// </summary>
         public string status_descricao { get; set; }
+
+
+        /// <summary>
+        /// Caso haja status, coloca cor de fundo
+        /// </summary>
+        public string corFundo { get; set; }
 
 
         // /// <summary>
