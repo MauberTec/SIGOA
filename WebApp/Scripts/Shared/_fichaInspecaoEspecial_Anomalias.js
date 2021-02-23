@@ -29,7 +29,8 @@
         ' <td class="borderLeft qualClasse"> ' +
         '          <button id="btn_InserirAnomalia_ian_id_ZZZ" ' +
         '            type="button" ' +
-        '             onclick="return Ficha4_InserirAnomalia(ZZZ)" ' +
+//        '             onclick="return Ficha4_InserirAnomalia(ZZZ)" ' +
+        '             onclick="return SalvarDados_Ficha4_CAMPO_VALORES(null, 1, ZZZ) " ' +
         '             title="Inserir Anomalia" ' +
         '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
         '             <span class="glyphicon glyphicon-plus text-success contornoBranco"> ' +
@@ -37,7 +38,8 @@
 
         '          <button id="btn_ExcluirAnomalia_ian_id_ZZZ" ' +
         '            type="button" ' +
-        '             onclick="return Ficha4_ExcluirAnomalia(ZZZ)" ' +
+ //       '             onclick="return Ficha4_ExcluirAnomalia(ZZZ)" ' +
+        '             onclick="return SalvarDados_Ficha4_CAMPO_VALORES(null, 2, ZZZ) " ' +
         '             title="Excluir Anomalia" ' +
         '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
         '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
@@ -47,7 +49,7 @@
         ' </td > ' +
         ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
         // ' <td class="borderLeft centroH qualClasse" > <label id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " >txt_Numero_VVV</label></td> ' +
-       ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
+       ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" onkeyup="txt_Numero_onchange(this)"  /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  title="TOOLTIP_cmb_Cod"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Alerta_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Alerta"  onchange="cmb_Alerta_onchange(this)" >OPCOES_cmb_Alerta</select></td > ' +
@@ -80,6 +82,9 @@ function txt_Comprimento_onKeyUP(quem) {
 function txt_Quantidade_onKeyUP(quem) {
     quem.style.backgroundColor = corBranca;
 }
+function txt_Numero_onchange(quem) {
+    quem.style.backgroundColor = corBranca;
+}
 
 function Ficha4_CAMPO_ExportarXLS() {
     $.ajax({
@@ -110,7 +115,13 @@ function EditarDados_Ficha4_CAMPO(tabela) {
     return false;
 }
 
-function SalvarDados_Ficha4_CAMPO_VALORES() {
+function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
+
+    if (qualEvento == null)
+        qualEvento = 0;
+
+    if (qual_ian_id == null)
+        qual_ian_id = -1;
 
     // monta lista de valores das linhas
     var saida = '';
@@ -120,149 +131,164 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
         if (table.rows[i].id.includes("trFICHA4_CAMPO_ian_id")) {
             var ian_id = table.rows[i].id.replace("trFICHA4_CAMPO_ian_id_", "");
 
-            var txt_Numero_ian_id = document.getElementById("txt_Numero_ian_id_" + ian_id);
-            if (txt_Numero_ian_id) {
-                var ian_numero = $("#txt_Numero_ian_id_" + ian_id).val();
-                var leg_codigo = $("#cmb_Sigla_ian_id_" + ian_id).val() + '';
-                var atp_codigo = $("#cmb_Cod_ian_id_" + ian_id).val() + '';
-                var ale_codigo = $("#cmb_Alerta_ian_id_" + ian_id).val() + '';
-                var ian_quantidade = $("#txt_Quantidade_ian_id_" + ian_id).val();
-                var ian_espacamento = $("#txt_EspacamentoMedio_ian_id_" + ian_id).val();
-                var ian_largura = $("#txt_Largura_ian_id_" + ian_id).val();
-                var ian_comprimento = $("#txt_Comprimento_ian_id_" + ian_id).val();
-                var ian_abertura_minima = $("#txt_AberturaMinima_ian_id_" + ian_id).val();
-                var ian_abertura_maxima = $("#txt_AberturaMaxima_ian_id_" + ian_id).val();
-                var aca_codigo = $("#cmb_Causa_ian_id_" + ian_id).val() + '';
-                var ian_fotografia = $("#txt_Foto_ian_id_" + ian_id).val();
-                var ian_croqui = $("#txt_Croqui_ian_id_" + ian_id).val();
-                var ian_desenho = $("#txt_Desenho_ian_id_" + ian_id).val();
-                var ian_observacoes = $("#txt_Obs_ian_id_" + ian_id).val();
-                var rpt_id_sugerido = $("#lbl_ReparoIndicado_ian_id_" + ian_id).text();
-                var qt_sugerido = $("#lbl_QuantidadeIndicada_ian_id_" + ian_id).text();
-          //      var rpt_id_adotado = $("#txt_ReparoAdotado_ian_id_" + ian_id).val();
-                var rpt_id_adotado = $("#cmb_ReparoAdotado_ian_id_" + ian_id).val();
-                var qt_adotado = $("#txt_QuantidadeAdotada_ian_id_" + ian_id).val();
+          //  if ((parseInt(ian_id) != qual_ian_id) && (qual_ian_id > 0))
+            {
+                var txt_Numero_ian_id = document.getElementById("txt_Numero_ian_id_" + ian_id);
+                if (txt_Numero_ian_id) {
+                    var ian_numero = $("#txt_Numero_ian_id_" + ian_id).val();
+                    var leg_codigo = $("#cmb_Sigla_ian_id_" + ian_id).val() + '';
+                    var atp_codigo = $("#cmb_Cod_ian_id_" + ian_id).val() + '';
+                    var ale_codigo = $("#cmb_Alerta_ian_id_" + ian_id).val() + '';
+                    var ian_quantidade = $("#txt_Quantidade_ian_id_" + ian_id).val();
+                    var ian_espacamento = $("#txt_EspacamentoMedio_ian_id_" + ian_id).val();
+                    var ian_largura = $("#txt_Largura_ian_id_" + ian_id).val();
+                    var ian_comprimento = $("#txt_Comprimento_ian_id_" + ian_id).val();
+                    var ian_abertura_minima = $("#txt_AberturaMinima_ian_id_" + ian_id).val();
+                    var ian_abertura_maxima = $("#txt_AberturaMaxima_ian_id_" + ian_id).val();
+                    var aca_codigo = $("#cmb_Causa_ian_id_" + ian_id).val() + '';
+                    var ian_fotografia = $("#txt_Foto_ian_id_" + ian_id).val();
+                    var ian_croqui = $("#txt_Croqui_ian_id_" + ian_id).val();
+                    var ian_desenho = $("#txt_Desenho_ian_id_" + ian_id).val();
+                    var ian_observacoes = $("#txt_Obs_ian_id_" + ian_id).val();
+                    var rpt_id_sugerido = $("#lbl_ReparoIndicado_ian_id_" + ian_id).text();
+                    var qt_sugerido = $("#lbl_QuantidadeIndicada_ian_id_" + ian_id).text();
+                    //      var rpt_id_adotado = $("#txt_ReparoAdotado_ian_id_" + ian_id).val();
+                    var rpt_id_adotado = $("#cmb_ReparoAdotado_ian_id_" + ian_id).val();
+                    var qt_adotado = $("#txt_QuantidadeAdotada_ian_id_" + ian_id).val();
 
-                var ehLinhaVazia = true;
+                    var ehLinhaVazia = true;
 
-                if ((leg_codigo != "") 
-                    || (atp_codigo != "null")
-                    || (ale_codigo != "null")
-                    || (ian_quantidade.replace(".","").replace(",","") != "")
-                    || (ian_espacamento.replace(".", "").replace(",", "") != "")
-                    || (ian_largura.replace(".", "").replace(",", "") != "")
-                    || (ian_comprimento.replace(".", "").replace(",", "") != "")
-                    || (ian_abertura_minima.replace(".", "").replace(",", "") != "")
-                    || (ian_abertura_maxima.replace(".", "").replace(",", "") != "")
-                    || (aca_codigo != "null")
-                    || (ian_fotografia.trim() != "")
-                    || (ian_croqui.trim() != "")
-                    || (ian_desenho.trim() != "")
-                    || (ian_observacoes.trim() != "")
-                )
-                    ehLinhaVazia = false;
+                    if ((ian_numero != "")
+                        || (leg_codigo != "")
+                        || (atp_codigo != "null")
+                        || (ale_codigo != "null")
+                        || (ian_quantidade.replace(".", "").replace(",", "") != "")
+                        || (ian_espacamento.replace(".", "").replace(",", "") != "")
+                        || (ian_largura.replace(".", "").replace(",", "") != "")
+                        || (ian_comprimento.replace(".", "").replace(",", "") != "")
+                        || (ian_abertura_minima.replace(".", "").replace(",", "") != "")
+                        || (ian_abertura_maxima.replace(".", "").replace(",", "") != "")
+                        || (aca_codigo != "null")
+                        || (ian_fotografia.trim() != "")
+                        || (ian_croqui.trim() != "")
+                        || (ian_desenho.trim() != "")
+                        || (ian_observacoes.trim() != "")
+                    )
+                        ehLinhaVazia = false;
 
-                if (ehLinhaVazia) // se for linha vazia, nao precisa salvar
-                    continue;
+                    if (ehLinhaVazia) // se for linha vazia, nao precisa salvar
+                        continue;
 
-                if (leg_codigo == "-1") // campo Sigla
-                {
-                    var cmb_Sigla = document.getElementById("cmb_Sigla_ian_id_" + ian_id);
-                    cmb_Sigla.style.backgroundColor = corVermelho;
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: 'A Sigla é obrigatória'
-                    }).then(
-                        function () {
-                            return false;
-                        });
-                    return false;
-                }
+                    if (ian_numero == "") // campo Numero 
+                    {
+                        txt_Numero_ian_id.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'O Número da Anomalia é obrigatório'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+                    }
 
-                if ((atp_codigo) == "-1") // campo Codigo
-                {
-                    var cmb_Cod = document.getElementById("cmb_Cod_ian_id_" + ian_id);
-                    cmb_Cod.style.backgroundColor = corVermelho;
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: 'O Código é obrigatório'
-                    }).then(
-                        function () {
-                            return false;
-                        });
-                    return false;
-                }
+                    if ((leg_codigo == "-1") || (leg_codigo == "") || (leg_codigo == "null")) // campo Sigla
+                    {
+                        var cmb_Sigla = document.getElementById("cmb_Sigla_ian_id_" + ian_id);
+                        cmb_Sigla.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'A Sigla é obrigatória'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+                    }
 
-                if ((ale_codigo) == "-1") // campo Alerta
-                {
-                   var cmb_Alerta = document.getElementById("cmb_Alerta_ian_id_" + ian_id);
-                   cmb_Alerta.style.backgroundColor = corVermelho;
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: 'O Alerta é obrigatório'
-                    }).then(
-                        function () {
-                            return false;
-                        });
-                    return false;
-                }
+                    if ((atp_codigo == "-1") || (atp_codigo == "") || (atp_codigo == "null"))  // campo Codigo
+                    {
+                        var cmb_Cod = document.getElementById("cmb_Cod_ian_id_" + ian_id);
+                        cmb_Cod.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'O Código é obrigatório'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+                    }
 
-                if ((aca_codigo) == "-1") // campo Causa
-                {
-                    var cmb_Causa = document.getElementById("cmb_Causa_ian_id_" + ian_id);
-                    cmb_Causa.style.backgroundColor = corVermelho;
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: 'A Causa é obrigatória'
-                    }).then(
-                        function () {
-                            return false;
-                        });
-                    return false;
-                }
+                    if ((ale_codigo == "-1") || (ale_codigo == "") || (ale_codigo == "null")) // campo Alerta
+                    {
+                        var cmb_Alerta = document.getElementById("cmb_Alerta_ian_id_" + ian_id);
+                        cmb_Alerta.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'O Alerta é obrigatório'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+                    }
+
+                    if ((aca_codigo == "-1") || (aca_codigo == "") || (aca_codigo == "null"))  // campo Causa
+                    {
+                        var cmb_Causa = document.getElementById("cmb_Causa_ian_id_" + ian_id);
+                        cmb_Causa.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'A Causa é obrigatória'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+                    }
 
 
-                if (ian_numero.trim() == "")
-                    ian_numero = " ";
+                    if (ian_numero.trim() == "")
+                        ian_numero = " ";
 
-                // quantidade obrigatoria
-                var valor = ian_quantidade;
-                if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                {
+                    // quantidade obrigatoria
+                    var valor = ian_quantidade;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == "")) {
 
-                    var txt_Quantidade = document.getElementById("txt_Quantidade_ian_id_" + ian_id);
-                    txt_Quantidade.style.backgroundColor = corVermelho;
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: 'A Quantidade é obrigatória'
-                    }).then(
-                        function () {
-                            return false;
-                        });
-                    return false;
-                    //ian_quantidade = " ";
-                }
+                        var txt_Quantidade = document.getElementById("txt_Quantidade_ian_id_" + ian_id);
+                        txt_Quantidade.style.backgroundColor = corVermelho;
+                        swal({
+                            type: 'error',
+                            title: 'Aviso',
+                            text: 'A Quantidade é obrigatória'
+                        }).then(
+                            function () {
+                                return false;
+                            });
+                        return false;
+                        //ian_quantidade = " ";
+                    }
 
-                valor = ian_espacamento;
-                if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                    ian_espacamento = " ";
+                    valor = ian_espacamento;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
+                        ian_espacamento = " ";
 
-                // largura nao obrigatoria, metro linear para reparo rpt_id in (1,26,27,28,30,31)
-                valor = ian_largura;
-                if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                    ian_largura = " ";
+                    // largura nao obrigatoria, metro linear para reparo rpt_id in (1,26,27,28,30,31)
+                    valor = ian_largura;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
+                        ian_largura = " ";
 
-                // comprimento é obrigatorio
-                valor = ian_comprimento;
-                if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                {
-                    var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
-                    txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
+                    // comprimento é obrigatorio
+                    valor = ian_comprimento;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == "")) {
+                        var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
+                        txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
                         swal({
                             type: 'error',
                             title: 'Aviso',
@@ -273,62 +299,64 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
                             });
                         return false;
 
-                  //  ian_comprimento = " ";
+                        //  ian_comprimento = " ";
+                    }
+
+                    valor = ian_abertura_minima;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
+                        ian_abertura_minima = " ";
+
+                    valor = ian_abertura_maxima;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
+                        ian_abertura_maxima = " ";
+
+                    if (ian_fotografia.trim() == "")
+                        ian_fotografia = " ";
+
+                    if (ian_croqui.trim() == "")
+                        ian_croqui = " ";
+
+                    if (ian_desenho.trim() == "")
+                        ian_desenho = " ";
+
+                    if (ian_observacoes.trim() == "")
+                        ian_observacoes = " ";
+
+                    if ((rpt_id_sugerido == null) || (rpt_id_sugerido.trim() == ""))
+                        rpt_id_sugerido = " ";
+
+                    if ((qt_sugerido == null) || (qt_sugerido.trim() == ""))
+                        qt_sugerido = " ";
+
+                    if ((rpt_id_adotado == null) || (rpt_id_adotado.trim() == ""))
+                        rpt_id_adotado = " ";
+
+                    if ((qt_adotado == null) || (qt_adotado.trim() == ""))
+                        qt_adotado = " ";
+
+                    if (aca_codigo == "-1")
+                        aca_codigo = " ";
+
+                    //if (isNaN(ovv_tpu_quantidade))
+                    //    ovv_tpu_quantidade = 0;
+
+                    var linhaMontada = '<tr_linha>'
+                        + ian_id + '<quebra>'
+                        + ian_numero + '<quebra>' + leg_codigo + '<quebra>'
+                        + atp_codigo + '<quebra>' + ale_codigo + '<quebra>'
+                        + ian_quantidade.replace(',', '.') + '<quebra>' + ian_espacamento.replace(',', '.') + '<quebra>'
+                        + ian_largura.replace(',', '.') + '<quebra>' + ian_comprimento.replace(',', '.') + '<quebra>'
+                        + ian_abertura_minima.replace(',', '.') + '<quebra>' + ian_abertura_maxima.replace(',', '.') + '<quebra>'
+                        + aca_codigo + '<quebra>' + ian_fotografia + '<quebra>'
+                        + ian_croqui + '<quebra>' + ian_desenho + '<quebra>'
+                        + ian_observacoes + '<quebra>'
+                        + rpt_id_sugerido + '<quebra>' + rpt_id_adotado + '<quebra>'
+                        + qt_sugerido.replace(',', '.') + '<quebra>' + qt_adotado.replace(',', '.') + '<quebra>'
+                        + '</tr_linha>';
+
+                    saida = saida + linhaMontada;
                 }
 
-                valor = ian_abertura_minima;
-                if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                    ian_abertura_minima = " ";
-
-                valor = ian_abertura_maxima;
-                if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
-                    ian_abertura_maxima = " ";
-
-                if (ian_fotografia.trim() == "")
-                    ian_fotografia = " ";
-
-                if (ian_croqui.trim() == "")
-                    ian_croqui = " ";
-
-                if (ian_desenho.trim() == "")
-                    ian_desenho = " ";
-
-                if (ian_observacoes.trim() == "")
-                    ian_observacoes = " ";
-
-                if ((rpt_id_sugerido == null) || (rpt_id_sugerido.trim() == ""))
-                    rpt_id_sugerido = " ";
-
-                if ((qt_sugerido == null) || (qt_sugerido.trim() == ""))
-                    qt_sugerido = " ";
-
-                if ((rpt_id_adotado == null) || (rpt_id_adotado.trim() == ""))
-                    rpt_id_adotado = " ";
-
-                if ((qt_adotado == null) || (qt_adotado.trim() == ""))
-                    qt_adotado = " ";
-
-                if (aca_codigo == "-1")
-                    aca_codigo = " ";
-
-                //if (isNaN(ovv_tpu_quantidade))
-                //    ovv_tpu_quantidade = 0;
-
-                var linhaMontada = '<tr_linha>'
-                    + ian_id + '<quebra>'
-                    + ian_numero + '<quebra>' + leg_codigo + '<quebra>'
-                    + atp_codigo + '<quebra>' + ale_codigo + '<quebra>'
-                    + ian_quantidade.replace(',', '.') + '<quebra>' + ian_espacamento.replace(',', '.') + '<quebra>'
-                    + ian_largura.replace(',', '.') + '<quebra>' + ian_comprimento.replace(',', '.') + '<quebra>'
-                    + ian_abertura_minima.replace(',', '.') + '<quebra>' + ian_abertura_maxima.replace(',', '.') + '<quebra>'
-                    + aca_codigo + '<quebra>' + ian_fotografia + '<quebra>'
-                    + ian_croqui + '<quebra>' + ian_desenho + '<quebra>'
-                    + ian_observacoes + '<quebra>'
-                    + rpt_id_sugerido + '<quebra>' + rpt_id_adotado + '<quebra>'
-                    + qt_sugerido.replace(',', '.') + '<quebra>' + qt_adotado.replace(',', '.') + '<quebra>'
-                    + '</tr_linha>';
-
-                saida = saida + linhaMontada;
             }
         }
     }
@@ -361,7 +389,13 @@ function SalvarDados_Ficha4_CAMPO_VALORES() {
         dataType: "json",
         success: function (result) {
 
-            preenchetblFicha4_CAMPO(true);
+            switch (qualEvento)
+            {
+                case 1: Ficha4_InserirAnomalia(qual_ian_id); break; // inserir anomalia
+                case 2: Ficha4_ExcluirAnomalia(qual_ian_id); break; // excluir anomalia
+                case 3: Ficha4_CAMPO_btn_Adicionar_Objeto_Anomalia_onclick(); break; // inserir OBJETO
+                default:preenchetblFicha4_CAMPO(true);
+            }
 
             return false;
         },
@@ -929,7 +963,9 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
                             else
                                 if (str.startsWith("txt_AberturaMaxima_ian_id_"))
                                     mascara = "999,99";
-
+                            else
+                                if (str.startsWith("txt_Numero_ian_id_"))
+                                    mascara = "999";
             if (mascara != "")
                 jQuery("#" + str).mask(mascara);
 

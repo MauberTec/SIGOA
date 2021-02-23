@@ -671,8 +671,10 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         if (cmb2) {
             if ((parseInt(valor) <= 3) && (cmb2.options.length >= parseInt(valor))) {
                 cmb2.value = valor;
+                quem.title = quem.options[quem.selectedIndex].title;
                 lbl.innerText = cmb2.options[cmb2.selectedIndex].text;
                 lbl.title = cmb2.options[cmb2.selectedIndex].text;
+
             }
         }
     }

@@ -33,8 +33,6 @@
     .Centralizado {
         text-align: center;
     }
-
-
 </style>
 
 <div style="width:100%;" id="divFiltros">
@@ -131,6 +129,7 @@
 
         $('#txtCodRodovia').val("");
         $('#txtCodOAE').val("");
+        $("#cmbFiltroRegionais").multiselect("clearSelection");
 
         carregaGridPriorizacao();
 
@@ -155,7 +154,6 @@
                 "datatype": "json",
                 "data": function (d) {
                     d.CodRodovia = $('#txtCodRodovia').val();
-                    //d.CodOAE = $('#txtCodOAE').val();
                     d.Regionais = FiltroRegionais;
                 }
             }
@@ -214,7 +212,8 @@
               //  $(row).removeAttr('even');
                // $(row).removeAttr('odd');
               //  $(row).css("background-color", data["corFundo"]);
-                $(row).attr('style', 'background-color:' + data["corFundo"] + ' !important');
+                if (data["corFundo"] != "transparent")
+                    $(row).attr('style', 'background-color:' + data["corFundo"] + ' !important');
             }
             , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
             , select: {

@@ -1687,7 +1687,7 @@ namespace WebApp.DAO
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
         /// <returns>Lista de Objetos</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais)
         {
             try
             {
@@ -1699,7 +1699,7 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
-                    com.Parameters.AddWithValue("@CodOAE", CodOAE);
+                    com.Parameters.AddWithValue("@Regionais", Regionais);
 
 
                     SqlDataReader rdr = com.ExecuteReader();
