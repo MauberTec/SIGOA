@@ -57,6 +57,8 @@ namespace WebApp.Controllers
 
             ViewBag.cmbClassesOS = new OrdemServicoBLL().PreencheCmbClassesOS();
 
+            ViewBag.cmbEmailRegionais = new ObjetoBLL().PreenchecmbEmailRegionais();
+
             return View();
         }
 
@@ -430,6 +432,26 @@ namespace WebApp.Controllers
         {
             return Json(new OrdemServicoBLL().OSFluxoStatus_Salvar(fos), JsonRequestBehavior.AllowGet);
         }
+
+
+
+        /// <summary>
+        ///  Envia Email de Notificacao
+        /// </summary>
+        /// <param name="lstDestinatarios">Lista de Destinatarios separada por ponto e virgula</param>
+        /// <param name="TextoEmail">Texto do Email</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail)
+        {
+            string retorno = new OrdemServicoBLL().FichaNotificacao_EnviarEmail(lstDestinatarios, TextoEmail);
+            bool valid = retorno.Trim() == "" ? true : false;
+
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
 
     }
 }

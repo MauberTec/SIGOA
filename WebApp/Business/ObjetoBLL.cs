@@ -961,14 +961,40 @@ namespace WebApp.Business
 
             foreach (var temp in lstRegionais)
             {
-                string txt = temp.reg_codigo + "-" + temp.reg_descricao;
-                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                if (temp.reg_email.Trim() != "")
+                {
+                    string txt = temp.reg_codigo + "-" + temp.reg_descricao;
+                    lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                }
             }
 
             return lstListacmbFiltroRegionais;
         }
 
 
+
+
+        /// <summary>
+        /// Preenchimento do combo Filtro Email Regionais 
+        /// </summary>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbEmailRegionais()
+        {
+            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
+            List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
+
+            foreach (var temp in lstRegionais)
+            {
+                if (temp.reg_email.Trim() != "")
+                {
+                   string txt = temp.reg_codigo + "-" + temp.reg_descricao + "<" + temp.reg_email.Trim() + ">";
+                  //   string txt = temp.reg_codigo + "-" + temp.reg_descricao + "<mayatabe@mayatabe.com.br>";
+                    lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = txt });
+                }
+            }
+
+            return lstListacmbFiltroRegionais;
+        }
 
     }
 

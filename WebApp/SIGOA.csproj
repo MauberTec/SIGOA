@@ -709,7 +709,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
+    <Content Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -260,8 +260,6 @@ function cmbTiposOS_Novo_onchange()
 }
 
 
-
-
 // *****************************************************************
 
 
@@ -938,7 +936,8 @@ function OrdemServico_Objeto_Salvar() {
         var sel_txt = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text;
         var selObj_codigo = sel_txt.substring(0, sel_txt.indexOf("(")-1);
 
-        var selTipoOS = $("#cmbTiposOS_Novo").val() == "" ? -1 : $("#cmbFiltroTiposOS").val();
+    //    var selTipoOS = $("#cmbTiposOS_Novo").val() == "" ? -1 : $("#cmbFiltroTiposOS").val();
+        var selTipoOS = $("#cmbTiposOS_Novo").val() == "" ? -1 : $("#cmbTiposOS_Novo option:selected").val();
         var selTipoOStxt = $("#cmbTiposOS_Novo").val() == "" ? "" : $("#cmbTiposOS_Novo option:selected").text();
 
         // checa se ja tem O.S. com esse Objeto e Tipo O.S.

@@ -7,6 +7,7 @@ using WebApp.DAO;
 using System.Web.Mvc;
 using System.Drawing;
 using WebApp.Helpers;
+using System.Net.Mail;
 
 namespace WebApp.Business
 {
@@ -496,6 +497,33 @@ namespace WebApp.Business
         }
 
 
+        // *************** FICHA DE NOTIFICACAO DE OCORRENCIAS  *************************************************************
+
+        /// <summary>
+        ///  Envia Email de Notificacao
+        /// </summary>
+        /// <param name="lstDestinatarios">Lista de Destinatarios separada por ponto e virgula</param>
+        /// <param name="TextoEmail">Texto do Email</param>
+        /// <returns>string</returns>
+        public string FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail)
+        {
+                ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
+
+                pEmail.Para = lstDestinatarios;
+                pEmail.Assunto = "Notificação de Ocorrência";
+
+
+                // substitui parametros
+                pEmail.Texto = TextoEmail;
+
+
+                // envia o email
+                AlternateView av1 = null;
+                if (pEmail.IsBodyHtml)
+                    av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+            return new Gerais().MandaEmail(av1, pEmail);
+        }
 
     }
 }
