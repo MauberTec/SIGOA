@@ -798,6 +798,16 @@ namespace WebApp.Models
        public string obj_descricao { get; set; }
 
 
+        /// <summary>
+        /// Data da Inspeção
+        /// </summary>
+        public string ord_data_termino_execucao { get; set; }
+
+        /// <summary>
+        /// Descrição do Tipo de O.S.
+        /// </summary>
+        public string tos_descricao { get; set; }
+
     }
 
 

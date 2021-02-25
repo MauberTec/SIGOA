@@ -1737,7 +1737,11 @@ namespace WebApp.DAO
                             pri_nota_agressividade_ambiental = (rdr["pri_nota_agressividade_ambiental"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_agressividade_ambiental"]), 2),
                             pri_nota_trem_tipo = (rdr["pri_nota_trem_tipo"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_trem_tipo"]), 2),
                             pri_nota_barreira_seguranca = (rdr["pri_nota_barreira_seguranca"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_barreira_seguranca"]), 2),
-                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 2)
+                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 2),
+
+                            ord_data_termino_execucao = (rdr["ord_data_termino_execucao"] == DBNull.Value) ? "" : rdr["ord_data_termino_execucao"].ToString(),
+                            tos_descricao = (rdr["tos_descricao"] == DBNull.Value) ? "" :rdr["tos_descricao"].ToString()
+
                         });
                     }
                     return lst;

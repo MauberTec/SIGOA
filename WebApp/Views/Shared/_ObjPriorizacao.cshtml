@@ -65,15 +65,28 @@
     <div class="row">
         <div class="box box-primary">
             <div class="box-body">
+
                 <table id="tblPriorizacao">
                     <thead>
                         <tr>
+                            <th colspan="20" style="text-align:right">
+                                <button type="button"
+                                        id="btnToggleAtributos"
+                                        onclick="btnToggleAtributos_click()"
+                                        title="Contrair/Expandir outras Notas">
+                                    <i class="fa fa-exchange"></i>
+                                </button>
+                            </th>
+                        </tr>
+                        <tr>
                             <th>pri_id</th>
                             <th>obj_id</th>
-                            <th title="Prioridade">Prio-ridade</th>
+                            <th title="Prioridade">Prio ridade</th>
                             <th title="OAE">OAE</th>
                             <th title="Nota Final">Nota Geral</th>
-                            <th title="Nota Final">Data Classif</th>
+
+                            <th title="Nota Final">Data Inspeção</th>
+                            <th title="Nota Final">Tipo Inspeção</th>
 
                             <th title="Nota Estrutura">Estrut</th>
                             <th title="Nota Durabilidade">Durab</th>
@@ -82,11 +95,7 @@
                             <th title="Status">Status</th>
 
                             <th title="Nota Importância na Malha">
-                                            Impor-tância na Malha
-                                            <button type="button" id="btnToggleAtributos" onclick="btnToggleAtributos_click()" title="Contrair/Expandir outras Notas">
-                                                <i class="fa fa-exchange"></i>
-                                            </button>
-
+                                Impor tância na Malha
                             </th>
 
                             <th title="Nota VDM">VDM </th>
@@ -134,6 +143,8 @@
 
 <script>
 
+    var colunasVisiveis = false;
+
     function LimparFiltroPriorizacao() {
 
         $('#txtCodRodovia').val("");
@@ -172,7 +183,10 @@
                 { data: "pri_ordem", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "obj_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "pri_data_classificacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+        //        { data: "pri_data_classificacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "ord_data_termino_execucao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "tos_descricao", "className": "Centralizado", "autoWidth": true, "searchable": true },
 
                 { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
@@ -181,6 +195,7 @@
                 { data: "pri_status", "className": "Centralizado", "autoWidth": true, "searchable": true },
 
                 { data: "pri_nota_importancia_oae_malha", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
                 { data: "pri_nota_vdm", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_principal_utilizacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_facilidade_desvio", "className": "Centralizado", "autoWidth": true, "searchable": true },
@@ -214,7 +229,7 @@
                     }
                 }
                 ,{
-                    "targets": [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20]
+                    "targets": [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20, 21]
                     , "orderable": false
                 }
             ]
@@ -235,16 +250,26 @@
             , "pagingType": "input"
             , "sDom": '<"top">rt<"bottom"pfli><"clear">'
         });
+
+        btnToggleAtributos_click(colunasVisiveis);
     }
 
-    function btnToggleAtributos_click(e) {
+    function btnToggleAtributos_click(estado) {
 
         var table = $('#tblPriorizacao').DataTable();
-        for (i = 11; i <= 20; i++) {
-            var column = table.column(i);
-            column.visible(!column.visible());
+
+        if (estado == null) // foi click do botao
+        {
+            colunasVisiveis = !table.column(12).visible();
+            estado = colunasVisiveis;
         }
 
+
+        for (i = 12; i <= 21; i++) {
+            var column = table.column(i);
+          //  column.visible(!column.visible());
+            column.visible(estado);
+        }
         return false;
     }
 

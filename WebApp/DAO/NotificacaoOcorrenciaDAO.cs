@@ -103,13 +103,13 @@ namespace WebApp.DAO
                         com.Parameters.AddWithValue("@noc_id", notOcor.noc_id);
 
                     com.Parameters.AddWithValue("@ord_id", notOcor.ord_id);
-                    com.Parameters.AddWithValue("@data_notificacao", notOcor.data_notificacao);
-                    com.Parameters.AddWithValue("@responsavel_notificacao", notOcor.responsavel_notificacao);
-                    com.Parameters.AddWithValue("@descricao_ocorrencia", notOcor.descricao_ocorrencia);
-                    com.Parameters.AddWithValue("@solicitante", notOcor.solicitante);
-                    com.Parameters.AddWithValue("@solicitante_data", notOcor.solicitante_data);
-                    com.Parameters.AddWithValue("@responsavel_recebimento", notOcor.responsavel_recebimento);
-                    com.Parameters.AddWithValue("@responsavel_recebimento_data", notOcor.responsavel_recebimento_data);
+                    com.Parameters.AddWithValue("@data_notificacao", notOcor.data_notificacao == null ? " " : notOcor.data_notificacao);
+                    com.Parameters.AddWithValue("@responsavel_notificacao", notOcor.responsavel_notificacao == null ? " " : notOcor.responsavel_notificacao);
+                    com.Parameters.AddWithValue("@descricao_ocorrencia", notOcor.descricao_ocorrencia == null ? " " : notOcor.descricao_ocorrencia);
+                    com.Parameters.AddWithValue("@solicitante", notOcor.solicitante == null ? " " : notOcor.solicitante);
+                    com.Parameters.AddWithValue("@solicitante_data", notOcor.solicitante_data == null ? " " : notOcor.solicitante_data);
+                    com.Parameters.AddWithValue("@responsavel_recebimento", notOcor.responsavel_recebimento == null ? " " :  notOcor.responsavel_recebimento);
+                    com.Parameters.AddWithValue("@responsavel_recebimento_data", notOcor.responsavel_recebimento_data == null ? " " : notOcor.responsavel_recebimento_data);
 
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
