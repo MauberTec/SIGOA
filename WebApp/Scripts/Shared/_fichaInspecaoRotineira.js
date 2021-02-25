@@ -63,7 +63,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         '    <label id="lbl_Variaveis_GGG_VVV" class="lblsNormal">lbl_Variaveis_XXXXX</label> ' +
         '  </td> ' +
         '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
-        '    <select class="cmbs" id="cmb_situacao_GGG_VVV" onchange="cmb_situacao_onchange(this)"> ' +
+        '    <select class="cmbs" id="cmb_situacao_GGG_VVV" title="TOOLTIP_cmb_situacao"  onchange="cmb_situacao_onchange(this)"> ' +
         '          OPCOES_cmb_situacao ' +
         '    </select> ' +
         '  </td> ' +
@@ -664,13 +664,17 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         var lbl_id = quem.id.replace("cmb_situacao", "lbl_servico");
         var lbl = document.getElementById(lbl_id);
         lbl.innerText = "";
+        lbl.title = "";
 
         var cmb2_id = quem.id.replace("cmb_situacao", "cmb_tpu_descricao_itens");
         var cmb2 = document.getElementById(cmb2_id);
         if (cmb2) {
             if ((parseInt(valor) <= 3) && (cmb2.options.length >= parseInt(valor))) {
                 cmb2.value = valor;
+                quem.title = quem.options[quem.selectedIndex].title;
                 lbl.innerText = cmb2.options[cmb2.selectedIndex].text;
+                lbl.title = cmb2.options[cmb2.selectedIndex].text;
+
             }
         }
     }
@@ -763,8 +767,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
 
 
                                     // cria os itens do combo cmb_situacao ========================================
-                                    var op0 = ' <option selectedXX value="0" disabled></option> ';
-                                    var op = ' <option selectedXX value="valor">texto</option> ';
+                                    var op0 = ' <option selectedXX value="-1" disabled></option> ';
+                                    var op = ' <option selectedXX value="valor" title="tooltips" >texto</option> ';
                                     var total = op0;
                                     var str = result.data[i].caracterizacao_situacao_cmb;
                                     var selectedValue = result.data[i].ogi_id_caracterizacao_situacao;
@@ -777,17 +781,28 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                                     var pedacos = str.split(";");
                                     for (k = 0; k < pedacos.length; k++) {
                                         var aux = pedacos[k].split(":");
+                                        var aux2 = aux[1].split("|");
+
                                         var opt = op;
-                                        opt = opt.replace("valor", aux[0]).replace("texto", aux[1]);
+                                        opt = opt.replace("valor", aux[0]);
+                                        opt = opt.replace("texto", aux2[0]);
+                                        if (aux2.length > 1)
+                                            opt = opt.replace("tooltips", aux2[1]);
+                                        else
+                                            opt = opt.replace("tooltips", "");
 
                                         // checa se é o item selecionado
-                                        if (parseInt(selectedValue) == parseInt(aux[0]))
+                                        if (parseInt(selectedValue) == parseInt(aux[0])) {
                                             opt = opt.replace("selectedXX", "selected");
+                                            if (aux2.length > 1)
+                                                linhaAux = linhaAux.replace("TOOLTIP_cmb_situacao", aux2[1]);
+                                        }
                                         else
                                             opt = opt.replace("selectedXX", "");
 
                                         total = total + opt;
                                     }
+                                    linhaAux = linhaAux.replace("TOOLTIP_cmb_situacao", " ");
                                     linhaAux = linhaAux.replace(/OPCOES_cmb_situacao/g, total);
 
                                     // cria os itens do combo OPCOES_cmb_condicao============================================

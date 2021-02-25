@@ -327,32 +327,32 @@ namespace WebApp.Models
         /// <summary>
         /// Quantidade de anomalia 
         /// </summary>
-        public int ian_quantidade { get; set; }
+        public string ian_quantidade { get; set; }
 
         /// <summary>
         /// Espaçamento entre anomalia em cm
         /// </summary>
-        public int ian_espacamento { get; set; }
+        public string ian_espacamento { get; set; }
 
         /// <summary>
         /// Largura de anomalia em cm
         /// </summary>
-        public int ian_largura { get; set; }
+        public string ian_largura { get; set; }
 
         /// <summary>
         /// Comprimento de anomalia em cm
         /// </summary>
-        public int ian_comprimento { get; set; }
+        public string ian_comprimento { get; set; }
 
         /// <summary>
         /// Abertura mímima da anomalia em mm
         /// </summary>
-        public Double ian_abertura_minima { get; set; }
+        public string ian_abertura_minima { get; set; }
 
         /// <summary>
         /// Abertura máxima da anomalia em mm
         /// </summary>
-        public Double ian_abertura_maxima { get; set; }
+        public string ian_abertura_maxima { get; set; }
 
         /// <summary>
         /// Id de causa provável

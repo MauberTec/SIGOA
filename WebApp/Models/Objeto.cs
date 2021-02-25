@@ -696,14 +696,46 @@ namespace WebApp.Models
        public Double pri_nota_durabilidade { get; set; }
 
         /// <summary>
-        /// Nota Funcionalidade
+        /// Nota Ação
         /// </summary>
-       public Double pri_nota_funcionalidade { get; set; }
+        public Double pri_nota_acao { get; set; }
 
+        /// <summary>
+        /// Descrição da Ação
+        /// </summary>
+        public string pri_acao { get; set; }
+
+
+        /// <summary>
+        /// Id do Status da Prioridade
+        /// </summary>
+        public string prs_id { get; set; }
+
+        /// <summary>
+        /// Status
+        /// </summary>
+        public string pri_status { get; set; }
+
+        /// <summary>
+        /// Descrição do Status
+        /// </summary>
+        public string status_descricao { get; set; }
+
+
+        /// <summary>
+        /// Caso haja status, coloca cor de fundo
+        /// </summary>
+        public string corFundo { get; set; }
+
+
+        // /// <summary>
+        // /// Nota Funcionalidade
+        // /// </summary>
+        //public Double pri_nota_funcionalidade { get; set; }
         /// <summary>
         /// Nota da Importância da OAE
         /// </summary>
-       public Double pri_nota_importancia_oae_malha { get; set; }
+        public Double pri_nota_importancia_oae_malha { get; set; }
 
         /// <summary>
         /// Nota da VDM
@@ -765,6 +797,16 @@ namespace WebApp.Models
         /// </summary>
        public string obj_descricao { get; set; }
 
+
+        /// <summary>
+        /// Data da Inspeção
+        /// </summary>
+        public string ord_data_termino_execucao { get; set; }
+
+        /// <summary>
+        /// Descrição do Tipo de O.S.
+        /// </summary>
+        public string tos_descricao { get; set; }
 
     }
 

@@ -47,7 +47,7 @@ namespace WebApp
                 obj_id = Convert.ToInt32(sObj_id);
 
             string sord_id = Request["ord_id"];
-            int ord_id = 10;
+            int ord_id = -10;
 
             if ((sord_id != null) && (sord_id.Trim() != ""))
             if (Int32.Parse(sord_id) > 0)

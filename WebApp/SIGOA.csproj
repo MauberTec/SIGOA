@@ -205,6 +205,7 @@
     <Compile Include="Controllers\AcessoNegadoController.cs" />
     <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
+    <Compile Include="Controllers\MultiselectController.cs" />
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\PoliticaConservaController.cs" />
@@ -473,6 +474,7 @@
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
+    <Content Include="Scripts\Shared\_fichaNotificacaoOcorrencia.js" />
     <Content Include="Scripts\Shared\_fichasInspecao.js" />
     <Content Include="Scripts\Shared\_SelecionarDocumento.js" />
     <Content Include="Scripts\Unidade\Unidade.js" />
@@ -605,6 +607,7 @@
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste4.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste5.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste6.png" />
+    <Content Include="Views\PoliticaReparos\multiselect.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -718,7 +721,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
+    <Content Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

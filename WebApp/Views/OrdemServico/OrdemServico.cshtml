@@ -44,6 +44,9 @@
 
 </script>
 
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
 
 <div style="width:100%;" id="divFiltros">
     <div class="box box-primary">
@@ -55,11 +58,11 @@
                 <div class="form-group">
                     <div class="col-sm-3">
                         <label class="control-label">Código O.S.</label>
-                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo"  maxlength="100" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                        <input type="text" class="form-control" id="txtFiltroOrdemServico_codigo" maxlength="100" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
                     </div>
                     <div class="col-sm-3">
                         <label class="control-label">Código Objeto</label>
-                        <input type="text" class="form-control" id="txtFiltroObj_codigo"   maxlength="100" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
+                        <input type="text" class="form-control" id="txtFiltroObj_codigo" maxlength="100" onkeydown="if (event.keyCode == 13) { ExecutarFiltro(); }">
                     </div>
 
                     <div class="col-sm-3 ">
@@ -93,14 +96,14 @@
                     <div class="col-sm-3">
                         <label class="control-label">De</label>
                         <input id="filtroord_data_De" name="filtroord_data_De"
-                               placeholder="De" maxlength="20" 
+                               placeholder="De" maxlength="20"
                                class="form-control" style="background-color:white" />
                     </div>
 
                     <div class="col-sm-3">
                         <label class="control-label">Até</label>
                         <input id="filtroord_data_Ate" name="filtroord_data_Ate"
-                               placeholder="Até" maxlength="20" 
+                               placeholder="Até" maxlength="20"
                                class="form-control" style="background-color:white" />
                     </div>
 
@@ -148,6 +151,8 @@
                         <button type="button" class="btn btn-primary botaoInserir" onclick="btnOSInserir_onclick();">Nova Ordem de Serviço</button>
                     }
                 }
+
+                <button type="button" class="btn btn-primary botaoInserir" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=100000&ord_id=-1',  '_blank');">Ficha de Notificação em Branco</button>
                 <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
 
             </div>
@@ -245,185 +250,7 @@
 
 
 @***** SCRIPT FICHA 6 - NOTIFICACAO OCORRENCIA ***********************@
-<script>
-
-    var sel_noc_id = -1;
-
-    var controlesReadOnly = ["txt_atr_txt_IdentificacaoOAEid_102", "txt_NomeOAE", "txt_CodigoRodovia", "txt_NomeRodovia", "txt_LocalizacaoKm", "txt_Municipio", "txt_Tipo"];
-
-    function setaReadWrite_FichaNotificacaoOcorrencia(tabela, ehRead) {
-
-        // habilita ou desabilita todos os controles editaveis
-        var lstTxtBoxes = tabela.getElementsByTagName('input');
-        var lstCombos = tabela.getElementsByTagName('select');
-        var lstTextareas = tabela.getElementsByTagName('textarea');
-
-        for (var i = 0; i < lstTxtBoxes.length; i++)
-            if (!controlesReadOnly.includes(lstTxtBoxes[i].id))
-                lstTxtBoxes[i].disabled = ehRead;
-
-        for (var i = 0; i < lstTextareas.length; i++)
-            if (!controlesReadOnly.includes(lstTextareas[i].id))
-                lstTextareas[i].disabled = ehRead;
-
-        for (var i = 0; i < lstCombos.length; i++)
-            if (!controlesReadOnly.includes(lstCombos[i].id))
-                lstCombos[i].disabled = ehRead;
-            else
-                lstCombos[i].disabled = true;
-
-    }
-
-    function limpatblFicha6() {
-
-        var tabela = document.getElementById("divFicha6");
-
-        // habilita ou desabilita todos os controles editaveis
-        if (tabela) {
-            var lstTxtBoxes = tabela.getElementsByTagName('input');
-            var lstCombos = tabela.getElementsByTagName('select');
-            var lstTextareas = tabela.getElementsByTagName('textarea');
-
-            for (var i = 0; i < lstTxtBoxes.length; i++)
-                lstTxtBoxes[i].value = "";
-
-            for (var i = 0; i < lstTextareas.length; i++)
-                lstTextareas[i].value = "";
-
-            for (var i = 0; i < lstCombos.length; i++)
-                lstCombos[i].innerText = null;
-        }
-    }
-
-    function preenchetblFicha6(obj_id, classe, tipo, ins_id) {
-        classe = parseInt(classe);
-        tipo = parseInt(tipo);
-        selectedId_clo_id = classe;
-        selectedId_tip_id = tipo;
-
-
-        // limpa antes de preencher
-        limpatblFicha6();
-
-        // datepickers da ficha NOTIFICACAO OCORRENCIAS
-        $('#txt_Data_Notificacao').datepicker({ dateFormat: 'dd/mm/yy' });
-        $('#txt_Solicitante_Data').datepicker({ dateFormat: 'dd/mm/yy' });
-        $('#txt_Responsavel_Recebimento_Data').datepicker({ dateFormat: 'dd/mm/yy' });
-
-
-        var ord_id = 0;
-        if (paginaPai == "OrdemServico")
-            ord_id = selectedId_ord_id;
-
-        var url = "/NotificacaoOcorrencia/NotificacaoOcorrencia_ListAll";
-        var data = { "ord_id": ord_id };
-
-        // dados da ocorrencia
-        $.ajax({
-            "url": url,
-            "type": "GET",
-            "datatype": "json",
-            "data": data,
-            "success": function (result) {
-                if (result.data.length > 0) {
-
-                    $('#txt_IdentificacaoOAE').val(result.data[0].IdentificacaoOAE);
-                    $('#txt_NomeOAE').val(result.data[0].NomeOAE);
-                    $('#txt_CodigoRodovia').val(result.data[0].CodigoRodovia);
-                    $('#txt_NomeRodovia').val(result.data[0].NomeRodovia);
-                    $('#txt_LocalizacaoKm').val(result.data[0].LocalizacaoKm);
-                    $('#txt_Municipio').val(result.data[0].Municipio);
-                    $('#txt_Tipo').val(result.data[0].Tipo);
-
-                    sel_noc_id = result.data[0].noc_id;
-                    $('#txt_Data_Notificacao').val(result.data[0].data_notificacao);
-                    $('#txt_Responsavel_Notificacao').val(result.data[0].responsavel_notificacao);
-                    $('#txt_Descricao_Ocorrencia').val(result.data[0].descricao_ocorrencia);
-                    $('#txt_Solicitante').val(result.data[0].solicitante);
-                    $('#txt_Solicitante_Data').val(result.data[0].solicitante_data);
-                    $('#txt_Responsavel_Recebimento').val(result.data[0].responsavel_recebimento);
-                    $('#txt_Responsavel_Recebimento_Data').val(result.data[0].responsavel_recebimento_data);
-                }
-            }
-        });
-
-
-
-    }
-
-    function CancelarDados_FichaNotificacaoOcorrencia(tabela) {
-        preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
-        // alterna os campos para leitura
-        setaReadWrite_FichaNotificacaoOcorrencia(tabela, true);
-        document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
-        document.getElementById("btn_Cancelar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
-        document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
-
-    }
-    function SalvarDados_FichaNotificacaoOcorrencia(tabela) {
-
-        // ********* ENVIA OS DADOS PARA O BANCO **********************************************************************
-        var ord_id = -1;
-        if (moduloCorrente == 'OrdemServico')
-            ord_id = selectedId_ord_id;
-
-        var notOcor = {
-            noc_id: sel_noc_id,
-            ord_id: ord_id,
-            data_notificacao: $('#txt_Data_Notificacao').val(),
-            responsavel_notificacao: $('#txt_Responsavel_Notificacao').val(),
-            descricao_ocorrencia: $('#txt_Descricao_Ocorrencia').val(),
-            solicitante: $('#txt_Solicitante').val(),
-            solicitante_data: $('#txt_Solicitante_Data').val(),
-            responsavel_recebimento: $('#txt_Responsavel_Recebimento').val(),
-            responsavel_recebimento_data: $('#txt_Responsavel_Recebimento_Data').val()
-        };
-
-
-
-        $.ajax({
-            url: "/NotificacaoOcorrencia/NotificacaoOcorrencia_Salvar",
-            data: JSON.stringify(notOcor),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-
-                preenchetblFicha6(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
-
-                return false;
-            },
-            error: function (errormessage) {
-                alert(errormessage.responseText);
-                return false;
-            }
-        });
-
-
-        // alterna os campos para leitura
-        setaReadWrite_FichaNotificacaoOcorrencia(tabela, true);
-
-        // alterna para os botoes de salvar/cancelar
-        document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
-        document.getElementById("btn_Cancelar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
-        document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
-
-    }
-    function EditarDados_FichaNotificacaoOcorrencia(tabela) {
-        // alterna os campos para escrita
-        setaReadWrite_FichaNotificacaoOcorrencia(tabela, false);
-
-        // alterna para os botoes de salvar/cancelar
-        document.getElementById("btn_Salvar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
-        document.getElementById("btn_Cancelar_NOTIFICACAO_OCORRENCIA").style.display = 'block';
-        document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'none';
-
-        return false;
-    }
-
-
-</script>
-
+<script src="~/Scripts/Shared/_fichaNotificacaoOcorrencia.js"></script>
 
 
 @***** INICIO DAS ABAS ***********************@
@@ -498,7 +325,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-2">Código</label>
                                         <div class="col-sm-10">
-                                            <input id="txtord_codigo" name="txtord_codigo"  maxlength="20" 
+                                            <input id="txtord_codigo" name="txtord_codigo" maxlength="20"
                                                    style="margin-left: -3px !important;"
                                                    class="form-control" disabled />
                                         </div>
@@ -534,7 +361,7 @@
                                                 <tr>
                                                     <td style="width:100%">
                                                         <input id="txtobj_codigo_Novo2" name="txtobj_codigo_Novo2" class="form-control"
-                                                               placeholder="Objeto" disabled  maxlength="100" 
+                                                               placeholder="Objeto" disabled maxlength="100"
                                                                autocomplete="off" />
                                                     </td>
                                                     <td>
@@ -555,7 +382,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Aberta Por</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_aberta_por" name="txtord_aberta_por"  maxlength="100" 
+                                            <input id="txtord_aberta_por" name="txtord_aberta_por" maxlength="100"
                                                    class="form-control" readonly />
                                         </div>
                                     </div>
@@ -593,7 +420,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Início Programada<span class="text-danger">*</span></label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_inicio_programada" name="txtord_data_inicio_programada" placeholder="Data Início Programada"
-                                                maxlength="20"     class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
@@ -601,7 +428,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Início Execução</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_inicio_execucao" name="txtord_data_inicio_execucao" placeholder="Data Início Execução"
-                                                maxlength="20"     class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
@@ -609,7 +436,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Suspensão</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_suspensao" name="txtord_data_suspensao" placeholder="Data Suspensão"
-                                                 maxlength="20"    class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
@@ -617,7 +444,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Cancelamento</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_cancelamento" name="txtord_data_cancelamento" placeholder="Data Cancelamento"
-                                                  maxlength="20"   class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
@@ -625,14 +452,14 @@
                                         <nobr><label class="control-label col-sm-4">Data Reinício</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_reinicio" name="txtord_data_reinicio" placeholder="Data Reinício"
-                                                  maxlength="20"   class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Criticidade (Nota OAE)</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade"  maxlength="5" />
+                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade" maxlength="5" />
 
                                             @*@Html.DropDownList("cmbCriticidade", null, "-- Selecione --", new { @class = "form-control " })*@
                                         </div>
@@ -641,35 +468,35 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">OS de Orçamento</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_OSOrcamento" name="txtord_OSOrcamento" class="form-control" placeholder="OS de Orçamento" maxlength="20"  />
+                                            <input id="txtord_OSOrcamento" name="txtord_OSOrcamento" class="form-control" placeholder="OS de Orçamento" maxlength="20" />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Quantidade Estimada</label></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtord_quantidade_estimada" name="txtord_quantidade_estimada" class="form-control" maxlength="5"  placeholder="Quantidade Estimada" />
+                                            <input id="txtord_quantidade_estimada" name="txtord_quantidade_estimada" class="form-control" maxlength="5" placeholder="Quantidade Estimada" />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Custo Estimado</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_custo_estimado" name="txtord_custo_estimado" class="form-control" placeholder="Custo Estimado"  maxlength="20" />
+                                            <input id="txtord_custo_estimado" name="txtord_custo_estimado" class="form-control" placeholder="Custo Estimado" maxlength="20" />
                                         </div>
                                     </div>
 
                                     <div class="form-group" style="display:none">
                                         <label class="control-label col-sm-4">Valor TPU??</label>
                                         <div class="col-sm-8">
-                                            <input id="txttpu_codigo_der" name="txttpu_codigo_der" class="form-control" placeholder="Valor TPU" maxlength="20"  />
+                                            <input id="txttpu_codigo_der" name="txttpu_codigo_der" class="form-control" placeholder="Valor TPU" maxlength="20" />
                                         </div>
                                     </div>
 
                                     <div class="form-group" style="display:none">
                                         <label class="control-label col-sm-4">Descrição TPU??</label>
                                         <div class="col-sm-8">
-                                            <input id="txttpu_descricao" name="txttpu_descricao" class="form-control" placeholder="Descrição TPU"  maxlength="100" />
+                                            <input id="txttpu_descricao" name="txttpu_descricao" class="form-control" placeholder="Descrição TPU" maxlength="100" />
                                             <button id="bntBuscarTPU" name="bntBuscarTPU">Buscar TPU</button>
                                         </div>
                                     </div>
@@ -677,7 +504,7 @@
                                     <div class="form-group" style="display:none">
                                         <label class="control-label col-sm-4">Data Base TPU</label>
                                         <div class="col-sm-8">
-                                            <input id="txttpu_data_base_der" name="txttpu_data_base_der" class="form-control" placeholder="Data Base TPU"  maxlength="20" />
+                                            <input id="txttpu_data_base_der" name="txttpu_data_base_der" class="form-control" placeholder="Data Base TPU" maxlength="20" />
                                         </div>
                                     </div>
 
@@ -694,7 +521,7 @@
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">O.S. Principal</label></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtord_codigo_pai" name="txtord_codigo_pai" class="form-control" maxlength="20" 
+                                            <input id="txtord_codigo_pai" name="txtord_codigo_pai" class="form-control" maxlength="20"
                                                    placeholder="Ordem de Serviço Principal" />
                                         </div>
                                     </div>
@@ -709,7 +536,7 @@
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Data Abertura</label></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtord_data_abertura" name="txtord_data_abertura" placeholder="Data Abertura" maxlength="20" 
+                                            <input id="txtord_data_abertura" name="txtord_data_abertura" placeholder="Data Abertura" maxlength="20"
                                                    class="form-control" readonly />
                                         </div>
                                     </div>
@@ -724,14 +551,14 @@
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Contrato de Fiscalização</label></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtcon_codigofiscalizacao" name="txtcon_codigofiscalizacao" class="form-control"  maxlength="20" placeholder="Contrato de Fiscalização" />
+                                            <input id="txtcon_codigofiscalizacao" name="txtcon_codigofiscalizacao" class="form-control" maxlength="20" placeholder="Contrato de Fiscalização" />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Contrato de Execução</label></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtcon_codigoexecucao" name="txtcon_codigoexecucao" maxlength="20" 
+                                            <input id="txtcon_codigoexecucao" name="txtcon_codigoexecucao" maxlength="20"
                                                    class="form-control" placeholder="Contrato de Execução" />
                                         </div>
                                     </div>
@@ -740,7 +567,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Término Programada</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_termino_programada" name="txtord_data_termino_programada" placeholder="Data Término Programada"
-                                                  maxlength="20"   class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
@@ -748,7 +575,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Término Execução</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_termino_execucao" name="txtord_data_termino_execucao" placeholder="Data Término Execução"
-                                                  maxlength="20"   class="form-control" readonly />
+                                                   maxlength="20" class="form-control" readonly />
                                         </div>
                                     </div>
 
@@ -757,7 +584,7 @@
                                         <div class="col-sm-8">
                                             @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
                                             <input id="txtord_responsavel_suspensao" name="txtord_responsavel_suspensao"
-                                                   placeholder="Responsável Suspensão" maxlength="100" 
+                                                   placeholder="Responsável Suspensão" maxlength="100"
                                                    class="form-control" />
                                         </div>
                                     </div>
@@ -767,7 +594,7 @@
                                         <div class="col-sm-8">
                                             @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
                                             <input id="txtord_responsavel_cancelamento" name="txtord_responsavel_cancelamento"
-                                                   placeholder="Responsável Cancelamento" maxlength="100" 
+                                                   placeholder="Responsável Cancelamento" maxlength="100"
                                                    class="form-control" />
                                         </div>
                                     </div>
@@ -804,7 +631,7 @@
                                         <label class="control-label col-sm-4">Custo Final</label>
                                         <div class="col-sm-8">
                                             <input id="txtord_custo_final" name="txtord_custo_final" class="form-control"
-                                                 maxlength="20"    placeholder="Custo Final" />
+                                                   maxlength="20" placeholder="Custo Final" />
                                         </div>
                                     </div>
                                 </div>
@@ -942,7 +769,7 @@
                             <div class="form-group">
                                 <div class="col-sm-4">
                                     <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=100000&ord_id=-1',  '_blank');">Imprimir Ficha em Branco</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEnviarEmail">Enviar Email</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Formulário de Notificação de Ocorrência em Obras de Arte Especiais</label></h3>
@@ -1056,7 +883,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Código</label>
                             <div class="col-sm-9">
-                                <input id="txtord_codigo_Novo" name="txtord_codigo" maxlength="20" 
+                                <input id="txtord_codigo_Novo" name="txtord_codigo" maxlength="20"
                                        class="form-control" disabled />
                             </div>
                         </div>
@@ -1086,7 +913,7 @@
                                     <tr>
                                         <td style="width:100%">
                                             <input id="txtobj_codigo_Novo" name="txtobj_codigo_Novo" class="form-control"
-                                                   placeholder="Objeto" readonly maxlength="40" 
+                                                   placeholder="Objeto" readonly maxlength="40"
                                                    autocomplete="off" />
                                         </td>
                                         <td>
@@ -1101,14 +928,14 @@
                             <nobr><label class="control-label col-sm-3">Data Início Planejada<span class="text-danger">*</span></label></nobr>
                             <div class="col-sm-9">
                                 <input id="txtord_data_planejada_Novo" name="txtord_data_planejada_Novo" placeholder="Data Início Planejada"
-                                      maxlength="20"   class="form-control" readonly style="background-color:transparent" />
+                                       maxlength="20" class="form-control" readonly style="background-color:transparent" />
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label col-sm-3">Aberta Por</label>
                             <div class="col-sm-9">
-                                <input id="txtusu_nome_Novo" name="txtusu_nome" maxlength="100" 
+                                <input id="txtusu_nome_Novo" name="txtusu_nome" maxlength="100"
                                        class="form-control" disabled value="@( @gUsuario.usu_nome)" title="@( gUsuario.usu_id)" />
                             </div>
                         </div>
@@ -1117,7 +944,7 @@
                             <nobr><label class="control-label col-sm-3">Data Abertura</label></nobr>
                             <div class="col-sm-9">
                                 <input id="txtord_data_abertura_Novo" name="txtord_data_abertura_Novo" placeholder="Data Abertura"
-                                     maxlength="20"    class="form-control" disabled value="@( DateTime.Now.ToShortDateString() )">
+                                       maxlength="20" class="form-control" disabled value="@( DateTime.Now.ToShortDateString() )">
                             </div>
                         </div>
                     </div>
@@ -1147,7 +974,7 @@
                 <div class="modal-body form-group">
 
                     <div class="form-group" style="text-align:center;">
-                        <input id="txt_codigo" name="txt_codigo" class="txtdoc_codigoHeader" readonly style="text-align:center; width:95%"  maxlength="100" />
+                        <input id="txt_codigo" name="txt_codigo" class="txtdoc_codigoHeader" readonly style="text-align:center; width:95%" maxlength="100" />
                     </div>
 
                     <div class="form-group">
@@ -1155,7 +982,7 @@
                         <div class="col-sm-6" style="padding-left:0px !important">
                             <input id="txtLocalizarDocumento" name="txtLocalizarDocumento" class="form-control col-sm-6"
                                    placeholder="Digite o Código do Documento"
-                                   autocomplete="off" maxlength="100" 
+                                   autocomplete="off" maxlength="100"
                                    onkeyup="if ((event.keyCode == 13)) { event.preventDefault(); if (!document.getElementById('btnLocalizarDocumentos').disabled) LocalizarDocumentos(); return false;} " />
                         </div>
                         <div class="col-sm-3">
@@ -1204,7 +1031,7 @@
 
                             <input id="txtLocalizarObjeto" name="txtLocalizarObjeto" class="form-control"
                                    placeholder="Digite o Código/Iniciais do Objeto"
-                                   autocomplete="off" maxlength="20" 
+                                   autocomplete="off" maxlength="20"
                                    onkeyup="if ((event.keyCode == 13) || (this.value.length > 1) ) { event.preventDefault(); LocalizarObjetos(); return false;} " />
                         </div>
                     </div>
@@ -1232,6 +1059,45 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="modalEnviarEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:950px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Enviar Email</label></b></h3>
+            </div>
+            <form class="form-horizontal" >
+                <br />
+
+                <div class="modal-body form-group">
+                    <div class="col-sm-12">
+                        <div class="col-sm-12">
+                            <label class="control-label">Para</label>
+                            @Html.DropDownList("cmbEmailRegionais", null, null, new { @class = "form-control", @multiple = "multiple", @style = "width:350px !important;" })
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="control-label">Texto</label><br />
+                            <textarea id="txtEmailTexto" name="txtEmailTexto" rows="10" cols="130" ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntEnviarEmailNotificacao" name="bnt" onclick="return bntEnviarEmailNotificacao_onclick();" class="btn btn-primary btn-block btn-flat">Enviar Email</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
@@ -1294,12 +1160,24 @@
 
     // datepickers da ficha NOTIFICACAO OCORRENCIAS
     $('#txt_Data_Notificacao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txt_Data_Notificacao').datepicker().datepicker('setDate', new Date());
+
     $('#txt_Solicitante_Data').datepicker({ dateFormat: 'dd/mm/yy' });
     $('#txt_Responsavel_Recebimento_Data').datepicker({ dateFormat: 'dd/mm/yy' });
 
 
 
     moduloCorrente = 'OrdemServico';
+
+
+    // transforma o combo em multipla escolha
+    $(function () {
+        $('#cmbEmailRegionais').multiselect({
+            includeSelectAllOption: false,
+            nonSelectedText: "-- Selecione --",
+            delimiterText: '; '
+        });
+    });
 
 
 

@@ -25,6 +25,11 @@ namespace WebApp.Controllers
             //List<Orcamento> orcamentos = orcamento.GetOrcamentos();
             //return View(orcamentos);
 
+            // preenche o combos
+            List<SelectListItem> lstListacmbFiltroRegionais = new ObjetoBLL().PreenchecmbFiltroRegionais();
+            ViewBag.cmbFiltroRegionais = lstListacmbFiltroRegionais;
+
+
             ViewBag.cmbFiltroStatusOrcamento = new OrcamentoBLL().PreencheCmbStatusOrcamento();
 
             return View();

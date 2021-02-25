@@ -1686,9 +1686,8 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="CodOAE">Filtro por Codigo de OAE</param>
-        /// <param name="Criticidade">Filtro por Criticidade - Notas</param>
         /// <returns>Lista de Objetos</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string CodOAE, string Criticidade)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais)
         {
             try
             {
@@ -1700,16 +1699,8 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
-                    com.Parameters.AddWithValue("@CodOAE", CodOAE);
-                    com.Parameters.AddWithValue("@Criticidade", Criticidade);
+                    com.Parameters.AddWithValue("@Regionais", Regionais);
 
-                    //com.Parameters.AddWithValue("@filtro_obj_codigo", filtro_obj_codigo);
-                    //com.Parameters.AddWithValue("@filtro_obj_descricao", filtro_obj_descricao);
-                    //if ((filtro_clo_id >= 0) || (filtro_clo_id == -13)) // -13  retorna classe 2 e 3
-                    //    com.Parameters.AddWithValue("@filtro_clo_id", filtro_clo_id);
-
-                    //if (filtro_tip_id >= 0)
-                    //    com.Parameters.AddWithValue("@filtro_tip_id", filtro_tip_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -1727,7 +1718,15 @@ namespace WebApp.DAO
                             pri_nota_final = (rdr["pri_nota_final"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_final"]), 2),
                             pri_nota_estrutura = (rdr["pri_nota_estrutura"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_estrutura"]), 2),
                             pri_nota_durabilidade = (rdr["pri_nota_durabilidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_durabilidade"]), 2),
-                            pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_funcionalidade"]), 2),
+                            pri_nota_acao = (rdr["pri_nota_acao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_acao"]), 2),
+                            pri_acao = rdr["pri_acao"].ToString(),
+
+                            prs_id = rdr["prs_id"].ToString(),
+                            pri_status = rdr["pri_status"].ToString(),
+                            status_descricao = rdr["status_descricao"].ToString(),
+                            corFundo = rdr["corFundo"].ToString(),
+
+                            //pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_funcionalidade"]), 2),
                             pri_nota_importancia_oae_malha = (rdr["pri_nota_importancia_oae_malha"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_importancia_oae_malha"]), 2),
                             pri_nota_vdm = (rdr["pri_nota_vdm"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_vdm"]), 2),
                             pri_nota_principal_utilizacao = (rdr["pri_nota_principal_utilizacao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_principal_utilizacao"]), 2),
@@ -1738,7 +1737,11 @@ namespace WebApp.DAO
                             pri_nota_agressividade_ambiental = (rdr["pri_nota_agressividade_ambiental"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_agressividade_ambiental"]), 2),
                             pri_nota_trem_tipo = (rdr["pri_nota_trem_tipo"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_trem_tipo"]), 2),
                             pri_nota_barreira_seguranca = (rdr["pri_nota_barreira_seguranca"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_barreira_seguranca"]), 2),
-                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 2)
+                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 2),
+
+                            ord_data_termino_execucao = (rdr["ord_data_termino_execucao"] == DBNull.Value) ? "" : rdr["ord_data_termino_execucao"].ToString(),
+                            tos_descricao = (rdr["tos_descricao"] == DBNull.Value) ? "" :rdr["tos_descricao"].ToString()
+
                         });
                     }
                     return lst;
