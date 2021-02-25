@@ -1798,175 +1798,8 @@
     }); // document.ready
 
 
-
 </script>
 
-
-<script>
-    // datepickers da ficha, aba DADOS GERAIS - POR ALGUM MOTIVO SÓ FUNCIONOU COLOCANDO AQUI
-    moment.locale('pt-br');         // pt-br
-    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
-
-    $("#searchOrcamentos").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#OrcamentoBody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
-
-    var table = $('#tblOrcamento').DataTable({
-        "paging": false,
-        "ordering": true,
-        "info": false,
-        "searching": true
-    });
-
-    var table2 = $('#tblSelOrcamento').DataTable({
-        "paging": false,
-        "ordering": false,
-        "info": false,
-        "searching": false,
-        "scrollX": true
-    });
-
-    var table3 = $('#tblSelOrcamento2').DataTable({
-        "paging": false,
-        "ordering": false,
-        "info": false,
-        "searching": false,
-        "scrollX": true
-    });
-
-    var table4 = $('#tblEditOrcamento').DataTable({
-        "paging": false,
-        "ordering": false,
-        "info": false,
-        "searching": false,
-        "scrollX": true,
-        "width": 1000
-    });
-
-    $('#tblOrcamento tbody').on('click', 'tr', function () {
-        var divOrcamento = $('#OrcamentoSelected');
-
-        if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
-
-            divOrcamento.addClass('hidden');
-            $('#OrcamentoSelected2').addClass('hidden');
-        }
-        else {
-            table.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-
-            divOrcamento.removeClass('hidden');
-            $('#OrcamentoSelected2').removeClass('hidden');
-
-            // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
-            $($.fn.dataTable.tables(true)).DataTable()
-                .columns.adjust();
-        }
-    });
-
-    function clickedTrechos() {
-        var canSee = $("#bodyTrechos").is(":visible");
-        if (canSee) {
-            $('#showHide').removeClass('fa-angle-down');
-            $('#showHide').addClass('fa-angle-left');
-
-            $('#showHide2').removeClass('fa-angle-down');
-            $('#showHide2').addClass('fa-angle-left');
-        }
-        else {
-            $('#showHide').removeClass('fa-angle-left');
-            $('#showHide').addClass('fa-angle-down');
-
-            $('#showHide2').removeClass('fa-angle-left');
-            $('#showHide2').addClass('fa-angle-down');
-        }
-    }
-
-    function clickedTrechos2() {
-        var canSee = $("#bodyTrechos2").is(":visible");
-        if (canSee) {
-            $('#showHide3').removeClass('fa-angle-down');
-            $('#showHide3').addClass('fa-angle-left');
-
-            $('#showHide4').removeClass('fa-angle-down');
-            $('#showHide4').addClass('fa-angle-left');
-        }
-        else {
-            $('#showHide3').removeClass('fa-angle-left');
-            $('#showHide3').addClass('fa-angle-down');
-
-            $('#showHide4').removeClass('fa-angle-left');
-            $('#showHide4').addClass('fa-angle-down');
-        }
-    }
-
-    function clickedTrechos_nOrc() {
-        var canSee = $("#bodyTrechos_nOrc").is(":visible");
-        if (canSee) {
-            $('#showHide_nOrc').removeClass('fa-angle-down');
-            $('#showHide_nOrc').addClass('fa-angle-left');
-
-            $('#showHide_nOrc2').removeClass('fa-angle-down');
-            $('#showHide_nOrc2').addClass('fa-angle-left');
-        }
-        else {
-            $('#showHide_nOrc').removeClass('fa-angle-left');
-            $('#showHide_nOrc').addClass('fa-angle-down');
-
-            $('#showHide_nOrc2').removeClass('fa-angle-left');
-            $('#showHide_nOrc2').addClass('fa-angle-down');
-        }
-    }
-
-    function editarOrcamento() {
-        $('#orc01Edit').removeClass('hidden');
-        $('#orc01Viewer').addClass('hidden');
-
-        // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-
-        //location.href = "#";
-        //location.href = "#orc01Edit";
-
-        var topdiv = $('#orc01Edit');
-
-        $('body').animate({ scrollTop: topdiv.position().top });
-        //$("#modalEditarOrcamento").modal('show');
-        //$('#tblEditOrcamento').css('display', 'table');
-    }
-
-    function bntNovoOrcamento_click() {
-        $('#newOrcamento').removeClass('hidden');
-        $('#btnNewOrcamento').removeClass('hidden');
-        $('#frmNovoOrcamento').addClass('hidden');
-        $('#newOrcamento').addClass('scroll');
-    }
-
-    function btnCriaOrcOAE() {
-        $('#btnNewOrcamento').addClass('hidden');
-        $('#frmNovoOrcamento').removeClass('hidden');
-        $('#newOrcamento').removeClass('scroll');
-
-        // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    }
-
-    function salvarNovoOrcamento() {
-        $('#newOrcamento').addClass('hidden');
-        $('#OrcamentoSelected').removeClass('hidden');
-    }
-
-    function salvarEdicaoOrcamento() {
-        $('#orc01Edit').addClass('hidden');
-        $('#orc01Viewer').removeClass('hidden');
-    }
-</script>
 
 <div class="modal fade" id="modalEditarOrcamento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -2198,29 +2031,25 @@
 
 
 
-    function bntSalvar_Novo_Orcamento_onclick() {
+    function bntSalvarObjetos_onclick() {
+
 
         var table = $('#tblPriorizacao').DataTable();
         table.$('input[type="checkbox"]').each(function () {
-          //  if (!$.contains(document, this)) {
-                if (this.checked) {
-                    alert(this.value);
-                    //// Create a hidden element
-                    //$(form).append(
-                    //    $('<input>')
-                    //        .attr('type', 'hidden')
-                    //        .attr('name', this.name)
-                    //        .val(this.value)
-                    //);
-                }
-         //   }
+            if (this.checked) {
+                alert(this.value);
+
+            }
         });
 
 
         return false;
     }
 
-
+    function btnAbrirPriorizacao_onclick() {
+        $("#modalPriorizacao").modal('show');
+        return false;
+    }
 
 </script>
 <style>
@@ -2230,6 +2059,105 @@
 </style>
 
 <div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Nova Ordem de Serviço</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+
+                <div class="modal-body form-group">
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Código</label>
+                            <div class="col-sm-9">
+                                <input id="txtorc_codigo_Novo" name="txtorc_codigo" maxlength="20"
+                                       class="form-control" disabled />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Versão<span class="text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="txtorc_versao" name="txtorc_versao" maxlength="20"
+                                       class="form-control" disabled />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Descrição<span class="text-danger">*</span></label>
+                            <div class="col-sm-9">
+                                <input id="txtorc_descricao_Novo" name="txtorc_descricao_Novo" class="form-control"
+                                       placeholder="Descrição" data-val="true" required
+                                       maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                       autocomplete="off"
+                                       onkeyup="$('#txtorc_descricao_Novo').css('background-color', corBranca)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Objeto(s)<span class="text-danger">*</span> </label>
+                            <div class="col-sm-9">
+                                <table style="width:100%">
+                                    <tr>
+                                        <td style="width:100%">
+                                            <input id="txtobj_codigo_Novo" name="txtobj_codigo_Novo" class="form-control"
+                                                   placeholder="Objeto" readonly maxlength="240"
+                                                   autocomplete="off" />
+                                        </td>
+                                        <td>
+                                            <button style="display:inline; width:40px; height:25px; margin-left:5px; " id="btnAbrirPriorizacao" onclick="return btnAbrirPriorizacao_onclick()">...</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <nobr><label class="control-label col-sm-3">Data Validade<span class="text-danger">*</span></label></nobr>
+                            <div class="col-sm-9">
+                                <input id="txtorc_data_Validade_Novo" name="txtorc_data_Validade_Novo" placeholder="Data Validade"
+                                       maxlength="20" class="form-control" readonly style="background-color:transparent" />
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Aberta Por</label>
+                            <div class="col-sm-9">
+                                <input id="txtusu_nome_Novo" name="txtusu_nome" maxlength="100"
+                                       class="form-control" disabled value="@( @gUsuario.usu_nome)" title="@( gUsuario.usu_id)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <nobr><label class="control-label col-sm-3">Data Abertura</label></nobr>
+                            <div class="col-sm-9">
+                                <input id="txtorc_data_abertura" name="txtorc_data_abertura" placeholder="Data Abertura"
+                                       maxlength="20" class="form-control" disabled value="@( DateTime.Now.ToShortDateString() )">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar_Novo" onclick="return bntSalvar_Novo_onclick();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalPriorizacao" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="width:950px;">
             <div class="modal-header">
@@ -2290,7 +2218,7 @@
 
                 <div class="modal-footer">
                     <div class="col-md-3 col-md-offset-4">
-                        <button id="bntSalvar" name="bntSalvar_Novo" onclick="return bntSalvar_Novo_Orcamento_onclick();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                        <button id="bntSalvarObjetos" name="bntSalvarObjetos" onclick="return bntSalvarObjetos_onclick();" class="btn btn-primary btn-block btn-flat">Salvar</button>
                     </div>
                 </div>
             </form>
@@ -2299,3 +2227,172 @@
 </div>
 
 
+<script>
+    // datepickers da ficha, aba DADOS GERAIS - POR ALGUM MOTIVO SÓ FUNCIONOU COLOCANDO AQUI
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    $('#txtorc_data_abertura').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtorc_data_Validade_Novo').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+    $("#searchOrcamentos").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#OrcamentoBody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    var table = $('#tblOrcamento').DataTable({
+        "paging": false,
+        "ordering": true,
+        "info": false,
+        "searching": true
+    });
+
+    var table2 = $('#tblSelOrcamento').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false,
+        "scrollX": true
+    });
+
+    var table3 = $('#tblSelOrcamento2').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false,
+        "scrollX": true
+    });
+
+    var table4 = $('#tblEditOrcamento').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false,
+        "scrollX": true,
+        "width": 1000
+    });
+
+    $('#tblOrcamento tbody').on('click', 'tr', function () {
+        var divOrcamento = $('#OrcamentoSelected');
+
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+
+            divOrcamento.addClass('hidden');
+            $('#OrcamentoSelected2').addClass('hidden');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+
+            divOrcamento.removeClass('hidden');
+            $('#OrcamentoSelected2').removeClass('hidden');
+
+            // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        }
+    });
+
+    function clickedTrechos() {
+        var canSee = $("#bodyTrechos").is(":visible");
+        if (canSee) {
+            $('#showHide').removeClass('fa-angle-down');
+            $('#showHide').addClass('fa-angle-left');
+
+            $('#showHide2').removeClass('fa-angle-down');
+            $('#showHide2').addClass('fa-angle-left');
+        }
+        else {
+            $('#showHide').removeClass('fa-angle-left');
+            $('#showHide').addClass('fa-angle-down');
+
+            $('#showHide2').removeClass('fa-angle-left');
+            $('#showHide2').addClass('fa-angle-down');
+        }
+    }
+
+    function clickedTrechos2() {
+        var canSee = $("#bodyTrechos2").is(":visible");
+        if (canSee) {
+            $('#showHide3').removeClass('fa-angle-down');
+            $('#showHide3').addClass('fa-angle-left');
+
+            $('#showHide4').removeClass('fa-angle-down');
+            $('#showHide4').addClass('fa-angle-left');
+        }
+        else {
+            $('#showHide3').removeClass('fa-angle-left');
+            $('#showHide3').addClass('fa-angle-down');
+
+            $('#showHide4').removeClass('fa-angle-left');
+            $('#showHide4').addClass('fa-angle-down');
+        }
+    }
+
+    function clickedTrechos_nOrc() {
+        var canSee = $("#bodyTrechos_nOrc").is(":visible");
+        if (canSee) {
+            $('#showHide_nOrc').removeClass('fa-angle-down');
+            $('#showHide_nOrc').addClass('fa-angle-left');
+
+            $('#showHide_nOrc2').removeClass('fa-angle-down');
+            $('#showHide_nOrc2').addClass('fa-angle-left');
+        }
+        else {
+            $('#showHide_nOrc').removeClass('fa-angle-left');
+            $('#showHide_nOrc').addClass('fa-angle-down');
+
+            $('#showHide_nOrc2').removeClass('fa-angle-left');
+            $('#showHide_nOrc2').addClass('fa-angle-down');
+        }
+    }
+
+    function editarOrcamento() {
+        $('#orc01Edit').removeClass('hidden');
+        $('#orc01Viewer').addClass('hidden');
+
+        // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+
+        //location.href = "#";
+        //location.href = "#orc01Edit";
+
+        var topdiv = $('#orc01Edit');
+
+        $('body').animate({ scrollTop: topdiv.position().top });
+        //$("#modalEditarOrcamento").modal('show');
+        //$('#tblEditOrcamento').css('display', 'table');
+    }
+
+    function bntNovoOrcamento_click() {
+        $('#newOrcamento').removeClass('hidden');
+        $('#btnNewOrcamento').removeClass('hidden');
+        $('#frmNovoOrcamento').addClass('hidden');
+        $('#newOrcamento').addClass('scroll');
+    }
+
+    function btnCriaOrcOAE() {
+        $('#btnNewOrcamento').addClass('hidden');
+        $('#frmNovoOrcamento').removeClass('hidden');
+        $('#newOrcamento').removeClass('scroll');
+
+        // ajusta a largura das colunas das tabelas que estavam ocultas. Evita a assincronia de largura entre cabeçalho e linhas.
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
+    }
+
+    function salvarNovoOrcamento() {
+        $('#newOrcamento').addClass('hidden');
+        $('#OrcamentoSelected').removeClass('hidden');
+    }
+
+    function salvarEdicaoOrcamento() {
+        $('#orc01Edit').addClass('hidden');
+        $('#orc01Viewer').removeClass('hidden');
+    }
+</script>
