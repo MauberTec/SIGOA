@@ -16,7 +16,6 @@ namespace WebApp.DAO
     /// </summary>
     public class ReparoDAO : Conexao
     {
-
         Conexao conn = new Conexao();
         // *************** TIPO  *************************************************************
 
