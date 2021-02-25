@@ -84,7 +84,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label class="control-label">Alerta:</label>
-                            <select name="cmdAlertaAdd_in" id="cmdAlertaAdd_in" class="form-control" onchange="preencheCausa_in()()">
+                            <select name="cmdAlertaAdd_in" id="cmdAlertaAdd_in" class="form-control" >
                                 <option value="0-0">--Selecione--</option>
                                 <option value="1-A">ATENÇÃO</option>
                                 <option value="2-N">NORMAL</option>
@@ -122,7 +122,7 @@
                         <tr>
                             <th style="width:40px; text-align:center">Reparo</th>
                             <th style="width:70px; text-align:center">Legenda</th>
-                            <th style="width:70px; text-align:center">Cod Anom</th>
+                            <th style="width:270px; text-align:center">Anomalia</th>
                             <th style="width:70px; text-align:center">Alerta</th>
                             <th style="text-align:center">Causa</th>
                             <th style="text-align:center">Opções</th>
@@ -133,15 +133,16 @@
                     </tbody>
                 </table>
                 @*@{
-                        if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
-                        {
-                            <button type="button" class="btn btn-primary botaoInserir" onclick="btnOSInserir_onclick();">Nova Politica de Conserva</button>
-                        }
-                    }*@
+                if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                {
+                    <button type="button" class="btn btn-primary botaoInserir" onclick="btnOSInserir_onclick();">Nova Politica de Conserva</button>
+                }
+            }*@
 
-                <button type="button" class="btn btn-primary botaoInserir" onclick="OpenModalReparo();">Nova Politica de Reparo</button>
-                <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
+
             </div>
+            <button type="button" class="btn btn-primary botaoInserir" onclick="OpenModalReparo();">Nova Politica de Reparo</button>
+            <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
         </div>
     </div>
 </section>

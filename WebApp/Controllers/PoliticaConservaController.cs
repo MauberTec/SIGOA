@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApp.DAO;
 using WebApp.Models;
+using static WebApp.DAO.PoliticaConservaDAO;
 
 namespace WebApp.Controllers
 {
@@ -23,107 +24,57 @@ namespace WebApp.Controllers
         {
             return View();
         }
-  
+
         /// <summary>
         /// cmbSub2
         /// </summary>
-        public JsonResult Conserva(int id)
+        public JsonResult GVariavel()
         {
-            List<ConservaPolitica> j = RequestConserva(id);
+            List<tab_conserva_variaveis> j = new PoliticaConservaDAO().GetVariavel();
             return Json(j, JsonRequestBehavior.AllowGet);
         }
+
         /// <summary>
-        /// GetAllConserva
+        /// Conserva
         /// </summary>
-        public JsonResult GetAllConserva()
+        public JsonResult GConserva()
         {
-            List<ConservaModel> lista = new PoliticaConservaDAO().GetAllConserva();
-            
-            List<ConservaDTO> conservas = new List<ConservaDTO>();
-            var groups = lista.GroupBy(x => x.ogv_id);
-            List<ConservaModel> ConservasArray;
-            foreach (var _item in groups)
-            {
-                ConservasArray = new List<ConservaModel>();
-                foreach (var item in _item)
-                {
-                    ConservasArray.Add(new ConservaModel
-                    {
-                        Alerta = item.Alerta,
-                        ocp_id = item.ocp_id,
-                        tip_nome = item.tip_nome,
-                        Grupo = item.Grupo,
-                        ogv_id = item.ogv_id,
-                        Servico = item.Servico,
-                        Situacao = item.Situacao,
-                        Variavel = item.Variavel,
-                        ale_codigo = item.ale_codigo
-                    });
-                }
-                conservas.Add(new ConservaDTO
-                {
-                    Numero_Ogv = _item.Key,
-                    Conservas = ConservasArray
-
-                });
-               
-            }
-
-
-            return Json(conservas, JsonRequestBehavior.AllowGet);
-        }
-
-        private static List<ConservaPolitica> RequestConserva(int id)
-        {
-            return new PoliticaConservaDAO().Conserva(id);
+            List<tab_conserva_tipos> j = new PoliticaConservaDAO().GetConserva();
+            return Json(j, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
-        /// Variaveis
+        /// Alerta
+        /// </summary>
+        public JsonResult GAlerta()
+        {
+            List<PoliticaReparoModel> j = new PoliticaConservaDAO().GetAlerta();
+            return Json(j, JsonRequestBehavior.AllowGet);
+        }
+
+        private static List<tab_conserva_tipos> RequestConserva()
+        {
+            return new PoliticaConservaDAO().GetConserva();
+        }
+
+        /// <summary>
+        /// Grupos
         /// </summary>
         /// 
-        public JsonResult Variaveis(string Id)
+        public JsonResult GGrupo(string Id)
         {
-            List<GruposVariaveisValores> vr = RequestVariaveis(Id);
+            List<Objetos> vr = new PoliticaConservaDAO().GetObjetos();
 
             return Json(vr, JsonRequestBehavior.AllowGet);
         }
 
-        private List<GruposVariaveisValores> RequestVariaveis(string Id)
-        {
-            List<GruposVariaveisValores> vr = new List<GruposVariaveisValores>();
-            var gr = GruposVariaveisValores_ListAll();
-            string s = Id.Substring(0, 2);
-            if (s.Length == 1)
-            {
-                s = s + "0";
-            }
-            var resp = gr.Where(x => x.tip_id_grupo == Convert.ToInt32(s)).ToList();
-            resp.ForEach(item =>
-            {
-                vr.Add(new GruposVariaveisValores { ogv_id = item.ogv_id, variavel = item.variavel });
-            });
-            return vr;
-        }
-
-        // *************** GRUPOS / VARIÁVEIS / VALORES DE INSPEÇÃO  *************************************************************
         /// <summary>
         /// Lista Grupos/Variáveis do Objeto Selecionado      
         /// <summary>
-        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll()
+        public JsonResult Perquisar(int cot_id, int cov_id, int tip_id)
         {
-            try
-            {
-                List<GruposVariaveisValores> lst = new List<GruposVariaveisValores>();
-                return new PoliticaConservaDAO().GruposVariaveis(lst);
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                //new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-
+            var resp = new PoliticaConservaDAO().GruposConservaHome(cot_id, cov_id, tip_id);
+            return Json(resp, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -162,44 +113,8 @@ namespace WebApp.Controllers
 
             return Json("", JsonRequestBehavior.AllowGet);
         }
-        
-        /// <summary>
-        /// Listar
-        /// </summary>
-        /// 
-        public JsonResult Listar(string sub1, string sub2, string sub3, string grupo, string variavel, int variavelId)
-        {
-            string tp = string.Empty;
-            List<ConservaPoliticaModel> model = new List<ConservaPoliticaModel>();
-            var lista = RequestConserva(variavelId);
-            
-            foreach (var item in lista)
-            {
-                if(item.ogi_id_caracterizacao_situacao == 1)
-                {
-                    tp = "A";
-                }
-                else if (item.ogi_id_caracterizacao_situacao == 2)
-                {
-                    tp = "N";
-                }
-                else if (item.ogi_id_caracterizacao_situacao == 3)
-                {
-                    tp = "C";
-                }
-                model.Add(new ConservaPoliticaModel
-                {
-                   
-                    Grupos = grupo,
-                    Variavel = variavel,
-                    ocp_id = item.ocp_id,
-                    alerta = item.ocp_descricao_alerta,
-                    servico = item.ocp_descricao_servico,
-                    tipo = tp
-                });
-            }
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+
+
         /// <summary>
         /// Edita linha unica do grid de pesquisa
         /// </summary>
@@ -207,14 +122,14 @@ namespace WebApp.Controllers
         public JsonResult Edti(string ocp_id, string alerta, string conserva)
         {
             string response = string.Empty;
-            if(!string.IsNullOrEmpty(ocp_id) && !string.IsNullOrEmpty(alerta) && !string.IsNullOrEmpty(conserva))
+            if (!string.IsNullOrEmpty(ocp_id) && !string.IsNullOrEmpty(alerta) && !string.IsNullOrEmpty(conserva))
             {
                 response = new PoliticaConservaDAO().EditConserva(ocp_id, alerta, conserva);
             }
             else
             {
                 response = "Preencha todos so campos!";
-            }           
+            }
 
             return Json(response, JsonRequestBehavior.AllowGet);
         }
@@ -230,37 +145,34 @@ namespace WebApp.Controllers
         /// UpdateConserva
         /// </summary>
         /// 
-        public JsonResult ConservaTipo_Salvar(string oct_cod, string oct_descricao, string oct_ativo, int oct_id = 0)
+        [HttpPost]
+        public JsonResult ConservaTipoSalvar(int tipid, string alerta,int cotid, int covid, int copid)
         {
-            string resp = string.Empty;
-            if(oct_id == 0)
+            GrupoObjetosConserva grupo = new GrupoObjetosConserva()
             {
-                resp = new PoliticaConservaDAO().InsertConservaTipo(oct_cod, oct_descricao, oct_ativo, "4");
-            }
-            else if(oct_id > 0)
-            {
-                resp = new PoliticaConservaDAO().UpdateConservaTipo(oct_id,oct_cod, oct_descricao, oct_ativo, "4");
-            }
-               
+                tip_id = tipid,
+                ale_codigo = alerta,
+                cot_id = cotid,
+                cov_id = covid,
+                cop_id = copid
+
+            };
+            string resp = new PoliticaConservaDAO().InsertConserva(grupo);       
+
             return Json(resp, JsonRequestBehavior.AllowGet);
         }
-
         /// <summary>
-        /// GetAllConservaTipo
+        /// deleta conserva
         /// </summary>
-        public JsonResult GetAllConservaTipo()
-        {           
-            return Json(new PoliticaConservaDAO().GetConservaTipo(), JsonRequestBehavior.AllowGet);
-        }
-
-        ///<summary>
-        ///Get Tipo Editar
-        /// </summary>
-        public ActionResult GetEdtit(int id)
+        /// <param name="cop_id"></param>
+        /// <returns></returns>
+        public JsonResult Deleta(int cop_id)
         {
-            var ret = new PoliticaConservaDAO().GetConservaTipo();
-            var resp = ret.FirstOrDefault(x => x.oct_id == id);
+            string resp = new PoliticaConservaDAO().DeletaConserva(cop_id);
             return Json(resp, JsonRequestBehavior.AllowGet);
         }
+
+
+
     }
 }

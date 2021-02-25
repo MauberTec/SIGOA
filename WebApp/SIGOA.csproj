@@ -58,6 +58,12 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.11.3.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.11.3\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.AppService.ApiApps.Service, Version=0.9.16.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.AppService.ApiApps.Service.0.9.16\lib\net45\Microsoft.Azure.AppService.ApiApps.Service.dll</HintPath>
       <Private>True</Private>
@@ -98,6 +104,8 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -217,6 +225,7 @@
     <Compile Include="Controllers\ModuloController.cs" />
     <Compile Include="Controllers\ParametroController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
+    <Compile Include="DAO\GrupoObjetosConserva.cs" />
     <Compile Include="DAO\InspecaoDAO.cs" />
     <Compile Include="DAO\NotificacaoOcorrenciaDAO.cs" />
     <Compile Include="DAO\OrcamentoDAO.cs" />
@@ -250,6 +259,7 @@
     <Compile Include="Models\Inspecao.cs" />
     <Compile Include="Models\NotificaoOcorrencia.cs" />
     <Compile Include="Models\Orcamento.cs" />
+    <Compile Include="Models\PoliticaConserva.cs" />
     <Compile Include="Models\PoliticaReparoModel.cs" />
     <Compile Include="Models\Reparo.cs" />
     <Compile Include="Models\Documento.cs" />
@@ -456,6 +466,7 @@
     <Content Include="Scripts\Politica\ConservaTipo.js" />
     <Content Include="Scripts\Politica\Politica.js" />
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
+    <Content Include="Scripts\Reparo\PoliticaReparos.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
@@ -666,6 +677,7 @@
     <Content Include="Views\PoliticaReparos\Index.cshtml" />
     <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
     <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
+    <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -681,6 +693,7 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Reports\FichaRotineira_sub1.rdlc" />

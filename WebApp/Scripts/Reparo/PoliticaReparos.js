@@ -1,6 +1,4 @@
-﻿
-
-preencheRep();
+﻿preencheRep();
 preencheLegenda();
 GetAll($('#GridHome'));
 
@@ -48,7 +46,7 @@ function preencheAnomalia() {
 
                 var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
                 taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.atp_descricao);
+                taglbl = taglbl.replace("TextoXXX", item.atp_codigo + '-' + item.atp_descricao);
 
                 $("#divCodAnomaliaUp").append(tagchk + taglbl);
               
@@ -62,6 +60,7 @@ function preencheAnomalia() {
 }
 
 function preencheAnomalia_in() {
+    preencheCausa_in();
     $.ajax({
         url: '/PoliticaReparos/PreencheAno?id=' + $('#cmdLegAdd_in option:selected').val(),
         type: "Get",
@@ -97,7 +96,7 @@ function preencheAlerta() {
                 tagchk = tagchk.replace("valueXXX", item.ale_id);
                 var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
                 taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.ale_descricao);
+                taglbl = taglbl.replace("TextoXXX", item.ale_codigo + '-'+ item.ale_descricao);
                 $("#divAlertaAdd").append(tagchk + taglbl);
 
                
@@ -121,7 +120,7 @@ function preencheCausa(id) {
                 tagchk = tagchk.replace("valueXXX", item.aca_id);
                 var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
                 taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.aca_descricao);
+                taglbl = taglbl.replace("TextoXXX",item.aca_codigo + '-'+ item.aca_descricao);
                 $("#cmdCausaAdd").append(tagchk + taglbl);
                 
             });
@@ -141,7 +140,7 @@ function preencheCausa_in() {
             $('#cmdCausaAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
 
             $.each(data, function (i, item) {
-                $('#cmdCausaAdd_in').append($('<option value=' + item.aca_id + '>' + item.aca_descricao + ' </option>'));
+                $('#cmdCausaAdd_in').append($('<option value=' + item.aca_id + '>'+item.aca_codigo+' - ' + item.aca_descricao + ' </option>'));
             });
         }
     });
@@ -174,7 +173,7 @@ function GetAll(table) {
         success: function (data) {
             table.html("");
             $.each(data, function (i, valor) {
-                table.append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + '</td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
+                table.append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
             });
             paginar();  
             
@@ -197,25 +196,47 @@ function paginar() {
 }
 
 function btnAddReparo() {
-    
+    if ($('#cmbReparoAdd').val() == null) {
+        alert('Selecione Reparo');
+        return;
+    }
+    if ($('#cmdLegAdd').val() == null)
+    {
+        alert('Selecione a Legenda');
+        return;
+    }
   
     // cria lista dos IDs de Cod Anomalia
     var CodAnomalia = [];
     $('#divCodAnomaliaUp input:checked').each(function () {
         CodAnomalia.push($(this).attr('value'));
     });
+    if (CodAnomalia == '') {
+        alert('Selecione Cod Anomalia');
+        return;
+    }
+
+    //cria lista de Ids do Causa
+    var IdCausa = [];
+    $('#cmdCausaAdd input:checked').each(function () {
+        IdCausa.push($(this).attr('value'));
+    });   
+    if (IdCausa == '') {
+        alert('Selecione Causa');
+        return;
+    }
 
     //cria lista de Ids do Alerta
     var IdAlerta = [];
     $('#divAlertaAdd input:checked').each(function () {
         IdAlerta.push($(this).attr('value'));
     });
+    if (IdAlerta == '') {
+        alert('Selecione Alerta');
+        return;
+    }
 
-    //cria lista de Ids do Causa
-    var IdCausa = [];
-    $('#cmdCausaAdd input:checked').each(function () {
-        IdCausa.push($(this).attr('value'));
-    });    
+   
 
     var Grupo = [
         { Nome: 'Alerta', Qtd: IdAlerta.length, Ids: [IdAlerta] },
@@ -344,7 +365,7 @@ function Buscar() {
                 '<tr>' +
                 '<th style="width:40px; text-align:center">Reparo</th>' +
                 '<th style="width:70px; text-align:center">Legenda</th>' +
-                '<th style="width:70px; text-align:center">Cod Anom</th>' +
+                '<th style="width:270px; text-align:center">Anomalia</th>' +
                 '<th style="width:70px; text-align:center">Alerta</th>' +
                 '<th style="text-align:center">Causa</th>' +
                 '<th style="text-align:center">Opções</th>' +
@@ -357,7 +378,7 @@ function Buscar() {
                 $('#GridHome').append($(
 
 
-                    '<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + '</td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
+                    '<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
                 )
 
                 );

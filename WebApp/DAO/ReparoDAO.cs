@@ -227,19 +227,15 @@ namespace WebApp.DAO
                 com.Parameters.Add(p_return);
                 com.Parameters[0].Size = 32000;
 
-                //com.Parameters.AddWithValue("@ACA_ID", aca_id);
+                com.Parameters.AddWithValue("@ACA_ID", aca_id);
 
-                //com.Parameters.AddWithValue("@ALE_ID", ale_id);
-                //com.Parameters.AddWithValue("@ALE_CODIGO", ale_codigo);
+                com.Parameters.AddWithValue("@ALE_ID", ale_id);
 
-                //com.Parameters.AddWithValue("@ATP_ID", atp_id);
-                //com.Parameters.AddWithValue("@ATP_CODIGO", atp_codigo);
+                com.Parameters.AddWithValue("@ATP_ID", atp_id);
 
-                //com.Parameters.AddWithValue("@RPT_ID", rpt_id);
-                //com.Parameters.AddWithValue("@RPT_CODIGO", rpt_codigo);
+                com.Parameters.AddWithValue("@RPT_ID", rpt_id);
 
-                //com.Parameters.AddWithValue("@LEG_ID", leg_id);
-                //com.Parameters.AddWithValue("@LEG_CODIGO", leg_codigo);
+                com.Parameters.AddWithValue("@LEG_ID", leg_id);
 
                 SqlDataReader reader = com.ExecuteReader();
                 while (reader.Read())
@@ -258,35 +254,16 @@ namespace WebApp.DAO
                         rpt_codigo = reader["rpt_codigo"] == DBNull.Value ? string.Empty : reader["rpt_codigo"].ToString(),
                         rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString(),
                         leg_id = reader["leg_id"] == DBNull.Value ? string.Empty : reader["leg_id"].ToString(),
-                        atp_id = reader["atp_id"] == DBNull.Value ? string.Empty : reader["atp_id"].ToString()
+                        atp_id = reader["atp_id"] == DBNull.Value ? string.Empty : reader["atp_id"].ToString(),
+                        ale_id = reader["ale_id"] == DBNull.Value ? string.Empty : reader["ale_id"].ToString(),
+                        aca_id = reader["aca_id"] == DBNull.Value ? string.Empty : reader["aca_id"].ToString()
+
 
                     });
                 }
 
-                var query = lista;
-                //if(rpt_id != "0")
-                //{
-                //    query = query.Where(x => x.rpt_id == rpt_id).ToList();
-                //}
-
-              
-                if(ale_id != "0")
-                {
-                    query = query.Where(x => x.ale_id.Equals(ale_id)).ToList();
-                }
-                if(aca_id != "0")
-                {
-                    query = query.Where(x => x.aca_id.Equals(aca_id)).ToList();
-                }
-                if(leg_id != "0")
-                {
-                    query = query.Where(x => x.leg_id.Equals(leg_id)).ToList();
-                }
-                if(atp_id != "0")
-                {
-                    query = query.Where(x => x.atp_id.Equals(atp_id)).ToList();
-                }
-                return query.ToList();
+                
+                return lista.ToList();
 
             }
         }
@@ -374,7 +351,7 @@ namespace WebApp.DAO
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_reparo_tipos order by rpt_descricao asc ", con);
+                SqlCommand com = new SqlCommand("select * from tab_reparo_tipos order by convert(int, rpt_codigo) asc ", con);
                 com.CommandType = CommandType.Text;
 
                 SqlDataReader reader = com.ExecuteReader();
@@ -404,7 +381,7 @@ namespace WebApp.DAO
             using (SqlConnection con = new SqlConnection(conn.strConn))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_anomalia_causas where leg_id =" + id + " and aca_id <> -1 order by aca_codigo asc ", con);
+                SqlCommand com = new SqlCommand("select * from tab_anomalia_causas where leg_id =" + id + " and aca_id <> -1 order by convert(int, aca_codigo) asc ", con);
                 com.CommandType = CommandType.Text;
 
                 SqlDataReader reader = com.ExecuteReader();
