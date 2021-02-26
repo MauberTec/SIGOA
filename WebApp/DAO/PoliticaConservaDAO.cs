@@ -204,45 +204,23 @@ namespace WebApp.DAO
         /// </summary>
         public List<GrupoObjetosConserva> GruposConservaHome(int cot_id, int cov_id, int tip_id)
         {
-            string query = string.Empty; ;
-            if(cot_id == 0)
-            {
-               query = "where (p.tip_id = t.tip_id and t.tip_pai = t1.tip_id and a.ale_id = p.ogi_id_caracterizacao_situacao and p.cot_id = ct.cot_id)";
-            }
-            else
-            {
-               query = "where (p.tip_id = t.tip_id and t.tip_pai = t1.tip_id and a.ale_id = p.ogi_id_caracterizacao_situacao and p.cot_id = ct.cot_id) and (ct.cot_id = " + cot_id + " and t.tip_id = " + tip_id + " and p.cov_id = " + cov_id + ")";
-            }
+            
             using (SqlConnection con = new SqlConnection(new Conexao().strConn))
             {
                 List<GrupoObjetosConserva> lista = new List<GrupoObjetosConserva>();
                 con.Open();
-                SqlCommand com = new SqlCommand(@"SELECT [cop_id]
-                                                 ,t.tip_id
-                                                 ,p.cov_id
-                                                 ,t1.tip_nome OBJPAI
-                                                 ,t.tip_nome GrupoOBJ
-                                                 , v.cov_nome Variavel
-                                                 , a.ale_codigo
-                                                    ,a.ale_id
-                                                  ,p.ogi_id_caracterizacao_situacao
-                                                  ,p.cot_id
-                                                  ,ct.cot_descricao conserva
-                                                  ,[cop_ativo]
-                                                  ,[cop_deletado]
-                                                  ,[cop_data_criacao]
-                                                  ,[cop_criado_por]
-                                                  ,[cop_data_atualizacao]
-                                                  ,[cop_atualizado_por]
-                                              FROM [SIGOA_DESENV].[dbo].[tab_conserva_politica] p
-                                                  inner join tab_conserva_variaveis v on  p.cov_id = v.cov_id  
-                                                  inner join tab_conserva_grupo_objeto_variaveis cgv 
-	                                              on cgv.cov_id = p.cov_id and  p.tip_id = cgv.tip_id
-                                                    ,tab_objeto_tipos t
-                                                    ,tab_objeto_tipos t1
-                                                   , tab_anomalia_alertas a
-                                                   , tab_conserva_tipos ct " +
-                                                   " " + query + " ", con);
+                SqlCommand com = new SqlCommand("STP_SEL_POLITICA_CONSERVA_PARAMETROS", con);
+                com.CommandType = CommandType.StoredProcedure;
+                System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                com.Parameters.Add(p_return);
+                com.Parameters[0].Size = 32000;
+
+                com.Parameters.AddWithValue("@cot_id", cot_id);
+
+                com.Parameters.AddWithValue("@tip_id", tip_id);
+
+                com.Parameters.AddWithValue("@cov_id", cov_id);
 
                 SqlDataReader rdr = com.ExecuteReader();
                 while (rdr.Read())

@@ -122,7 +122,6 @@ function OpenComboModal() {
 
 }
 
-
 function GetGetBusca() {
 
     $.ajax({
@@ -145,7 +144,7 @@ function GetGetBusca() {
                 '</tbody>' +
                 '</table >');
             $.each(data, function (i, item) {
-                $("#body").append($('<tr><td>' + item.conserva + '</td><td>' + item.GrupoOBJ + '</td><td>' + item.Variavel + '</td><td style="text-align:center">' + item.ale_codigo + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + item.tip_id + '\', \'' + item.cot_id + '\', \'' + item.cov_id + '\', \'' + item.ale_id + '\', \'' + item.cop_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a><a href="#" onclick="return Deleta(' + item.cop_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
+                $("#body").append($('<tr><td>' + item.conserva + '</td><td>' + item.GrupoOBJ + '</td><td>' + item.Variavel + '</td><td style="text-align:center">' + item.ale_codigo + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + item.tip_id + '\', \'' + item.cot_id + '\', \'' + item.cov_id + '\', \'' + item.ale_id + '-' + item.ale_codigo + '\', \'' + item.cop_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a><a href="#" onclick="return Deleta(' + item.cop_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
             });
             paginar();
         }
@@ -174,7 +173,7 @@ function GetGetBuscaTodos() {
                 '</tbody>' +
                 '</table >');
             $.each(data, function (i, item) {
-                $("#body").append($('<tr><td>' + item.conserva + '</td><td>' + item.GrupoOBJ + '</td><td>' + item.Variavel + '</td><td style="text-align:center">' + item.ale_codigo + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + item.tip_id + '\', \'' + item.cot_id + '\', \'' + item.cov_id + '\', \'' + item.ale_id + '\', \'' + item.cop_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a><a href="#" onclick="return Deleta(' + item.cop_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
+                $("#body").append($('<tr><td>' + item.conserva + '</td><td>' + item.GrupoOBJ + '</td><td>' + item.Variavel + '</td><td style="text-align:center">' + item.ale_codigo + '</td><td style="text-align:center"><a href="#" onclick="return btnEdit_onclick(\'' + item.tip_id + '\', \'' + item.cot_id + '\', \'' + item.cov_id + '\', \'' + item.ale_id + '-' + item.ale_codigo + '\', \'' + item.cop_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a><a href="#" onclick="return Deleta(' + item.cop_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
             });
             paginar();
         }
@@ -245,12 +244,12 @@ function pesquisar_click() {
 }
 
 function btnEdit_onclick(tip_id, cot_id, cov_id, ale_id, cop_id) {
-
+    
     $("#modalEdit").modal('show');
-    $("#ComboConserva3 select").val(cot_id);
-    $("#ComboGrupo3 select").val(tip_id);
-    $("#ComboVariavel3 select").val(cov_id);
-    $("#ComboAlerta3 select").val(ale_id);
+    $("#ComboConserva3").val(cot_id).change();
+    $("#ComboGrupo3").val(tip_id).change();
+    $("#ComboVariavel3").val(cov_id).change();
+    $("#ComboAlerta3").val(ale_id).change();
     $("#lblCopId").val(cop_id);
 }
 

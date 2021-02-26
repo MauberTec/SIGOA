@@ -164,16 +164,31 @@ function preencheRep() {
     });
 }
 
-function GetAll(table) {
+function GetAll() {
 
     $.ajax({
         url: '/PoliticaReparos/PreencheRepAll',
         type: "Get",
         dataType: "JSON",
         success: function (data) {
-            table.html("");
+            $('#DivGrid').empty();
+            $('#DivGrid').append('<table id="tblSubs" class="no-footer dataTable">' +
+                '<thead>' +
+                '<tr>' +
+                '<th style="width:40px; text-align:center">Reparo</th>' +
+                '<th style="width:70px; text-align:center">Legenda</th>' +
+                '<th style="width:270px; text-align:center">Anomalia</th>' +
+                '<th style="width:70px; text-align:center">Alerta</th>' +
+                '<th style="text-align:center">Causa</th>' +
+                '<th style="text-align:center">Opções</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody id="GridHome">' +
+                '</tbody>' +
+                '</table >');
+            
             $.each(data, function (i, valor) {
-                table.append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
+                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
             });
             paginar();  
             
@@ -398,5 +413,5 @@ function Limpar() {
     $("#cmdLegAdd_in").val("0-0").change();
     $("#cmdCodAnomaliaAdd_in").val("0-0").change();
     $("#cmdAlertaAdd_in").val("0-0").change();
-    GetAll();
+    GetAll($('#GridHome'));
 }
