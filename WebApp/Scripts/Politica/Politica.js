@@ -135,8 +135,8 @@ function GetGetBusca() {
                 '<thead>' +
                 '<tr>' +
                 '<th style="width:80px">Conserva</th>' +
-                '<th style="width:110px">Grupo de Objetos</th> ' +
-                '<th style="width:110px">Variavel</th> ' +
+                '<th style="width:200px">Grupo de Objetos</th> ' +
+                '<th style="width:400px">Variavel</th> ' +
                 '<th style="text-align:center">Alerta</th> ' +
                 '<th style="text-align:center">Opções</th> ' +
                 '</tr>' +
@@ -164,8 +164,8 @@ function GetGetBuscaTodos() {
                 '<thead>' +
                 '<tr>' +
                 '<th style="width:80px">Conserva</th>' +
-                '<th style="width:110px">Grupo de Objetos</th> ' +
-                '<th style="width:110px">Variavel</th> ' +
+                '<th style="width:200px">Grupo de Objetos</th> ' +
+                '<th style="width:400px">Variavel</th> ' +
                 '<th style="text-align:center">Alerta</th> ' +
                 '<th style="text-align:center">Opções</th> ' +
                 '</tr>' +
@@ -434,4 +434,12 @@ function Deleta(id) {
             });
         }
     });
+}
+
+function Limpar() {
+
+    $("#ComboConserva").val("0").change();
+    $("#ComboGrupo").val("0").change();
+    $("#ComboVariavel").val("0").change();
+    GetGetBuscaTodos();
 }

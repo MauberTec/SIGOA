@@ -19,9 +19,9 @@ function preencheLegenda() {
         dataType: "JSON",
         success: function (data) {
             $('#cmdLegAdd').empty();
-            $('#cmdLegAdd').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $('#cmdLegAdd').append($('<option selected></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $('#cmdLegAdd_in').empty();
-            $('#cmdLegAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $('#cmdLegAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmdLegAdd').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
                 $('#cmdLegAdd_in').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
@@ -67,7 +67,7 @@ function preencheAnomalia_in() {
         dataType: "JSON",
         success: function (data) {
             $('#cmdCodAnomaliaAdd_in').empty();
-            $('#cmdCodAnomaliaAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $('#cmdCodAnomaliaAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmdCodAnomaliaAdd_in').append($('<option value=' + item.atp_id + '> ' + item.atp_codigo + ' - ' + item.atp_descricao + ' </option>'));
                 
@@ -137,7 +137,7 @@ function preencheCausa_in() {
         success: function (data) {
            
             $('#cmdCausaAdd_in').empty();
-            $('#cmdCausaAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $('#cmdCausaAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
 
             $.each(data, function (i, item) {
                 $('#cmdCausaAdd_in').append($('<option value=' + item.aca_id + '>'+item.aca_codigo+' - ' + item.aca_descricao + ' </option>'));
@@ -153,9 +153,9 @@ function preencheRep() {
         dataType: "JSON",
         success: function (data) {
             $('#cmbReparoAdd').empty();
-            $('#cmbReparoAdd').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $('#cmbReparoAdd').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $('#cmbReparoAdd_in').empty();
-            $('#cmbReparoAdd_in').append($('<option selected disabled></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $('#cmbReparoAdd_in').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmbReparoAdd').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
                 $('#cmbReparoAdd_in').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
@@ -390,4 +390,13 @@ function Buscar() {
 
         }
     });
+}
+
+function Limpar() {
+    
+    $("#cmbReparoAdd_in").val("0-0").change();
+    $("#cmdLegAdd_in").val("0-0").change();
+    $("#cmdCodAnomaliaAdd_in").val("0-0").change();
+    $("#cmdAlertaAdd_in").val("0-0").change();
+    GetAll();
 }
