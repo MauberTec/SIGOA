@@ -71,7 +71,8 @@ namespace WebApp.Controllers
         /// <summary>
         /// Lista Grupos/Variáveis do Objeto Selecionado      
         /// <summary>
-        public JsonResult Perquisar(int cot_id, int cov_id, int tip_id)
+        [HttpGet]
+        public JsonResult Pesquisar(int cot_id, int cov_id, int tip_id)
         {
             var resp = new PoliticaConservaDAO().GruposConservaHome(cot_id, cov_id, tip_id);
             return Json(resp, JsonRequestBehavior.AllowGet);

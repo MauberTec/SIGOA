@@ -125,7 +125,7 @@ function OpenComboModal() {
 function GetGetBusca() {
 
     $.ajax({
-        url: '/Politicaconserva/Perquisar?cot_id=' + $('#ComboConserva option:selected').val() + '&cov_id=' + $('#ComboVariavel option:selected').val() + '&tip_id=' + $('#ComboGrupo option:selected').val(),
+        url: '/PoliticaConserva/Pesquisar?cot_id=' + $('#ComboConserva option:selected').val() + '&cov_id=' + $('#ComboVariavel option:selected').val() + '&tip_id=' + $('#ComboGrupo option:selected').val(),
         type: "Get",
         dataType: "JSON",
         success: function (data) {
@@ -153,8 +153,15 @@ function GetGetBusca() {
 
 function GetGetBuscaTodos() {
 
+    var modulo = {
+        cot_id: 0,
+        cov_id: 0,
+        tip_id: 0
+    };
+
     $.ajax({
-        url: '/Politicaconserva/Perquisar?cot_id=0&cov_id=0&tip_id=0',
+        url: '/PoliticaConserva/Pesquisar',
+        data:  modulo,
         type: "Get",
         dataType: "JSON",
         success: function (data) {
@@ -408,6 +415,7 @@ function btnAditarSalvarConserva() {
         }
     });
 }
+
 function Deleta(id) {
     swal({
         title: "Excluir. Tem certeza?",
