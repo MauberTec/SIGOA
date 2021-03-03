@@ -123,9 +123,15 @@ function OpenComboModal() {
 }
 
 function GetGetBusca() {
+    var modulo = {
+        cot_id: $('#ComboConserva option:selected').val(),
+        cov_id: $('#ComboVariavel option:selected').val(),
+        tip_id: $('#ComboGrupo option:selected').val()
+    };
 
     $.ajax({
-        url: '/PoliticaConserva/Pesquisar?cot_id=' + $('#ComboConserva option:selected').val() + '&cov_id=' + $('#ComboVariavel option:selected').val() + '&tip_id=' + $('#ComboGrupo option:selected').val(),
+        url: '/PoliticaConserva/Pesquisar',
+        data: modulo,
         type: "Get",
         dataType: "JSON",
         success: function (data) {
