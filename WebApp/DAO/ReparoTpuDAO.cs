@@ -112,7 +112,8 @@ namespace WebApp.DAO
                             rtu_fonte_txt = reader["rtu_fonte_txt"] == DBNull.Value ? string.Empty : reader["rtu_fonte_txt"].ToString(),
                             rpt_id = reader["rpt_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["rpt_id"].ToString()),
                             datastring = reader["datastring"] == DBNull.Value ? string.Empty : reader["datastring"].ToString(),
-                            rtu_ativo = reader["rtu_ativo"] == DBNull.Value ? false : Convert.ToBoolean(reader["rtu_ativo"].ToString())
+                            rtu_ativo = reader["rtu_ativo"] == DBNull.Value ? false : Convert.ToBoolean(reader["rtu_ativo"].ToString()),
+                            fon_id = reader["fon_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["fon_id"].ToString())
                         });
                     }
                     return lista.ToList();
