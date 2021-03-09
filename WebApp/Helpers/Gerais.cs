@@ -1236,8 +1236,9 @@ namespace WebApp.Helpers
         /// <param name="fase">fase = 23</param>
         /// <param name="mes">Mês</param>
         /// <param name="onerado">Onerado: SIM,NÃO, vazio para todos</param>
+        ///  /// <param name="codSubItem">codSubItem: Opcional</param>
         /// <returns>Lista tpu</returns>
-        public List<tpu> get_TPUs(string ano, string fase, string mes, string onerado = "")
+        public List<tpu> get_TPUs(string ano, string fase, string mes, string onerado = "", string codSubItem = "")
         {
 
             try
@@ -1255,6 +1256,7 @@ namespace WebApp.Helpers
                     tpus_In.fase = fase;
                     tpus_In.mes = mes;
                     tpus_In.onerado = onerado;
+                    tpus_In.CodSubItem = codSubItem;
 
 
                     var stringContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(tpus_In), Encoding.UTF8, "application/json");
