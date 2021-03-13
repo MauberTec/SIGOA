@@ -115,7 +115,7 @@ function GetAll() {
 
             $.each(data, function (i, item) {               
                 var fonte = "";
-                if (item.fon_id === 1) {
+                if (item.fon_id === 2) {
                     fonte = "Maubertec";
                 } else if (item.fon_id === 2) {
                     fonte = "DER";

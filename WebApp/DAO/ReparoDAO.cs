@@ -523,6 +523,12 @@ namespace WebApp.DAO
                 {
                     con.Open();
                     SqlCommand com = new SqlCommand();
+                    //string query = " insert into tab_reparo_politica  " +
+                    //                 "(rpp_id, leg_codigo, atp_codigo, ale_codigo, aca_id, rpt_id, rpp_ativo," +
+                    //                 "rpp_data_criacao, rpp_criado_por, leg_id, ale_id, atp_id) " +
+                    //                 "values('" + leg_codigo + "', '" + atp_codigo + "', '" + ale_codigo + "', " + aca_id + ", " +
+                    //                 "" + rpt_id + ", 1, getdate(), 4, " + leg_id + ", " + ale_id + ", " + atp_id + ")  ";
+                    //com.CommandText = query;
                     com.CommandText = "STP_INS_REPARO_POLITICA";
 
                     com.Connection = con;
