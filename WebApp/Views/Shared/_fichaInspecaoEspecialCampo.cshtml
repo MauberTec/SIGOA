@@ -288,7 +288,7 @@
             <td class="larguraPadrao"></td>
             <td class="larguraPadrao"></td>
             <td class="larguraPadrao"></td>
-            <td class="larguraPadrao"></td>
+            <td class="larguraPadrao"  style="display:none"></td>
             <td class="larguraPadrao"></td>
 
             <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header001a"></td>
@@ -303,13 +303,12 @@
         <tr style="border:solid 1px black;">
             <td id="tdFICHA4_CodObjeto_ian_id_header1a" class="lblTitulos" style="margin:0; padding:0; border:none"></td>
 
-            <td colspan="4"  id="tdFICHA4_CodObjeto_ian_id_header1b" class="lblTitulos" style="margin:0; padding:0; text-align:right; border:none;"> </td>
-
-            <td colspan="18" class="lblTitulos" style="margin:0; padding:0; text-align:right; margin-right:5px; border:none;">
+            <td colspan="4" id="tdFICHA4_CodObjeto_ian_id_header1b" class="lblTitulos" style="margin:0; padding:0; text-align:right; border:none;"> </td>
+            <td colspan="17" class="lblTitulos" style="margin:0; padding:0; text-align:right; margin-right:5px; border:none;">
                 <table style="width:100%">
                     <tr>
                         <td></td>
-                        <td style="width:25px !important; text-align:right;margin-right:5px; ">
+                        <td style="width:25px !important; text-align:right;margin-right:5px;">
                             <button id="btn_Salvar_INSPECAO_ESPECIAL_CAMPO"
                                     type="button"
                                     onclick="return SalvarDados_Ficha4_CAMPO_VALORES(tblFicha4_INSPECAO_ESPECIAL_CAMPO,0,-1)"
@@ -319,7 +318,7 @@
                             </button>
                         </td>
 
-                        <td style="width:25px !important; text-align:right;margin-right:5px; ">
+                        <td style="width:25px !important; text-align:right;margin-right:5px; " class="borderRight">
                             <button id="btn_Cancelar_INSPECAO_ESPECIAL_CAMPO"
                                     type="button"
                                     onclick="return CancelarDados_Ficha4_CAMPO(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
@@ -349,13 +348,14 @@
             <td colspan="3"><label class="txts" id="lblOAE" style="border:none !important"></label></td>
             <td colspan="10" style="text-align:center; height:20px"><label class="lblsBold">DEPARTAMENTO DE ESTRADAS DE RODAGEM DO ESTADO DE SÃO PAULO - DER/SP</label></td>
             <td><label class="lblsBold" id="lbldatainspcampo">DATA:</label></td>
-            <td colspan="2" class="borderRight"><input disabled id="txt_ins_anom_data" class="txts" readonly style="width:95%" /></td>
+            <td style="display:none"></td>
+            <td class="borderRight"><input disabled id="txt_ins_anom_data" class="txts" readonly style="width:95%" /></td>
 
             <td id="tdFICHA4_CodObjeto_ian_id_header001b"></td>
             <td id="tdFICHA4_CodObjeto_ian_id_header002b"></td>
             <td id="tdFICHA4_CodObjeto_ian_id_header003b"></td>
             <td id="tdFICHA4_CodObjeto_ian_id_header004b"></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header005b"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header005b" class="borderRight"></td>
         </tr>
 
         <tr>
@@ -364,13 +364,14 @@
             <td class="borderLeft"><label class="lblsBold" id="lblins_anom_OAE">Responsável:</label></td>
             <td colspan="3"><input disabled id="txt_ins_anom_Responsavel" class="txts" /></td>
             <td colspan="10" style="text-align:center; height:20px"><label class="lblsBold">FICHA DE CADASTRAMENTO DE ANOMALIAS - INSPEÇÃO ESPECIAL</label></td>
-            <td colspan="3" class="borderRight"><label class="lblsBold" id="lblFL">Fl:</label></td>
+            <td  style="display:none" ></td>
+            <td colspan="2" class="borderRight"><label class="lblsBold" id="lblFL">Fl:</label></td>
 
             <td id="tdFICHA4_CodObjeto_ian_id_header001c"></td>
             <td id="tdFICHA4_CodObjeto_ian_id_header002c"></td>
             <td id="tdFICHA4_CodObjeto_ian_id_header003c"></td>
             <td id="tdFICHA4_CodObjeto_ian_id_header004c"></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header005c"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header005c" class="borderRight"></td>
         </tr>
 
         <tr>
@@ -405,7 +406,7 @@
             <td rowspan="3" class="borderAll cabecalho ">CAUSA PROVÁVEL</td>
             <td rowspan="3" class="borderAll cabecalho ">FOTO Nº</td>
             <td rowspan="3" class="borderAll cabecalho ">CROQUI Nº</td>
-            <td rowspan="3" class="borderAll cabecalho ">DESENHO</td>
+            <td rowspan="3" class="borderAll cabecalho " style="display:none" >DESENHO</td>
             <td rowspan="3" class="borderAll cabecalho ">OBSERVAÇÕES</td>
 
             <td id="tdFICHA4_CodObjeto_ian_id_header001d" rowspan="3" class="borderAll cabecalho ">REPARO INDICADO</td>

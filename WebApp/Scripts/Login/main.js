@@ -1,7 +1,7 @@
 ﻿
 //Função para Login -- Validando os campos login e senha preenchidos
-function Login() {
-    event.preventDefault();
+function btnLogin_onclick()
+{
     var result = validarCamposEditar();
     if (result == false) {
         return false;
@@ -40,6 +40,7 @@ function Login() {
                             title: 'Aviso'
                         });
                     }
+            return false;
         },
         error: function (errormessage) {
            // alert(errormessage.responseText);
@@ -54,8 +55,63 @@ function Login() {
         }
     });
 
- 
+    return false;
 }
+
+//function Login() {
+//    event.preventDefault();
+//    var result = validarCamposEditar();
+//    if (result == false) {
+//        return false;
+//    }
+//    var objetoLogin = {
+//        usu_usuario: $("#usu_usuario").val(),
+//        usu_senha: $("#usu_senha").val(),
+//    };
+
+//    $.ajax({
+//        url: "/Login/ValidarUsuario",
+//        data: JSON.stringify(objetoLogin),
+//        type: "POST",
+//        contentType: "application/json;charset=utf-8",
+//        dataType: "json",
+//        success: function (result) {
+//            if (result.status == true) {
+//                window.location.href = "/Home/Index";
+//            }
+//            else
+//                if (result.erroId == -1) {
+//                    swal({
+//                        position: 'top',
+//                        type: 'error',
+//                        text: 'Usuário ou senha incorretos',
+//                        title: 'Aviso'
+//                    });
+//                }
+//                else
+//                    if (result.erroId == -20)
+//                    {
+//                        swal({
+//                            position: 'top',
+//                            type: 'error',
+//                            text: 'Usuário desativado',
+//                            title: 'Aviso'
+//                        });
+//                    }
+//        },
+//        error: function (errormessage) {
+//           // alert(errormessage.responseText);
+//            {
+//                swal({
+//                    type: 'error',
+//                    title: 'Erro',
+//                    text: errormessage.responseText
+//                });
+//            }
+
+//        }
+//    });
+//}
 
 //Validar campos 
 function validarCamposEditar() {

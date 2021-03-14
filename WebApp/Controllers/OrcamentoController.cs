@@ -31,6 +31,8 @@ namespace WebApp.Controllers
 
 
             ViewBag.cmbFiltroStatusOrcamento = new OrcamentoBLL().PreencheCmbStatusOrcamento();
+            ViewBag.cmbStatusOrcamento = new OrcamentoBLL().PreencheCmbStatusOrcamento();
+            ViewBag.cmbStatusOrcamentoDetalhes = new OrcamentoBLL().PreencheCmbStatusOrcamento();
 
             return View();
         }
@@ -42,11 +44,23 @@ namespace WebApp.Controllers
         /// <param name="filtroRodovia">Filtro por Rodovia</param>
         /// <param name="filtroObjetos">Filtro por Objeto</param>
         /// <param name="filtroStatus">Filtro por Status</param>
+        /// <param name="orc_ativo">Filtro por Ativo/Inativo</param>
         /// <returns>JsonResult Lista de Orcamento</returns>
-        public JsonResult Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1)
+        public JsonResult Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1, int? orc_ativo = 2)
         {
-            return Json(new { data = new OrcamentoBLL().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new OrcamentoBLL().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus, orc_ativo) }, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Dados do Orcamento selecionado
+        /// </summary>
+        /// <param name="ID">Id do Orcamento selecionado</param>
+        /// <returns>JsonResult Orcamento</returns>
+        public JsonResult Orcamento_GetbyID(int ID)
+        {
+            return Json(new OrcamentoBLL().Orcamento_ListAll(ID, "", "", -1, 2).FirstOrDefault(), JsonRequestBehavior.AllowGet);
+        }
+
 
         /// <summary>
         ///  Excluir (logicamente) 
@@ -77,13 +91,51 @@ namespace WebApp.Controllers
         /// <summary>
         ///  Insere ou Altera os dados do 
         /// </summary>
-        /// <param name="orcam">Dados do Orçamento</param>
+        /// <param name="orc">Dados do Orçamento</param>
         /// <returns>JsonResult</returns>
-        public JsonResult Orcamento_Salvar(Orcamento orcam)
+        public JsonResult Orcamento_Salvar(Orcamento orc)
         {
-            return Json(new OrcamentoBLL().Orcamento_Salvar(orcam), JsonRequestBehavior.AllowGet);
+            return Json(new OrcamentoBLL().Orcamento_Salvar(orc), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        ///    Clona os dados do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do Orcamento a ser clonado</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult Orcamento_Clonar(int orc_id)
+        {
+            return Json(new OrcamentoBLL().Orcamento_Clonar(orc_id), JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        // *************** ORCAMENTO_DETALHES  *************************************************************
+
+        /// <summary>
+        ///     Lista dos Detalhes do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do orçamento</param>
+        /// <param name="ore_ativo">Filtro por Elemento Ativo</param>
+        /// <returns>JsonResult Lista de OrcamentoDetalhes</returns>
+        public JsonResult OrcamentoDetalhes_ListAll(int orc_id, int ore_ativo)
+        {
+            return Json(new { data = new OrcamentoBLL().OrcamentoDetalhes_ListAll(orc_id, ore_ativo) }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        ///  Ativa/Desativa 
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrcamentoDetalhes_AtivarDesativar(int ore_id)
+        {
+            int retorno = new OrcamentoBLL().OrcamentoDetalhes_AtivarDesativar(ore_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
 
 
         // *************** STATUS  *************************************************************

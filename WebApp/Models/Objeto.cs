@@ -656,6 +656,11 @@ namespace WebApp.Models
        public int pri_id { get; set; }
 
         /// <summary>
+        /// Id da Ordem de Serviço que contém esse Objeto ranqueado
+        /// </summary>
+       public int ord_id { get; set; }
+
+        /// <summary>
         /// Id do Objeto ranqueado
         /// </summary>
        public int obj_id { get; set; }

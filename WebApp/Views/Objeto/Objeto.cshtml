@@ -748,8 +748,18 @@
 
 
                 <div class="modal-footer">
-                    <div class="col-md-3 col-md-offset-4">
-                        <button id="bntSalvarNovo" name="bntSalvarNovo" onclick="return bntSalvarNovo_click();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    <div class="col-md-6 col-md-offset-4">
+                        <table>
+                            <tr>
+                                <td>
+                                    <button id="bntLimparCampos" name="bntLimparCampos" onclick="return LimparCampos(0);" class="btn btn-primary btn-block btn-flat">Limpar</button>
+                                </td>
+                                <td style="width:20px"></td>
+                                <td>
+                                    <button id="bntSalvarNovo" name="bntSalvarNovo" onclick="return bntSalvarNovo_click();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </form>

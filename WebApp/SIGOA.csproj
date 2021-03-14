@@ -681,6 +681,7 @@
     <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
     <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
     <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
+    <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

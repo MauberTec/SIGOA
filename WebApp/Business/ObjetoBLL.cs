@@ -940,14 +940,14 @@ namespace WebApp.Business
         /// Lista de Objetos Priorizados
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
-        /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <param name="Regionais">Filtro por Regionais</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
         /// <returns>List ObjPriorizacao</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais, int? somenteINSP_ESPECIAIS = 0)
         {
-            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, Regionais);
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, Regionais, somenteINSP_ESPECIAIS);
 
         }
-
 
 
         /// <summary>
@@ -956,22 +956,26 @@ namespace WebApp.Business
         /// <returns>Lista de SelectListItem</returns>
         public List<SelectListItem> PreenchecmbFiltroRegionais()
         {
-            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
             List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
-
-            foreach (var temp in lstRegionais)
+            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
+            if (lstRegionais[0].reg_id > 0)
             {
-                if (temp.reg_email.Trim() != "")
+                foreach (var temp in lstRegionais)
                 {
-                    string txt = temp.reg_codigo + "-" + temp.reg_descricao;
-                    lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                    if (temp.reg_email.Trim() != "")
+                    {
+                        string txt = temp.reg_codigo + "-" + temp.reg_descricao;
+                        lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                    }
                 }
+            }
+            else
+            {
+                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = lstRegionais[0].reg_codigo, Value = "-1"});
             }
 
             return lstListacmbFiltroRegionais;
         }
-
-
 
 
         /// <summary>
@@ -980,19 +984,23 @@ namespace WebApp.Business
         /// <returns>Lista de SelectListItem</returns>
         public List<SelectListItem> PreenchecmbEmailRegionais()
         {
-            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
             List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
-
-            foreach (var temp in lstRegionais)
+            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
+            if (lstRegionais[0].reg_id > 0)
             {
-                if (temp.reg_email.Trim() != "")
+                foreach (var temp in lstRegionais)
                 {
-                   string txt = temp.reg_codigo + "-" + temp.reg_descricao + "<" + temp.reg_email.Trim() + ">";
-                  //   string txt = temp.reg_codigo + "-" + temp.reg_descricao + "<mayatabe@mayatabe.com.br>";
-                    lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = txt });
+                    if (temp.reg_email.Trim() != "")
+                    {
+                        string txt = temp.reg_codigo + "-" + temp.reg_descricao + "<" + temp.reg_email.Trim() + ">";
+                        lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = txt });
+                    }
                 }
             }
-
+            else
+            {
+                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = lstRegionais[0].reg_codigo, Value = "-1" });
+            }
             return lstListacmbFiltroRegionais;
         }
 

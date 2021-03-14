@@ -353,11 +353,11 @@ namespace WebApp.DAO
                             tip_id = Convert.ToInt32(rdr["tip_id"]),
                             tip_nome = rdr["tip_nome"].ToString() ,
 
-                            col_Localizacao = rdr["col_Localizacao"].ToString() ,
+                            col_Localizacao =  rdr["col_Localizacao"] == DBNull.Value ? "" : rdr["col_Localizacao"].ToString(),
                            
                             ian_id = rdr["ian_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ian_id"]),
-                          //  ian_numero = rdr["ian_numero"].ToString(),
-                             ian_numero = ((rdr["ian_numero"] == DBNull.Value) || (Convert.ToInt32(rdr["ian_numero"]) == 0)) ? "" : rdr["ian_numero"].ToString(),
+
+                            ian_numero = ((rdr["ian_numero"] == DBNull.Value) ||  (Convert.ToInt32(rdr["ian_numero"]) == 0)) ? "" : rdr["ian_numero"].ToString(),
 
                             atp_id = rdr["atp_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["atp_id"]),
                             atp_codigo = rdr["atp_codigo"] == DBNull.Value ? "" : rdr["atp_codigo"].ToString(),
@@ -376,13 +376,6 @@ namespace WebApp.DAO
                             leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
 
                             ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
-
-                            //ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_quantidade"]),
-                            //ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_espacamento"]),
-                            //ian_largura = rdr["ian_largura"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_largura"]),
-                            //ian_comprimento = rdr["ian_comprimento"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["ian_comprimento"]),
-                            //ian_abertura_minima = rdr["ian_abertura_minima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_minima"]),1),
-                            //ian_abertura_maxima = rdr["ian_abertura_maxima"] == DBNull.Value ? 0 : Math.Round(Convert.ToDouble(rdr["ian_abertura_maxima"]),1),
 
                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? "" : rdr["ian_quantidade"].ToString(),
                            ian_espacamento = rdr["ian_espacamento"] == DBNull.Value ? "" : rdr["ian_espacamento"].ToString(),

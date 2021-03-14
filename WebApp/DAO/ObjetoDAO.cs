@@ -1685,9 +1685,10 @@ namespace WebApp.DAO
         /// Lista de Objetos Priorizados
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
-        /// <param name="CodOAE">Filtro por Codigo de OAE</param>
+        /// <param name="Regionais">Filtro por Regional</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
         /// <returns>Lista de Objetos</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais)
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais, int? somenteINSP_ESPECIAIS = 0)
         {
             try
             {
@@ -1700,6 +1701,7 @@ namespace WebApp.DAO
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
                     com.Parameters.AddWithValue("@Regionais", Regionais);
+                    com.Parameters.AddWithValue("@somenteINSP_ESPECIAIS", somenteINSP_ESPECIAIS);
 
 
                     SqlDataReader rdr = com.ExecuteReader();
@@ -1708,6 +1710,7 @@ namespace WebApp.DAO
                         lst.Add(new ObjPriorizacao
                         {
                             pri_id = Convert.ToInt32(rdr["pri_id"]),
+                            ord_id = Convert.ToInt32(rdr["ord_id"]),
                             obj_id = Convert.ToInt32(rdr["obj_id"]),
                             obj_codigo = rdr["obj_codigo"].ToString(),
                             obj_descricao = rdr["obj_descricao"].ToString(),
