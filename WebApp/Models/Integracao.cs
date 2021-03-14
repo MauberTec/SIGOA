@@ -512,6 +512,10 @@ namespace WebApp.Models
         /// Onerado? (SIM / NÃO / VAZIO)
         /// </summary>
         public string onerado { get; set; }  // "SIM", "NÃO", "" PARA TODOS
+        /// <summary>
+        /// Opcional
+        /// </summary>
+        public string CodSubItem { get; set; }
     }
 
     /// <summary>

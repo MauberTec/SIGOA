@@ -199,13 +199,9 @@ function GetAll() {
 function paginar() {
     $(document).ready(function () {
         $('#tblSubs').DataTable({
-            "language": {
-                "lengthMenu": "Mostrando _MENU_ registros por página",
-                "zeroRecords": "Nada encontrado",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "infoEmpty": "Nenhum registro disponível",
-                "infoFiltered": "(filtrado de _MAX_ registros no total)"
-            }
+            "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
         });
     });
 }
@@ -324,6 +320,28 @@ function btnAddReparo() {
                             },
                             error: function (erro) {
                                
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+    if (Grupo[0].Nome == 'Anomalia') {
+        for (var an = 0; an < CodAnomalia.length; an++) {
+            if (Grupo[1].Nome == 'Alerta') {
+                for (var a = 0; a < IdAlerta.length; a++) {
+                    for (var c = 0; c < IdCausa.length; c++) {
+                        $.ajax({
+                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            type: "Post",
+                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            dataType: "JSON",
+                            success: function (data) {
+
+                            },
+                            error: function (erro) {
+
                             }
                         });
                     }

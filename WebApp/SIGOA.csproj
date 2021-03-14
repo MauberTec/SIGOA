@@ -215,6 +215,7 @@
     <Compile Include="Controllers\AnomaliaController.cs" />
     <Compile Include="Controllers\OrdemServicoController.cs" />
     <Compile Include="Controllers\Preco_UnitarioController.cs" />
+    <Compile Include="Controllers\ReparoTpuController.cs" />
     <Compile Include="Controllers\UnidadeController.cs" />
     <Compile Include="Controllers\ObjetoController.cs" />
     <Compile Include="Controllers\LogSistemaController.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="DAO\Conexao.cs" />
     <Compile Include="DAO\AnomaliaDAO.cs" />
     <Compile Include="DAO\PrecoUnitarioDAO.cs" />
+    <Compile Include="DAO\ReparoTpuDAO.cs" />
     <Compile Include="DAO\UnidadeDAO.cs" />
     <Compile Include="DAO\OrdemServicoDAO.cs" />
     <Compile Include="DAO\ObjetoDAO.cs" />
@@ -266,6 +268,10 @@
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\Anomalia.cs" />
     <Compile Include="Models\PrecoUnitario.cs" />
+    <Compile Include="Models\ReparoTipoModel.cs" />
+    <Compile Include="Models\ReparoTpuModel.cs" />
+    <Compile Include="Models\TpuDtoModel.cs" />
+    <Compile Include="Models\TpuFontesModel.cs" />
     <Compile Include="Models\Unidades.cs" />
     <Compile Include="Models\OrdemServico.cs" />
     <Compile Include="Models\Objeto.cs" />
@@ -467,6 +473,7 @@
     <Content Include="Scripts\Politica\ConservaTipo.js" />
     <Content Include="Scripts\Politica\Politica.js" />
     <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
+    <Content Include="Scripts\ReparoTpu\tpu.js" />
     <Content Include="Scripts\Reparo\PoliticaReparos.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
@@ -681,7 +688,7 @@
     <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
     <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
     <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
-    <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
+    <Content Include="Views\ReparoTpu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

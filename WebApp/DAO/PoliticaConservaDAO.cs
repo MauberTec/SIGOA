@@ -336,8 +336,6 @@ namespace WebApp.DAO
 
             return response;
         }
-
-
         
         /// <summary>
         /// Deleta conserva 

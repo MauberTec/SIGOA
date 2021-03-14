@@ -65,7 +65,7 @@ namespace WebApp.Controllers
             return Json(lista, JsonRequestBehavior.AllowGet);
         }  
         /// <summary>
-        /// Alerta
+        /// Reparo
         /// </summary>
         /// <returns></returns>       
         public JsonResult PreencheRep()
