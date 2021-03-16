@@ -203,6 +203,7 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
+    <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
     <Compile Include="Controllers\MultiselectController.cs" />
@@ -671,7 +672,6 @@
     <Content Include="Views\Shared\_SelecionarDocumento.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoCadastral.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoRotineira.cshtml" />
-    <Content Include="Views\Relatorio\Relatorio.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecial.cshtml" />
     <Content Include="Views\Inspecao\Inspecao.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecialCampo.cshtml" />
@@ -689,6 +689,8 @@
     <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
     <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
     <Content Include="Views\ReparoTpu\Index.cshtml" />
+    <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
+    <Content Include="Views\Relatorio\Relatorio.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -729,7 +731,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\rptFichaNotificacaoOcorrencia.rdlc" />
+    <Content Include="Reports\rptFichaNotificacaoOcorrencia.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_Priorizacao.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

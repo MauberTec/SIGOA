@@ -59,7 +59,7 @@ namespace WebApp.Models
         /// <summary>
         /// Criticidade
         /// </summary>
-        public int ord_criticidade { get; set; }
+        public decimal ord_criticidade { get; set; }
 
         /// <summary>
         /// Id do Contrato

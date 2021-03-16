@@ -191,7 +191,7 @@
 
 <script>
     function abreFicha(qualFicha1) {
-        // limpa todas as fichas
+       // limpa todas as fichas
         $('#partialFicha1').empty();
         $('#partialFicha2').empty();
         $('#partialFicha3').empty();
@@ -262,7 +262,7 @@
 
                 <ul class="nav nav-tabs" id="Tabs" role="tablist">
                     <li class="active" id="liDetalhesOS">
-                        <a id="tabDetalhesOSheader" data-toggle="tab" href="#tabDetalhesOS" onclick="OrdemServico_setaReadWrite(true)">Detalhes O.S.</a>
+                        <a id="tabDetalhesOSheader" data-toggle="tab" href="#tabDetalhesOS" onclick="OrdemServico_PreencheDetalhes(selectedId_ord_id);">Detalhes O.S.</a>
                     </li>
                     <li style="display:none" id="liFichaInspecaoCadastral">
                         <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral </a>
@@ -459,7 +459,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Criticidade (Nota OAE)</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade" maxlength="5" />
+                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade" maxlength="5" readonly />
 
                                             @*@Html.DropDownList("cmbCriticidade", null, "-- Selecione --", new { @class = "form-control " })*@
                                         </div>
@@ -705,7 +705,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha em Branco</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Informações Básicas da OAE - Inspeção Especial</label></h3>

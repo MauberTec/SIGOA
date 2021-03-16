@@ -83,7 +83,7 @@ namespace WebApp.DAO
 
                             obj_id = rdr["obj_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["obj_id"]),
                             ord_ativo = rdr["ord_ativo"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ord_ativo"]),
-                            ord_criticidade = rdr["ord_criticidade"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ord_criticidade"]),
+                            ord_criticidade = rdr["ord_criticidade"] == DBNull.Value ? -1 : Convert.ToDecimal(rdr["ord_criticidade"]),
 
                             tos_codigo = rdr["tos_codigo"] == DBNull.Value ? string.Empty : rdr["tos_codigo"].ToString(),
                             tos_descricao = rdr["tos_descricao"] == DBNull.Value ? string.Empty : rdr["tos_descricao"].ToString(),

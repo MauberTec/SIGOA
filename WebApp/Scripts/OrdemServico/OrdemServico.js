@@ -620,7 +620,8 @@ function OrdemServico_Editar(id, origem) {
             $('#txtord_data_cancelamento').val(result.ord_data_cancelamento.substring(0, 10));
             $('#txtord_data_reinicio').val(result.ord_data_reinicio.substring(0, 10));
 
-            $('#txtord_criticidade').val(result.ord_criticidade);
+            $('#txtord_criticidade').val( parseFloat(result.ord_criticidade).toFixed(2));
+
             $('#txtord_quantidade_estimada').val(result.ord_quantidade_estimada);
             $('#txtord_custo_estimado').val(result.ord_custo_estimado);
 

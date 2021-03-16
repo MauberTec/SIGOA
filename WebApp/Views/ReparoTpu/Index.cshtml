@@ -10,16 +10,16 @@
     //Verifica se o usuário esta logado
     if (Session["Usuario"] == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 315 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 
     Usuario gUsuario = (Usuario)Session["Usuario"];
     List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
-    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(315)); // id DO MODULO "O.S."
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(320)); // id DO MODULO ReparoTPU
     if (permissoesDesteModulo == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 315 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 }
