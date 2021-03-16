@@ -947,7 +947,6 @@ namespace WebApp.Helpers
         }
 
 
-
         /// <summary>
         ///  Busca a lista de SentidoRodovias pela API
         /// </summary>
@@ -1135,11 +1134,6 @@ namespace WebApp.Helpers
 
 
 
-
-
-
-
-
         // ***************  APIs DER **************
 
         /// <summary>
@@ -1220,7 +1214,7 @@ namespace WebApp.Helpers
                 List<vdm> saida_erro = new List<vdm>();
                 vdm err = new vdm();
                 err.vdm_ano = -1;
-                err.vdm_rodovia = ex.InnerException.Message;
+                err.vdm_rodovia = ex.Message;
 
                 saida_erro.Add(err);
                 return saida_erro;
@@ -1313,7 +1307,7 @@ namespace WebApp.Helpers
                 List<tpu> saida_erro = new List<tpu>();
                 tpu err = new tpu();
                 err.DataTpu = "-1";
-                err.CodSubItem = ex.InnerException.Message;
+                err.CodSubItem = ex.Message;
 
                 saida_erro.Add(err);
                 return saida_erro;

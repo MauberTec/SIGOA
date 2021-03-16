@@ -20,10 +20,11 @@ namespace WebApp.Business
         /// <param name="filtroRodovia">Filtro por Rodovia</param>
         /// <param name="filtroObjetos">Filtro por Objeto</param>
         /// <param name="filtroStatus">Filtro por Status</param>
+        /// <param name="orc_ativo">Filtro por Ativo/Inativo</param>
         /// <returns>Lista de OrcamentoStatus</returns>
-        public List<Orcamento> Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1)
+        public List<Orcamento> Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1, int? orc_ativo = 2)
         {
-            return new OrcamentoDAO().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus);
+            return new OrcamentoDAO().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus, orc_ativo);
         }
 
         /// <summary>
@@ -51,13 +52,27 @@ namespace WebApp.Business
         /// <summary>
         ///  Insere ou Altera os dados do Orcamento
         /// </summary>
-        /// <param name="sta">Dados do Orcamento</param>
+        /// <param name="orc">Dados do Orcamento</param>
         /// <returns>int</returns>
-        public int Orcamento_Salvar(Orcamento sta)
+        public int Orcamento_Salvar(Orcamento orc)
         {
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
-            return new OrcamentoDAO().Orcamento_Salvar(sta, paramUsuario.usu_id, paramUsuario.usu_ip);
+            return new OrcamentoDAO().Orcamento_Salvar(orc, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
+
+
+        /// <summary>
+        ///    Clona os dados do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do Orcamento a ser clonado</param>
+        /// <returns>int</returns>
+        public int Orcamento_Clonar(int orc_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrcamentoDAO().Orcamento_Clonar(orc_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+
+        }
+
 
 
         /// <summary>
@@ -77,6 +92,33 @@ namespace WebApp.Business
 
             return lstSaida;
         }
+
+
+
+        // *************** ORCAMENTO_DETALHES  *************************************************************
+
+        /// <summary>
+        ///     Lista dos Detalhes do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do orçamento</param>
+        /// <param name="ore_ativo">Filtro por Elemento Ativo</param>
+        /// <returns>Lista de Detalhes do Orcamento</returns>
+        public List<OrcamentoDetalhes> OrcamentoDetalhes_ListAll(int orc_id, int ore_ativo)
+        {
+             return new OrcamentoDAO().OrcamentoDetalhes_ListAll(orc_id, ore_ativo);
+       }
+
+        /// <summary>
+        ///  Ativa/Desativa Orcamento
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <returns>int</returns>
+        public int OrcamentoDetalhes_AtivarDesativar(int ore_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrcamentoDAO().OrcamentoDetalhes_AtivarDesativar(ore_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
 
 
         // *************** STATUS  *************************************************************

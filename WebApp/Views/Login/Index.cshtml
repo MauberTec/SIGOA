@@ -86,7 +86,8 @@
                             <a href="#" onclick="return EsqueciSenha()">Esqueci a senha</a>
                         </div>
                         <div class="col-xs-6 pull-right">
-                            <button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled><i class="fa fa-sign-in"></i> Entrar</button>
+                            <button id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled onclick="return btnLogin_onclick();"><i class="fa fa-sign-in"></i> Entrar</button>
+                            @*<button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled><i class="fa fa-sign-in"></i> Entrar</button>*@
 
                             <div id="divDatabaseOFF" style="display: @display;" title="Sem Conexão com Banco de Dados">
                                 <span class="fa-stack fa-stack-2x">
@@ -100,7 +101,7 @@
                     <div class="row">
                         @Html.Hidden("hddnVersao", "build: " + File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString())
                         <div class="col-xs-6 pull-left" id="divVersao">
-                            <b>Versão 1.7.0</b>
+                            <b>Versão 1.7.1</b>
                             @{ 
                                 string qualBanco = new WebApp.DAO.Conexao().QualBD();
                             }

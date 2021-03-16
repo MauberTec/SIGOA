@@ -1434,6 +1434,10 @@ $(document).ready(function () {
 
 
 
+    // preenche combo
+    preencheCombo(1, 'cmbRodovia', '--Selecione--', null);
+
+
 }); // document.ready
 
 

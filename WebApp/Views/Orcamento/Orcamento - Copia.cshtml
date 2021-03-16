@@ -1133,6 +1133,8 @@
     var ehNovoOrcamento_orc_id = -1;
 
     var orc_ids_selecionados = [];
+    var abas_selecionadas = [];
+
     var orc_ord_ids_associados = '';
     var pri_ids_associados = '';
 
@@ -1155,33 +1157,69 @@
                 // prenche as abas
                 orc_ids_selecionados.push(quem.value);
                 var numAba = orc_ids_selecionados.length;
+                abas_selecionadas.push(numAba);
 
                 carregaGridOrcamentoDetalhes(numAba, quem.value, 1);
+
+
+                //if (orc_ids_selecionados.length == 1) // se houver somente 1 seleção, expande a aba
+                //{
+                //    $("#btn_Toggle_ORCAMENTO_DETALHES_1").attr("aria-expanded", "false");
+                //    ORCAMENTO_DETALHES_header_click("btn_Toggle_ORCAMENTO_DETALHES_1", 1);
+
+                //    $("#div_ORCAMENTO_DETALHES_1").attr("aria-expanded", "true");
+                //    $("#div_ORCAMENTO_DETALHES_1").removeClass("collapse");
+                //    $("#div_ORCAMENTO_DETALHES_1").addClass("collapse in");
+
+                //    var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_1");
+                //    if (div_FICHA_ORCAMENTO_DETALHES)
+                //        div_FICHA_ORCAMENTO_DETALHES.style.display = 'block';
+
+                //    // roda o icone 90graus
+                //    $("#iconAngle_ORCAMENTO_DETALHES_1").removeClass("rotate");
+                //    $("#iconAngle_ORCAMENTO_DETALHES_1").addClass("rotate");
+
+                //}
+                //else
+                //{
+                //    for (var aba = 1; aba <= 10; aba++) {
+
+                //        $("#btn_Toggle_ORCAMENTO_DETALHES_" + aba).attr("aria-expanded", "true");
+                //        ORCAMENTO_DETALHES_header_click("btn_Toggle_ORCAMENTO_DETALHES_" + aba, 0);
+
+                //        $("#div_ORCAMENTO_DETALHES_" + aba).attr("aria-expanded", "false");
+                //        $("#div_ORCAMENTO_DETALHES_" + aba).removeClass("collapse in");
+                //        $("#div_ORCAMENTO_DETALHES_" + aba).addClass("collapse");
+                //        $("#iconAngle_ORCAMENTO_DETALHES_" + aba).removeClass("rotate");
+
+                //    }
+                //}
+
             }
         }
         else {
             // checked = false entao limpar
-            var qualAba = 0;
             for (var index = 0; index < orc_ids_selecionados.length; index++) {
                 if (orc_ids_selecionados[index] === quem.value) {
-                    //qualAba = index + 1;
 
-                    // limpa a ultima aba porque removeu 1 e deslocou 1
-                    var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + (orc_ids_selecionados.length));
+                    // limpa a aba
+                    var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + abas_selecionadas[index]);
                     if (div_FICHA_ORCAMENTO_DETALHES)
                         div_FICHA_ORCAMENTO_DETALHES.style.display = 'none';
 
+                    $("#btn_Toggle_ORCAMENTO_DETALHES_" + abas_selecionadas[index]).attr("aria-expanded", "true");
+                    ORCAMENTO_DETALHES_header_click("btn_Toggle_ORCAMENTO_DETALHES_" + abas_selecionadas[index], 0);
 
-                    // remove do array
+                    $("#btn_Toggle_ORCAMENTO_DETALHES_" + abas_selecionadas[index]).attr("aria-expanded", "false");
+                    $("#div_ORCAMENTO_DETALHES_" + abas_selecionadas[index]).attr("aria-expanded", "false");
+                    $("#div_ORCAMENTO_DETALHES_" + abas_selecionadas[index]).removeClass("collapse in");
+                    $("#div_ORCAMENTO_DETALHES_" + abas_selecionadas[index]).addClass("collapse");
+                    $("#iconAngle_ORCAMENTO_DETALHES_" + abas_selecionadas[index]).removeClass("rotate");
+
+
+                    // remove dos arrays
                     orc_ids_selecionados.splice(index, 1);
-                    document.getElementById("demo").innerHTML = orc_ids_selecionados;
-
-                    // recarrega os itens que foram deslocados
-                    for (var aux = index; aux < orc_ids_selecionados.length; aux++) {
-                        carregaGridOrcamentoDetalhes(aux+1, orc_ids_selecionados[aux], 1);
-                    }
-
-
+                    abas_selecionadas.splice(index, 1);
                     break;
                 }
             }
@@ -1191,7 +1229,7 @@
         else
             $("#lblSelecionados").html("");
 
-        document.getElementById("demo").innerHTML = orc_ids_selecionados ;
+        document.getElementById("demo").innerHTML = orc_ids_selecionados + '<>' + abas_selecionadas;
 
         return false;
     }
@@ -1199,6 +1237,7 @@
     function btnLimparSelecao_onclick() {
         // limpa os arrays
         orc_ids_selecionados = [];
+        abas_selecionadas = [];
         selectedId_orc_id = -1;
 
         $("#lblSelecionados").html("");
@@ -1557,6 +1596,7 @@
                         // btnLimparSelecao_onclick();
                         // limpa os arrays
                         orc_ids_selecionados = [];
+                        abas_selecionadas = [];
                         $("#lblSelecionados").html("");
 
                         // oculta as abas
@@ -1598,10 +1638,8 @@
 
         // procura o indice no array
         var index = -1;
-        var qualAba = -1;
-        for (index = 0; index < orc_ids_selecionados.length; index++) {
-            qualAba = index +1;
-            if (qualAba === parseInt(aba)) {
+        for (index = 0; index < abas_selecionadas.length; index++) {
+            if (abas_selecionadas[index] === parseInt(aba)) {
                 // recarrega os dados
                 carregaGridOrcamentoDetalhes(aba, orc_ids_selecionados[index], 2);
 
@@ -1622,15 +1660,14 @@
 
 
         // procura o indice no array
-        var index = -1; var qualAba = 0;
+        var index = -1;
         for (index = 0; index < orc_ids_selecionados.length; index++) {
-            qualAba = index + 1;
-            if (qualAba === parseInt(aba)) {
+            if (abas_selecionadas[index] === parseInt(aba)) {
                 // recarrega os dados
-                carregaGridOrcamentoDetalhes(qualAba, orc_ids_selecionados[index], 1);
+                carregaGridOrcamentoDetalhes(aba, orc_ids_selecionados[index], 1);
 
                 // seta para Leitura
-                ORCAMENTO_DETALHES_setaReadWrite(qualAba, true);
+                ORCAMENTO_DETALHES_setaReadWrite(aba, true);
 
                 break;
             }
@@ -1800,16 +1837,15 @@
 
         var orc_idd = -1;
         // procura o indice no array abas para achar a correspondente ORC_ID
-        var index = -1; var qualAba = 0;
+        var index = -1;
         for (index = 0; index < abas_selecionadas.length; index++) {
-            qualAba = index + 1;
-            if (qualAba=== parseInt(aba)) {
+            if (abas_selecionadas[index] === parseInt(aba)) {
                 orc_idd = orc_ids_selecionados[index];
                 break;
             }
         }
                 
-        ORCAMENTO_DETALHES_setaReadWrite(parseInt(aba), true);
+        ORCAMENTO_DETALHES_setaReadWrite(aba, true);
 
         // salva
      return   ORCAMENTO_Salvar(orc_idd,
@@ -2242,6 +2278,7 @@
 
             // limpa os arrays
             orc_ids_selecionados = [];
+            abas_selecionadas = [];
 
             $("#lblSelecionados").html("");
 
@@ -2260,6 +2297,7 @@
 
 
                         // seta a 1a aba
+                        abas_selecionadas.push(1);
                         orc_ids_selecionados.push(selectedId_orc_id);
 
                         // carrega a aba

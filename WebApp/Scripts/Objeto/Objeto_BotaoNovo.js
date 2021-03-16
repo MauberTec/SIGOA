@@ -287,10 +287,11 @@ function LimparCampos(aPartirDe) {
     $("#cmbAEVCVG_Novo").html(""); // limpa 
     $('#txtLocalizacaoAte_Novo').val("00");
 
-    if (aPartirDe <= 1) $("#cmbRodovia").val(null);
+    if (aPartirDe <= 1) $("#cmbRodovia").val(-1);
+
     if (aPartirDe <= 2) {
         $('#txtRodovia').val("");
-        $("#txtRodovia").attr('placeholder', "");
+        $("#txtRodovia").attr('placeholder', "Código Rodovia");
         $("#cmbRodoviaED").val(null);
         document.getElementById("tdcmbRodoviaED").style.display = 'none';
     }
@@ -309,30 +310,46 @@ function LimparCampos(aPartirDe) {
 
     if (aPartirDe <= 7) $("#cmbSubdivisao3").html(""); // limpa os itens existentes;
     if (aPartirDe <= 8) $("#cmbGrupoObjetos").html(""); // limpa os itens existentes;
-    if (aPartirDe <= 9) $('#txtNumeroObjeto').val("");
-    if (aPartirDe <= 10) $('#txtLocalizacao').val("");
+    if (aPartirDe <= 9) {
+        $('#txtNumeroObjeto').val("");
+        $('#txtNumeroObjetoAte_Novo').val("");
+    }
 
+    if (aPartirDe <= 10) {
+        $('#txtLocalizacao').val("");
+        $('#txtLocalizacaoAte_Novo').val("");
+    }
     $('#txtNovoDescricao').val("");
 
     jQuery("#txtNumeroObjeto").mask("00", options2);
 
     PreenchetxtCodigoDigitavel();
+
+    jQuery("#txtOAE").mask("000,000", options);
+    jQuery("#txtOAE").attr("placeholder", "000,000 - Quilometragem");
+
+    return false;
 }
 
 function bntNovo_click() {
 
+ /*  02/mar/2021 - nao limpar campos para facilitar cadastro
+  *  
     LimparCampos(0);
 
     // oculta o divs Subdivisao2 e 3
     document.getElementById("divSubdivisao2").style.display = 'none';
     document.getElementById("divSubdivisao3").style.display = 'none';
 
+    //// preenche combo
+    //preencheCombo(1, 'cmbRodovia', '--Selecione--', null);
+    
+    */
 
     jQuery("#txtOAE").mask("000,000", options);
     jQuery("#txtOAE").attr("placeholder", "000,000 - Quilometragem");
 
-    // preenche combo
-    preencheCombo(1, 'cmbRodovia', '--Selecione--', null);
+
 
     $("#modalNovoRegistro").modal('show');
 }

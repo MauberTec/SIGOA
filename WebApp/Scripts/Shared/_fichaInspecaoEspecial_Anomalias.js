@@ -15,7 +15,7 @@
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
-        ' <td class="borderLeft " ></td> ' +
+        ' <td class="borderLeft "  style="display:none" ></td> ' +
         ' <td class="borderLeft  borderRight" ></td> ' +
         ' <td class="borderLeft " id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft " id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
@@ -32,6 +32,7 @@
 //        '             onclick="return Ficha4_InserirAnomalia(ZZZ)" ' +
         '             onclick="return SalvarDados_Ficha4_CAMPO_VALORES(null, 1, ZZZ) " ' +
         '             title="Inserir Anomalia" ' +
+        '             tabindex="tabindexValor" ' +
         '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
         '             <span class="glyphicon glyphicon-plus text-success contornoBranco"> ' +
         '          </button> ' +
@@ -41,6 +42,7 @@
  //       '             onclick="return Ficha4_ExcluirAnomalia(ZZZ)" ' +
         '             onclick="return SalvarDados_Ficha4_CAMPO_VALORES(null, 2, ZZZ) " ' +
         '             title="Excluir Anomalia" ' +
+        '             tabindex="tabindexValor" ' +
         '             style="border:none; box-shadow:none; background-color:transparent; display:none"> ' +
         '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
         '          </button> ' +
@@ -63,17 +65,43 @@
 
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Foto_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Foto_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Croqui_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Croqui_VVV" /></td> ' +
-        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Desenho_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Desenho_VVV" /></td> ' +
-        ' <td class="borderLeft centroH qualClasse borderRight"><input disabled id="txt_Obs_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Obs_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse" style="display:none" ><input disabled id="txt_Desenho_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Desenho_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse borderRight"><input disabled id="txt_Obs_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Obs_VVV" onkeydown="txt_Obs_onKeyDown(this)" /></td> ' +
 
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_ReparoIndicado_ian_id_ZZZ" title="TOOLTIP_ReparoIndicado_ian_id" >lbl_ReparoIndicado_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ><label class="centroH txts2" id="lbl_QuantidadeIndicada_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicada_VVV</label><label class="centroH txts2" id="lbl_QuantidadeIndicadaUnidade_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicadaUnidade_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><select disabled id="cmb_ReparoAdotado_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_ReparoAdotado" >OPCOES_cmb_ReparoAdotado</select></td> ' +
         //' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_ReparoAdotado_ian_id_ZZZ" class="centroH" style="width:94%;" value="txt_ReparoAdotado_VVV" /></td> ' +
-        ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_QuantidadeAdotada_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_QuantidadeAdotada_VVV" /></td> ' +
-        ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
-
+        ' <td class="borderLeft centroH  qualClasse" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_QuantidadeAdotada_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_QuantidadeAdotada_VVV" /></td> ' +
+        ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
         ' </tr>';
+
+
+function txt_Obs_onKeyDown(quem) {
+    // Set self as the current item in focus
+    var self = $(':focus'),
+        // Set the form by the current item in focus
+        form = $("#tblFicha4_INSPECAO_ESPECIAL_CAMPO"), Tabbable ; //self.parents('form:eq(0)'), focusable;
+
+    // Array of Indexable/Tab-able items
+    tabbable = form.find('input').filter(':visible');
+
+    function enterKey() {
+        if (event.which === 13 && !self.is('textarea')) { // [Enter] key
+
+            if ($.inArray(self, tabbable) && (!self.is('a')) && (!self.is('button'))) {
+                event.preventDefault();
+            } 
+            tabbable.eq(tabbable.index(self) + (event.shiftKey ? -1 : 1)).focus();
+
+            return false;
+        }
+    }
+    if (event.shiftKey) { enterKey() } else { enterKey() }
+}
+
+
+
 
 function txt_Comprimento_onKeyUP(quem) {
     quem.style.backgroundColor = corBranca;
@@ -157,18 +185,19 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                     var qt_adotado = $("#txt_QuantidadeAdotada_ian_id_" + ian_id).val();
 
                     var ehLinhaVazia = true;
+                    var ehLinhaOK = false;
 
                     if ((ian_numero != "")
-                        || (leg_codigo != "")
-                        || (atp_codigo != "null")
-                        || (ale_codigo != "null")
+                        || ((leg_codigo != "") && (leg_codigo != "null"))
+                        || ((atp_codigo != "") && (atp_codigo != "null"))
+                        || ((ale_codigo != "") && (ale_codigo != "null"))
                         || (ian_quantidade.replace(".", "").replace(",", "") != "")
                         || (ian_espacamento.replace(".", "").replace(",", "") != "")
                         || (ian_largura.replace(".", "").replace(",", "") != "")
                         || (ian_comprimento.replace(".", "").replace(",", "") != "")
                         || (ian_abertura_minima.replace(".", "").replace(",", "") != "")
                         || (ian_abertura_maxima.replace(".", "").replace(",", "") != "")
-                        || (aca_codigo != "null")
+                        || ((aca_codigo != "") && (aca_codigo != "null"))
                         || (ian_fotografia.trim() != "")
                         || (ian_croqui.trim() != "")
                         || (ian_desenho.trim() != "")
@@ -176,10 +205,30 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                     )
                         ehLinhaVazia = false;
 
-                    if (ehLinhaVazia) // se for linha vazia, nao precisa salvar
-                        continue;
+                    ////if (ehLinhaVazia) // se for linha vazia, nao precisa salvar
+                    ////    continue;
 
-                    if (ian_numero == "") // campo Numero 
+                    if ((ian_numero == "")
+                        && ((leg_codigo == "") || (leg_codigo == "null"))
+                        && ((atp_codigo == "") || (atp_codigo == "null"))
+                        && ((ale_codigo == "") || (ale_codigo == "null"))
+                        && (ian_quantidade.replace(".", "").replace(",", "") == "")
+                        && (ian_espacamento.replace(".", "").replace(",", "") == "")
+                        && (ian_largura.replace(".", "").replace(",", "") == "")
+                        && (ian_comprimento.replace(".", "").replace(",", "") == "")
+                        && (ian_abertura_minima.replace(".", "").replace(",", "") == "")
+                        && (ian_abertura_maxima.replace(".", "").replace(",", "") == "")
+                        && ((aca_codigo == "") || (aca_codigo == "null"))
+                        && (ian_fotografia.trim() == "")
+                        && (ian_croqui.trim() == "")
+                        && (ian_desenho.trim() == "")
+                        && (ian_observacoes.trim() != "")
+                    )
+                        ehLinhaOK = true;
+
+
+                    // campo Numero
+                    if ((ian_numero == "") && (!ehLinhaVazia) && (!ehLinhaOK))
                     {
                         txt_Numero_ian_id.style.backgroundColor = corVermelho;
                         swal({
@@ -193,87 +242,127 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                         return false;
                     }
 
+                    // campo Sigla
                     if ((leg_codigo == "-1") || (leg_codigo == "") || (leg_codigo == "null")) // campo Sigla
                     {
-                        var cmb_Sigla = document.getElementById("cmb_Sigla_ian_id_" + ian_id);
-                        cmb_Sigla.style.backgroundColor = corVermelho;
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'A Sigla é obrigatória'
-                        }).then(
-                            function () {
-                                return false;
-                            });
-                        return false;
+                        leg_codigo = "-1";
+                        if ((ehLinhaOK == false) && (!ehLinhaVazia))
+                        {
+                            var cmb_Sigla = document.getElementById("cmb_Sigla_ian_id_" + ian_id);
+                            cmb_Sigla.style.backgroundColor = corVermelho;
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: 'A Sigla é obrigatória'
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
                     }
 
+                    // campo Código
                     if ((atp_codigo == "-1") || (atp_codigo == "") || (atp_codigo == "null"))  // campo Codigo
                     {
-                        var cmb_Cod = document.getElementById("cmb_Cod_ian_id_" + ian_id);
-                        cmb_Cod.style.backgroundColor = corVermelho;
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'O Código é obrigatório'
-                        }).then(
-                            function () {
-                                return false;
-                            });
-                        return false;
+                        atp_codigo = "-1";
+                        if ((ehLinhaOK == false) && (!ehLinhaVazia))
+                        {
+                            var cmb_Cod = document.getElementById("cmb_Cod_ian_id_" + ian_id);
+                            cmb_Cod.style.backgroundColor = corVermelho;
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: 'O Código é obrigatório'
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
                     }
 
+                    // campo Alerta
                     if ((ale_codigo == "-1") || (ale_codigo == "") || (ale_codigo == "null")) // campo Alerta
                     {
-                        var cmb_Alerta = document.getElementById("cmb_Alerta_ian_id_" + ian_id);
-                        cmb_Alerta.style.backgroundColor = corVermelho;
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'O Alerta é obrigatório'
-                        }).then(
-                            function () {
-                                return false;
-                            });
-                        return false;
+                        ale_codigo = "-1";
+                        if ((ehLinhaOK == false) && (!ehLinhaVazia))
+                        {
+                            var cmb_Alerta = document.getElementById("cmb_Alerta_ian_id_" + ian_id);
+                            cmb_Alerta.style.backgroundColor = corVermelho;
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: 'O Alerta é obrigatório'
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
                     }
 
+                    // campo Causa
                     if ((aca_codigo == "-1") || (aca_codigo == "") || (aca_codigo == "null"))  // campo Causa
                     {
-                        var cmb_Causa = document.getElementById("cmb_Causa_ian_id_" + ian_id);
-                        cmb_Causa.style.backgroundColor = corVermelho;
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'A Causa é obrigatória'
-                        }).then(
-                            function () {
-                                return false;
-                            });
-                        return false;
+                        aca_codigo = "-1";
+                        if ((ehLinhaOK == false) && (!ehLinhaVazia))
+                        {
+                            var cmb_Causa = document.getElementById("cmb_Causa_ian_id_" + ian_id);
+                            cmb_Causa.style.backgroundColor = corVermelho;
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: 'A Causa é obrigatória'
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
                     }
-
-
-                    if (ian_numero.trim() == "")
-                        ian_numero = " ";
 
                     // quantidade obrigatoria
                     var valor = ian_quantidade;
                     if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == "")) {
-
-                        var txt_Quantidade = document.getElementById("txt_Quantidade_ian_id_" + ian_id);
-                        txt_Quantidade.style.backgroundColor = corVermelho;
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'A Quantidade é obrigatória'
-                        }).then(
-                            function () {
-                                return false;
-                            });
-                        return false;
-                        //ian_quantidade = " ";
+                        ian_quantidade = " ";
+                        if ((ehLinhaOK == false) && (!ehLinhaVazia))
+                        {
+                            var txt_Quantidade = document.getElementById("txt_Quantidade_ian_id_" + ian_id);
+                            txt_Quantidade.style.backgroundColor = corVermelho;
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: 'A Quantidade é obrigatória'
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
                     }
+
+                    // comprimento é obrigatorio
+                    valor = ian_comprimento;
+                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == "")) {
+                        ian_comprimento = " ";
+
+                        if ((ehLinhaOK == false) && (!ehLinhaVazia)) {
+                            var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
+                            txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: 'O Comprimento é obrigatório'
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
+                    }
+
+
 
                     valor = ian_espacamento;
                     if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
@@ -284,23 +373,8 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                     if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
                         ian_largura = " ";
 
-                    // comprimento é obrigatorio
-                    valor = ian_comprimento;
-                    if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == "")) {
-                        var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
-                        txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'O Comprimento é obrigatório'
-                        }).then(
-                            function () {
-                                return false;
-                            });
-                        return false;
-
-                        //  ian_comprimento = " ";
-                    }
+                    if (ian_numero.trim() == "")
+                        ian_numero = " ";
 
                     valor = ian_abertura_minima;
                     if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
@@ -352,6 +426,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                         + ian_observacoes + '<quebra>'
                         + rpt_id_sugerido + '<quebra>' + rpt_id_adotado + '<quebra>'
                         + qt_sugerido.replace(',', '.') + '<quebra>' + qt_adotado.replace(',', '.') + '<quebra>'
+                        + i  + '<quebra>'
                         + '</tr_linha>';
 
                     saida = saida + linhaMontada;
@@ -436,7 +511,11 @@ function Ficha4_CAMPO_prenchetdCombos(qualCombo, listadeValores, selectedValue, 
     var opcoes = 'OPCOES_' + qualCombo;
 
     var op0 = ' <option selectedxx disabled value="-1" ></option> ';
+    //if (qualCombo == 'cmb_Sigla')
+    //    op0 = op0.replace('disabled', '');
+
     var op = ' <option selectedxx value="valor" title="tooltip">texto</option> ';
+
     var total = op0;
 
     if (parseInt(selectedValue) == -1) {
@@ -575,7 +654,7 @@ function preenchetblFicha4_CAMPO(ehRead) {
                     linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
 
                     if (!isNaN((result.data[i].ian_quantidade_adotada)))
-                        linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, result.data[i].ian_quantidade_sugerida.toFixed(2));
+                        linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
                     else
                         linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, '');
 
@@ -583,11 +662,15 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
                    // linhaAux = linhaAux.replace(/txt_ReparoAdotado_VVV/g, result.data[i].rownum);
                     if (!isNaN((result.data[i].ian_quantidade_adotada)))
-                        linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, result.data[i].ian_quantidade_adotada.toFixed(2));
+                        linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, (((result.data[i].ian_quantidade_adotada.toFixed(2)) + " ").replace(".", ",").trim()));
                     else
                         linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, '');
 
+                    // substitui o valor -1 por vazio
                     linhaAux = linhaAux.replace(/-1/g, '');
+
+                    // insere o valor "-1" para desabilitar algumas tabulacoes
+                    linhaAux = linhaAux.replace(/tabindexValor/g, '-1');
 
                     // cria os itens dos combos ========================================
                     linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
@@ -808,20 +891,20 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
                     // metro linear para reparo rpt_id in (1, 26, 27, 28, 30, 31) 2021/fev/15
                     var rpt_id = parseInt(result.data[0].rpt_id);
                     if ((rpt_id == 1) || (rpt_id == 26) || (rpt_id == 27) || (rpt_id == 28) || (rpt_id == 30) || (rpt_id == 31)) {
-                        lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                        lbl_QuantidadeIndicada.innerHTML = (((f_Quantidade * (f_Comprimento / 100)).toFixed(2)) + " ").replace(".", ",").trim();
                     }
                     else {
                         switch (result.data[0].rpt_unidade.toUpperCase()) {
                             case "M":
-                                lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                                lbl_QuantidadeIndicada.innerHTML = (((f_Quantidade * (f_Comprimento / 100)).toFixed(2)) + " ").replace(".",",").trim();
                                 break;
 
                             case "M2":
-                                lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2);
+                                lbl_QuantidadeIndicada.innerHTML = (((f_Quantidade * (f_Comprimento / 100) * (f_Largura / 100)).toFixed(2)) + " ").replace(".", ",").trim();
                                 break;
 
                             default: // UM, UN
-                                lbl_QuantidadeIndicada.innerHTML = (f_Quantidade * (f_Comprimento / 100)).toFixed(2);
+                                lbl_QuantidadeIndicada.innerHTML = (((f_Quantidade * (f_Comprimento / 100)).toFixed(2)) + " ").replace(".", ",").trim();
                                 break;
                         }
                     }
@@ -965,7 +1048,7 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
                                     mascara = "999,99";
                             else
                                 if (str.startsWith("txt_Numero_ian_id_"))
-                                    mascara = "999";
+                                    mascara = "99999";
             if (mascara != "")
                 jQuery("#" + str).mask(mascara);
 
@@ -1008,6 +1091,15 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
 
 }
 
+function chk00_click(chk00_checked)
+{
+    $('#divFicha4_CAMPO_LocalizacaoObjeto input').each(function () {
+         $(this).prop("checked", chk00_checked);
+    });
+
+    return false;
+}
+
 function Ficha4_CAMPO_preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) {
     if (tip_pai == null)
         tip_pai = -1;
@@ -1036,10 +1128,9 @@ function Ficha4_CAMPO_preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) 
             }
             else {
                 var i = 0;
-                $("#divFicha4_CAMPO_LocalizacaoObjeto").empty();
                 $.each(lstSubNiveis, function (i, objeto) {
                     i++;
-                    if (i < 50) {
+                    if (i < 150) {
                         var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
                         tagchk = tagchk.replace("idXXX", "chk" + i);
                         tagchk = tagchk.replace("nameXXX", "chk" + i);
@@ -1068,9 +1159,16 @@ function Ficha4_CAMPO_preencheLocalizacao(tip_id_Grupo) {
 
             var i = 0;
             $("#divFicha4_CAMPO_LocalizacaoObjeto").empty();
+
+            var tagchk00 = '<input type="checkbox" id="chk00" nome="chk00" value="-314159" style="margin-right:5px" onclick="chk00_click(this.checked)" >';
+            var taglbl00 = '<label for="idchk00" class="chklst" >Todos</label> <br />';
+
+            if (lstSubNiveis.length > 0)
+                $("#divFicha4_CAMPO_LocalizacaoObjeto").append(tagchk00 + taglbl00);
+
             $.each(lstSubNiveis, function (i, objeto) {
                 i++;
-                if (i < 100) {
+                if (i < 1000) {
                     var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
                     tagchk = tagchk.replace("idXXX", "chk" + i);
                     tagchk = tagchk.replace("nameXXX", "chk" + i);
@@ -1211,7 +1309,9 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
     // cria lista dos IDs de Objetos selecionados
     var selchks = [];
     $('#divFicha4_CAMPO_LocalizacaoObjeto input:checked').each(function () {
-        selchks.push($(this).attr('value'));
+        var valor = $(this).attr('value')
+        if (valor > 0 )
+            selchks.push(valor);
     });
 
     //se houver grupos selecionados, salva

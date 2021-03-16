@@ -634,10 +634,11 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
         /// <param name="Regionais">Filtro por Regionais</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
         /// <returns>JsonResult</returns>
-        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string Regionais)
+        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string Regionais, int? somenteINSP_ESPECIAIS = 0)
         {
-            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, Regionais) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, Regionais, somenteINSP_ESPECIAIS) }, JsonRequestBehavior.AllowGet);
         }
 
 

@@ -323,7 +323,7 @@
                             <div class="form-group" id="divDetalhes">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label col-sm-2">Código</label>
+                                        <label class="control-label col-sm-2">Código<span class="text-danger">*</span></label>
                                         <div class="col-sm-10">
                                             <input id="txtord_codigo" name="txtord_codigo" maxlength="20"
                                                    style="margin-left: -3px !important;"
@@ -373,14 +373,14 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4">Status</label>
+                                        <label class="control-label col-sm-4">Status<span class="text-danger">*</span></label>
                                         <div class="col-sm-8">
                                             @Html.DropDownList("cmbStatusOS", null, "-- Selecione --", new { @class = "form-control " })
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4">Aberta Por</label>
+                                        <label class="control-label col-sm-4">Aberta Por<span class="text-danger">*</span></label>
                                         <div class="col-sm-8">
                                             <input id="txtord_aberta_por" name="txtord_aberta_por" maxlength="100"
                                                    class="form-control" readonly />
@@ -388,7 +388,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">Responsável DER</label></nobr>
+                                        <nobr><label class="control-label col-sm-4">Responsável DER<span class="text-danger">*</span></label></nobr>
                                         <div class="col-sm-8">
                                             @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
                                             <input id="txtord_responsavel_der" name="txtord_responsavel_der" maxlength="100"
@@ -398,7 +398,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">Responsável Fiscalização</label></nobr>
+                                        <nobr><label class="control-label col-sm-4">Responsável Fiscalização<span class="text-danger">*</span></label></nobr>
                                         <div class="col-sm-8">
                                             @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
                                             <input id="txtord_responsavel_fiscalizacao" name="txtord_responsavel_fiscalizacao" maxlength="100"
@@ -408,7 +408,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <nobr> <label class="control-label col-sm-4">Responsável Execução</label></nobr>
+                                        <nobr> <label class="control-label col-sm-4">Responsável Execução<span class="text-danger">*</span></label></nobr>
                                         <div class="col-sm-8">
                                             @*@Html.DropDownList("cmbResponsavelDER", null, "-- Selecione --", new { @class = "form-control " })*@
                                             <input id="txtord_responsavel_execucao" name="txtord_responsavel_execucao" maxlength="100"
@@ -468,7 +468,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">OS de Orçamento</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_OSOrcamento" name="txtord_OSOrcamento" class="form-control" placeholder="OS de Orçamento" maxlength="20" />
+                                            <input id="txtord_OSOrcamento" name="txtord_OSOrcamento" class="form-control" placeholder="OS de Orçamento" maxlength="10" />
                                         </div>
                                     </div>
 
