@@ -62,7 +62,7 @@ function verifica() {
         $('#codDer').hide();
     }
     else if ($('#fonte_ad').val() === "2") {
-        $('#codDer').show();
+        $('#codDer').hide();
     }
     else if ($('#fonte_ad').val() === "3") {
         $('#codDer').show();
@@ -103,7 +103,6 @@ function GetAll() {
                 '<th style="width:70px; text-align:center">Unidade</th>' +
                 '<th style="width:70px; text-align:center">Código TPU</th>' +
                 '<th style="width:70px; text-align:center">Fonte</th>' +
-                '<th style="width:70px; text-align:center">Código na Fonte</th>' +
                 '<th style="width:70px; text-align:center">Preço Unitátio</th>' +
                 '<th style="width:70px; text-align:center">Data Base</th>' +
                 '<th style="width:70px; text-align:center">Opções</th>' +
@@ -122,7 +121,7 @@ function GetAll() {
                 } else if (item.fon_id === 3) {
                     fonte = "Outros";
                 }
-                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + item.rpt_descricao + '">' + item.rpt_descricao + '</td><td tyle="text-align:center">' + item.unidade + '</td><td tyle="text-align:center" >' + item.rtu_codigo_tpu + ' </td><td style="text-align:center">' + fonte + '</td><td tyle="text-align:center" >' + item.rtu_fonte_txt + '</td><td style="text-align:center">' + item.rtu_preco_unitario.toLocaleString("pt-BR") + '</td><td style="text-align:center">' + item.rtu_data_base + '</td><td style="text-align:center"><a id="btn_desativa_' + i + '" href="#" onclick="return Desativar(\'' + item.rtu_id + '\', 0)" title="Desativar TPU"><span class="glyphicon glyphicon-ok text-success"></span></a><a id="btn_ativa_' + i + '" href="#" onclick="return Ativar(\'' + item.rtu_id + '\', 1)" title="Ativar TPU"><span class="glyphicon glyphicon-remove text-danger"></span></a>  <a href="#" onclick="return Editar(\'' + item.rtu_id + '\', \'' + item.rpt_id + '\', \'' + item.rtu_preco_unitario + '\',\'' + item.rtu_fonte_txt + '\',\'' + item.rtu_codigo_tpu + '\',  \'' + item.datastring + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
+                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + item.rpt_descricao + '">' + item.rpt_descricao + '</td><td tyle="text-align:center">' + item.unidade + '</td><td tyle="text-align:center" >' + item.rtu_codigo_tpu + ' </td><td style="text-align:center">' + fonte + '</td><td style="text-align:center">' + item.rtu_preco_unitario.toLocaleString("pt-BR") + '</td><td style="text-align:center">' + item.rtu_data_base + '</td><td style="text-align:center"><a id="btn_desativa_' + i + '" href="#" onclick="return Desativar(\'' + item.rtu_id + '\', 0)" title="Desativar TPU"><span class="glyphicon glyphicon-ok text-success"></span></a><a id="btn_ativa_' + i + '" href="#" onclick="return Ativar(\'' + item.rtu_id + '\', 1)" title="Ativar TPU"><span class="glyphicon glyphicon-remove text-danger"></span></a>  <a href="#" onclick="return Editar(\'' + item.rtu_id + '\', \'' + item.rpt_id + '\', \'' + item.rtu_preco_unitario + '\',\'' + item.rtu_fonte_txt + '\',\'' + item.rtu_codigo_tpu + '\',  \'' + item.datastring + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
                 if (item.rtu_ativo === true) {
                     $('#btn_ativa_' + i + '').hide();
                     $('#btn_desativa_' + i + '').show();

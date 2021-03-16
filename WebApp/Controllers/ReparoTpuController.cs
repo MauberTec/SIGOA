@@ -89,7 +89,7 @@ namespace WebApp.Controllers
             Gerais saida = new Gerais();
             List<tpu> retorno = saida.get_TPUs(x_ano, fase, x_mes, onerado.Trim() == "" ? "" : onerado,codItem);
             var list = retorno.FirstOrDefault(x => x.CodSubItem == codItem);
-            if(retorno.Count > 0)
+            if(list != null)
             {
                 price = retorno.FirstOrDefault().PrecoUnitario;
             }

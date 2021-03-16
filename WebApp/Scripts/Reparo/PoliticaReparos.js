@@ -1,5 +1,5 @@
-﻿preencheRep();
-preencheLegenda();
+﻿preencheRep_in();
+preencheLegenda_in();
 GetAll($('#GridHome'));
 
 function OpenModalReparo() {
@@ -10,6 +10,13 @@ function OpenModalReparo() {
 
 function closeModalReparo() {
     $("#modalNovo").modal('hide');
+    if ($('#cmdLegAdd').val() == "0-0") {
+        GetAll();
+    }
+    else {
+        Buscar();
+    }
+
 }
 
 function preencheLegenda() {
@@ -20,15 +27,28 @@ function preencheLegenda() {
         success: function (data) {
             $('#cmdLegAdd').empty();
             $('#cmdLegAdd').append($('<option selected></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $.each(data, function (i, item) {
+                $('#cmdLegAdd').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
+            });
+        }
+    });
+}
+
+function preencheLegenda_in() {
+    $.ajax({
+        url: '/PoliticaReparos/PreencheLeg',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
             $('#cmdLegAdd_in').empty();
             $('#cmdLegAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
-                $('#cmdLegAdd').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
                 $('#cmdLegAdd_in').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
             });
         }
     });
 }
+
 
 function preencheAnomalia() {
     $.ajax({
@@ -146,6 +166,21 @@ function preencheCausa_in() {
     });
 }
 
+function preencheRep_in() {
+    $.ajax({
+        url: '/PoliticaReparos/PreencheRep',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
+            $('#cmbReparoAdd_in').empty();
+            $('#cmbReparoAdd_in').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
+            $.each(data, function (i, item) {
+                $('#cmbReparoAdd_in').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
+            });
+        }
+    });
+}
+
 function preencheRep() {
     $.ajax({
         url: '/PoliticaReparos/PreencheRep',
@@ -154,18 +189,15 @@ function preencheRep() {
         success: function (data) {
             $('#cmbReparoAdd').empty();
             $('#cmbReparoAdd').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-            $('#cmbReparoAdd_in').empty();
-            $('#cmbReparoAdd_in').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
             $.each(data, function (i, item) {
                 $('#cmbReparoAdd').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
-                $('#cmbReparoAdd_in').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
             });
         }
     });
 }
 
 function GetAll() {
-
+    $('#msg').val('Aguarde...');
     $.ajax({
         url: '/PoliticaReparos/PreencheRepAll',
         type: "Get",
@@ -190,6 +222,7 @@ function GetAll() {
             $.each(data, function (i, valor) {
                 $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
             });
+            $('#msg').hide();
             paginar();  
             
         }
@@ -256,11 +289,10 @@ function btnAddReparo() {
     ];
 
     function sortfunction(a, b) {
-        if (a.Qtd < b.Qtd) return -1;
-        if (a.Qtd > b.Qtd) return 1;
-        return 0;
+        return (a.Qtd > b.Qtd) ? 1 : ((b.Qtd > a.Qtd) ? -1 : 0);
     }   
     Grupo.sort(sortfunction);
+    
     if (Grupo[0].Nome == 'Alerta') {
         for (var a = 0; a < IdAlerta.length; a++) {
             if (Grupo[1].Nome == 'Causa') {
@@ -283,6 +315,29 @@ function btnAddReparo() {
             }
         }
     }
+    if (Grupo[0].Nome == 'Alerta') {
+        for (var a = 0; a < IdAlerta.length; a++) {
+            if (Grupo[1].Nome == 'Anomalia') {
+                console.log(IdAlerta);
+                for (var an = 0; an < CodAnomalia.length; an++) {
+                    for (var c = 0; c < IdCausa.length; c++) {
+                        $.ajax({
+                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            type: "Post",
+                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            dataType: "JSON",
+                            success: function (data) {
+                              
+                            },
+                            error: function (erro) {
+
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
     if (Grupo[0].Nome == 'Causa') {
         for (var c = 0; c < IdCausa.length; c++) {
             if (Grupo[1].Nome == 'Alerta') {
@@ -298,6 +353,28 @@ function btnAddReparo() {
                             },
                             error: function (erro) {
                                
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+    if (Grupo[0].Nome == 'Causa') {
+        for (var c = 0; c < IdCausa.length; c++) {
+            if (Grupo[1].Nome == 'Anomalia') {
+                for (var an = 0; an < CodAnomalia.length; an++) {
+                    for (var a = 0; a < IdAlerta.length; a++) {
+                        $.ajax({
+                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            type: "Post",
+                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            dataType: "JSON",
+                            success: function (data) {
+
+                            },
+                            error: function (erro) {
+
                             }
                         });
                     }
@@ -349,11 +426,22 @@ function btnAddReparo() {
             }
         }
     }
-
+   
     $('#divAlertaAdd').empty();
     $('#cmdCausaAdd').empty();
     $('#divCodAnomaliaUp').empty();
+    $("#divAlertaAdd").empty();
+
+    $('#cmbReparoAdd').val("0-0").change();
+    $('#cmdLegAdd').val("0-0").change();
+   
     alert('Reparos incluido com sucesso!');
+    if ($('#cmdLegAdd').val() == "0-0") {
+        GetAll();
+    }
+    else {
+        Buscar();
+    }
 }
 
 function DeleteReparo(rpp_id) {
@@ -373,7 +461,9 @@ function DeleteReparo(rpp_id) {
                 type: "Post",
                 dataType: "JSON",
                 success: function (data) {
-                    alert('Reparo deletado com sucesso!');                   
+                    alert('Reparo deletado com sucesso!'); 
+                    $('#DivGrid').empty();
+                    Buscar();
                 },
                 error: function (erro) {
                     alert(erro);
