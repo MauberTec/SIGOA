@@ -6,49 +6,24 @@
 @using WebApp.Models
 
 
-@{
-    //Verifica se o usuário esta logado
-    if (Session["Usuario"] == null)
-    {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
-        Response.Redirect("~/AcessoNegado/AcessoNegado");
+
+<script src="~/Scripts/Base.js"></script>
+<script src="~/Scripts/ReparoTpu/tpu.js"></script>
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery.dataTables.min.js"></script>
+<script>
+    var selectedId_obj_id;
+
+    function btnOSInserir_onclick() {
+
+        $("#modalSalvarRegistro").modal('show');
+
     }
 
-    Usuario gUsuario = (Usuario)Session["Usuario"];
-    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
-    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(320)); // id DO MODULO ReparoTPU
-    if (permissoesDesteModulo == null)
-    {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
-        Response.Redirect("~/AcessoNegado/AcessoNegado");
-    }
-}
-@section Scripts{
-    <script>
-        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
-        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
-        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
-        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
-    </script>
-    <script src="~/Scripts/Base.js"></script>
-        <script src="~/Scripts/ReparoTpu/tpu.js"></script>
-    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery.dataTables.min.js"></script>
-    <script>
-        var selectedId_obj_id;
-
-        function btnOSInserir_onclick() {
-
-            $("#modalSalvarRegistro").modal('show');
-
-        }
-
-    </script>
-
-}
+</script>
 
 <style>
-    .element.style{
+    .element.style {
         padding-left: 5px;
     }
 </style>
@@ -60,7 +35,7 @@
                 <h1 id="titulo"></h1>
                 <div id="DivGrid">
                 </div>
-               
+
             </div>
         </div>
     </div>
@@ -107,7 +82,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Data Base:</label>
                             <div class="col-sm-8">
-                                <input type="text" id="data_ad" placeholder="Codigo" class="form-control" maxlength="10" onBlur="Intergracao()"/>
+                                <input type="text" id="data_ad" placeholder="Codigo" class="form-control" maxlength="10" onBlur="Intergracao()" />
                             </div>
                         </div>
                         <div class="form-group">
