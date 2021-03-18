@@ -1004,6 +1004,57 @@ namespace WebApp.Business
             return lstListacmbFiltroRegionais;
         }
 
+        /// <summary>
+        /// Funçao para filtrar a lista de retorno porque a busca pelo SirGeo é exata 
+        /// </summary>
+        /// <param name="targerList"></param>
+        /// <param name="filterStr"></param>
+        /// <returns>Lista Rodovia  </returns>
+        public static List<Rodovia> StartsWithStringContains(List<Rodovia> targerList, string filterStr)
+        {
+            var resultList = from resultValues in targerList
+                             where
+                                 (resultValues.rod_codigo.StartsWith(filterStr))
+                             select
+                                 resultValues;
+
+            return resultList.ToList();
+        }
+
+        /// <summary>
+        /// Preenchimento do combo Filtro Rodovias 
+        /// </summary>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbFiltroRodovias(string rod_codigo = "")
+        {
+            List<SelectListItem> lstListacmbFiltroRodovias = new List<SelectListItem>(); // lista de combo
+            List<Rodovia> lstRodovias = new Gerais().get_Rodovias(""); // lista de "Rodovias"
+
+            // filtra aqui por aproximacao porque a busca pelo SirGeo é exata
+            rod_codigo = rod_codigo.ToUpper();
+            List<Rodovia> SortedList = StartsWithStringContains(lstRodovias, rod_codigo);
+
+
+            if (lstRodovias[0].rod_id > 0)
+            {
+                foreach (var temp in SortedList)
+                {
+                    if (temp.rod_codigo.Trim() != "")
+                    {
+                        string txt = temp.rod_codigo + " (" + temp.rod_descricao + ")";
+                        lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = txt, Value = temp.rod_id.ToString() });
+                    }
+                }
+            }
+            else
+            {
+                lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = SortedList[0].rod_codigo, Value = "-1"});
+            }
+
+            return lstListacmbFiltroRodovias;
+        }
+
+
     }
 
 }

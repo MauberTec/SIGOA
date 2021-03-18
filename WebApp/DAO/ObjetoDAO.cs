@@ -1759,6 +1759,43 @@ namespace WebApp.DAO
             }
         }
 
+        /// <summary>
+        /// Lista de Objetos Priorizados
+        /// </summary>
+        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
+        /// <param name="Regionais">Filtro por Regional</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
+        /// <returns>DataSet</returns>
+        public System.Data.DataSet ObjPriorizacao_Ds(string CodRodovia, string Regionais, int? somenteINSP_ESPECIAIS = 0)
+        {
+            try
+            {
+                DataSet ds = new System.Data.DataSet();
+                SqlDataAdapter adapter = new SqlDataAdapter();
+
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_OBJETOS_PRIORIZACAO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
+                    com.Parameters.AddWithValue("@Regionais", Regionais);
+                    com.Parameters.AddWithValue("@somenteINSP_ESPECIAIS", somenteINSP_ESPECIAIS);
+
+                    adapter.SelectCommand = com;
+                    adapter.Fill(ds);
+
+                    return ds;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
 
 
     }

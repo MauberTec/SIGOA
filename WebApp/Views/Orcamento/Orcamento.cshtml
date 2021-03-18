@@ -376,7 +376,6 @@
 
                 <input type="checkbox" id="chkMostrarInativos" style="margin-left: 20px; vertical-align:sub;" value="2" onchange="btnMostrarInativos_onclick(this.checked);">
                 <label for="chkMostrarInativos" style="padding-left: 4px;vertical-align:sub;">Mostrar Inativos</label>
-                <p id="demo"></p>
                 <br>
             </div>
         </div>
@@ -1174,7 +1173,6 @@
 
                     // remove do array
                     orc_ids_selecionados.splice(index, 1);
-                    document.getElementById("demo").innerHTML = orc_ids_selecionados;
 
                     // recarrega os itens que foram deslocados
                     for (var aux = index; aux < orc_ids_selecionados.length; aux++) {
@@ -1191,7 +1189,6 @@
         else
             $("#lblSelecionados").html("");
 
-        document.getElementById("demo").innerHTML = orc_ids_selecionados ;
 
         return false;
     }
