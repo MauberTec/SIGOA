@@ -45,7 +45,6 @@ namespace WebApp.DAO
                 }
             }
         }
-
         /// <summary>
         /// Retorna o nome do banco de dados da connectionstring
         /// </summary>
