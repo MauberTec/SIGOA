@@ -54,6 +54,10 @@ namespace WebApp.Models
         /// rtu_ativo
         /// </summary>
         public Boolean rtu_ativo { get; set; }
+        /// <summary>
+        /// unidade
+        /// </summary>
+        public string unidade { get; set; }
 
     }
 }

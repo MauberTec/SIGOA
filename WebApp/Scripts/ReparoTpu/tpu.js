@@ -2,7 +2,8 @@
 
 GetAll();
 
-function Editar(id, rpt_id, valor, fonte_txt, codigo, datastring) {
+function Editar(id, rpt_id, valor, fonte_txt, codigo, datastring, fonId) {
+    
     $("#modalEdit").modal('show');
     $('#rtu_id').val(id);
     $('#reparo_ad').val(rpt_id).change();
@@ -10,7 +11,8 @@ function Editar(id, rpt_id, valor, fonte_txt, codigo, datastring) {
     $('#fonteTxt_ad').val(fonte_txt);
     $('#codigo_ad').val(codigo);
     $('#data_ad').val(datastring.substring(0, 10));
-
+    $('#fonte_ad').val(fonId).change();
+    verifica();
     Intergracao();
 
 }
@@ -101,7 +103,7 @@ function GetAll() {
                 '<tr>' +
                 '<th style="width:340px; text-align:center">Reparo</th>' +
                 '<th style="width:70px; text-align:center">Unidade</th>' +
-                '<th style="width:70px; text-align:center">Código TPU</th>' +
+                '<th style="width:100px; text-align:center">Código TPU</th>' +
                 '<th style="width:70px; text-align:center">Fonte</th>' +
                 '<th style="width:70px; text-align:center">Preço Unitátio</th>' +
                 '<th style="width:70px; text-align:center">Data Base</th>' +
@@ -114,14 +116,14 @@ function GetAll() {
 
             $.each(data, function (i, item) {               
                 var fonte = "";
-                if (item.fon_id === 2) {
+                if (item.fon_id === 1) {
                     fonte = "Maubertec";
                 } else if (item.fon_id === 2) {
                     fonte = "DER";
                 } else if (item.fon_id === 3) {
-                    fonte = "Outros";
+                    fonte = "EXTERNA";
                 }
-                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + item.rpt_descricao + '">' + item.rpt_descricao + '</td><td tyle="text-align:center">' + item.unidade + '</td><td tyle="text-align:center" >' + item.rtu_codigo_tpu + ' </td><td style="text-align:center">' + fonte + '</td><td style="text-align:center">' + item.rtu_preco_unitario.toLocaleString("pt-BR") + '</td><td style="text-align:center">' + item.rtu_data_base + '</td><td style="text-align:center"><a id="btn_desativa_' + i + '" href="#" onclick="return Desativar(\'' + item.rtu_id + '\', 0)" title="Desativar TPU"><span class="glyphicon glyphicon-ok text-success"></span></a><a id="btn_ativa_' + i + '" href="#" onclick="return Ativar(\'' + item.rtu_id + '\', 1)" title="Ativar TPU"><span class="glyphicon glyphicon-remove text-danger"></span></a>  <a href="#" onclick="return Editar(\'' + item.rtu_id + '\', \'' + item.rpt_id + '\', \'' + item.rtu_preco_unitario + '\',\'' + item.rtu_fonte_txt + '\',\'' + item.rtu_codigo_tpu + '\',  \'' + item.datastring + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
+                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + item.rpt_descricao + '">' + item.rpt_descricao + '</td><td tyle="text-align:center">' + item.unidade + '</td><td tyle="text-align:center" >' + item.rtu_codigo_tpu + ' </td><td style="text-align:center">' + fonte + '</td><td style="text-align:center">' + item.rtu_preco_unitario.toLocaleString("pt-BR") + '</td><td style="text-align:center">' + item.rtu_data_base + '</td><td style="text-align:center"><a id="btn_desativa_' + i + '" href="#" onclick="return Desativar(\'' + item.rtu_id + '\', 0)" title="Desativar TPU"><span class="glyphicon glyphicon-ok text-success"></span></a><a id="btn_ativa_' + i + '" href="#" onclick="return Ativar(\'' + item.rtu_id + '\', 1)" title="Ativar TPU"><span class="glyphicon glyphicon-remove text-danger"></span></a>  <a href="#" onclick="return Editar(\'' + item.rtu_id + '\', \'' + item.rpt_id + '\', \'' + item.rtu_preco_unitario + '\',\'' + item.rtu_fonte_txt + '\',\'' + item.rtu_codigo_tpu + '\',  \'' + item.datastring + '\', \'' + item.fon_id + '\')" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a></td></tr>'));
                 if (item.rtu_ativo === true) {
                     $('#btn_ativa_' + i + '').hide();
                     $('#btn_desativa_' + i + '').show();
