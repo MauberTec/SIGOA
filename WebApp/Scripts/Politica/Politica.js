@@ -1,8 +1,14 @@
 ﻿GetConserva();
 GetGrupos();
-GetVariavel();
-GetAlerta();
+GetVariavelAll();
 GetGetBuscaTodos();
+GetAlertaEdit();
+function OpenComboModal() {
+    $('#modalSalvarRegistro').modal('show');
+    GetGrupos_Ad();
+    GetConserva_Ad();
+    GetAlerta();
+}
 
 function GetConserva() {
     $.ajax({
@@ -11,17 +17,52 @@ function GetConserva() {
         dataType: "JSON",
         success: function (data) {
 
-            $('#ComboConserva2').empty();
             $('#ComboConserva').empty();
             $("#ComboConserva").append($('<option value="0">--Selecione--</option>'));
             $.each(data, function (i, item) {
 
                 $("#ComboConserva3").append($('<option value=' + item.cot_id + '>' + item.cot_descricao + '  </option>'));
-                $("#ComboConserva2").append($('<option value=' + item.cot_id + '>' + item.cot_descricao + '  </option>'));
                 $("#ComboConserva").append($('<option value=' + item.cot_id + '>' + item.cot_descricao + '  </option>'));
 
             });
             //$('select[multiple]').multiselect();
+        }
+
+    });
+}
+
+function GetConserva_Ad() {
+    $.ajax({
+        url: '/PoliticaConserva/GConserva',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
+
+            $('#ComboConserva2').empty();
+            $("#ComboConserva2").append($('<option value="0">--Selecione--</option>'));
+            $.each(data, function (i, item) {
+                $("#ComboConserva2").append($('<option value=' + item.cot_id + '>' + item.cot_descricao + '  </option>'));
+
+            });
+            //$('select[multiple]').multiselect();
+        }
+
+    });
+}
+function GetGrupos_Ad() {
+    $.ajax({
+        url: '/PoliticaConserva/GGrupo',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
+
+            $('#ComboGrupo_ad').empty();
+            $("#ComboGrupo_ad").append($('<option value="0">--Selecione--</option>'));
+            $.each(data, function (i, item) {
+
+                $("#ComboGrupo_ad").append($('<option value=' + item.tip_id + '>' + item.tip_nome + '  </option>'));
+
+            });
         }
 
     });
@@ -33,26 +74,15 @@ function GetGrupos() {
         type: "Get",
         dataType: "JSON",
         success: function (data) {
-
-            $('#divCodAnomaliaUp').empty();
             $('#ComboGrupo').empty();
+            $('#ComboGrupo3').empty();
             $("#ComboGrupo").append($('<option value="0">--Selecione--</option>'));
             $.each(data, function (i, item) {
-                var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                tagchk = tagchk.replace("idXXX", "chk" + i);
-                tagchk = tagchk.replace("nameXXX", "chk" + i);
-                tagchk = tagchk.replace("valueXXX", item.tip_id);
 
-                var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.tip_id + '-' + item.tip_nome);
-
-                $("#ComboGrupo2").append(tagchk + taglbl);
                 $("#ComboGrupo").append($('<option value=' + item.tip_id + '>' + item.tip_nome + '  </option>'));
                 $("#ComboGrupo3").append($('<option value=' + item.tip_id + '>' + item.tip_nome + '  </option>'));
-
-            });
-            //$('select[multiple]').multiselect();
+                
+            });            
         }
 
     });
@@ -60,7 +90,7 @@ function GetGrupos() {
 
 function GetVariavel() {
     $.ajax({
-        url: '/PoliticaConserva/GVariavel',
+        url: '/PoliticaConserva/GVariavel?tipId=' + $('#ComboGrupo_ad').val(),
         type: "Get",
         dataType: "JSON",
         success: function (data) {
@@ -76,9 +106,30 @@ function GetVariavel() {
 
                 var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
                 taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.cov_id + '-' + item.cov_nome);
+                taglbl = taglbl.replace("TextoXXX", item.cov_nome);
 
                 $("#ComboVariavel2").append(tagchk + taglbl);
+                $("#ComboVariavel").append($('<option value=' + item.cov_id + '>' + item.cov_nome + '  </option>'));
+                $("#ComboVariavel3").append($('<option value=' + item.cov_id + '>' + item.cov_nome + '  </option>'));
+
+            });
+            GetAlerta();
+        }
+
+    });
+}
+
+function GetVariavelAll() {
+    $.ajax({
+        url: '/PoliticaConserva/GVariavelAll',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
+
+            $('#ComboVariavel').empty();
+            $("#ComboVariavel").append($('<option value="0">--Selecione--</option>'));
+            $.each(data, function (i, item) {
+                
                 $("#ComboVariavel").append($('<option value=' + item.cov_id + '>' + item.cov_nome + '  </option>'));
                 $("#ComboVariavel3").append($('<option value=' + item.cov_id + '>' + item.cov_nome + '  </option>'));
 
@@ -95,7 +146,8 @@ function GetAlerta() {
         type: "Get",
         dataType: "JSON",
         success: function (data) {
-
+            $("#ComboAlerta2").empty();
+            $("#ComboAlerta3").empty();
             $('#divCodAnomaliaUp').empty();
             $.each(data, function (i, item) {
                 var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
@@ -105,7 +157,7 @@ function GetAlerta() {
 
                 var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
                 taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.ale_id + '-' + item.ale_descricao);
+                taglbl = taglbl.replace("TextoXXX", item.ale_descricao);
 
                 $("#ComboAlerta2").append(tagchk + taglbl);
                 $("#ComboAlerta3").append($('<option value=' + item.ale_id + '>' + item.ale_descricao + '  </option>'));
@@ -117,10 +169,22 @@ function GetAlerta() {
     });
 }
 
-function OpenComboModal() {
-    $('#modalSalvarRegistro').modal('show');
+function GetAlertaEdit() {
+    $.ajax({
+        url: '/PoliticaConserva/GAlerta',
+        type: "Get",
+        dataType: "JSON",
+        success: function (data) {
+            $("#ComboAlerta3").empty();
+            $('#divCodAnomaliaUp').empty();
+            $.each(data, function (i, item) {               
+                $("#ComboAlerta3").append($('<option value=' + item.ale_id + '>' + item.ale_descricao + '  </option>'));
 
+            });
+        }
+    });
 }
+
 
 function GetGetBusca() {
     var modulo = {
@@ -278,12 +342,19 @@ function btnEditSalvar_onclick() {
         dataType: "JSON",
         success: function (data) {
             if (data == 'ok') {
-                $("#modalEdit").modal('hide');
-                GetAll();
-                return false;
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Registro salvo com sucesso'
+                });
+                Recarrega();
             }
             else {
-                alert(data)
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao salvar registro'
+                });
             }
 
         },
@@ -293,21 +364,24 @@ function btnEditSalvar_onclick() {
     });
 }
 
+function Recarrega() {
+    if ($('#ComboConserva').val() != 0 || $('#ComboGrupo').val() != 0 || $('#ComboVariavel').val() != 0) {
+        GetGetBusca();
+    }
+    else {
+        GetGetBuscaTodos();
+    }
+    GetVariavelAll();
+}
+
+
 function btnAddConserva() {
     if ($('#ComboConserva2').val() == null) {
         alert('Selecione Conserva');
         return;
     }
 
-    // cria lista dos IDs de Cod Anomalia
-    var ComboGrupo2 = [];
-    $('#ComboGrupo2 input:checked').each(function () {
-        ComboGrupo2.push($(this).attr('value'));
-    });
-    if (ComboGrupo2 == '') {
-        alert('Selecione Grupo');
-        return;
-    }
+   
 
     //cria lista de Ids do Causa
     var ComboVariavel2 = [];
@@ -330,7 +404,6 @@ function btnAddConserva() {
     }
     var Grupo = [
         { Nome: 'Alerta', Qtd: ComboAlerta2.length, Ids: [ComboAlerta2] },
-        { Nome: 'Grupo', Qtd: ComboGrupo2.length, Ids: [ComboGrupo2] },
         { Nome: 'Variavel', Qtd: ComboVariavel2.length, Ids: [ComboVariavel2] }
     ];
 
@@ -340,77 +413,44 @@ function btnAddConserva() {
         return 0;
     }
     Grupo.sort(sortfunction);
-    if (Grupo[0].Nome == 'Alerta') {
-       
+    if (Grupo[0].Nome == 'Alerta') {       
         for (var a = 0; a < ComboAlerta2.length; a++) {
-            if (Grupo[1].Nome == 'Grupo') {
-                for (var g = 0; g < ComboGrupo2.length; g++) {
-                    for (var va = 0; va < ComboVariavel2.length; va++) {
-                        $.ajax({
-                            url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + ComboGrupo2[g] + '&alerta=' + ComboAlerta2[a] + '&cotid=' + $('#ComboConserva2').val() + '&covid=' + ComboVariavel2[va] + '&copid=0',
-                            type: "Post",
-                            dataType: "JSON"
-                        });
-                    }
-                }
+            for (var va = 0; va < ComboVariavel2.length; va++) {
+                $.ajax({
+                    url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + $('#ComboGrupo_ad').val() + '&alerta=' + ComboAlerta2[a] + '&cotid=' + $('#ComboConserva2').val() + '&covid=' + ComboVariavel2[va] + '&copid=0',
+                    type: "Post",
+                    dataType: "JSON"
+                });
             }
         }
     }
-    if (Grupo[0].Nome == 'Grupo') {
-      
-        for (var g = 0; g < ComboGrupo2.length; g++) {
-            if (Grupo[1].Nome == 'Alerta') {
-                for (var a = 0; a < ComboAlerta2.length; a++) {
-                    for (var va = 0; va < ComboVariavel2.length; va++) {
-                        $.ajax({
-                            url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + ComboGrupo2[g] + '&alerta=' + ComboAlerta2[a] + '&cotid=' + $('#ComboConserva2').val() + '&covid=' + ComboVariavel2[va] + '&copid=0',
-                            type: "Post",                            
-                            dataType: "JSON"
-                        });
-                    }
-                }
+    if (Grupo[0].Nome == 'Variavel') {
+        for (var va = 0; va < ComboVariavel2.length; va++) {
+            for (var a = 0; a < ComboAlerta2.length; a++) {
+                $.ajax({
+                    url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + $('#ComboGrupo_ad').val() + '&alerta=' + ComboAlerta2[a] + '&cotid=' + $('#ComboConserva2').val() + '&covid=' + ComboVariavel2[va] + '&copid=0',
+                    type: "Post",
+                    dataType: "JSON"
+                });
             }
         }
-        if (Grupo[0].Nome == 'Variavel') {
-            for (var va = 0; va < ComboVariavel2.length; va++) {
-                if (Grupo[1].Nome == 'Alerta') {
-                    for (var a = 0; a < ComboAlerta2.length; a++) {
-                        for (var g = 0; g < ComboGrupo2.length; g++) {
-                            $.ajax({
-                                url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + ComboGrupo2[g] + '&alerta=' + ComboAlerta2[a] + '&cotid=' + $('#ComboConserva2').val() + '&covid=' + ComboVariavel2[va] + '&copid=0',
-                                type: "Post",                                
-                                dataType: "JSON"
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
-        if (Grupo[0].Nome == 'Variavel') {
-            for (var va = 0; va < ComboVariavel2.length; va++) {
-                if (Grupo[1].Nome == 'Grupo') {
-                    for (var g = 0; g < ComboGrupo2.length; g++) {
-                        for (var a = 0; a < ComboAlerta2.length; a++) {
-                            $.ajax({
-                                url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + ComboGrupo2[g] + '&alerta=' + ComboAlerta2[a] + '&cotid=' + $('#ComboConserva2').val() + '&covid=' + ComboVariavel2[va] + '&copid=0',
-                                type: "Post",
-                                dataType: "JSON"
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
+    $('#ComboConserva2').val("0").change();
+    $('#ComboGrupo_ad').val("0").change();
+    $('#ComboAlerta2').empty();
+    $('#ComboVariavel2').empty();
+    swal({
+        type: 'success',
+        title: 'Sucesso',
+        text: 'Registro incluido com sucesso'
+    });
     $('#modalSalvarRegistro').modal('hide');
-    alert('Conserva incluida com sucesso!');
-    return;
+    Recarrega();
+    
 }
 
-function btnAditarSalvarConserva() {
+function btnEditarSalvarConserva() {
     $.ajax({
         url: '/PoliticaConserva/ConservaTipoSalvar?tipid=' + $('#ComboGrupo3').val() + '&alerta=' + $('#ComboAlerta3').val() + '&cotid=' + $('#ComboConserva3').val() + '&covid=' + $('#ComboVariavel3').val() + '&copid=' + $('#lblCopId').val() ,
         type: "Post",        
@@ -442,7 +482,13 @@ function Deleta(id) {
                 type: "Post",
                 dataType: "JSON",
                 success: function (data) {
-                    alert('Conserva excluida com sucesso ')
+                    Recarrega();
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Registro deletado com sucesso'
+                    });
+                   
                 },
                 error: function (erro) {
                     alert(erro);

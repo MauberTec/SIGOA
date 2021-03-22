@@ -72,8 +72,7 @@
                         <div class="col-sm-3" id="cmbSub2Div">
                             <div>
                                 <label class="control-label">Grupo de Objetos:</label>
-                                <select class="form-control" id="ComboGrupo"
-                                        o>
+                                <select class="form-control" id="ComboGrupo">
                                 </select>
                             </div>
 
@@ -136,28 +135,16 @@
                 <br />
                 <div class="modal-body form-group">
                     <div class="col-sm-12">
-                        <div id="Ficha2_divSubdivisao1" class="form-group">
-                            <label class="control-label col-sm-3">Conserva</label>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Grupo de Objetos</label>
                             <div class="col-sm-8">
-                                <select class="form-control" id="ComboConserva2">
-                                    
+                                <select class="form-control" id="ComboGrupo_ad" onchange="GetVariavel()">
                                 </select>
                             </div>
                         </div>
 
-                        <div class="form-group" >
-                            <label class="control-label col-sm-3">Grupo de Objetos</label>
-                            <div class="col-sm-8">
-                                <div id="ComboGrupo2" class="control-label"
-                                     style="height:100px; overflow-y:auto;
-                                        border:solid 1px lightgray; border-radius:4px !important;
-                                        text-align:left; padding: 6px;">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label class="control-label col-sm-3">Variavel</label>
                             <div class="col-sm-8">
                                 <div id="ComboVariavel2" class="control-label"
@@ -168,19 +155,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label class="control-label col-sm-3">Alerta</label>
                             <div class="col-sm-8">
                                 <div id="ComboAlerta2" class="control-label"
                                      style="height:100px; overflow-y:auto;
                                         border:solid 1px lightgray; border-radius:4px !important;
                                         text-align:left; padding: 6px;">
-
                                 </div>
-
                             </div>
-                        </div>                       
-                        <hr style="width:100%" />                     
+                        </div>
+                        <div id="Ficha2_divSubdivisao1" class="form-group">
+                            <label class="control-label col-sm-3">Conserva</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ComboConserva2">
+                                </select>
+                            </div>
+                        </div>
+                        <hr style="width:100%" />
 
                     </div>
                 </div>
@@ -239,7 +231,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="col-md-3 col-md-offset-4">
-                        <a id="bntEditar" name="bntEditar" onclick="return btnAditarSalvarConserva();" class="btn btn-primary btn-block btn-flat">Salvar</a>
+                        <a id="bntEditar" name="bntEditar" onclick="return btnEditarSalvarConserva();" class="btn btn-primary btn-block btn-flat">Salvar</a>
                     </div>
                 </div>
             </form>
