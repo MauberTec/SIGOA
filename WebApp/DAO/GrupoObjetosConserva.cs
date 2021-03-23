@@ -21,5 +21,6 @@ namespace WebApp.DAO
         public string ogi_id_caracterizacao_situacao { get; set; }
         public int cot_id { get; set; }
         public string  conserva { get; set; }
+        public string tip_nome { get; set; }
     }
 }

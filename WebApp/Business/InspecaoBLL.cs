@@ -88,7 +88,7 @@ namespace WebApp.Business
         /// <summary>
         ///  Nova Anomalia
         /// </summary>
-        /// <param name="id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
+        /// <param name="ian_id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
         /// <returns>int</returns>
         public int InspecaoAnomalia_Nova(int ian_id)
         {

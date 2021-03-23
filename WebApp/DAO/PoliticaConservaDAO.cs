@@ -29,7 +29,7 @@ namespace WebApp.DAO
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand("select * from tab_conserva_tipos", con);
+                    SqlCommand com = new SqlCommand("select * from tab_conserva_tipos order by cot_descricao", con);
 
                     SqlDataReader reader = com.ExecuteReader();
                     while (reader.Read())
@@ -51,17 +51,25 @@ namespace WebApp.DAO
                 throw new Exception(ex.Message);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public class Objetos
         {
+            /// <summary>
+            /// 
+            /// </summary>
             public int tip_id { get; set; }
+            /// <summary>
+            /// 
+            /// </summary>
             public string tip_nome { get; set; }
         }
 
         /// <summary>
         /// Conserva
         /// </summary>
-        public List<tab_conserva_variaveis> GetVariavel()
+        public List<tab_conserva_variaveis> GetVariavel(int tipId)
         {
 
             try
@@ -70,7 +78,49 @@ namespace WebApp.DAO
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand("select * from tab_conserva_variaveis", con);
+                    SqlCommand com = new SqlCommand("select distinct c.cov_id, c.cov_nome, c.cov_descricao " +
+                                                    "from tab_conserva_variaveis c " +
+                                                    "inner " +
+                                                    "join tab_conserva_grupo_objeto_variaveis gr on gr.tip_id = " + tipId + " order by c.cov_nome ", con);
+
+
+              SqlDataReader reader = com.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Conserva.Add(new tab_conserva_variaveis
+                        {
+                            cov_nome = reader["cov_nome"].ToString(),
+                            cov_id = reader["cov_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["cov_id"]),                            
+                            cov_descricao = reader["cov_descricao"].ToString()
+                        });
+                    }
+                    return Conserva;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Conserva
+        /// </summary>
+        public List<tab_conserva_variaveis> GetVariavelAll()
+        {
+
+            try
+            {
+                List<tab_conserva_variaveis> Conserva = new List<tab_conserva_variaveis>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("select distinct c.cov_id, c.cov_nome, c.cov_descricao " +
+                                                    "from tab_conserva_variaveis c order by c.cov_nome ", con);
+
 
                     SqlDataReader reader = com.ExecuteReader();
                     while (reader.Read())
@@ -78,7 +128,7 @@ namespace WebApp.DAO
                         Conserva.Add(new tab_conserva_variaveis
                         {
                             cov_nome = reader["cov_nome"].ToString(),
-                            cov_id = reader["cov_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["cov_id"]),                            
+                            cov_id = reader["cov_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["cov_id"]),
                             cov_descricao = reader["cov_descricao"].ToString()
                         });
                     }
@@ -105,9 +155,12 @@ namespace WebApp.DAO
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand(@"select distinct ob.tip_id, ob.tip_nome, ob.tip_pai from tab_objeto_tipos ob
-                                                      inner join tab_conserva_grupo_objeto_variaveis obj on obj.tip_id = ob.tip_id
-                                                      where ob.tip_pai <> -1", con);
+                    SqlCommand com = new SqlCommand(@"select distinct ob.tip_nome, 
+                                                    (select top(1) tip_id from tab_objeto_tipos where tip_nome = ob.tip_nome) tip_id
+                                                    from tab_objeto_tipos ob
+                                                    inner join tab_conserva_grupo_objeto_variaveis obj on obj.tip_id = ob.tip_id
+                                                    where ob.tip_pai <> -1
+                                                    order by ob.tip_nome", con);
 
                     SqlDataReader reader = com.ExecuteReader();
                     while (reader.Read())
@@ -258,6 +311,9 @@ namespace WebApp.DAO
             ale_id = ale[0];
             ale_codigo = ale[1];
 
+            string query = "insert into tab_conserva_politica (cop_id,tip_id,cov_id,ogi_id_caracterizacao_situacao,cot_id,cop_criado_por) " +
+                           " values (" + model.cop_id + "," + model.tip_id + "," + model.cov_id + ",'" + model.ogi_id_caracterizacao_situacao + "'," + model.cot_id + ",4 )";
+
             using (SqlConnection con = new SqlConnection(new Conexao().strConn))
             {
                 try
@@ -276,12 +332,10 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@cop_id", model.cop_id);
                     com.Parameters.AddWithValue("@tip_id", model.tip_id);
-                    com.Parameters.AddWithValue("@cov_id", model.cop_id );
+                    com.Parameters.AddWithValue("@cov_id", model.cov_id );
                     com.Parameters.AddWithValue("@ogi_id_caracterizacao_situacao", ale_id);
                     com.Parameters.AddWithValue("@cot_id", model.cot_id);
                     com.Parameters.AddWithValue("@cop_criado_por", 4);
-                    com.Parameters.AddWithValue("@ale_id", ale_id);
-                    com.Parameters.AddWithValue("@ale_codigo", ale_codigo);
                     com.ExecuteScalar();
                     int id = Convert.ToInt32(p_return.Value);
                     response = "0";

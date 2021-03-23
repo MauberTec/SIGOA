@@ -28,9 +28,18 @@ namespace WebApp.Controllers
         /// <summary>
         /// cmbSub2
         /// </summary>
-        public JsonResult GVariavel()
+        public JsonResult GVariavel(int tipId)
         {
-            List<tab_conserva_variaveis> j = new PoliticaConservaDAO().GetVariavel();
+            List<tab_conserva_variaveis> j = new PoliticaConservaDAO().GetVariavel(tipId);
+            return Json(j, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GVariavelAll()
+        {
+            List<tab_conserva_variaveis> j = new PoliticaConservaDAO().GetVariavelAll();
             return Json(j, JsonRequestBehavior.AllowGet);
         }
 
