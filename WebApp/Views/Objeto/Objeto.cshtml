@@ -445,6 +445,7 @@
                                     <td style="display:none;" id="tdTxtCodigo">
                                         <input id="txtcodigo" name="txtcodigo" style="width:60px; margin-right: 10px; margin-top: -8px;"
                                                onkeyup="txtcodigo_onKeyUp()"
+                                               onblur="txtcodigo_onblur()"
                                                class="form-control"
                                                maxlength="7"
                                                autocomplete="off" />
@@ -457,7 +458,8 @@
                                     <td>
                                         <input id="txtCodigoAte" name="txtCodigoAte" style="width:60px; display:none; margin-right: 10px; margin-top: -8px; margin-left: 10px;"
                                                class="form-control"
-                                               maxlength="2"
+                                               onblur="txtcodigo_onblur()"
+                                               maxlength="3"
                                                autocomplete="off" />
                                     </td>
                                 </tr>
@@ -684,9 +686,9 @@
                                 <tr>
                                     <td id="tdTxtLocalizacao" style="width:60px;">
                                         <input id="txtNumeroObjeto" name="txtNumeroObjeto" class="form-control"
-                                               placeholder="00" autocomplete="off"
+                                               autocomplete="off"
                                                onkeyup="PreenchetxtCodigoDigitavel()"
-                                               maxlength="2" />
+                                               maxlength="3" />
                                     </td>
                                     <td style="width:30px;">
                                         <label id="lblAte_Novo"
@@ -695,8 +697,8 @@
                                     </td>
                                     <td>
                                         <input id="txtNumeroObjetoAte_Novo" name="txtNumeroObjetoAte_Novo"
-                                               class="form-control" placeholder="00"
-                                               maxlength="2" title="Valor Opcional para inserção em sequência"
+                                               class="form-control"
+                                               maxlength="3" title="Valor Opcional para inserção em sequência"
                                                autocomplete="off" />
                                     </td>
                                 </tr>
@@ -715,9 +717,10 @@
 
                                     <td id="tdTxtLocalizacao" style="width:60px;">
                                         <input id="txtLocalizacao" name="txtLocalizacao" style="width:60px;  margin-top: -8px; margin-left: 10px;"
-                                               class="form-control" autocomplete="off" placeholder="00"
+                                               class="form-control" autocomplete="off" 
                                                onkeyup="txtLocalizacao_onkeyup()"
-                                               maxlength="2" />
+                                                onblur="txtLocalizacao_onblur()"
+                                               maxlength="3" />
                                     </td>
                                     <td style="width:30px;">
                                         <label id="lblAte_Novo"
@@ -726,8 +729,8 @@
                                     </td>
                                     <td>
                                         <input id="txtLocalizacaoAte_Novo" name="txtLocalizacaoAte_Novo" style="margin-top: -8px;"
-                                               class="form-control" placeholder="00"
-                                               maxlength="2" title="Valor Opcional para inserção em sequência"
+                                               class="form-control"
+                                               maxlength="3" title="Valor Opcional para inserção em sequência"
                                                autocomplete="off" />
                                     </td>
                                 </tr>

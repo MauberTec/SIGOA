@@ -33,6 +33,7 @@ namespace WebApp.Controllers
                 case 5: ficha = "~/Views/Shared/_fichaInspecaoEspecialCampo.cshtml";  break;
                 case 6: ficha = "~/Views/Shared/_fichaNotificacaoOcorrencia.cshtml";  break;
                 case 7: ficha = "~/Views/Shared/_fichaInspecaoEspecialProvidencias.cshtml";  break;
+                case 8: ficha = "~/Views/Shared/_fichaInspecaoRotineiraProvidencias.cshtml";  break;
             }
 
                 return PartialView(ficha);
@@ -230,6 +231,27 @@ namespace WebApp.Controllers
 
 
 
+        /// <summary>
+        ///    Busca o valor do campo ord_indicacao_servico
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult OrdemServico_Indicacao_Servico_ListAll(int ord_id)
+        {
+            return Json(new { data = new OrdemServicoBLL().OrdemServico_Indicacao_Servico_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///    Altera os dados da Aba Indicacao de Servico no Banco
+        /// </summary>
+        /// <param name="ord_id">Id do OrdemServico Selecionado</param>
+        /// <param name="ord_indicacao_servico">Texto do campo Indicaçao de serviço</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServico_Indicacao_Servico_Salvar(int ord_id, string ord_indicacao_servico)
+        {
+            return Json(new OrdemServicoBLL().OrdemServico_Indicacao_Servico_Salvar(ord_id, ord_indicacao_servico), JsonRequestBehavior.AllowGet);
+        }
 
 
         // *************** TIPO DE Ordem de Servico  *************************************************************

@@ -13,13 +13,13 @@
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
-        ' <td class="borderLeft " ></td> ' +
+   //     ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft  borderRight" ></td> ' +
     ' </tr>';
 
     var linhaCabecalhoProvidencia = ' <tr id="trFicha4_PROVIDENCIAS_ian_id_ZZZ" > ' +
-        ' <td class="borderLeft borderTop borderBottom borderRight cabecalhos_providencias" colspan="17" >' +
+        ' <td class="borderLeft borderTop borderBottom borderRight cabecalhos_providencias" colspan="16" >' +
             '<label class="lblsBold" style="vertical-align: middle;" id="lbl_apt_id_ZZZ">lbl_apt_descricao_VVV</label > ' +
         '<button title="Imprimir" onclick="Ficha4_PROVIDENCIAS_Imprimir(apr_id_VVV)" ><i class="fa fa-print" ></i></button>  ' +
     '</td > </tr>';
@@ -41,7 +41,7 @@
 
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Foto_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Foto_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Croqui_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Croqui_VVV" /></td> ' +
-        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Desenho_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Desenho_VVV" /></td> ' +
+        //' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Desenho_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Desenho_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse borderRight"><input disabled id="txt_Obs_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Obs_VVV" /></td> ' +
         ' </tr>';
 
@@ -208,7 +208,7 @@ function preenchetblFicha4_PROVIDENCIAS() {
                         linhaAux = linhaAux.replace(/txt_AberturaMaxima_VVV/g, result.data[i].ian_abertura_maxima);
                         linhaAux = linhaAux.replace(/txt_Foto_VVV/g, result.data[i].ian_fotografia);
                         linhaAux = linhaAux.replace(/txt_Croqui_VVV/g, result.data[i].ian_croqui);
-                        linhaAux = linhaAux.replace(/txt_Desenho_VVV/g, result.data[i].ian_desenho);
+                  //      linhaAux = linhaAux.replace(/txt_Desenho_VVV/g, result.data[i].ian_desenho);
                         linhaAux = linhaAux.replace(/txt_Obs_VVV/g, result.data[i].ian_observacoes);
 
                         if (result.data[i].apt_id == 0)
@@ -365,3 +365,6 @@ function Ficha4_PROVIDENCIAS_Imprimir(apt_id) {
 
     return false;
 }
+
+
+

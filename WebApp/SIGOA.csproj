@@ -479,6 +479,7 @@
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoRotineira_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
@@ -691,6 +692,7 @@
     <Content Include="Views\ReparoTpu\Index.cshtml" />
     <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
     <Content Include="Views\Relatorio\Relatorio.cshtml" />
+    <Content Include="Views\Shared\_fichaInspecaoRotineiraProvidencias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -737,6 +739,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Reports\rptRelatorio_Priorizacao.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_Acoes.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_PerformanceOAEs.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_OS.rdlc">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

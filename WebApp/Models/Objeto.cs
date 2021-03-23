@@ -517,7 +517,7 @@ namespace WebApp.Models
         /// <summary>
         /// Id da Variável do Grupo
         /// </summary>
-        public int ogv_id { get; set; }
+        public int cgv_id { get; set; }
 
         /// <summary>
         /// Descricao da variavel
@@ -606,7 +606,7 @@ namespace WebApp.Models
         /// <summary>
         /// Campos da conserva
         /// </summary>
-        public int ogv_id { get; set; }
+        public int cgv_id { get; set; }
         /// <summary>
         /// Campos da conserva
         /// </summary>

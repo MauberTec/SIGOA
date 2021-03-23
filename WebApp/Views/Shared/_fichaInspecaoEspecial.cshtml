@@ -1124,7 +1124,7 @@
                             <td class="borderLeft borderBottom borderRight" style="border-left:none" colspan="2"><label class="lblsBold" id="lblatr_id_66">APARELHOS DE APOIO | Carga do Aparelho (max)</label><input disabled id="txt_atr_id_66" class="txtsNoWidth" /> tonelada(t)</td>
                         </tr>
                         <tr>
-                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_67">APARELHOS DE APOIO | Observação</label><input disabled id="txt_atr_id_67" class="txts" /></td>
+                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_67">APARELHOS DE APOIO | Observação</label><input disabled id="txt_atr_id_67" class="txts" maxlength="255" /></td>
                         </tr>
                     </table>
                 </div>
@@ -1387,7 +1387,7 @@
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_76">Material de Apoio</label><select disabled id="cmb_atr_id_76" class="cmbs"></select></td>
                         </tr>
                         <tr>
-                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_77">CONDIÇÕES GEOLÓGICAS - Observação</label><input disabled id="txt_atr_id_77" class="txts" /></td>
+                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_77">CONDIÇÕES GEOLÓGICAS - Observação</label><input disabled id="txt_atr_id_77" class="txts" maxlength="255" /></td>
                         </tr>
                     </table>
                 </div>
@@ -1472,102 +1472,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ENCONTROS | Observação</label><input disabled id="txt_atr_id_80" class="txts" /></td>
+                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ENCONTROS | Observação</label><input disabled id="txt_atr_id_80" class="txts" maxlength="255" /></td>
                         </tr>
-                        <tr>
-                            <td colspan="6"></td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <table id="tblFicha4_ESQUEMA_ESTRUTURAL" cellpadding="0" cellspacing="1" style="width: 100%;">
-        <tr>
-            <td class="lblTitulos" style="margin:0; padding:0;">
-                <table style="width:100%">
-                    <tr>
-                        <td>
-                            <button id="btn_Toggle_ESQUEMA_ESTRUTURAL"
-                                    type="button" data-toggle="collapse" data-target="#div_Ficha_ESQUEMA_ESTRUTURAL"
-                                    onclick="header_click4(this)" aria-expanded="false"
-                                    class="btnHeader1">
-                                5 - ESQUEMA ESTRUTURAL
-                            </button>
-                        </td>
-                        <td style="width:25px !important; ">
-                            <button id="btn_Salvar_ESQUEMA_ESTRUTURAL"
-                                    type="button"
-                                    onclick="return SalvarDados_Ficha4(tblFicha4_ESQUEMA_ESTRUTURAL)"
-                                    title="Salvar"
-                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
-                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
-                            </button>
-                        </td>
-
-                        <td style="width:25px !important; ">
-                            <button id="btn_Cancelar_ESQUEMA_ESTRUTURAL"
-                                    type="button"
-                                    onclick="return CancelarDados_Ficha4(tblFicha4_ESQUEMA_ESTRUTURAL)"
-                                    title="Cancelar Edição"
-                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
-                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
-                            </button>
-
-                            <button id="btn_Editar_ESQUEMA_ESTRUTURAL"
-                                    type="button"
-                                    onclick="return EditarDados_Ficha4(tblFicha4_ESQUEMA_ESTRUTURAL)"
-                                    title="Editar"
-                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                        </td>
-                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left" id="iconAngle_ESQUEMA_ESTRUTURAL"></i>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <div id="div_Ficha_ESQUEMA_ESTRUTURAL" class="collapse">
-                    <table id="tblFicha4_6" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
-                        <tr style="visibility:hidden;">
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                        </tr>
-
-                        <tr>
-                            <td class="borderLeft borderBottomPt borderRight" colspan="6" style="text-align:right">
-                                @*<input id="txtdoc_caminho9" name="txtdoc_caminho9"
-                                    readonly placeholder="Selecionar Arquivo local"
-                                    class="form-control" style="width: 85%; display:inline" />*@
-                                @*<button style="display:inline; width:40px; height:25px; display:inline" onclick="esquemaBrowse.click(); return false;">...</button>*@
-                                <button id="btnEsquemaUpload" class="btn btn-primary" onclick="esquemaBrowse.click();return false;"><i class="fa fa-search margin-r-5"></i> Upload</button>
-                                <input type="file" id="esquemaBrowse" name="esquemaBrowse" style="display:none"
-                                       onchange="esquemaBrowse_onchange(this.files);"
-                                       accept="image/png, image/jpeg" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6" style="text-align:center ">
-                                <img id="img_atr_id_159" align="middle" style="border:solid 1px gray; width:80%; height:auto; min-height:300px " />
-                            </td>
-                        </tr>
-
-
-                        @*<tr>
-                                <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ESQUEMA_ESTRUTURAL | Observação</label><input disabled id="txt_atr_id_80" class="txts" /></td>
-                            </tr>*@
                         <tr>
                             <td colspan="6"></td>
                         </tr>
@@ -1587,7 +1493,7 @@
                                     type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_CRITERIO_DE_CLASSIFICACAO"
                                     onclick="header_click4(this)" aria-expanded="false"
                                     class="btnHeader1">
-                                6 - NOTA GERAL DE AVALIAÇÃO E CLASSIFICAÇÃO DA OBRA DE ARTE (1º Requisito + 2º Requisito)
+                                5 - NOTA GERAL DE AVALIAÇÃO E CLASSIFICAÇÃO DA OBRA DE ARTE (1º Requisito + 2º Requisito)
                             </button>
                         </td>
                         <td style="width:95px; ">
@@ -1767,7 +1673,7 @@
                                     type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_NOTA_OAE_PARAMETRO_FUNCIONAL"
                                     onclick="header_click4(this)" aria-expanded="false"
                                     class="btnHeader1">
-                                7 - NOTA DA OBRA DE ARTE PARA O PARÂMETRO FUNCIONAL (NBR 9452:2019) - Conforto e Segurança do Usuário
+                                6 - NOTA DA OBRA DE ARTE PARA O PARÂMETRO FUNCIONAL (NBR 9452:2019) - Conforto e Segurança do Usuário
                             </button>
                         </td>
                         <td style="width:25px !important; ">
@@ -1862,7 +1768,7 @@
                                     type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_POLITICA_ACOES_A_IMPLEMENTAR"
                                     onclick="header_click4(this)" aria-expanded="false"
                                     class="btnHeader1">
-                                8 - POLÍTICA DE AÇÕES A SEREM IMPLEMENTADAS EM FUNÇÃO DAS NOTAS
+                                7 - POLÍTICA DE AÇÕES A SEREM IMPLEMENTADAS EM FUNÇÃO DAS NOTAS
                             </button>
                         </td>
 

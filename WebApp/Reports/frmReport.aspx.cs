@@ -42,20 +42,68 @@ namespace WebApp
                 // abre o relatorio
                 string relatorio = Request["relatorio"];
                 System.Data.DataSet ds = new System.Data.DataSet();
+                ReportDataSource rds1 = new ReportDataSource();
 
                 if (relatorio.StartsWith("rptRelatorio"))
                 {
+                    // cria lista de Regionais
+                    string strRegionais = new Gerais().str_Regionais();
 
                     switch (relatorio)
                     {
+                        case "rptRelatorio_OS":
+                            ds = new ObjetoDAO().OSs_Ds(Request["FiltroRodovias"],
+                                                                    Request["FiltroRegionais"],
+                                                                    Request["FiltroTiposOS"],
+                                                                    Request["FiltroStatusOS"],
+                                                                    Request["Filtro_tipo_data"],
+                                                                    Request["Filtro_data_De"],
+                                                                    Request["Filtro_data_Ate"],
+                                                                    strRegionais);
+                            ReportViewer1.LocalReport.DataSources.Clear();
+                            rds1 = new ReportDataSource("dtOS", ds.Tables[0]);
+                            ReportViewer1.LocalReport.DataSources.Add(rds1);
+                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptRelatorio_OS.rdlc");
+                            break;
+
+                        case "rptRelatorio_PerformanceOAEs":
+                            ds = new ObjetoDAO().PerformanceOAEs_Ds(Request["FiltroRodovias"],
+                                                                    Request["FiltroRegionais"],
+                                                                    Request["FiltroObj_codigo"],
+                                                                    Request["Filtro_data_De"],
+                                                                    Request["Filtro_data_Ate"],
+                                                                    strRegionais);
+
+                            ReportViewer1.LocalReport.DataSources.Clear();
+                            rds1 = new ReportDataSource("dtOAEs", ds.Tables[0]);
+                            ReportViewer1.LocalReport.DataSources.Add(rds1);
+                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptRelatorio_PerformanceOAEs.rdlc");
+                            break;
+
                         case "rptRelatorio_Priorizacao":
-                            ds = new ObjetoDAO().ObjPriorizacao_Ds(Request["FiltroRodovias"], Request["FiltroRegionais"],0);
-                    ReportViewer1.LocalReport.DataSources.Clear();
-                    ReportDataSource rds = new ReportDataSource("dtPriorizacao", ds.Tables[0]);
-                    ReportViewer1.LocalReport.DataSources.Add(rds);
-                    ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptRelatorio_Priorizacao.rdlc");
+                            ds = new ObjetoDAO().ObjPriorizacao_Ds("", Request["FiltroRodovias"], Request["FiltroRegionais"], "", "", "", 0, strRegionais);
 
+                            ReportViewer1.LocalReport.DataSources.Clear();
+                            rds1 = new ReportDataSource("dtPriorizacao", ds.Tables[0]);
+                            ReportViewer1.LocalReport.DataSources.Add(rds1);
+                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptRelatorio_Priorizacao.rdlc");
+                            break;
 
+                        case "rptRelatorio_Acoes":
+                            ds = new ObjetoDAO().Objetos_Relatorio_Acoes_Ds("",
+                                                                    Request["FiltroRodovias"],
+                                                                    Request["FiltroRegionais"],
+                                                                    Request["FiltroObj_codigo"],
+                                                                    Request["Filtro_data_De"],
+                                                                    Request["Filtro_data_Ate"],
+                                                                    0,
+                                                                    strRegionais);
+
+                            // ***** manda para o relatorio *************************************************
+                            ReportViewer1.LocalReport.DataSources.Clear();
+                            rds1 = new ReportDataSource("dtAcoes", ds.Tables[0]);
+                            ReportViewer1.LocalReport.DataSources.Add(rds1);
+                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptRelatorio_Acoes.rdlc");
                             break;
                     }
 
@@ -112,14 +160,14 @@ namespace WebApp
                             ReportViewer1.LocalReport.DataSources.Add(rds);
                             ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoEspecial.rdlc");
 
-                            string imgBase64 = ds.Tables[0].Rows[0]["txt_atr_id_159"].ToString().Trim();
+                            //string imgBase64 = ds.Tables[0].Rows[0]["txt_atr_id_159"].ToString().Trim();
 
-                            // se nao houver imagem, coloca uma imagem branca
-                            if (imgBase64 == "")
-                                imgBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQECWAJYAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAZABkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooA//2Q==";
+                            //// se nao houver imagem, coloca uma imagem branca
+                            //if (imgBase64 == "")
+                            //    imgBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQECWAJYAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAZABkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD7LooooAKKKKACiiigAooooA//2Q==";
 
-                            ReportParameter par_img_esquema_estrutural = new ReportParameter("par_img_esquema_estrutural", (imgBase64.Replace("data:image/jpg;base64,", "").Replace("data:image/png;base64,", "")));
-                            ReportViewer1.LocalReport.SetParameters(new ReportParameter[] { par_img_esquema_estrutural });
+                            //ReportParameter par_img_esquema_estrutural = new ReportParameter("par_img_esquema_estrutural", (imgBase64.Replace("data:image/jpg;base64,", "").Replace("data:image/png;base64,", "")));
+                            //ReportViewer1.LocalReport.SetParameters(new ReportParameter[] { par_img_esquema_estrutural });
                         }
                         else
                             if (relatorio.Trim() == "rptFichaInspecaoEspecial_campo")

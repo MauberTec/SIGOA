@@ -1163,24 +1163,32 @@ function Ficha4_CAMPO_preencheLocalizacao(tip_id_Grupo) {
             var tagchk00 = '<input type="checkbox" id="chk00" nome="chk00" value="-314159" style="margin-right:5px" onclick="chk00_click(this.checked)" >';
             var taglbl00 = '<label for="idchk00" class="chklst" >Todos</label> <br />';
 
-            if (lstSubNiveis.length > 0)
+            if (lstSubNiveis.length > 0) {
                 $("#divFicha4_CAMPO_LocalizacaoObjeto").append(tagchk00 + taglbl00);
 
-            $.each(lstSubNiveis, function (i, objeto) {
-                i++;
-                if (i < 1000) {
-                    var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                    tagchk = tagchk.replace("idXXX", "chk" + i);
-                    tagchk = tagchk.replace("nameXXX", "chk" + i);
-                    tagchk = tagchk.replace("valueXXX", objeto.Value);
+                $.each(lstSubNiveis, function (i, objeto) {
+                    i++;
+                    if (i < 1000) {
+                        var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+                        tagchk = tagchk.replace("idXXX", "chk" + i);
+                        tagchk = tagchk.replace("nameXXX", "chk" + i);
+                        tagchk = tagchk.replace("valueXXX", objeto.Value);
 
-                    var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                    taglbl = taglbl.replace("idXXX", "chk" + i);
-                    taglbl = taglbl.replace("TextoXXX", objeto.Text);
+                        var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
+                        taglbl = taglbl.replace("idXXX", "chk" + i);
+                        taglbl = taglbl.replace("TextoXXX", objeto.Text);
 
-                    $("#divFicha4_CAMPO_LocalizacaoObjeto").append(tagchk + taglbl);
-                }
-            });
+                        $("#divFicha4_CAMPO_LocalizacaoObjeto").append(tagchk + taglbl);
+                    }
+                });
+            }
+            else
+            {
+                var taglbl00a = '<label class="chklst" >Objeto(s) não cadastrado(s)</label> <br />';
+                $("#divFicha4_CAMPO_LocalizacaoObjeto").append(taglbl00a);
+
+            }
+
         }
     });
 }

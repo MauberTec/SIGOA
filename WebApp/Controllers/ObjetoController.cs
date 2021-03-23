@@ -633,12 +633,18 @@ namespace WebApp.Controllers
         /// Lista de Objetos Priorizados
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
-        /// <param name="Regionais">Filtro por Regionais</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
+        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
+        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
+        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
         /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
         /// <returns>JsonResult</returns>
-        public JsonResult ObjPriorizacao_ListAll(string CodRodovia, string Regionais, int? somenteINSP_ESPECIAIS = 0)
+        public JsonResult ObjPriorizacao_ListAll(string CodRodovia,
+            string FiltroidRodovias = "", string FiltroidRegionais = "", string FiltroidObjetos = "", string Filtro_data_De = "", string Filtro_data_Ate = "",
+            int? somenteINSP_ESPECIAIS = 0)
         {
-            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, Regionais, somenteINSP_ESPECIAIS) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS) }, JsonRequestBehavior.AllowGet);
         }
 
 

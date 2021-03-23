@@ -1,9 +1,8 @@
-﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
 
-//var cabecalho2 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
 var cabecalho2 =
     ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
-    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "9" >' +
+    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
     '     <table style="width:100%"> ' +
     '      <tr> ' +
     '        <td style="width:26px"> ' +
@@ -18,6 +17,9 @@ var cabecalho2 =
     '        <td> ' +
     '           <label class="lblsBold" > XXXXX</label >' +
     '       </td> ' +
+    '        <td> ' +
+    '           <label class="lblsBold" > </label >' +
+    '       </td> ' +
     '     </tr> ' +
     '   </table> ' +
 
@@ -25,7 +27,7 @@ var cabecalho2 =
     ' </tr > ';
 
 
-var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
 
     var MesclarGrupo =
         '   <td class="borderLeft borderTop borderRight borderBottomPt" rowspan=N_ROWSPAN > ' +
@@ -42,6 +44,9 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         '        </td> ' +
         '        <td> ' +
         '           <label id="lbl_Elemento_GGG_VVV" class="lblsNormal">lbl_Elemento_XXXXX</label> ' +
+        '       </td> ' +
+        '        <td> ' +
+        '           ' +
         '       </td> ' +
         '     </tr> ' +
         '   </table> ' +
@@ -94,6 +99,10 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
         '    <input id="txt_quantidade_GGG_VVV" class="txts  centroH" value="txt_quantidade_XXXXX" /> ' +
         '  </td> ' +
+        '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
+        '    ' +
+        '  </td> ' +
+
         ' </tr> ';
 
 
@@ -844,7 +853,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                                     // COLOCA OS DADOS
                                     linhaAux = linhaAux.replace(/OOBBJJIIDD/g, result.data[i].obj_id);
                                     linhaAux = linhaAux.replace(/GGG/g, result.data[i].obj_id);
-                                    linhaAux = linhaAux.replace(/VVV/g, result.data[i].ogv_id);
+                                    linhaAux = linhaAux.replace(/VVV/g, result.data[i].cgv_id);
                                     linhaAux = linhaAux.replace(/lbl_Elemento_XXXXX/g, result.data[i].nomeGrupo);
                                     linhaAux = linhaAux.replace(/lbl_Variaveis_XXXXX/g, result.data[i].variavel);
                                     linhaAux = linhaAux.replace(/txt_obs_XXXXX/g, result.data[i].ovv_observacoes_gerais);
@@ -1014,14 +1023,14 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                 var GGG_VVV = table.rows[i].id.replace("trFICHA2_", "");
                 var aux = GGG_VVV.split("_");
                 var obj_id = aux[1];
-                var ogv_id = aux[2];
+                var cgv_id = aux[2];
 
                 grupoAtual = aux[1];
 
                 if (parseInt(aux[aux.length - 1]) == 0)
                     grupoAnterior = aux[1];
 
-                GGG_VVV = obj_id + "_" + ogv_id;
+                GGG_VVV = obj_id + "_" + cgv_id;
                 var ogi_id_caracterizacao_situacao = document.getElementById("cmb_situacao_" + GGG_VVV).options[document.getElementById("cmb_situacao_" + GGG_VVV).selectedIndex].value;
 
                 if (table.rows[i].cells.length > 6) {
@@ -1049,7 +1058,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                 if (isNaN(ovv_tpu_quantidade))
                     ovv_tpu_quantidade = 0;
 
-                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + ogv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + '</tr_linha>';
+                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + cgv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + '</tr_linha>';
 
                 if (parseInt(ati_id_condicao_inspecao) == 0) {
                     linhaOK = false;

@@ -336,6 +336,15 @@ namespace WebApp.Models
         /// </summary>
         public string lst_proximos_status { get; set; }
 
+
+
+        /// <summary>
+        /// Conteúdo da Aba Indicacao Servico
+        /// </summary>
+        public string ord_indicacao_servico { get; set; }
+
+
+
     }
 
     // ************* Classe DE ORDEM DE SERVICO ***************************************
