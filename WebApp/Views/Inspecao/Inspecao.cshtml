@@ -470,7 +470,7 @@
         switch (parseInt(selectedId_tos_id)) {
             case 7: liFichaInspecaoCadastral.style.display = "unset";
                 liFichaInspecao1aRotineira.style.display = "unset";
-            //    liFichaInspecaoRotineiraProvidencias.style.display = "unset";
+                liFichaInspecaoRotineiraProvidencias.style.display = "unset";
 
                 if (bool_posicionar)
                     $('[href="#tabFichaInspecaoCadastral"]').tab('show');
@@ -478,7 +478,7 @@
 
             case 8:
                 liFichaInspecaoRotineira.style.display = "unset";
-            //    liFichaInspecaoRotineiraProvidencias.style.display = "unset";
+                liFichaInspecaoRotineiraProvidencias.style.display = "unset";
 
                if (bool_posicionar)
                     $('[href="#tabFichaInspecaoRotineira"]').tab('show');
@@ -542,9 +542,9 @@
                         <a id="tabFichaInspecaoRotineiraheader" data-toggle="tab" href="#tabFichaInspecaoRotineira" onclick="abreFicha(3);">Ficha Básica - Inspeção Rotineira</a>
                     </li>
 
-                    @*<li style="display:none" id="liFichaInspecaoRotineiraProvidencias">
+                    <li style="display:none" id="liFichaInspecaoRotineiraProvidencias">
                         <a id="tabFichaInspecaoRotineiraProvidenciasheader" data-toggle="tab" href="#tabFichaInspecaoRotineiraProvidencias" onclick="abreFicha(8);">Providências</a>
-                    </li>*@
+                    </li>
 
                     <li style="display:none" id="liFichaInspecaoEspecial">
                         <a id="tabFichaInspecaoEspecialheader" data-toggle="tab" href="#tabFichaInspecaoEspecial" onclick="abreFicha(4);">Ficha de Informações Básicas - Inspeção Especial</a>
@@ -628,9 +628,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira_Providencias&id=999999&ord_id=' + selectedId_ord_id, '_blank');">Imprimir</button>
-                                    @*    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>*@
-                                </div>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_PROVIDENCIAS_Imprimir(99999);">Imprimir</button>                                </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Providências</label></h3>
                                 </div>

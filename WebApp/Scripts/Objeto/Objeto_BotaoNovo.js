@@ -255,6 +255,7 @@ function PreenchetxtCodigoDigitavel() {
                     case "A": localizacaoNome = "Apoio"; break;
                     case "E": localizacaoNome = "Encontro"; break;
                     case "V": localizacaoNome = "Vão"; break;
+                    case "T": localizacaoNome = "Trecho"; break;
                     case "VC": localizacaoNome = "Vão Caixão Perdido"; break;
                     case "VG": localizacaoNome = "Vão em Grelha"; break;
                 }

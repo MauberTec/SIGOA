@@ -52,7 +52,7 @@ namespace WebApp
                     switch (relatorio)
                     {
                         case "rptRelatorio_OS":
-                            ds = new ObjetoDAO().OSs_Ds(Request["FiltroRodovias"],
+                            ds = new RelatoriosDAO().OSs_Ds(Request["FiltroRodovias"],
                                                                     Request["FiltroRegionais"],
                                                                     Request["FiltroTiposOS"],
                                                                     Request["FiltroStatusOS"],
@@ -67,7 +67,7 @@ namespace WebApp
                             break;
 
                         case "rptRelatorio_PerformanceOAEs":
-                            ds = new ObjetoDAO().PerformanceOAEs_Ds(Request["FiltroRodovias"],
+                            ds = new RelatoriosDAO().PerformanceOAEs_Ds(Request["FiltroRodovias"],
                                                                     Request["FiltroRegionais"],
                                                                     Request["FiltroObj_codigo"],
                                                                     Request["Filtro_data_De"],
@@ -81,7 +81,7 @@ namespace WebApp
                             break;
 
                         case "rptRelatorio_Priorizacao":
-                            ds = new ObjetoDAO().ObjPriorizacao_Ds("", Request["FiltroRodovias"], Request["FiltroRegionais"], "", "", "", 0, strRegionais);
+                            ds = new RelatoriosDAO().ObjPriorizacao_Ds("", Request["FiltroRodovias"], Request["FiltroRegionais"], "", "", "", 0, strRegionais);
 
                             ReportViewer1.LocalReport.DataSources.Clear();
                             rds1 = new ReportDataSource("dtPriorizacao", ds.Tables[0]);
@@ -90,7 +90,7 @@ namespace WebApp
                             break;
 
                         case "rptRelatorio_Acoes":
-                            ds = new ObjetoDAO().Objetos_Relatorio_Acoes_Ds("",
+                            ds = new RelatoriosDAO().Objetos_Relatorio_Acoes_Ds("",
                                                                     Request["FiltroRodovias"],
                                                                     Request["FiltroRegionais"],
                                                                     Request["FiltroObj_codigo"],
@@ -148,6 +148,20 @@ namespace WebApp
                             ReportViewer1.LocalReport.DataSources.Add(rds);
                             ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoRotineira.rdlc");
                             ReportViewer1.LocalReport.SubreportProcessing += new Microsoft.Reporting.WebForms.SubreportProcessingEventHandler(LocalReport_SubreportProcessing);
+
+                            List<ReportParameter> listReportParameter = new List<ReportParameter>();
+                            listReportParameter.Add(new ReportParameter("tos_id", tos_id));
+                            ReportViewer1.LocalReport.SetParameters(listReportParameter);
+                        }
+                        if (relatorio.Trim() == "rptFichaInspecaoRotineira_Providencias")
+                        {
+                            string tos_id = Request["tos_id"];  // 1 = cadastral; 2 = rotineira
+
+                            ds = new RelatoriosDAO().GruposVariaveisValores_ListAll(-1, ord_id, 1, Convert.ToInt32(Request["prt_id"]));
+
+                            ReportDataSource rds = new ReportDataSource("dtRotineiraProvidencias", ds.Tables[0]);
+                            ReportViewer1.LocalReport.DataSources.Add(rds);
+                            ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoRotineira_Providencias.rdlc");
 
                             List<ReportParameter> listReportParameter = new List<ReportParameter>();
                             listReportParameter.Add(new ReportParameter("tos_id", tos_id));
@@ -233,7 +247,7 @@ namespace WebApp
 
             e.DataSources.Clear();
 
-            System.Data.DataSet ds_sub = new RelatoriosDAO().GruposVariaveisValores_ListAll(obj_id, ord_id);
+            System.Data.DataSet ds_sub = new RelatoriosDAO().GruposVariaveisValores_ListAll(obj_id, ord_id, 0);
             ReportDataSource rds_sub = new ReportDataSource("dsFicha2_sub", ds_sub.Tables[0]);
 
             e.DataSources.Add(rds_sub);

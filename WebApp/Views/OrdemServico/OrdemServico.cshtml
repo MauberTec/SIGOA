@@ -218,7 +218,7 @@
                     case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
                     case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
                     case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
-                    case 8: preenchetblFicha2_PROVIDENCIAS(); break; // inspecao ROTINEIRA - Providencias
+                    case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos() ; break; // inspecao ROTINEIRA - Providencias
                 }
 
                 colocaDatePickers();
@@ -280,9 +280,9 @@
                         <a id="tabFichaInspecaoRotineiraheader" data-toggle="tab" href="#tabFichaInspecaoRotineira" onclick="abreFicha(3);">Ficha Básica - Inspeção Rotineira</a>
                     </li>
 
-                    @*<li style="display:none" id="liFichaInspecaoRotineiraProvidencias">
+                    <li style="display:none" id="liFichaInspecaoRotineiraProvidencias">
                         <a id="tabFichaInspecaoRotineiraProvidenciasheader" data-toggle="tab" href="#tabFichaInspecaoRotineiraProvidencias" onclick="abreFicha(8);">Providências</a>
-                    </li>*@
+                    </li>
 
                     <li style="display:none" id="liFichaInspecaoEspecial">
                         <a id="tabFichaInspecaoEspecialheader" data-toggle="tab" href="#tabFichaInspecaoEspecial" onclick="abreFicha(4);">Ficha de Informações Básicas - Inspeção Especial</a>
@@ -307,7 +307,7 @@
                         <a id="tabDocumentosAssociadosOSHeader" data-toggle="tab" href="#tabDocumentosAssociadosOS" onclick="$('#tblDocumentosAssociados').DataTable().ajax.reload();">Documentos Associados à Ordem de Serviço</a>
                     </li>
 
-                    <li>
+                    <li  style="display:none" id="liIndicacaoServicos">
                         <a id="tabIndicacaoServicosHeader" data-toggle="tab" href="#tabIndicacaoServicos" onclick="OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id);">Indicação de Serviços</a>
                     </li>
                 </ul>
@@ -485,13 +485,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">Quantidade Estimada</label></nobr>
-                                        <div class="col-sm-8">
-                                            <input id="txtord_quantidade_estimada" name="txtord_quantidade_estimada" class="form-control" maxlength="5" placeholder="Quantidade Estimada" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label class="control-label col-sm-4">Custo Estimado</label>
                                         <div class="col-sm-8">
                                             <input id="txtord_custo_estimado" name="txtord_custo_estimado" class="form-control" placeholder="Custo Estimado" maxlength="20" />
@@ -524,9 +517,9 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4">Classe</label>
+                                        @*<label class="control-label col-sm-4">Classe</label>*@
                                         <div class="col-sm-8">
-                                            @Html.DropDownList("cmbClassesOS", null, "-- Selecione --", new { @class = "form-control " })
+                                            @*@Html.DropDownList("cmbClassesOS", null, "-- Selecione --", new { @class = "form-control " })*@
                                         </div>
                                     </div>
 
@@ -631,13 +624,6 @@
                                             <input id="txtDummy13" class="form-control" style="visibility:hidden" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">Quantidade Executada</label></nobr>
-                                        <div class="col-sm-8">
-                                            <input id="txtord_quantidade_executada" name="txtord_quantidade_executada" class="form-control"
-                                                   placeholder="Quantidade Executada" />
-                                        </div>
-                                    </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Custo Final</label>
@@ -717,7 +703,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira_Providencias&id=999999&ord_id=' + selectedId_ord_id, '_blank');">Imprimir</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_PROVIDENCIAS_Imprimir(99999);">Imprimir</button>
                                     @*    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>*@
                                 </div>
                                 <div class="col-sm-8">

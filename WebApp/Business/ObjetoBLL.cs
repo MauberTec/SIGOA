@@ -634,10 +634,12 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>Lista de ObjAtributoValores</returns>
-        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return new ObjetoDAO().GruposVariaveisValores_ListAll(obj_id, ord_id);
+            return new ObjetoDAO().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id);
         }
 
 

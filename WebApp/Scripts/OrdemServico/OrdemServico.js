@@ -277,6 +277,9 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
     var liFichaNotificacaoOcorrencia = document.getElementById("liFichaNotificacaoOcorrencia");
 
+    var liIndicacaoServicos = document.getElementById("liIndicacaoServicos");
+
+
     //if (liDetalhesOS)
     //    $('[href="#tabDetalhesOS"]').tab('show');
 
@@ -304,19 +307,21 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     if (liFichaNotificacaoOcorrencia)
         liFichaNotificacaoOcorrencia.style.display = "none";
 
+    if (liIndicacaoServicos)
+        liIndicacaoServicos.style.display = "none";
 
     switch (parseInt(selectedId_tos_id)) {
         case 7:
             liFichaInspecaoCadastral.style.display = "unset";
             liFichaInspecao1aRotineira.style.display = "unset";
-       //     liFichaInspecaoRotineiraProvidencias.style.display = "unset";
+            liFichaInspecaoRotineiraProvidencias.style.display = "unset";
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoCadastral"]').tab('show');
             break;
 
         case 8:
             liFichaInspecaoRotineira.style.display = "unset";
-       //     liFichaInspecaoRotineiraProvidencias.style.display = "unset";
+            liFichaInspecaoRotineiraProvidencias.style.display = "unset";
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoRotineira"]').tab('show');
             break;
@@ -334,13 +339,17 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
             break;
 
-        case 18: liFichaNotificacaoOcorrencia.style.display = "unset";
+        case 18:
+            liFichaNotificacaoOcorrencia.style.display = "unset";
+            liIndicacaoServicos.style.display = "unset";
              if (bool_posicionar)
                  $('[href="#tabFichaNotificacaoOcorrencia"]').tab('show');
             break;
 
 
-        default: $('[href="#tabDetalhesOS"]').tab('show');
+        default:
+            liIndicacaoServicos.style.display = "unset";
+            $('[href="#tabDetalhesOS"]').tab('show');
 
     }
 
@@ -433,7 +442,7 @@ function OrdemServico_LimparDetalhes()
     $('#txtord_criticidade').val("");
 
 
-    $('#txtord_quantidade_estimada').val("");
+  // $('#txtord_quantidade_estimada').val("");
     $('#txtord_custo_estimado').val("");
 
     $('#txttpu_codigo_der').val("");
@@ -453,7 +462,7 @@ function OrdemServico_LimparDetalhes()
 
     $('#cmbStatusOS').val(null);
 
-    $('#txtord_quantidade_executada').val("");
+  //  $('#txtord_quantidade_executada').val("");
     $('#txtord_custo_final').val("");
 
     $('#chkord_ativo').prop('checked', true);
@@ -516,9 +525,9 @@ function OrdemServico_Salvar() {
             ord_data_termino_programada: $('#txtord_data_termino_programada').val(),
             ord_data_inicio_execucao: $('#txtord_data_inicio_execucao').val(),
             ord_data_termino_execucao: $('#txtord_data_termino_execucao').val(),
-            ord_quantidade_estimada: $('#txtord_quantidade_estimada').val(),
+          //  ord_quantidade_estimada: $('#txtord_quantidade_estimada').val(),
             uni_id_qt_estimada: $('#txtuni_id_qt_estimada').val(),
-            ord_quantidade_executada: $('#txtord_quantidade_executada').val(),
+         //   ord_quantidade_executada: $('#txtord_quantidade_executada').val(),
             uni_id_qt_executada: $('#txtuni_id_qt_executada').val(),
             ord_custo_estimado: $('#txtord_custo_estimado').val(),
             ord_custo_final: $('#txtord_custo_final').val(),
@@ -630,7 +639,7 @@ function OrdemServico_Editar(id, origem) {
 
             $('#txtord_criticidade').val( parseFloat(result.ord_criticidade).toFixed(2));
 
-            $('#txtord_quantidade_estimada').val(result.ord_quantidade_estimada);
+        //    $('#txtord_quantidade_estimada').val(result.ord_quantidade_estimada);
             $('#txtord_custo_estimado').val(result.ord_custo_estimado);
 
             $('#txttpu_codigo_der').val(result.tpu_codigo_der.trim());
@@ -665,7 +674,7 @@ function OrdemServico_Editar(id, origem) {
 
             $('#cmbStatusOS').val(result.sos_id);
 
-            $('#txtord_quantidade_executada').val(result.ord_quantidade_executada);
+        //    $('#txtord_quantidade_executada').val(result.ord_quantidade_executada);
             $('#txtord_custo_final').val(result.ord_custo_final);
 
             $('#chkord_ativo').prop('checked', true);

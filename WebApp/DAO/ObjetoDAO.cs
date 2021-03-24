@@ -1438,20 +1438,35 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>Lista de ObjAtributoValores</returns>
-        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
             try
             {
+                string qualProcedure = "STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES";
+
+                if (ehProvidencia == 1)
+                     qualProcedure = "STP_SEL_INSPECAO_GRUPO_OBJETO_VARIAVEIS_VALORES_PROVIDENCIAS";
+
                 List<GruposVariaveisValores> lst = new List<GruposVariaveisValores>();
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES", con);
+
+                    SqlCommand com = new SqlCommand(qualProcedure, con);
+
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@obj_id", obj_id);
+                    if (ehProvidencia == 0)
+                        com.Parameters.AddWithValue("@obj_id", obj_id);
+
                     com.Parameters.AddWithValue("@ord_id", ord_id);
+
+                    if (ehProvidencia == 1)
+                        com.Parameters.AddWithValue("@filtro_prt_id", filtro_prt_id);
+
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -1486,7 +1501,11 @@ namespace WebApp.DAO
 
                             ovv_tpu_quantidade = Convert.ToDouble(rdr["ovv_tpu_quantidade"]),
                             caracterizacao_situacao_cmb = rdr["caracterizacao_situacao_cmb"].ToString(),
-                            condicao_inspecao_cmb = rdr["condicao_inspecao_cmb"].ToString()
+                            condicao_inspecao_cmb = rdr["condicao_inspecao_cmb"].ToString(),
+
+                            prt_id = Convert.ToInt32(rdr["prt_id"]),
+                            prt_descricao = rdr["prt_descricao"].ToString(),
+                            providencias_cmb = rdr["providencias_cmb"].ToString()
 
                         });
                     }
@@ -1770,210 +1789,6 @@ namespace WebApp.DAO
                 throw new Exception(ex.Message);
             }
         }
-
-        /// <summary>
-        /// Lista de Objetos Priorizados
-        /// </summary>
-        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
-        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
-        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
-        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
-        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
-        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
-        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
-        /// <param name="LstRegionais">Lista de Regionais obtidas no SirGeo</param>
-        /// <returns>DataSet</returns>
-        public System.Data.DataSet ObjPriorizacao_Ds(string CodRodovia,
-                                                      string FiltroidRodovias = "", string FiltroidRegionais = "", string FiltroidObjetos = "", string Filtro_data_De = "", string Filtro_data_Ate = "",
-                                                        int? somenteINSP_ESPECIAIS = 0,
-                                                        string LstRegionais = "")
-        {
-            try
-            {
-                DataSet ds = new System.Data.DataSet();
-                SqlDataAdapter adapter = new SqlDataAdapter();
-
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_OBJETOS_PRIORIZACAO", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
-                    com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
-                    com.Parameters.AddWithValue("@FiltroidRegionais", FiltroidRegionais);
-                    com.Parameters.AddWithValue("@FiltroidObjetos", FiltroidObjetos);
-                    com.Parameters.AddWithValue("@Filtro_data_De", Filtro_data_De);
-                    com.Parameters.AddWithValue("@Filtro_data_Ate", Filtro_data_Ate);
-                    com.Parameters.AddWithValue("@somenteINSP_ESPECIAIS", somenteINSP_ESPECIAIS);
-                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais);
-
-                    adapter.SelectCommand = com;
-                    adapter.Fill(ds);
-
-                    return ds;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
-
-        /// <summary>
-        /// Lista de Objetos Priorizados
-        /// </summary>
-        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
-        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
-        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
-        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
-        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
-        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
-        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
-        /// <param name="LstRegionais">Lista de Regionais obtidas no SirGeo</param>
-        /// <returns>DataSet</returns>
-        public System.Data.DataSet Objetos_Relatorio_Acoes_Ds(string CodRodovia,
-                                                      string FiltroidRodovias = "", string FiltroidRegionais = "", string FiltroidObjetos = "", string Filtro_data_De = "", string Filtro_data_Ate = "",
-                                                        int? somenteINSP_ESPECIAIS = 0,
-                                                        string LstRegionais = ""
-            )
-        {
-            try
-            {
-                DataSet ds = new System.Data.DataSet();
-                SqlDataAdapter adapter = new SqlDataAdapter();
-
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_RELATORIO_ACOES", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
-                    com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
-                    com.Parameters.AddWithValue("@FiltroidRegionais", FiltroidRegionais);
-                    com.Parameters.AddWithValue("@FiltroidObjetos", FiltroidObjetos);
-                    com.Parameters.AddWithValue("@Filtro_data_De", Filtro_data_De);
-                    com.Parameters.AddWithValue("@Filtro_data_Ate", Filtro_data_Ate);
-                    com.Parameters.AddWithValue("@somenteINSP_ESPECIAIS", somenteINSP_ESPECIAIS);
-                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais);
-
-                    adapter.SelectCommand = com;
-                    adapter.Fill(ds);
-
-                    return ds;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
-
-        /// <summary>
-        /// Lista de Objetos Priorizados
-        /// </summary>
-        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
-        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
-        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
-        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
-        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
-        /// <param name="LstRegionais">Lista de Regionais obtidas no SirGeo</param>
-        /// <returns>DataSet</returns>
-        public System.Data.DataSet PerformanceOAEs_Ds( string FiltroidRodovias = "", string FiltroidRegionais = "", string FiltroidObjetos = "", string Filtro_data_De = "", string Filtro_data_Ate = "",
-                                                      string LstRegionais = "")
-        {
-            try
-            {
-                DataSet ds = new System.Data.DataSet();
-                SqlDataAdapter adapter = new SqlDataAdapter();
-
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_RELATORIO_PERFORMANCE_OAEs", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
-                    com.Parameters.AddWithValue("@FiltroidRegionais", FiltroidRegionais);
-                    com.Parameters.AddWithValue("@FiltroidObjetos", FiltroidObjetos);
-                    com.Parameters.AddWithValue("@Filtro_data_De", Filtro_data_De);
-                    com.Parameters.AddWithValue("@Filtro_data_Ate", Filtro_data_Ate);
-                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais);
-
-                    adapter.SelectCommand = com;
-                    adapter.Fill(ds);
-
-                    return ds;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
-
-
-        /// <summary>
-        /// Lista de O.S.s
-        /// </summary>
-        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
-        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
-        /// <param name="FiltroTiposOS">Filtro por Tipo de O.S.</param>
-        /// <param name="FiltroStatusOS">Filtro por Status de O.S.</param>
-        /// <param name="Filtro_data">Filtro por tipo de Data</param>
-        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
-        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
-        /// <param name="LstRegionais">Lista de Regionais obtidas no SirGeo</param>
-        /// <returns>DataSet</returns>
-        public System.Data.DataSet OSs_Ds(string FiltroidRodovias = "", string FiltroidRegionais = "", 
-                                                        string FiltroTiposOS = "", string FiltroStatusOS = "",
-                                                        string Filtro_data = "", string Filtro_data_De = "",string Filtro_data_Ate = "",
-                                                        string LstRegionais = "")
-        {
-            try
-            {
-                DataSet ds = new System.Data.DataSet();
-                SqlDataAdapter adapter = new SqlDataAdapter();
-
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_RELATORIO_OSs", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
-                    com.Parameters.AddWithValue("@FiltroidRegionais", FiltroidRegionais);
-                    com.Parameters.AddWithValue("@FiltroTiposOS", FiltroTiposOS);
-                    com.Parameters.AddWithValue("@FiltroStatusOS", FiltroStatusOS);
-                    com.Parameters.AddWithValue("@FiltroData", Filtro_data);
-                    com.Parameters.AddWithValue("@Filtro_data_De", Filtro_data_De);
-                    com.Parameters.AddWithValue("@Filtro_data_Ate", Filtro_data_Ate);
-                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais);
-
-                    adapter.SelectCommand = com;
-                    adapter.Fill(ds);
-
-                    return ds;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
-
 
     }
 }

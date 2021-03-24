@@ -1,8 +1,40 @@
-﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
+﻿var cabecalhoTabela =   '         <tr style="text-align:center; border-top:solid 1px black "> ' +
+                        '            <td class="borderLeft borderBottom fundoSilver" rowspan="2" > ' +
+                        '                <table style="width:100%;"> ' +
+                        '                  <tr> ' +
+                        '                    <td style="width:26px"></td> ' +
+                        '                    <td> ' +
+                        '                      <label class="lblsBold"> Local / Elemento </label> ' +
+                        '                    </td> ' +
+                        '                  </tr> ' +
+                        '                </table> ' +
+                        '             </td > ' +
+                        '             <td class="borderLeft borderBottom  fundoSilver" rowspan = "2" > <label class="lblsBold" id="lblatr_id_82a">Variáveis</label></td > ' +
+                        '             <td class="borderLeft borderBottom  fundoSilver" rowspan = "2" > <label class="lblsBold" id="lblatr_id_82b">Caracterização da Situação</label></td > ' +
+                        '             <td class="borderLeft borderBottom  fundoSilver" rowspan = "2" > <label class="lblsBold" id="lblatr_id_82c">Condição para Inspeção</label></td > ' +
+                        '             <td class="borderLeft borderBottom  fundoSilver" rowspan = "2" colspan = "2" > <label class="lblsBold" id="lblatr_id_82d">Observações gerais </label></td > ' +
+                        '             <td class="borderLeft borderBottom  fundoSilver borderRight" colspan = "3" > <label class="lblsBold" id="lblatr_id_82e">Estimativa de Serviços - Conserva</label></td > ' +
+                        '             </tr > ' +
+                        '               <tr style = "text-align:center"  id="Ficha2_PROVIDENCIAS_tr_Cabecalho_YYY" > ' +
+                        '               <td class="borderLeft borderBottom fundoSilver " style = "width:40% !important" > <label class="lblsBold" id="lblatr_id_82f">Descrição do Serviço</label></td > ' +
+                        '               <td class="borderLeft borderBottom  fundoSilver" style = "width:30% !important" > <label class="lblsBold" id="lblatr_id_82g">Unid</label></td > ' +
+                        '               <td class="borderLeft borderBottom  fundoSilver borderRight" style = "width:30% !important" > <label class="lblsBold" id="lblatr_id_82h">Quantidade</label></td > ' +
+                        '           </tr>';
 
-var cabecalho2 =
+var cabecalho0_Providencias = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY" class="BorderTop borderBottom" >' +
+                                '<td  style="height:40px !important; font-size:13pt; text-align:center; border-top: solid 1px black !important;" class="borderLeft BorderTop borderBottom borderRight " colspan="9">' +
+    '                                <label class="lblsBold" > XXXXX</label >' +
+        '                            <button title="Imprimir" onclick="Ficha2_PROVIDENCIAS_Imprimir(PRT_IDDD)" ><i class="fa fa-print" ></i></button>  ' +
+    '                           </td >' +
+    '                          </tr > ';
+
+var rodape0_Providencias = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY" class="BorderTop borderBottom" ><td style="height:50px !important" class="BorderTop borderBottom"  colspan="9"></td></tr>';
+
+var cabecalho1_Providencias = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+
+var cabecalho2_Providencias =
     ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
-    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
+    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "9" >' +
     '     <table style="width:100%"> ' +
     '      <tr> ' +
     '        <td> ' +
@@ -18,9 +50,9 @@ var cabecalho2 =
     ' </tr > ';
 
 
-var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
+var cabecalho3_Providencias = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
 
-var MesclarGrupo =
+var MesclarGrupo_Providencias =
     '   <td class="borderLeft borderTop borderRight borderBottomPt" rowspan=N_ROWSPAN > ' +
     '     <table style="width:100%"> ' +
     '      <tr> ' +
@@ -31,31 +63,31 @@ var MesclarGrupo =
     '   </table> ' +
     '  </td> ';
 
-var Mesclar_Condicao_Inspecao =
+var Mesclar_Condicao_Inspecao_Providencias =
     '  <td class="borderTop borderRight borderBottomPt centroH" rowspan=N_ROWSPAN > ' +
-    '    <select class="cmbs" id="cmb_condicao_GGG_VVV"> ' +
+    '    <select class="cmbs" id="cmb_condicao_GGG_VVV" disabled="true"> ' +
     '          OPCOES_cmb_condicao ' +
     '    </select> ' +
     '  </td> ';
 
-var linhaGrupos =
+var linhaGrupos_Providencias =
     ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"> ' +
 
-    '  MesclarGrupo  ' +
+    '  MesclarGrupo_Providencias  ' +
 
     '  <td class="borderTop borderRight borderBottomPt"> ' +
     '    <label id="lbl_Variaveis_GGG_VVV" class="lblsNormal">lbl_Variaveis_XXXXX</label> ' +
     '  </td> ' +
     '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
-    '    <select class="cmbs" id="cmb_situacao_GGG_VVV" title="TOOLTIP_cmb_situacao"  onchange="cmb_situacao_onchange(this)"> ' +
+    '    <select class="cmbs" id="cmb_situacao_GGG_VVV" title="TOOLTIP_cmb_situacao"  disabled="true"> ' +
     '          OPCOES_cmb_situacao ' +
     '    </select> ' +
     '  </td> ' +
 
-    ' Mesclar_Condicao_Inspecao ' +
+    ' Mesclar_Condicao_Inspecao_Providencias ' +
 
-    '  <td class="borderTop borderRight borderBottomPt" colspan="2" style="text-align:center;"> ' +
-    '    <textarea id="txt_obs_GGG_VVV" class="txts" rows="2" cols="50"  maxlength="255" style="width:98%; overflow:auto">txt_obs_XXXXX</textarea> ' +
+    '  <td class="borderTop borderRight borderBottomPt" colspan="2" style="text-align:center"> ' +
+    '    <textarea id="txt_obs_GGG_VVV" class="txts" rows="2" cols="50"  maxlength="255" style="width:98%; overflow:auto" disabled="true" >txt_obs_XXXXX</textarea> ' +
     '  </td> ' +
     '  <td class="borderTop borderRight borderBottomPt"> ' +
     '    <label id="lbl_servico_GGG_VVV" class="txts" style="border:none; width:100%; text-align:left" title="txt_servico_XXXXX">txt_servico_XXXXX</label> ' +
@@ -64,24 +96,29 @@ var linhaGrupos =
     '    </select> ' +
     '  </td> ' +
     '  <td class="borderTop borderRight borderBottomPt  centroH"> ' +
-    '    <input id="txt_unidade_GGG_VVV" class="txts  centroH" value="txt_unidade_XXXXX" maxlength="15"  /> ' +
+    '    <input id="txt_unidade_GGG_VVV" class="txts  centroH" value="txt_unidade_XXXXX" maxlength="15"  disabled="true"  /> ' +
     '  </td> ' +
-    '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
-    '    <input id="txt_quantidade_GGG_VVV" class="txts  centroH" value="txt_quantidade_XXXXX" /> ' +
+    '  <td class="borderTop borderRight borderBottomPt borderRight centroH"> ' +
+    '    <input id="txt_quantidade_GGG_VVV" class="txts  centroH" value="txt_quantidade_XXXXX" disabled="true"  /> ' +
     '  </td> ' +
-    '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
-    '    ' +
-    '  </td> ' +
-
     ' </tr> ';
 
-function Ficha2_PROVIDENCIAS_Imprimir(apt_id) {
+function Ficha2_PROVIDENCIAS_Imprimir(prt_id) {
 
-    window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira_Providencias&id=999999&ord_id=' + selectedId_ord_id + '&apt_id=' + apt_id, '_blank');
+    var liFichaInspecao1aRotineira = document.getElementById("liFichaInspecao1aRotineira");
+    var liFichaInspecaoRotineira = document.getElementById("liFichaInspecaoRotineira");
+    var tos_id = 1;
+
+    if ((liFichaInspecao1aRotineira) && (liFichaInspecaoRotineira))
+    {
+        if ((liFichaInspecao1aRotineira.style.display == "none") && (liFichaInspecaoRotineira.style.display != "none"))
+            tos_id = 2;
+    }
+
+    window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira_Providencias&id=99999999&tos_id=' + tos_id + '&ord_id=' + selectedId_ord_id + '&prt_id=' + prt_id, '_blank');
 
     return false;
 }
-
 
 function Ficha2_PROVIDENCIAS_limpar() {
 
@@ -103,161 +140,7 @@ function Ficha2_PROVIDENCIAS_limpar() {
 
 }
 
-function preenchetblFicha2_PROVIDENCIAS(obj_id, classe, tipo) {
-    classe = parseInt(classe);
-    tipo = parseInt(tipo);
-    selectedId_clo_id = classe;
-    selectedId_tip_id = tipo;
-
-
-    // limpa antes de preencher
-    Ficha2_PROVIDENCIAS_limpar();
-
-
-    var ord_id = 0;
-    if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
-        ord_id = selectedId_ord_id;
-
-    var url = "/Objeto/ObjAtributoValores_ListAll";
-    var data = { "obj_id": obj_id, "ord_id": ord_id };
-
-    if (moduloCorrente == 'OrdemServico') {
-        var StatusOS = parseInt(filtroStatusOS);
-        // if (StatusOS == 11) {
-
-        if (StatusOS <= 11) {
-            url = "/Inspecao/InspecaoAtributosValores_ListAll";
-            data = { "ord_id": selectedId_ord_id };
-        }
-    }
-
-    $.ajax({
-        "url": url,
-        "type": "GET",
-        "datatype": "json",
-        "data": data,
-        "success": function (result) {
-            for (var i = 0; i < result.data.length; i++) {
-
-                // preenche os LABELS
-                var label = document.getElementById(result.data[i].atv_controle.replace("chk_", "lbl").replace("cmb_", "lbl"));
-                if (label) {
-                    // procura o label2
-                    var label2 = document.getElementById((nome_segundo_cabecalho2(label.id)));
-
-                    var texto = result.data[i].atr_atributo_nome;
-                    if (texto.includes('|')) {
-                        partes = texto.split("|");
-                        texto = partes[partes.length - 1].trim();
-                    }
-                    label.innerText = texto;
-
-                    if (label2)
-                        label2.innerText = texto;
-                }
-
-                // preenche o valor se houver
-                if (parseInt(result.data[i].nItens) == 0) {
-                    var textbox = document.getElementById(result.data[i].atv_controle.replace("lbl", "txt_"));
-                    var textbox2 = document.getElementById((nome_segundo_cabecalho2(result.data[i].atv_controle.replace("lbl", "txt_"))).replace("lbl", "txt_"));
-                    var mascara = result.data[i].atr_mascara_texto;
-
-                    if (textbox) {
-                        textbox.value = result.data[i].atv_valor;
-
-                        // coloca mascara no textbox
-                        if (mascara != "") {
-                            jQuery(textbox).mask(mascara);
-                            jQuery(textbox).attr('placeholder', mascara.replace(/9/g, '0'));
-                        }
-
-                    }
-                    if (textbox2) {
-                        textbox2.value = result.data[i].atv_valor;
-
-                        if (mascara != "") {
-                            jQuery(textbox2).mask(mascara);
-                            jQuery(textbox).attr('placeholder', mascara.replace(/9/g, '0'));
-                        }
-                    }
-                }
-                else
-                    if (result.data[i].atr_apresentacao_itens == 'combobox') {
-                        var combo = document.getElementById(result.data[i].atv_controle);
-                        var combo2 = document.getElementById((nome_segundo_cabecalho2(result.data[i].atv_controle)));
-
-                        if (combo) {
-                            combo.innerText = null; // limpa
-
-                            // preenche combo
-                            var lista = result.data[i].atr_itens_todos.split(";");
-                            for (var m = 0; m < lista.length; m++) {
-                                var opt = document.createElement("option");
-                                opt.value = lista[m].substring(0, 3);
-                                opt.textContent = lista[m].substring(3);
-
-                                combo.appendChild(opt);
-                            }
-
-                            combo.value = result.data[i].atv_valor;
-                        }
-
-                        if (combo2) {
-                            combo2.innerText = null; // limpa
-
-                            // preenche combo
-                            var lista = result.data[i].atr_itens_todos.split(";");
-                            for (var m = 0; m < lista.length; m++) {
-                                var opt2 = document.createElement("option");
-                                opt2.value = lista[m].substring(0, 3);
-                                opt2.textContent = lista[m].substring(3);
-                                combo2.appendChild(opt2);
-                            }
-                            combo2.value = result.data[i].atv_valor;
-                        }
-
-                    }
-                    else
-                        if (result.data[i].atr_apresentacao_itens == 'checkbox') {
-                            var checkbox_prefixo = result.data[i].atv_controle;
-
-                            var lista = result.data[i].atr_itens_todos.split(";");
-                            for (var m = 0; m < lista.length; m++) {
-                                var valor = lista[m].substring(0, 3);
-                                var texto = lista[m].substring(3);
-                                var checkbox = document.getElementById(checkbox_prefixo + "_" + parseInt(valor));
-                                if (checkbox) {
-                                    var label = document.getElementById(checkbox_prefixo.replace("chk_", "lbl") + "_" + parseInt(valor));
-                                    if (label)
-                                        label.innerText = texto;
-
-                                    checkbox.value = valor;
-
-                                    // preenche os valores correspondentes
-                                    if (parseInt(valor) == parseInt(result.data[i].ati_ids)) {
-                                        var tick = result.data[i].atv_valor.substring(0, 1);
-                                        checkbox.checked = tick == "1" ? true : false;
-
-                                        // procura um textbox correspondente, do tipo checkbox+textbox
-                                        var txt = document.getElementById(checkbox_prefixo.replace("chk", "txt") + "_" + parseInt(valor));
-                                        if (txt) {
-                                            var texto = result.data[i].atv_valor.substr(2);
-                                            if (texto != "") {
-                                                txt.value = texto;
-                                                checkbox.checked = true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-            }
-
-        }
-    });
-
-
+function preenchetblFicha2_PROVIDENCIAS() {
 
     if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao")) {
 
@@ -266,10 +149,7 @@ function preenchetblFicha2_PROVIDENCIAS(obj_id, classe, tipo) {
 
 }
 
-function Ficha2_PROVIDENCIAS_CriarTabelaGrupos(ehRead) {
-
-    if (ehRead == null)
-        ehRead = true;
+function Ficha2_PROVIDENCIAS_CriarTabelaGrupos() {
 
     // limpa as linhas se houver
     var table = document.getElementById("tblFicha2_PROVIDENCIAS_GRUPOS");
@@ -281,7 +161,7 @@ function Ficha2_PROVIDENCIAS_CriarTabelaGrupos(ehRead) {
 
 
     var linhas = '';
-    var celulaPai = document.getElementById("Ficha2_PROVIDENCIAS_tr_Cabecalho");
+    var celulaPai = document.getElementById("Ficha2_PROVIDENCIAS_tr_Cabecalho_TUDO");
 
     var ord_id = 0;
     if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
@@ -291,38 +171,48 @@ function Ficha2_PROVIDENCIAS_CriarTabelaGrupos(ehRead) {
         "url": "/Objeto/GruposVariaveisValores_ListAll",
         "type": "GET",
         "datatype": "json",
-        "data": { "obj_id": selectedId_obj_id, "ord_id": ord_id },
+        "data": {
+            "obj_id": selectedId_obj_id, "ord_id": ord_id, "ehProvidencia": 1, "filtro_prt_id":99999 },
         "success": function (result) {
-            for (var i = 0; i < result.data.length; i++) {
-                if (parseInt(result.data[i].nCabecalhoGrupo) == 1)  // CABECALHO 1
-                    linhas = linhas + cabecalho1.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+
+            // varre as linhas do dataset
+            for (var i = 0; i < result.data.length; i++)
+            {
+                if (parseInt(result.data[i].nCabecalhoGrupo) == 5)  // CABECALHO 0
+                {
+                  //  celulaPai = document.getElementById("Ficha2_PROVIDENCIAS_tr_Cabecalho_" + i);
+                    if (i > 0) linhas = linhas + rodape0_Providencias;
+
+                    linhas = linhas + cabecalho0_Providencias.replace("XXXXX", result.data[i].prt_descricao).replace("YYY", i).replace("PRT_IDDD", result.data[i].prt_id);
+                    linhas = linhas + cabecalhoTabela.replace("YYY", i);
+                }
                 else
+                  if (parseInt(result.data[i].nCabecalhoGrupo) == 1)  // CABECALHO 1
+                    linhas = linhas + cabecalho1_Providencias.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+                  else
                     if (parseInt(result.data[i].nCabecalhoGrupo) == 2) // CABECALHO 2
                     {
                         var visibilitySub2 = "hidden";
-                        //if ((parseInt(result.data[i].tip_pai) == 22) || (parseInt(result.data[i].tip_pai) == 23) )
-                        //    visibilitySub2 = "visible";
-
-                        linhas = linhas + cabecalho2.replace(/TIPP_IIDD/g, result.data[i].tip_pai).replace(/XXXXX/g, result.data[i].nome_pai).replace(/YYY/g, i).replace("visibilitySubdivisao2", visibilitySub2);
+                        linhas = linhas + cabecalho2_Providencias.replace(/TIPP_IIDD/g, result.data[i].tip_pai).replace(/XXXXX/g, result.data[i].nome_pai).replace(/YYY/g, i).replace("visibilitySubdivisao2", visibilitySub2);
                     }
                     else
                         if (parseInt(result.data[i].nCabecalhoGrupo) == 3) // CABECALHO 3
-                            linhas = linhas + cabecalho3.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+                            linhas = linhas + cabecalho3_Providencias.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
                         else
                             if (parseInt(result.data[i].nCabecalhoGrupo) == 0) // LINHA NORMAL
                             {
-                                var linhaAux = linhaGrupos;
+                                var linhaAux = linhaGrupos_Providencias;
                                 linhaAux = linhaAux.replace("YYY", i);
 
                                 // MESCLA CELULAS SE NECESSARIO
                                 if ((result.data[i].nomeGrupo.trim() != "") && (parseInt(result.data[i].mesclarLinhas) > 0)) {
-                                    linhaAux = linhaAux.replace(/MesclarGrupo/g, MesclarGrupo);
-                                    linhaAux = linhaAux.replace(/Mesclar_Condicao_Inspecao/g, Mesclar_Condicao_Inspecao);
+                                    linhaAux = linhaAux.replace(/MesclarGrupo_Providencias/g, MesclarGrupo_Providencias);
+                                    linhaAux = linhaAux.replace(/Mesclar_Condicao_Inspecao_Providencias/g, Mesclar_Condicao_Inspecao_Providencias);
                                     linhaAux = linhaAux.replace(/N_ROWSPAN/g, result.data[i].mesclarLinhas);
                                 }
                                 else {
-                                    linhaAux = linhaAux.replace(/MesclarGrupo/g, "");
-                                    linhaAux = linhaAux.replace(/Mesclar_Condicao_Inspecao/g, "");
+                                    linhaAux = linhaAux.replace(/MesclarGrupo_Providencias/g, "");
+                                    linhaAux = linhaAux.replace(/Mesclar_Condicao_Inspecao_Providencias/g, "");
                                 }
 
 
@@ -439,7 +329,7 @@ function Ficha2_PROVIDENCIAS_CriarTabelaGrupos(ehRead) {
                                 linhaAux = linhaAux.replace(/txt_unidade_XXXXX/g, result.data[i].uni_unidade);
                                 //  linhaAux = linhaAux.replace(/lbl_unidade_XXXXX/g, result.data[i].uni_unidade);
                                 linhaAux = linhaAux.replace(/txt_quantidade_XXXXX/g, result.data[i].ovv_tpu_quantidade);
-
+                               
                                 linhas = linhas + linhaAux;
                             }
 
@@ -448,37 +338,8 @@ function Ficha2_PROVIDENCIAS_CriarTabelaGrupos(ehRead) {
             // mescla na tabela existente
             celulaPai.insertAdjacentHTML('afterend', linhas);
 
-            // coloca mascara no campo quantidade
-            var qts = $('[id^="txt_quantidade_"]');
-            for (var i = 0; i < qts.length; i++) {
-                jQuery(qts[i]).attr('placeholder', "000.00");
-                jQuery(qts[i]).mask("999.99");
-            }
-
-
-            //if (table)
-            //    Ficha2_PROVIDENCIAS_setaReadWrite(table, ehRead);
         }
     });
-
-}
-
-
-function Ficha2_PROVIDENCIAS_setaReadWrite(tabela, ehRead) {
-    // habilita ou desabilita todos os controles editaveis
-    var lstTxtBoxes = tabela.getElementsByTagName('input');
-    var lstCombos = tabela.getElementsByTagName('select');
-    var lstTextareas = tabela.getElementsByTagName('textarea');
-    var cmb_atr_id_98 = document.getElementById("cmb_atr_id_98");
-
-    for (var i = 0; i < lstTxtBoxes.length; i++)
-            lstTxtBoxes[i].disabled = ehRead;
-
-    for (var i = 0; i < lstTextareas.length; i++)
-            lstTextareas[i].disabled = ehRead;
-
-    for (var i = 0; i < lstCombos.length; i++)
-            lstCombos[i].disabled = ehRead;
 
 }
 

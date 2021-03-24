@@ -545,10 +545,12 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>JsonResult Lista de GruposVariaveisValores</returns>
-        public JsonResult GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public JsonResult GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
