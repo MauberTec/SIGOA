@@ -107,7 +107,7 @@ namespace WebApp.Controllers
         /// <param name="rod_codigo">Filtro por Código da Rodovia</param>
         /// <param name="kminicial">Km Inicial</param>
         /// <param name="kmfinal">km Final</param>
-        /// <returns></returns>
+        /// <returns>JsonResult</returns>
         public JsonResult Integracao_VDMs_ListAll(string rod_codigo = "", decimal kminicial = 0, decimal kmfinal = 0)
         {
             Gerais saida = new Gerais();

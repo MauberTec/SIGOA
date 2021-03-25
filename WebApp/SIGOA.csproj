@@ -206,7 +206,6 @@
     <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
-    <Compile Include="Controllers\MultiselectController.cs" />
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\PoliticaConservaController.cs" />
