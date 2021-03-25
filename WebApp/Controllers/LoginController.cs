@@ -37,9 +37,12 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult ValidarUsuario(Usuario paramUsuario)
         {
+            string PaginaInicial = new ParametroBLL().Parametro_GetbyID("PaginaInicial").par_valor;
+
             int retorno = new LoginBLL().ValidarUsuario(paramUsuario);
-            bool valid = retorno >= 0;              
-            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+            bool valid = retorno >= 0;
+
+            return Json(new { status = valid, erroId = retorno, data = PaginaInicial }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

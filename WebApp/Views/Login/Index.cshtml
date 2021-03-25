@@ -34,7 +34,7 @@
 
 </head>
 <body class="hold-transition login-page">
-    <form onsubmit="Login()">
+    <form >
         <div class="login-box">
             <div class="login-box-body">
                 <div class="text-center">
@@ -57,7 +57,7 @@
                     <input type="password" id="usu_senha" name="usu_senha" 
                            class="form-control" placeholder="Senha" ToolTip="Digite a Senha"
                            data-val="true" data-val-required="- digite a senha." required
-                           pattern=".{5,240}" 
+                           pattern=".{5,240}"  onkeydown="usu_senha_onkeydown()"
                             maxlength="240" />
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 </div>

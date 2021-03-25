@@ -1,4 +1,9 @@
-﻿
+﻿function usu_senha_onkeydown() {
+    if (event.keyCode == 13) {
+        btnLogin_onclick();
+    }
+}
+
 //Função para Login -- Validando os campos login e senha preenchidos
 function btnLogin_onclick()
 {
@@ -19,7 +24,7 @@ function btnLogin_onclick()
         dataType: "json",
         success: function (result) {
             if (result.status == true) {
-                window.location.href = "/Objeto/ObjPriorizacao/160";
+                window.location.href = result.data;
             }
             else
                 if (result.erroId == -1) {
@@ -57,6 +62,7 @@ function btnLogin_onclick()
 
     return false;
 }
+
 
 //function Login() {
 //    event.preventDefault();
