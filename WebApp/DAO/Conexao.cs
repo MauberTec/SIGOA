@@ -36,6 +36,7 @@ namespace WebApp.DAO
             {
                 try
                 {
+
                     connection.Open();
                     return true;
                 }
