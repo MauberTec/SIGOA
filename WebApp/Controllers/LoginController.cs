@@ -38,7 +38,7 @@ namespace WebApp.Controllers
         public JsonResult ValidarUsuario(Usuario paramUsuario)
         {
             int retorno = new LoginBLL().ValidarUsuario(paramUsuario);
-            bool valid = retorno >= 0;
+            bool valid = retorno >= 0;              
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
 

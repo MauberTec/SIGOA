@@ -19,7 +19,7 @@ function btnLogin_onclick()
         dataType: "json",
         success: function (result) {
             if (result.status == true) {
-                window.location.href = "/Home/Index";
+                window.location.href = "/Objeto/ObjPriorizacao/160";
             }
             else
                 if (result.erroId == -1) {

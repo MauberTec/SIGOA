@@ -22,7 +22,7 @@ namespace WebApp.Controllers
         {
             Usuario paramUsuario = (Usuario)Session["Usuario"];
             ListaMenus_Lateral(ref paramUsuario);
-
+            //Response.Redirect("/Objeto/ObjPriorizacao/160");
             return View();
         }
 
