@@ -634,10 +634,12 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>Lista de ObjAtributoValores</returns>
-        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return new ObjetoDAO().GruposVariaveisValores_ListAll(obj_id, ord_id);
+            return new ObjetoDAO().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id);
         }
 
 
@@ -940,12 +942,21 @@ namespace WebApp.Business
         /// Lista de Objetos Priorizados
         /// </summary>
         /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
-        /// <param name="Regionais">Filtro por Regionais</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
+        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
+        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
+        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
         /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
-        /// <returns>List ObjPriorizacao</returns>
-        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, string Regionais, int? somenteINSP_ESPECIAIS = 0)
+        /// <returns>Lista de Objetos</returns>
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia,
+                                                            string FiltroidRodovias, string FiltroidRegionais, string FiltroidObjetos, string Filtro_data_De, string Filtro_data_Ate,
+                                                            int? somenteINSP_ESPECIAIS = 0)
         {
-            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, Regionais, somenteINSP_ESPECIAIS);
+            // cria lista de Regionais
+            string strRegionais = new Gerais().str_Regionais();
+
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS, strRegionais);
 
         }
 

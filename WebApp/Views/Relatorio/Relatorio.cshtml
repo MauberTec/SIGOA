@@ -120,12 +120,12 @@
                         <br /><br />
                     </div>
 
-                    <div class="form-group" id="divFiltroTipoData" style="display:none">
-                        <label class="control-label col-sm-1">Data</label>
+                    <div class="form-group" id="divFiltroTipoData">
+                        <label class="control-label col-sm-1" id="lblData" style="display:none">Data</label>
                         <div class="col-sm-11">
                             <table>
                                 <tr>
-                                    <td>
+                                    <td id="tdCmbDatas" style="display:none">
                                         <select name="cmbDatas" id="cmbDatas" class="form-control" onchange="cmbDatas_onchange()" style="margin-left: 5px !important; background-color:#f4f4f4 !important;">
                                             <option value="">--Selecione--</option>
                                             <option value="Abertura">Data Abertura</option>
@@ -138,8 +138,8 @@
                                             <option value="Reinicio">Data Reinício</option>
                                         </select>
                                     </td>
-                                    <td style="width:10px;"></td>
-                                    <td>
+                                    <td  id="tdEspaco" style="width:10px; visibility:hidden"></td>
+                                    <td id="tdDatasDeAte" style="visibility:hidden">
                                         <table id="tblDatasDeAte" style="visibility:hidden">
                                             <tr>
                                                 <td>
@@ -163,7 +163,6 @@
                                             </tr>
                                         </table>
                                     </td>
-
                                 </tr>
                             </table>
                         </div>
@@ -226,8 +225,6 @@
             tblDatasDeAte.style.visibility = "hidden";
         else
             tblDatasDeAte.style.visibility = "visible";
-
-
     }
 
     function LimparFiltroRelatorios() {
@@ -252,7 +249,8 @@
         return false;
     }
 
-    function ExecutarFiltroRelatorios() {
+    function ExecutarFiltroRelatorios()
+    {
         var relatorio = '';
         var parametros = '';
 
@@ -270,22 +268,15 @@
 
         var qualModuloId = @qualModuloId;
 
-        if ((qualModuloId == 920) || (qualModuloId == 940)) {
-            var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
-            if (txtFiltroObj_codigo.trim() != "")
-                parametros = parametros + '&FiltroObj_codigo=' + idsObjetosSelecionados;
-            else
-                parametros = parametros + '&FiltroObj_codigo=';
-        } 
-
-        if (qualModuloId == 910) {
-            var cmbFiltroTiposOS = ($("#cmbFiltroTiposOS").val() + ';').replaceAll(",", ";");
+        if (qualModuloId == 910) // relatorio O.S.
+        {
+            var cmbFiltroTiposOS = ($("#cmbFiltroTiposOS").val() + '').replaceAll(",", ";");
             if (cmbFiltroTiposOS.trim() != "")
                 parametros = parametros + '&FiltroTiposOS=' + cmbFiltroTiposOS;
             else
                 parametros = parametros + '&FiltroTiposOS=';
 
-            var cmbFiltroStatusOS = ($("#cmbFiltroStatusOS").val() + ';').replaceAll(",", ";");
+            var cmbFiltroStatusOS = ($("#cmbFiltroStatusOS").val() + '').replaceAll(",", ";");
             if (cmbFiltroStatusOS.trim() != "")
                 parametros = parametros + '&FiltroStatusOS=' + cmbFiltroStatusOS;
             else
@@ -294,24 +285,62 @@
             var cmbDatas = $('#cmbDatas').val();
             if (cmbDatas.selectedIndex > 0) {
                 var filtro_data_De = $('#filtro_data_De').val();
-                var filtro_data_Ate = $('#filtro_data_Ate').val();
-                parametros = parametros + '&filtro_data_De=' + filtro_data_De;
-                parametros = parametros + '&filtro_data_Ate=' + filtro_data_Ate;
+                var Filtro_data_Ate = $('#filtro_data_Ate').val();
+                parametros = parametros + '&Filtro_tipo_data=' + cmbDatas + '&Filtro_data_De=' + filtro_data_De + '&Filtro_data_Ate=' + Filtro_data_Ate;
+            }
+            else
+                parametros = parametros + '&Filtro_tipo_data=&Filtro_data_De=&Filtro_data_Ate=';
 
+        }
+        else
+        if (qualModuloId == 920)  // relatorio OAE
+        {
+            var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
+            if (txtFiltroObj_codigo.trim() != "")
+                parametros = parametros + '&FiltroObj_codigo=' + idsObjetosSelecionados;
+            else
+                parametros = parametros + '&FiltroObj_codigo=';
+
+            var cmbDatas = $('#cmbDatas').val();
+            var filtro_data_De = $('#filtro_data_De').val();
+            if (filtro_data_De !== null)
+            {
+                var Filtro_data_Ate = $('#filtro_data_Ate').val();
+                parametros = parametros + '&Filtro_tipo_data=' + cmbDatas + '&Filtro_data_De=' + filtro_data_De + '&Filtro_data_Ate=' + Filtro_data_Ate;
+            }
+            else
+                parametros = parametros + '&Filtro_tipo_data=&Filtro_data_De=&Filtro_data_Ate=';
+        }
+        else
+            if (qualModuloId == 940)  // relatorio Acoes
+            {
+                var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
+                if (txtFiltroObj_codigo.trim() != "")
+                    parametros = parametros + '&FiltroObj_codigo=' + idsObjetosSelecionados;
+                else
+                    parametros = parametros + '&FiltroObj_codigo=';
+
+                var cmbDatas = $('#cmbDatas').val();
+                var filtro_data_De = $('#filtro_data_De').val();
+                if (filtro_data_De !== null) {
+                    var Filtro_data_Ate = $('#filtro_data_Ate').val();
+                    parametros = parametros + '&Filtro_tipo_data=' + cmbDatas + '&Filtro_data_De=' + filtro_data_De + '&Filtro_data_Ate=' + Filtro_data_Ate;
+                }
+                else
+                    parametros = parametros + '&Filtro_tipo_data=&Filtro_data_De=&Filtro_data_Ate=';
 
             }
-        }
 
-        switch  (@qualModuloId)
-        {
-            case 910: relatorio = 'rptRelatorio_OS';  break;
-            case 920: relatorio = 'rptRelatorio_OAE'; break;
-            case 930: relatorio = 'rptRelatorio_Priorizacao' ; break;
+
+        switch (@qualModuloId) {
+            case 910: relatorio = 'rptRelatorio_OS'; break;
+            case 920: relatorio = 'rptRelatorio_PerformanceOAEs'; break;
+            case 930: relatorio = 'rptRelatorio_Priorizacao'; break;
             case 940: relatorio = 'rptRelatorio_Acoes'; break;
         }
 
 
-        window.open('../../Reports/frmReport.aspx?relatorio='+  relatorio + parametros , '_blank');
+        window.open('../../Reports/frmReport.aspx?relatorio=' + relatorio + parametros, '_blank');
         return false;
     }
 
@@ -323,14 +352,39 @@
         $("#divFiltroOAE").css("display", "none");
         $("#divFiltroTipoOS").css("display", "none");
         $("#divFiltroStatusOS").css("display", "none");
-        $("#divFiltroTipoData").css("display", "none");
+
+        $("#lblData").css("display", "none");
+        $("#tdCmbDatas").css("display", "none");
+
+        var tdEspaco = document.getElementById("tdEspaco");
+        var tdDatasDeAte = document.getElementById("tdDatasDeAte");
+        var tblDatasDeAte = document.getElementById("tblDatasDeAte");
+
+        tdEspaco.style.visibility = "hidden";
+        tdDatasDeAte.style.visibility = "hidden";
+        tblDatasDeAte.style.visibility = "hidden";
 
         switch  (@qualModuloId)
         {
-            case 910: $('#divFiltroTipoOS').css("display", "block"); $('#divFiltroStatusOS').css("display", "block"); $('#divFiltroTipoData').css("display", "block"); $('#divFiltroDataDe').css("display", "block"); $('#divFiltroDataAte').css("display", "block"); break;
-            case 920: $('#divFiltroOAE').css("display", "block"); break;
-           // case 930: ;  break;
-            case 940: $('#divFiltroOAE').css("display", "block"); break;
+            case 910: $('#divFiltroTipoOS').css("display", "block");
+                $('#divFiltroStatusOS').css("display", "block");
+                $("#lblData").css("display", "block");
+                $("#tdCmbDatas").css("display", "block");
+                break;
+            case 920: $('#divFiltroOAE').css("display", "block");
+                $("#lblData").css("display", "block");
+                tdDatasDeAte.style.visibility = "visible";
+                tblDatasDeAte.style.visibility = "visible";
+
+                break;
+           // case 930: ;  break; // nao precisa porque é somente filtro rodovia+regional
+            case 940:
+                $('#divFiltroOAE').css("display", "block");
+                $("#lblData").css("display", "block");
+                tdDatasDeAte.style.visibility = "visible";
+                tblDatasDeAte.style.visibility = "visible";
+
+                break;
         }
 
 
@@ -620,7 +674,7 @@
                         <div class="col-sm-9" style="padding-left:0px !important">
 
                             <input id="txtLocalizarRodovia" name="txtLocalizarRodovia" class="form-control"
-                                   placeholder="Digite o Código/Iniciais do Rodovia"
+                                   placeholder="Digite o Código/Iniciais da Rodovia"
                                    autocomplete="off" maxlength="20"
                                    onkeyup="if ((event.keyCode == 13) || (this.value.length > 1) ) { event.preventDefault(); LocalizarRodovias(); return false;} " />
                         </div>

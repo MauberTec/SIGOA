@@ -269,11 +269,16 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
     var liFichaInspecao1aRotineira = document.getElementById("liFichaInspecao1aRotineira");
     var liFichaInspecaoRotineira = document.getElementById("liFichaInspecaoRotineira");
+    var liFichaInspecaoRotineiraProvidencias = document.getElementById("liFichaInspecaoRotineiraProvidencias");
+
     var liFichaInspecaoEspecial = document.getElementById("liFichaInspecaoEspecial");
     var liFichaInspecaoEspecialAnomalias = document.getElementById("liFichaInspecaoEspecialAnomalias");
     var liFichaInspecaoEspecialAnomaliasProvidencias = document.getElementById("liFichaInspecaoEspecialAnomaliasProvidencias");
 
     var liFichaNotificacaoOcorrencia = document.getElementById("liFichaNotificacaoOcorrencia");
+
+    var liIndicacaoServicos = document.getElementById("liIndicacaoServicos");
+
 
     //if (liDetalhesOS)
     //    $('[href="#tabDetalhesOS"]').tab('show');
@@ -285,6 +290,9 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
     if (liFichaInspecaoRotineira)
         liFichaInspecaoRotineira.style.display = "none";
+
+    if (liFichaInspecaoRotineiraProvidencias)
+        liFichaInspecaoRotineiraProvidencias.style.display = "none";
 
     if (liFichaInspecaoEspecial)
         liFichaInspecaoEspecial.style.display = "none";
@@ -299,16 +307,21 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     if (liFichaNotificacaoOcorrencia)
         liFichaNotificacaoOcorrencia.style.display = "none";
 
+    if (liIndicacaoServicos)
+        liIndicacaoServicos.style.display = "none";
 
     switch (parseInt(selectedId_tos_id)) {
         case 7:
             liFichaInspecaoCadastral.style.display = "unset";
             liFichaInspecao1aRotineira.style.display = "unset";
+            liFichaInspecaoRotineiraProvidencias.style.display = "unset";
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoCadastral"]').tab('show');
             break;
 
-        case 8: liFichaInspecaoRotineira.style.display = "unset";
+        case 8:
+            liFichaInspecaoRotineira.style.display = "unset";
+            liFichaInspecaoRotineiraProvidencias.style.display = "unset";
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoRotineira"]').tab('show');
             break;
@@ -326,13 +339,17 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
             break;
 
-        case 18: liFichaNotificacaoOcorrencia.style.display = "unset";
+        case 18:
+            liFichaNotificacaoOcorrencia.style.display = "unset";
+            liIndicacaoServicos.style.display = "unset";
              if (bool_posicionar)
                  $('[href="#tabFichaNotificacaoOcorrencia"]').tab('show');
             break;
 
 
-        default: $('[href="#tabDetalhesOS"]').tab('show');
+        default:
+            liIndicacaoServicos.style.display = "unset";
+            $('[href="#tabDetalhesOS"]').tab('show');
 
     }
 
@@ -425,7 +442,7 @@ function OrdemServico_LimparDetalhes()
     $('#txtord_criticidade').val("");
 
 
-    $('#txtord_quantidade_estimada').val("");
+  // $('#txtord_quantidade_estimada').val("");
     $('#txtord_custo_estimado').val("");
 
     $('#txttpu_codigo_der').val("");
@@ -445,7 +462,7 @@ function OrdemServico_LimparDetalhes()
 
     $('#cmbStatusOS').val(null);
 
-    $('#txtord_quantidade_executada').val("");
+  //  $('#txtord_quantidade_executada').val("");
     $('#txtord_custo_final').val("");
 
     $('#chkord_ativo').prop('checked', true);
@@ -508,9 +525,9 @@ function OrdemServico_Salvar() {
             ord_data_termino_programada: $('#txtord_data_termino_programada').val(),
             ord_data_inicio_execucao: $('#txtord_data_inicio_execucao').val(),
             ord_data_termino_execucao: $('#txtord_data_termino_execucao').val(),
-            ord_quantidade_estimada: $('#txtord_quantidade_estimada').val(),
+          //  ord_quantidade_estimada: $('#txtord_quantidade_estimada').val(),
             uni_id_qt_estimada: $('#txtuni_id_qt_estimada').val(),
-            ord_quantidade_executada: $('#txtord_quantidade_executada').val(),
+         //   ord_quantidade_executada: $('#txtord_quantidade_executada').val(),
             uni_id_qt_executada: $('#txtuni_id_qt_executada').val(),
             ord_custo_estimado: $('#txtord_custo_estimado').val(),
             ord_custo_final: $('#txtord_custo_final').val(),
@@ -622,7 +639,7 @@ function OrdemServico_Editar(id, origem) {
 
             $('#txtord_criticidade').val( parseFloat(result.ord_criticidade).toFixed(2));
 
-            $('#txtord_quantidade_estimada').val(result.ord_quantidade_estimada);
+        //    $('#txtord_quantidade_estimada').val(result.ord_quantidade_estimada);
             $('#txtord_custo_estimado').val(result.ord_custo_estimado);
 
             $('#txttpu_codigo_der').val(result.tpu_codigo_der.trim());
@@ -640,6 +657,7 @@ function OrdemServico_Editar(id, origem) {
             $('#txtord_data_termino_execucao').val(result.ord_data_termino_execucao.substring(0, 10));
             $('#txtord_responsavel_suspensao').val(result.ord_responsavel_suspensao.trim());
             $('#txtord_responsavel_cancelamento').val(result.ord_responsavel_cancelamento.trim());
+            $('#txt_IndicacaoServico').val(result.ord_indicacao_servico.trim());
 
             // preenche o combo de Status
             var cmbStatusOS = document.getElementById("cmbStatusOS");
@@ -656,7 +674,7 @@ function OrdemServico_Editar(id, origem) {
 
             $('#cmbStatusOS').val(result.sos_id);
 
-            $('#txtord_quantidade_executada').val(result.ord_quantidade_executada);
+        //    $('#txtord_quantidade_executada').val(result.ord_quantidade_executada);
             $('#txtord_custo_final').val(result.ord_custo_final);
 
             $('#chkord_ativo').prop('checked', true);
@@ -857,6 +875,97 @@ function ExecutarFiltro() {
 
     carregaGridOS(selectedId_ord_id);
 
+}
+
+
+
+// ********* ABA INDICACAO DE SERVICOS ******************************************
+
+function OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id) {
+    event.preventDefault(); // cancel default behavior
+
+    $.ajax({
+        url: "/OrdemServico/OrdemServico_Indicacao_Servico_ListAll",
+        type: "GET",
+        data: { ord_id: selectedId_ord_id },
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        success: function (result) {
+
+            $('#txt_IndicacaoServico').val(result.data.trim());
+
+            document.getElementById("txt_IndicacaoServico").disabled = true;
+            document.getElementById("btnEditar_IndicacaoServicos").style.display = "inline";
+            document.getElementById("btnSalvar_IndicacaoServicos").style.display = "none";
+            document.getElementById("btnCancelar_IndicacaoServicos").style.display = "none";
+
+             return false;
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+        }
+    });
+    return false;
+}
+function IndicacaoServicos_Editar()
+{
+    document.getElementById("btnEditar_IndicacaoServicos").style.display = "none";
+    document.getElementById("btnSalvar_IndicacaoServicos").style.display = "inline";
+    document.getElementById("btnCancelar_IndicacaoServicos").style.display = "inline";
+
+    document.getElementById("txt_IndicacaoServico").disabled = false;
+
+    return false;
+}
+function IndicacaoServicos_Cancelar() {
+    document.getElementById("btnEditar_IndicacaoServicos").style.display = "inline";
+    document.getElementById("btnSalvar_IndicacaoServicos").style.display = "none";
+    document.getElementById("btnCancelar_IndicacaoServicos").style.display = "none";
+
+    OrdemServico_PreencheDetalhes(selectedId_ord_id);
+
+    document.getElementById("txt_IndicacaoServico").disabled = true;
+
+    return false;
+}
+function IndicacaoServicos_Salvar() {
+
+
+        $.ajax({
+            url: "/OrdemServico/OrdemServico_Indicacao_Servico_Salvar",
+            data: JSON.stringify({ ord_id: selectedId_ord_id, ord_indicacao_servico: $("#txt_IndicacaoServico").val()}),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id);
+
+                document.getElementById("txt_IndicacaoServico").disabled = true;
+                document.getElementById("btnEditar_IndicacaoServicos").style.display = "inline";
+                document.getElementById("btnSalvar_IndicacaoServicos").style.display = "none";
+                document.getElementById("btnCancelar_IndicacaoServicos").style.display = "none";
+
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Registro salvo com sucesso'
+                });
+
+                return false;
+            },
+            error: function (errormessage) {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao excluir registro'
+                });
+                return false;
+            }
+        });
+
+
+return false;
 }
 
 

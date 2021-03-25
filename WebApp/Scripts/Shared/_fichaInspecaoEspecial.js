@@ -428,13 +428,13 @@ function Ficha4_setaReadWrite(tabela, ehRead) {
     var display1 = 'block';
     var display2 = 'none';
 
-    if (ehRead) {
-        display1 = 'none';
-        display2 = 'block';
-        document.getElementById("btnEsquemaUpload").style.display = 'none';
-    }
-    else
-        document.getElementById("btnEsquemaUpload").style.display = 'unset';
+    //if (ehRead) {
+    //    display1 = 'none';
+    //    display2 = 'block';
+    //    document.getElementById("btnEsquemaUpload").style.display = 'none';
+    //}
+    //else
+    //    document.getElementById("btnEsquemaUpload").style.display = 'unset';
 
 
 

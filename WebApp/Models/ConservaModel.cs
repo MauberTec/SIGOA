@@ -32,9 +32,9 @@ namespace WebApp.Models
         /// </summary>
         public string ale_codigo { get; set; }
         /// <summary>
-        /// ogv_id
+        /// cgv_id
         /// </summary>
-        public int ogv_id { get; set; }
+        public int cgv_id { get; set; }
         /// <summary>
         /// Alerta
         /// </summary>

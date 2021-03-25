@@ -199,6 +199,7 @@
         $('#partialFicha5').empty();
         $('#partialFicha6').empty();
         $('#partialFicha7').empty();
+        $('#partialFicha8').empty();
 
         qualFicha = qualFicha1;
 
@@ -217,6 +218,7 @@
                     case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
                     case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
                     case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
+                    case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos() ; break; // inspecao ROTINEIRA - Providencias
                 }
 
                 colocaDatePickers();
@@ -235,6 +237,9 @@
 @***** SCRIPT FICHAS 2 e 3 - CADASTRAL 2 E ROTINEIRA ***********************@
 
 <script src="~/Scripts/Shared/_fichaInspecaoRotineira.js"></script>
+
+@***** SCRIPT FICHA 8 - ESPECIAL PROVIDENCIAS ***********************@
+<script src="~/Scripts/Shared/_fichaInspecaoRotineira_Providencias.js"></script>
 
 
 @***** SCRIPT FICHA 4 - ESPECIAL ***********************@
@@ -275,6 +280,10 @@
                         <a id="tabFichaInspecaoRotineiraheader" data-toggle="tab" href="#tabFichaInspecaoRotineira" onclick="abreFicha(3);">Ficha Básica - Inspeção Rotineira</a>
                     </li>
 
+                    <li style="display:none" id="liFichaInspecaoRotineiraProvidencias">
+                        <a id="tabFichaInspecaoRotineiraProvidenciasheader" data-toggle="tab" href="#tabFichaInspecaoRotineiraProvidencias" onclick="abreFicha(8);">Providências</a>
+                    </li>
+
                     <li style="display:none" id="liFichaInspecaoEspecial">
                         <a id="tabFichaInspecaoEspecialheader" data-toggle="tab" href="#tabFichaInspecaoEspecial" onclick="abreFicha(4);">Ficha de Informações Básicas - Inspeção Especial</a>
                     </li>
@@ -298,6 +307,9 @@
                         <a id="tabDocumentosAssociadosOSHeader" data-toggle="tab" href="#tabDocumentosAssociadosOS" onclick="$('#tblDocumentosAssociados').DataTable().ajax.reload();">Documentos Associados à Ordem de Serviço</a>
                     </li>
 
+                    <li  style="display:none" id="liIndicacaoServicos">
+                        <a id="tabIndicacaoServicosHeader" data-toggle="tab" href="#tabIndicacaoServicos" onclick="OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id);">Indicação de Serviços</a>
+                    </li>
                 </ul>
 
                 <div class="tab-content" id="TabContent">
@@ -473,13 +485,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">Quantidade Estimada</label></nobr>
-                                        <div class="col-sm-8">
-                                            <input id="txtord_quantidade_estimada" name="txtord_quantidade_estimada" class="form-control" maxlength="5" placeholder="Quantidade Estimada" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label class="control-label col-sm-4">Custo Estimado</label>
                                         <div class="col-sm-8">
                                             <input id="txtord_custo_estimado" name="txtord_custo_estimado" class="form-control" placeholder="Custo Estimado" maxlength="20" />
@@ -512,9 +517,9 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label col-sm-4">Classe</label>
+                                        @*<label class="control-label col-sm-4">Classe</label>*@
                                         <div class="col-sm-8">
-                                            @Html.DropDownList("cmbClassesOS", null, "-- Selecione --", new { @class = "form-control " })
+                                            @*@Html.DropDownList("cmbClassesOS", null, "-- Selecione --", new { @class = "form-control " })*@
                                         </div>
                                     </div>
 
@@ -619,13 +624,6 @@
                                             <input id="txtDummy13" class="form-control" style="visibility:hidden" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">Quantidade Executada</label></nobr>
-                                        <div class="col-sm-8">
-                                            <input id="txtord_quantidade_executada" name="txtord_quantidade_executada" class="form-control"
-                                                   placeholder="Quantidade Executada" />
-                                        </div>
-                                    </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Custo Final</label>
@@ -700,12 +698,34 @@
                         </div>
                     </div>
 
+                    <div class="tab-pane fade" id="tabFichaInspecaoRotineiraProvidencias" role="tabpanel" aria-labelledby="tabFichaInspecaoRotineiraProvidencias2">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="Ficha2_PROVIDENCIAS_Imprimir(99999);">Imprimir</button>
+                                    @*    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>*@
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Providências</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha8">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
+
                     <div class="tab-pane fade" id="tabFichaInspecaoEspecial" role="tabpanel" aria-labelledby="tabFichaInspecaoEspecial2">
                         <br /><br />
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha em Branco</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Informações Básicas da OAE - Inspeção Especial</label></h3>
@@ -725,7 +745,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha em Branco</button>
                                     <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>
                                 </div>
                                 <div class="col-sm-8">
@@ -761,7 +781,6 @@
                             @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
                         </div>
                     </div>
-
 
                     <div class="tab-pane fade" id="tabFichaNotificacaoOcorrencia" role="tabpanel" aria-labelledby="tabFichaNotificacaoOcorrencia">
                         <br /><br />
@@ -840,6 +859,44 @@
                             </thead>
                         </table>
 
+                    </div>
+
+                    <div class="tab-pane fade" id="tabIndicacaoServicos" role="tabpanel" aria-labelledby="tabIndicacaoServicos">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" id="btnEditar_IndicacaoServicos" style="display:inline" onclick="IndicacaoServicos_Editar()">Editar</button>
+                                    <button type="button" class="btn btn-primary" id="btnSalvar_IndicacaoServicos" style="display:none" onclick="IndicacaoServicos_Salvar()">Salvar</button>
+                                    <button type="button" class="btn btn-primary" id="btnCancelar_IndicacaoServicos" style="display:none" onclick="IndicacaoServicos_Cancelar()">Cancelar</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Indicação de Serviços</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+
+                        <form class="form-horizontal">
+                            <br />
+                            <div class="form-group" id="divDetalhesIndicacaoServico">
+                                <div class="col-sm-12">
+                                    <table style="width:100%; height:100%; min-height:800px">
+                                        <tr>
+                                            <td>
+                                                <h5><label class="control-label">Descrição:</label></h5>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td id="tdTexto">
+                                                <textarea id="txt_IndicacaoServico" style="width:100%; height:100%; min-height:800px; border:solid 1px lightgray; vertical-align:top"></textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
                 </div>
@@ -1069,7 +1126,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h3 class="modal-title text-center"><b><label id="lblModalHeader">Enviar Email</label></b></h3>
             </div>
-            <form class="form-horizontal" >
+            <form class="form-horizontal">
                 <br />
 
                 <div class="modal-body form-group">
@@ -1081,7 +1138,7 @@
 
                         <div class="col-sm-12">
                             <label class="control-label">Texto</label><br />
-                            <textarea id="txtEmailTexto" name="txtEmailTexto" rows="10" cols="130" ></textarea>
+                            <textarea id="txtEmailTexto" name="txtEmailTexto" rows="10" cols="130"></textarea>
                         </div>
                     </div>
                 </div>

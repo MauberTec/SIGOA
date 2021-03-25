@@ -517,7 +517,7 @@ namespace WebApp.Models
         /// <summary>
         /// Id da Variável do Grupo
         /// </summary>
-        public int ogv_id { get; set; }
+        public int cgv_id { get; set; }
 
         /// <summary>
         /// Descricao da variavel
@@ -577,6 +577,17 @@ namespace WebApp.Models
 
 
         /// <summary>
+        /// Id da providência selecionada
+        /// </summary>
+        public int prt_id { get; set; }
+
+        /// <summary>
+        /// Descricao providência selecionada
+        /// </summary>
+        public string prt_descricao { get; set; }
+
+
+        /// <summary>
         /// Lista dos itens de caracterização de situação, para preenchimento de combo
         /// </summary>
         public string caracterizacao_situacao_cmb { get; set; }   
@@ -590,6 +601,13 @@ namespace WebApp.Models
         /// Lista dos itens de tpu_descricao, para preenchimento de combo
         /// </summary>
         public string tpu_descricao_itens_cmb { get; set; }        
+
+
+        /// <summary>
+        /// Lista dos itens de providencias, para preenchimento de combo
+        /// </summary>
+        public string providencias_cmb { get; set; } 
+        
 
 
     }
@@ -606,7 +624,7 @@ namespace WebApp.Models
         /// <summary>
         /// Campos da conserva
         /// </summary>
-        public int ogv_id { get; set; }
+        public int cgv_id { get; set; }
         /// <summary>
         /// Campos da conserva
         /// </summary>

@@ -1,9 +1,8 @@
-﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
 
-//var cabecalho2 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
 var cabecalho2 =
     ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
-    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "9" >' +
+    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
     '     <table style="width:100%"> ' +
     '      <tr> ' +
     '        <td style="width:26px"> ' +
@@ -18,6 +17,9 @@ var cabecalho2 =
     '        <td> ' +
     '           <label class="lblsBold" > XXXXX</label >' +
     '       </td> ' +
+    '        <td> ' +
+    '           <label class="lblsBold" > </label >' +
+    '       </td> ' +
     '     </tr> ' +
     '   </table> ' +
 
@@ -25,7 +27,7 @@ var cabecalho2 =
     ' </tr > ';
 
 
-var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
 
     var MesclarGrupo =
         '   <td class="borderLeft borderTop borderRight borderBottomPt" rowspan=N_ROWSPAN > ' +
@@ -42,6 +44,9 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         '        </td> ' +
         '        <td> ' +
         '           <label id="lbl_Elemento_GGG_VVV" class="lblsNormal">lbl_Elemento_XXXXX</label> ' +
+        '       </td> ' +
+        '        <td> ' +
+        '           ' +
         '       </td> ' +
         '     </tr> ' +
         '   </table> ' +
@@ -94,6 +99,13 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
         '    <input id="txt_quantidade_GGG_VVV" class="txts  centroH" value="txt_quantidade_XXXXX" /> ' +
         '  </td> ' +
+        '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
+        '    <label id="lbl_providencias_GGG_VVV" class="txts" style="border:none; width:100%; text-align:center" title="providencias_descricao">prt_id_Valor</label> ' +
+        '    <select class="cmbs" id="cmb_providencias_GGG_VVV" style="display:none"> ' +
+        '          OPCOES_providencias_cmb ' +
+        '    </select> ' +
+        '  </td> ' +
+
         ' </tr> ';
 
 
@@ -677,6 +689,28 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
 
             }
         }
+
+        var lbl3_id = quem.id.replace("cmb_situacao", "lbl_providencias");
+        var lbl3 = document.getElementById(lbl3_id);
+        lbl3.innerText = "";
+        lbl3.title = "";
+        var cmb3_id = quem.id.replace("cmb_situacao", "cmb_providencias");
+        var cmb3 = document.getElementById(cmb3_id);
+        if (cmb3) {
+            for (var v = 0; v < cmb3.options.length; v++)
+            {
+                var aux = cmb3.options[v].value.split(':');
+                if ((parseInt(valor) == parseInt(aux[0]))) 
+                {
+                    cmb3.selectedIndex = v;
+
+                    lbl3.innerText = aux[1];
+                    lbl3.title = cmb3.options[v].text;
+                    break;
+                }
+            }
+        }
+
     }
 
     function Ficha2_CriarTabelaGrupos(ehRead) {
@@ -704,7 +738,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
             "url": "/Objeto/GruposVariaveisValores_ListAll",
             "type": "GET",
             "datatype": "json",
-            "data": { "obj_id": selectedId_obj_id, "ord_id": ord_id },
+            "data": { "obj_id": selectedId_obj_id, "ord_id": ord_id, "ehProvidencia": 0 },
             "success": function (result) {
                 for (var i = 0; i < result.data.length; i++) {
                     if (parseInt(result.data[i].nCabecalhoGrupo) == 1)  // CABECALHO 1
@@ -832,6 +866,40 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                                     }
                                     linhaAux = linhaAux.replace(/OPCOES_cmb_condicao/g, total);
 
+                                    // ===  cria os itens do combo cmb_providencias_GGG_VVV  ============================================
+                                    var op0 = ' <option selectedXX value="0" disabled></option> ';
+                                    var op = '  <option selectedXX value="valor">texto</option> ';
+                                    total = op0;
+                                    if (parseInt(selectedValue) == 0)
+                                        total = total.replace("selectedXX", "selected");
+                                    else
+                                        total = total.replace("selectedXX", "");
+
+                                    var selectedValue = result.data[i].prt_id;
+                                    var selectedtxt = "";
+
+                                    var str = result.data[i].providencias_cmb;
+                                    var pedacos = str.split(";");
+                                    for (k = 0; k < pedacos.length; k++) {
+                                        var aux = pedacos[k].split(":");
+                                        var opt = op;
+                                        opt = opt.replace("valor", aux[0]+ ":" + aux[1]).replace("texto", aux[2]);
+
+                                        // checa se é o item selecionado
+                                        if (parseInt(selectedValue) == parseInt(aux[1])) {
+                                            opt = opt.replace("selectedXX", "selected");
+                                            selectedtxt = aux[2];
+                                        }
+                                        else
+                                            opt = opt.replace("selectedXX", "");
+
+                                        total = total + opt;
+                                    }
+                                    linhaAux = linhaAux.replace(/OPCOES_providencias_cmb/g, total);
+                                    linhaAux = linhaAux.replace(/prt_id_Valor/g, (parseInt(result.data[i].prt_id) > 0 ? result.data[i].prt_id : ""));
+                                    linhaAux = linhaAux.replace(/providencias_descricao/g, (parseInt(result.data[i].prt_id) > 0 ? selectedtxt : ""));
+
+                                    // ============================================================================================
 
                                     if (result.data[i].nomeGrupo.trim() == "") // LIXEIRA
                                         linhaAux = linhaAux.replace(/displayZYZ/g, "hidden");
@@ -844,7 +912,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                                     // COLOCA OS DADOS
                                     linhaAux = linhaAux.replace(/OOBBJJIIDD/g, result.data[i].obj_id);
                                     linhaAux = linhaAux.replace(/GGG/g, result.data[i].obj_id);
-                                    linhaAux = linhaAux.replace(/VVV/g, result.data[i].ogv_id);
+                                    linhaAux = linhaAux.replace(/VVV/g, result.data[i].cgv_id);
                                     linhaAux = linhaAux.replace(/lbl_Elemento_XXXXX/g, result.data[i].nomeGrupo);
                                     linhaAux = linhaAux.replace(/lbl_Variaveis_XXXXX/g, result.data[i].variavel);
                                     linhaAux = linhaAux.replace(/txt_obs_XXXXX/g, result.data[i].ovv_observacoes_gerais);
@@ -852,6 +920,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                                     linhaAux = linhaAux.replace(/txt_unidade_XXXXX/g, result.data[i].uni_unidade);
                                     //  linhaAux = linhaAux.replace(/lbl_unidade_XXXXX/g, result.data[i].uni_unidade);
                                     linhaAux = linhaAux.replace(/txt_quantidade_XXXXX/g, result.data[i].ovv_tpu_quantidade);
+
 
                                     linhas = linhas + linhaAux;
                                 }
@@ -1014,18 +1083,19 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                 var GGG_VVV = table.rows[i].id.replace("trFICHA2_", "");
                 var aux = GGG_VVV.split("_");
                 var obj_id = aux[1];
-                var ogv_id = aux[2];
+                var cgv_id = aux[2];
 
                 grupoAtual = aux[1];
 
                 if (parseInt(aux[aux.length - 1]) == 0)
                     grupoAnterior = aux[1];
 
-                GGG_VVV = obj_id + "_" + ogv_id;
+                GGG_VVV = obj_id + "_" + cgv_id;
                 var ogi_id_caracterizacao_situacao = document.getElementById("cmb_situacao_" + GGG_VVV).options[document.getElementById("cmb_situacao_" + GGG_VVV).selectedIndex].value;
 
-                if (table.rows[i].cells.length > 6) {
-                    ati_id_condicao_inspecao = document.getElementById("cmb_condicao_" + GGG_VVV).options[document.getElementById("cmb_condicao_" + GGG_VVV).selectedIndex].value;
+                if (table.rows[i].cells.length > 7) {
+                    var cmb_condicao_ = document.getElementById("cmb_condicao_" + GGG_VVV);
+                    ati_id_condicao_inspecao = cmb_condicao_.options[cmb_condicao_.selectedIndex].value;
 
                     // acha o nomeGrupoAtual
                     var elemento = table.rows[i].cells[0].getElementsByTagName("label");
@@ -1049,7 +1119,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                 if (isNaN(ovv_tpu_quantidade))
                     ovv_tpu_quantidade = 0;
 
-                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + ogv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + '</tr_linha>';
+                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + cgv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + '</tr_linha>';
 
                 if (parseInt(ati_id_condicao_inspecao) == 0) {
                     linhaOK = false;

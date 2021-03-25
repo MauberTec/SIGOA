@@ -137,7 +137,8 @@ namespace WebApp.DAO
                             tpu_data_base_der = rdr["tpu_data_base_der"] == DBNull.Value ? string.Empty : rdr["tpu_data_base_der"].ToString(),
                             tpu_id = rdr["tpu_id"] == DBNull.Value ? string.Empty : rdr["tpu_id"].ToString(),
                             tpu_preco_unitario = rdr["tpu_preco_unitario"] == DBNull.Value ? -1 : Convert.ToDouble(rdr["tpu_preco_unitario"]),
-                            lst_proximos_status = rdr["lst_proximos_status"] == DBNull.Value ? string.Empty : rdr["lst_proximos_status"].ToString()
+                            lst_proximos_status = rdr["lst_proximos_status"] == DBNull.Value ? string.Empty : rdr["lst_proximos_status"].ToString(),
+                            ord_indicacao_servico = rdr["ord_indicacao_servico"] == DBNull.Value ? string.Empty : rdr["ord_indicacao_servico"].ToString()
 
                         });
                     }
@@ -686,6 +687,84 @@ namespace WebApp.DAO
 
 
 
+
+        /// <summary>
+        ///    Busca o valor do campo ord_indicacao_servico
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>string</returns>
+        public string OrdemServico_Indicacao_Servico_ListAll(int ord_id)
+        {
+            try
+            {
+                List<OrdemServico> lst = new List<OrdemServico>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_OS_INDICACAO_SERVICO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+
+                    SqlDataReader rdr = com.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        return rdr["ord_indicacao_servico"] == DBNull.Value ? string.Empty : rdr["ord_indicacao_servico"].ToString();
+                    }
+
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///    Altera os dados da Aba Indicacao de Servico no Banco
+        /// </summary>
+        /// <param name="ord_id">Id da OrdemServico selecionada</param>
+        /// <param name="ord_indicacao_servico">Texto do campo Indicaçao de serviço</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int OrdemServico_Indicacao_Servico_Salvar(int ord_id, string ord_indicacao_servico, int usu_id, string ip)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_UPD_OS_INDICACAO_SERVICO";
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@ord_indicacao_servico", ord_indicacao_servico);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+                    return Convert.ToInt32(p_return.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
 
 
 

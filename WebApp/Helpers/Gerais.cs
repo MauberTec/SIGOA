@@ -946,6 +946,24 @@ namespace WebApp.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Concatena a lista de Regionais obtidas no Sirgeo
+        /// </summary>
+        /// <returns>string</returns>
+        public string str_Regionais()
+        {
+            List<Regional> lstRegionais = get_Regionais();
+            string strRegionais = "";
+
+            for (int i = 0; i < lstRegionais.Count; i++)
+                strRegionais = strRegionais + ";" + lstRegionais[i].reg_id.ToString() + ":" + lstRegionais[i].reg_codigo + "|" + lstRegionais[i].reg_descricao;
+
+            // remove o 1o ponto e virgula
+            strRegionais = strRegionais.Substring(1);
+
+            return strRegionais;
+        }
+
 
         /// <summary>
         ///  Busca a lista de SentidoRodovias pela API

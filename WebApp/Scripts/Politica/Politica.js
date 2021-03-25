@@ -288,7 +288,7 @@ function cmbGrupos_onchange() {
             if (data.length !== 0) {
 
                 $.each(data, function (i, item) {
-                    $("#cmbVarInspec").append($('<option value=' + item.ogv_id + '>' + item.variavel + '</option>'));
+                    $("#cmbVarInspec").append($('<option value=' + item.cgv_id + '>' + item.variavel + '</option>'));
                 });
             }
 

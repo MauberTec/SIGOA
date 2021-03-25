@@ -859,8 +859,8 @@
           <DataField>nome_grupo</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ogv_id">
-          <DataField>ogv_id</DataField>
+        <Field Name="cgv_id">
+          <DataField>cgv_id</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="variavel">

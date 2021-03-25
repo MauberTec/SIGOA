@@ -255,6 +255,7 @@ function PreenchetxtCodigoDigitavel() {
                     case "A": localizacaoNome = "Apoio"; break;
                     case "E": localizacaoNome = "Encontro"; break;
                     case "V": localizacaoNome = "Vão"; break;
+                    case "T": localizacaoNome = "Trecho"; break;
                     case "VC": localizacaoNome = "Vão Caixão Perdido"; break;
                     case "VG": localizacaoNome = "Vão em Grelha"; break;
                 }
@@ -607,7 +608,7 @@ function cmbSubdivisao2_onchange() {
     if ((ivalor == 15) || (ivalor == 16)) {// 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior
         $("#cmbAEVCVG_Novo").html(""); // limpa os itens existentes
         switch (ivalor) {
-            case 15: $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("V").html("V"));  break;// Tabuleiro Face Superior
+            case 15: $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("T").html("T"));  break;// Tabuleiro Face Superior
             case 16: 
                     $("#cmbAEVCVG_Novo").append($('<option selected></option>').val("V").html("V"));
                     $("#cmbAEVCVG_Novo").append($('<option></option>').val("VC").html("VC"));
@@ -657,6 +658,16 @@ function cmbGrupoObjetos_onchange() {
 
     if (lstExcecoes.includes(valor)) {
         document.getElementById("divNumeroObjeto").style.display = 'none';
+
+        var mascara = '00';
+        if (valor == "46:PR")   // se for pavimento rigido, entao tem 3 digitos
+            mascara = '000';
+
+        jQuery("#txtLocalizacao").mask(mascara, options);
+        jQuery("#txtLocalizacao").attr('placeholder', mascara);
+        jQuery("#txtLocalizacaoAte_Novo").mask(mascara, options);
+        jQuery("#txtLocalizacaoAte_Novo").attr('placeholder', mascara);
+
     }
     else
     {
@@ -672,6 +683,35 @@ function txtLocalizacao_onkeyup() {
     txtLocalizacao.val(txtLocalizacao.val().toUpperCase());
 
     PreenchetxtCodigoDigitavel();
+
 }
+
+function txtLocalizacao_onblur() {
+
+
+    var cmbGrupoObjetosval = $("#cmbGrupoObjetos").val();
+
+    var lblPrefixoval = $('#lblPrefixo').text();
+    if (cmbGrupoObjetosval == "46:PR")  // se for pavimento rigido, os numeros possuem 3 digitos
+    {
+        var txtcodval = Right(("000" + $('#txtLocalizacao').val()), 3);
+        $('#txtLocalizacao').val(txtcodval);
+
+        var txtCodigoAte = Right(("000" + $('#txtLocalizacaoAte_Novo').val()), 3);
+        $('#txtLocalizacaoAte_Novo').val(txtCodigoAte);
+    }
+    else {
+        var txtcodval = Right(("00" + $('#txtLocalizacao').val()), 2);
+        $('#txtLocalizacao').val(txtcodval);
+
+        var txtCodigoAte = Right(("00" + $('#txtLocalizacaoAte_Novo').val()), 2);
+        $('#txtLocalizacaoAte_Novo').val(txtCodigoAte);
+    }
+
+    // atualiza descricao
+    PreenchetxtCodigoDigitavel();
+
+}
+
 
 

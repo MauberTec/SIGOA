@@ -91,18 +91,39 @@ namespace WebApp.Business
             return new OrdemServicoDAO().OrdemServico_Excluir(ord_id, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
-
         /// <summary>
         ///  Ativa/Desativa Ordem de Servico
         /// </summary>
         /// <param name="ord_id">Id da Ordem de Servico Selecionada</param>
-        /// <param name="usu_id">Id do Usuário Logado</param>
-        /// <param name="ip">IP do Usuário Logado</param>
         /// <returns>int</returns>
         public int OrdemServico_AtivarDesativar(int ord_id)
         {
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
             return new OrdemServicoDAO().OrdemServico_AtivarDesativar(ord_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
+        /// <summary>
+        ///    Busca o valor do campo ord_indicacao_servico
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>string</returns>
+        public string OrdemServico_Indicacao_Servico_ListAll(int ord_id)
+        {
+            return new OrdemServicoDAO().OrdemServico_Indicacao_Servico_ListAll(ord_id);
+
+        }
+
+        /// <summary>
+        ///    Altera os dados da Aba Indicacao de Servico no Banco
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico Selecionada</param>
+        /// <param name="ord_indicacao_servico">Texto do campo Indicaçao de serviço</param>
+        /// <returns>int</returns>
+        public int OrdemServico_Indicacao_Servico_Salvar(int ord_id, string ord_indicacao_servico)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().OrdemServico_Indicacao_Servico_Salvar(ord_id, ord_indicacao_servico, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
 
