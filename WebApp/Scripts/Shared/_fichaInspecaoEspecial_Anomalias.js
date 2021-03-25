@@ -1030,7 +1030,7 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
             var mascara = "";
             var str = lstTxtBoxes[i].id;
             if (str.startsWith("txt_Quantidade_ian_id_"))
-                mascara = "999";
+                mascara = "9999";
             else
                 if (str.startsWith("txt_EspacamentoMedio_ian_id_"))
                     mascara = "999,99";
@@ -1039,7 +1039,7 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
                         mascara = "999,99";
                     else
                         if (str.startsWith("txt_Comprimento_ian_id_"))
-                            mascara = "999,99";
+                            mascara = "9999,99";
                         else
                             if (str.startsWith("txt_AberturaMinima_ian_id_"))
                                 mascara = "999,99";
