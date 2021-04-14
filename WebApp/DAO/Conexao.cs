@@ -50,17 +50,22 @@ namespace WebApp.DAO
         /// <summary>
         /// Retorna o nome do banco de dados da connectionstring
         /// </summary>
+        /// <returns>Nome do Banco Acessado</returns>
         public string QualBD()
         {
             this.strConn = new Gerais().Decrypt(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["CONNECTION_DER"].ConnectionString);
 
-            if (strConn.IndexOf("_DESENV") > 0)
-                return "Desenv";
-            else
-            if (strConn.IndexOf("_MBT") > 0)
-                return "MBT";
-            else
-                return "";
+            string [] pedacos = strConn.Split(";".ToCharArray());
+            for (int i=0; i < pedacos.Length; i++)
+            {
+               if (pedacos[i].StartsWith("Initial Catalog"))
+                 {
+                    string[] valores = pedacos[i].Split("=".ToCharArray());
+                    return valores[1].Replace("SIGOA_", "");
+                }
+            }
+
+            return "";
         }
 
 

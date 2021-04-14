@@ -19,6 +19,7 @@ namespace WebApp.Controllers
         /// <summary>
         /// Orcamento
         /// </summary>
+        /// <returns>View</returns>
         public ActionResult Orcamento()
         {
             //OrcamentoBLL orcamento = new OrcamentoBLL();

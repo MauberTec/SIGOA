@@ -1016,11 +1016,11 @@ namespace WebApp.Business
         }
 
         /// <summary>
-        /// Funçao para filtrar a lista de retorno porque a busca pelo SirGeo é exata 
+        /// Funçao para filtrar a lista de retorno porque a busca pelo SirGeo é exata e nao aproximada
         /// </summary>
-        /// <param name="targerList"></param>
-        /// <param name="filterStr"></param>
-        /// <returns>Lista Rodovia  </returns>
+        /// <param name="targerList">Lista a se procurar</param>
+        /// <param name="filterStr">String procurada</param>
+        /// <returns>Lista Rodovia </returns>
         public static List<Rodovia> StartsWithStringContains(List<Rodovia> targerList, string filterStr)
         {
             var resultList = from resultValues in targerList
@@ -1035,6 +1035,7 @@ namespace WebApp.Business
         /// <summary>
         /// Preenchimento do combo Filtro Rodovias 
         /// </summary>
+        /// <param name="rod_codigo">Filtro por Código da Rodovia</param>
         /// <returns>Lista de SelectListItem</returns>
         public List<SelectListItem> PreenchecmbFiltroRodovias(string rod_codigo = "")
         {
