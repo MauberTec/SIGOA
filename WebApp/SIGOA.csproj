@@ -203,6 +203,7 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
+    <Compile Include="Controllers\ManualController.cs" />
     <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
@@ -615,6 +616,21 @@
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste4.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste5.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste6.png" />
+    <Content Include="imagens\anomalias\alertas.png" />
+    <Content Include="imagens\anomalias\alertasListas.png" />
+    <Content Include="imagens\anomalias\causas.png" />
+    <Content Include="imagens\anomalias\causasListas.png" />
+    <Content Include="imagens\anomalias\fluxo.png" />
+    <Content Include="imagens\anomalias\fluxoLista.png" />
+    <Content Include="imagens\anomalias\fluxoOrgan.png" />
+    <Content Include="imagens\anomalias\legenda.png" />
+    <Content Include="imagens\anomalias\legendaQaudro.png" />
+    <Content Include="imagens\anomalias\listaLegenda.png" />
+    <Content Include="imagens\anomalias\menu_anomalia.png" />
+    <Content Include="imagens\anomalias\status.png" />
+    <Content Include="imagens\anomalias\statusLista.png" />
+    <Content Include="imagens\anomalias\tipos.png" />
+    <Content Include="imagens\anomalias\tiposLista.png" />
     <Content Include="Views\PoliticaReparos\multiselect.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -692,6 +708,10 @@
     <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
     <Content Include="Views\Relatorio\Relatorio.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoRotineiraProvidencias.cshtml" />
+    <Content Include="Views\Manual\Anomalias.cshtml" />
+    <Content Include="Views\Manual\Reparos.cshtml" />
+    <Content Include="Views\Manual\Conservas.cshtml" />
+    <Content Include="Views\Manual\Documentos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
