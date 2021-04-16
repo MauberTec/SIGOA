@@ -258,6 +258,8 @@ function preenchetblFicha4(obj_id, classe, tipo) {
         "datatype": "json",
         "data": data,
         "success": function (result) {
+
+
             for (var i = 0; i < result.data.length; i++) {
 
                 // coloca a imagem ESQUEMA_ESTRUTURAL

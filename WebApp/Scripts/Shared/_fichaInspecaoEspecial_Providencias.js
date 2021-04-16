@@ -13,13 +13,14 @@
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
+        ' <td class="borderLeft " ></td> ' +
    //     ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft  borderRight" ></td> ' +
     ' </tr>';
 
     var linhaCabecalhoProvidencia = ' <tr id="trFicha4_PROVIDENCIAS_ian_id_ZZZ" > ' +
-        ' <td class="borderLeft borderTop borderBottom borderRight cabecalhos_providencias" colspan="16" >' +
+        ' <td class="borderLeft borderTop borderBottom borderRight cabecalhos_providencias" colspan="17" >' +
             '<label class="lblsBold" style="vertical-align: middle;" id="lbl_apt_id_ZZZ">lbl_apt_descricao_VVV</label > ' +
         '<button title="Imprimir" onclick="Ficha4_PROVIDENCIAS_Imprimir(apr_id_VVV)" ><i class="fa fa-print" ></i></button>  ' +
     '</td > </tr>';
@@ -27,6 +28,7 @@
     var linhaObjetosProvidencia = ' <tr id="trFicha4_PROVIDENCIAS_ian_id_ZZZ" > ' +
         ' <td class=" qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
         ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
+        ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Localizacao_Especifica_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Localizacao_Especifica_VVV"  /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  >OPCOES_cmb_Cod</select></td> ' +
@@ -165,7 +167,7 @@ function preenchetblFicha4_PROVIDENCIAS() {
 
                 var linhaAux = linhaObjetosProvidencia;
                 if (parseInt(result.data[i].clo_id) < 10)
-                    linhaAux = linhaCabecalhos;
+                    linhaAux = linhaCabecalhosProvidencia;
 
                 if (result.data[i].ehCabecalho == "1") {
                     linhaAux = linhaCabecalhoProvidencia;
@@ -199,6 +201,7 @@ function preenchetblFicha4_PROVIDENCIAS() {
                     }
 
                     if (parseInt(result.data[i].clo_id) >= 10) {
+                        linhaAux = linhaAux.replace(/txt_Localizacao_Especifica_VVV/g, result.data[i].ian_localizacao_especifica);
                         linhaAux = linhaAux.replace(/txt_Numero_VVV/g, result.data[i].ian_numero);
                         linhaAux = linhaAux.replace(/txt_Quantidade_VVV/g, result.data[i].ian_quantidade);
                         linhaAux = linhaAux.replace(/txt_EspacamentoMedio_VVV/g, result.data[i].ian_espacamento);

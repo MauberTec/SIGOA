@@ -6,10 +6,13 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.80744cm</Width>
+              <Width>2.45523cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.64486cm</Width>
+              <Width>2.29549cm</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>2.39417cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.96346cm</Width>
@@ -51,7 +54,7 @@
               <Width>1.54939cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.22596cm</Width>
+              <Width>4.53338cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -120,7 +123,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>LOCALIZAÇÃO (SUB-TRECHO)  ELEMENTO ESTRUTURAL</Value>
+                              <Value>LOCALIZAÇÃO ELEMENTO ESTRUTURAL</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -133,6 +136,75 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox22</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </RightBorder>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox3">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>LOCALIZAÇÃO</Value>
+                              <Style>
+                                <FontFamily>Calibri</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>ESPECÍFICA</Value>
+                              <Style>
+                                <FontFamily>Calibri</FontFamily>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox3</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -1332,9 +1404,10 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>16</ColSpan>
+                    <ColSpan>17</ColSpan>
                   </CellContents>
                 </TablixCell>
+                <TablixCell />
                 <TablixCell />
                 <TablixCell />
                 <TablixCell />
@@ -1459,6 +1532,60 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="ian_localizacao_especifica">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!ian_localizacao_especifica.Value</Value>
+                              <Style>
+                                <FontFamily>Calibri</FontFamily>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>ian_localizacao_especifica</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                        </Border>
+                        <TopBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </LeftBorder>
+                        <RightBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </RightBorder>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2225,6 +2352,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -2255,7 +2383,7 @@
         <DataSetName>dtProvidencias</DataSetName>
         <Top>0.32604cm</Top>
         <Height>3.65208cm</Height>
-        <Width>28.17481cm</Width>
+        <Width>28.17482cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2266,7 +2394,7 @@
     <Height>6.62726cm</Height>
     <Style />
   </Body>
-  <Width>28.17481cm</Width>
+  <Width>28.17482cm</Width>
   <Page>
     <PageHeader>
       <Height>1.81391cm</Height>
@@ -2656,6 +2784,10 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
+        <Field Name="ehCabecalho">
+          <DataField>ehCabecalho</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="obj_codigo_TipoOAE">
           <DataField>obj_codigo_TipoOAE</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -2816,6 +2948,18 @@
           <DataField>rpt_id_sugerido</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="ast_id">
+          <DataField>ast_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ian_ordem_apresentacao">
+          <DataField>ian_ordem_apresentacao</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ian_localizacao_especifica">
+          <DataField>ian_localizacao_especifica</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="ins_id1">
           <DataField>ins_id1</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
@@ -2876,18 +3020,14 @@
           <DataField>lstTipos</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="ehCabecalho">
-          <DataField>ehCabecalho</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>SIGOA_DESENVdsFicha2</rd:DataSetName>
         <rd:SchemaPath>C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\SIGOA_DESENVdsFicha2.xsd</rd:SchemaPath>
-        <rd:TableName>STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS</rd:TableName>
+        <rd:TableName>STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS1</rd:TableName>
         <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
         <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
-        <rd:TableAdapterName>STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIASTableAdapter</rd:TableAdapterName>
+        <rd:TableAdapterName>STP_SEL_INSPECAO_ANOMALIAS_VALORES_PROVIDENCIAS1TableAdapter</rd:TableAdapterName>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

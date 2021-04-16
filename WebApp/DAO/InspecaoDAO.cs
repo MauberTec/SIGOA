@@ -354,6 +354,7 @@ namespace WebApp.DAO
                             tip_nome = rdr["tip_nome"].ToString() ,
 
                             col_Localizacao =  rdr["col_Localizacao"] == DBNull.Value ? "" : rdr["col_Localizacao"].ToString(),
+                            ian_localizacao_especifica =  rdr["ian_localizacao_especifica"] == DBNull.Value ? "" : rdr["ian_localizacao_especifica"].ToString(),
                            
                             ian_id = rdr["ian_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ian_id"]),
 
@@ -802,6 +803,7 @@ namespace WebApp.DAO
                             ins_anom_Responsavel = rdr["ins_anom_Responsavel"].ToString(),
                             ins_anom_data = rdr["ins_anom_data"].ToString(),
 
+                            ian_localizacao_especifica = rdr["ian_localizacao_especifica"] == DBNull.Value ? "" : rdr["ian_localizacao_especifica"].ToString(),
                             col_Localizacao = rdr["col_Localizacao"].ToString(),
                             clo_id = Convert.ToInt32(rdr["clo_id"]),
                             clo_nome = rdr["clo_nome"].ToString(),

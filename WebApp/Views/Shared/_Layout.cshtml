@@ -258,7 +258,7 @@
                 <ul id="menu" class="sidebar-menu tree" data-widget="tree">
                     <li class="header" style="padding:0px"></li>
                     <li>
-                        <a href="/Home/Index">
+                        <a href="/Objeto/ObjPriorizacao/160">
                             <i class="fa fa-home active"></i> <span>Home</span>
                         </a>
                     </li>
@@ -289,15 +289,27 @@
 
                                                 while ((i < gUsuario.lstMenus.Count) && (gUsuario.lstMenus[i].men_pai_id >= 0))
                                                 {
-                                                    <li class="tabulacao">
-                                                        <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="@sMenuPai">
-                                                            <i class="@gUsuario.lstMenus[i].men_icone"></i>
-                                                            <span>@gUsuario.lstMenus[i].LinkText </span>
-                                                        </a>
-                                                    </li>
-                                                    i++;
+                                                    if (@gUsuario.lstMenus[i].ActionName.IndexOf("/Manuais/") < 0)
+                                                    {
+                                                        <li class="tabulacao">
+                                                            <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="@sMenuPai">
+                                                                <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                                <span>@gUsuario.lstMenus[i].LinkText </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="tabulacao">
+                                                            <a href = "#" title = "@gUsuario.lstMenus[i].men_descricao" alt = "" onclick="javascript:window.open('@gUsuario.lstMenus[i].ActionName'); return false;" >
+                                                                <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                                <span>@gUsuario.lstMenus[i].LinkText </span>
+                                                            </a>
+                                                         </li>
+                                                   }
+                                                   i++;
                                                 }
-                                            }
+                                           }
                                         </ul>
                                     </li>
                                     i--;
@@ -307,12 +319,13 @@
                                         || ((i <= gUsuario.lstMenus.Count - 2) && (gUsuario.lstMenus[i + 1].men_pai_id < 0) && (gUsuario.lstMenus[i].men_pai_id < 0))
                                     )
                                 {
-                                    <li>
-                                        <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
-                                            <i class="@gUsuario.lstMenus[i].men_icone"></i>
-                                            <span>@gUsuario.lstMenus[i].LinkText </span>
-                                        </a>
-                                    </li>
+
+                                        <li>
+                                            <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
+                                                <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                <span>@gUsuario.lstMenus[i].LinkText </span>
+                                            </a>
+                                        </li>
                                 }
                                 i++;
                                 if (i >= gUsuario.lstMenus.Count) { break; };

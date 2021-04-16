@@ -24,8 +24,12 @@ namespace WebApp.DAO
         /// <param name="filtroObjetos">Filtro por Objeto</param>
         /// <param name="filtroStatus">Filtro por Status</param>
         /// <param name="orc_ativo">Filtro por Ativo/Inativo</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovias</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objetos</param>
         /// <returns>Lista de  de Orcamento</returns>
-        public List<Orcamento> Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1, int? orc_ativo = 2)
+        public List<Orcamento> Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1 ,int? orc_ativo = 2
+            ,string FiltroidRodovias = "", string FiltroidObjetos = "" )
+
         {
             try
             {
@@ -41,6 +45,8 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@filtroObjetos", filtroObjetos);
                     com.Parameters.AddWithValue("@filtroStatus", filtroStatus);
                     com.Parameters.AddWithValue("@orc_ativo", orc_ativo);
+                    com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
+                    com.Parameters.AddWithValue("@FiltroidObjetos", FiltroidObjetos);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -59,6 +65,10 @@ namespace WebApp.DAO
                             orc_data_criacao = rdr["orc_data_criacao"].ToString(),
                             orc_data_validade = rdr["orc_data_validade"].ToString(),
 
+                            orc_data_base = rdr["orc_data_base"].ToString(),
+                            tpt_descricao = rdr["tpt_descricao"].ToString(),
+                            tpt_id = rdr["tpt_id"].ToString(),
+
                             pri_ids_associados = rdr["pri_ids_associados"].ToString(),
                             orc_ord_ids_associados = rdr["orc_ord_ids_associados"].ToString(),
                             orc_os_associadas = rdr["orc_os_associadas"].ToString(),
@@ -66,6 +76,8 @@ namespace WebApp.DAO
                             orc_objetos_associados = rdr["orc_objetos_associados"].ToString(),
                             lstStatusOrcamento = rdr["lstStatusOrcamento"].ToString(),
                             orc_ativo = Convert.ToInt16(rdr["orc_ativo"])
+
+
                         });
                     }
                     return lst;
@@ -78,6 +90,37 @@ namespace WebApp.DAO
                 throw new Exception(ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// Busca o proximo sequencial de Orcamento
+        /// </summary>
+        /// <returns>string</returns>
+        public string Orcamento_ProximoSeq()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.Orcamento_ProximoSeq()", con);
+                    com.Parameters.Clear();
+
+                    string retorno = com.ExecuteScalar().ToString();
+
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
 
         /// <summary>
         ///    Insere ou Altera os dados do Orcamento no Banco
@@ -118,6 +161,10 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@orc_data_validade", orc.orc_data_validade);
                     com.Parameters.AddWithValue("@orc_id_pai", orc.orc_id_pai);
                     com.Parameters.AddWithValue("@pri_ids_selecionados", orc.pri_ids_selecionados);
+
+                    com.Parameters.AddWithValue("@orc_data_base", orc.orc_data_base);
+                    com.Parameters.AddWithValue("@tpt_id", orc.tpt_id);
+
                     com.Parameters.AddWithValue("@orc_ativo", orc.orc_ativo);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
@@ -287,6 +334,10 @@ namespace WebApp.DAO
                             orc_id_pai = Convert.ToInt32(rdr["orc_id_pai"]),
                             orc_ativo = Convert.ToInt32(rdr["orc_ativo"]),
 
+                            orc_data_base = rdr["orc_data_base"].ToString(),
+                            tpt_descricao = rdr["tpt_descricao"].ToString(),
+                            tpt_id = rdr["tpt_id"].ToString(),
+
                             ocs_id = Convert.ToInt16(rdr["ocs_id"]),
                             ocs_codigo = rdr["ocs_codigo"].ToString(),
                             ocs_descricao = rdr["ocs_descricao"].ToString(),
@@ -341,6 +392,7 @@ namespace WebApp.DAO
                             rtu_valor_total_adotado = rdr["rtu_valor_total_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_adotado"]),
 
                             orc_objetos_associados = rdr["orc_objetos_associados"] == DBNull.Value ? "" : rdr["orc_objetos_associados"].ToString(),
+                            orc_obj_ids_associados = rdr["orc_obj_ids_associados"] == DBNull.Value ? "" : rdr["orc_obj_ids_associados"].ToString(),
                             pri_ids_associados = rdr["pri_ids_associados"] == DBNull.Value ? "" : rdr["pri_ids_associados"].ToString(),
                             lstStatusOrcamento = rdr["lstStatusOrcamento"] == DBNull.Value ? "" : rdr["lstStatusOrcamento"].ToString()
                         });
@@ -358,6 +410,7 @@ namespace WebApp.DAO
                 throw new Exception(ex.Message);
             }
         }
+
 
         /// <summary>
         ///  Ativa/Desativa Orcamento
@@ -392,6 +445,191 @@ namespace WebApp.DAO
             }
         }
 
+
+        /// <summary>
+        ///     Lista dos Serviços Adicionais por Objeto do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do orçamento</param>
+        /// <param name="obj_id">Id do Objeto que contém o serviço</param>
+        /// <returns>Lista de Detalhes do Orcamento</returns>
+        public List<ServicosAdicionados> Orcamento_Servicos_Adicionados_ListAll(int orc_id, int obj_id)
+        {
+            try
+            {
+                string obj_codigo_atual = "";
+                string obj_codigo_anterior = "";
+
+                List<ServicosAdicionados> lst = new List<ServicosAdicionados>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_ORCAMENTO_SERVICOS_ADICIONADOS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@orc_id", orc_id);
+                    com.Parameters.AddWithValue("@obj_id", obj_id);
+
+                    SqlDataReader rdr = com.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        obj_codigo_atual = rdr["obj_codigo"].ToString();
+
+                        lst.Add(new ServicosAdicionados
+                        {
+                            ose_id = Convert.ToInt16(rdr["ose_id"]),
+                            orc_id = Convert.ToInt16(rdr["orc_id"]),
+                            obj_id = Convert.ToInt16(rdr["obj_id"]),
+                            obj_codigo = obj_codigo_atual != obj_codigo_anterior ? obj_codigo_atual : "",
+                            obj_descricao = obj_codigo_atual != obj_codigo_anterior ?  rdr["obj_descricao"].ToString() : "",
+                            tpt_id = rdr["tpt_id"].ToString(),
+                            ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"]),
+                            DataTpu = rdr["DataTpu"].ToString(),
+                            CodSubItem = rdr["CodSubItem"].ToString(),
+                            NomeSubItem = rdr["NomeSubItem"].ToString(),
+                            UnidMed = rdr["UnidMed"].ToString(),
+                            PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
+                            ValorTotal = Convert.ToDecimal(rdr["PrecoUnitario"]) * Convert.ToDecimal(rdr["ose_quantidade"]),
+                            Onerado = rdr["Onerado"].ToString(),
+
+                            tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()
+                        });
+
+                        obj_codigo_anterior = obj_codigo_atual;
+                    }
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///  Excluir (logicamente) Serviço
+        /// </summary>
+        /// <param name="ose_id">Id do Serviço Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>JsonResult</returns>
+        public int Orcamento_Servicos_Adicionados_Excluir(int ose_id, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_DEL_ORCAMENTO_SERVICOS_ADICIONADOS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@ose_id", ose_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        /// <summary>
+        ///  Salvar Serviços Adicionais
+        /// </summary>
+        /// <param name="ids_retorno">Lista dos ids alterados</param>
+        /// <param name="valores_retorno">Lista dos valores alterados</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int Orcamento_ServicosAdicionados_Salvar(string ids_retorno, string valores_retorno, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_ORCAMENTO_SERVICOS_ADICIONADOS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@ids_retorno", ids_retorno);
+                    com.Parameters.AddWithValue("@valores_retorno", valores_retorno);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///     Lista das TPUs a serem adicionadas
+        /// </summary>
+        /// <param name="orc_id">Id do orçamento</param>
+        /// <param name="obj_id">Id do objeto do orcamento</param>
+        /// <returns>Lista de Detalhes do Orcamento</returns>
+        public List<ServicosAdicionados> OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id)
+        {
+            try
+            {
+
+                List<ServicosAdicionados> lst = new List<ServicosAdicionados>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_ORCAMENTO_SERVICOS_ADICIONADOS_TPUS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@orc_id", orc_id);
+                    com.Parameters.AddWithValue("@obj_id", obj_id);
+
+                    SqlDataReader rdr = com.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        lst.Add(new ServicosAdicionados
+                        {
+                            ose_id = Convert.ToInt16(rdr["ose_id"]),
+                            orc_id = Convert.ToInt16(rdr["orc_id"]),
+                            obj_id = Convert.ToInt16(rdr["obj_id"]),
+                            obj_codigo = rdr["obj_codigo"].ToString(),
+                            obj_descricao = rdr["obj_descricao"].ToString(),
+                            tpt_id = rdr["tpt_id"].ToString(),
+                            ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"]),
+                            DataTpu = rdr["DataTpu"].ToString(),
+                            CodSubItem = rdr["CodSubItem"].ToString(),
+                            NomeSubItem = rdr["NomeSubItem"].ToString(),
+                            UnidMed = rdr["UnidMed"].ToString(),
+                            PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
+                            ValorTotal = Convert.ToDecimal(rdr["PrecoUnitario"]) * Convert.ToDecimal(rdr["ose_quantidade"]),
+                            Onerado = rdr["Onerado"].ToString(),
+                            tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()
+                        });
+                    }
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
 
 
         // *************** STATUS  *************************************************************

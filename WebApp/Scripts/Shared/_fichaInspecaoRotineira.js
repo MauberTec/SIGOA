@@ -5,12 +5,12 @@ var cabecalho2 =
     ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
     '     <table style="width:100%"> ' +
     '      <tr> ' +
-    '        <td style="width:26px"> ' +
+    '        <td> ' +
     '          <button id="btn_ExcluirSubDivisao2_INSPECAO_ROTINEIRA_TIPP_IIDD" ' +
     '            type="button" ' +
     '             onclick="return Ficha2_ExcluirSubDivisao2(TIPP_IIDD)" ' +
     '             title="Excluir Subdivisão" ' +
-    '             style="border:none; box-shadow:none; background-color:transparent; visibility:visibilitySubdivisao2"> ' +
+    '             style="margin-left:26px; border:none; box-shadow:none; background-color:transparent; display:none"> ' +
     '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
     '          </button> ' +
     '        </td> ' +
@@ -327,7 +327,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
             lstCombos[i].innerText = null;
 
     }
-    function preenchetblFicha2(obj_id, classe, tipo) {
+    function preenchetblFicha2(obj_id, classe, tipo)
+    {
         classe = parseInt(classe);
         tipo = parseInt(tipo);
         selectedId_clo_id = classe;
@@ -367,6 +368,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
             "datatype": "json",
             "data": data,
             "success": function (result) {
+
                 for (var i = 0; i < result.data.length; i++) {
 
                     // preenche os LABELS

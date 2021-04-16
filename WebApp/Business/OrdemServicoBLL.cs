@@ -450,10 +450,11 @@ namespace WebApp.Business
         /// <summary>
         ///     Lista de todos os Fluxos de  Status de OS não deletados
         /// </summary>
+        /// <param name="tos_id">Id do Tipo de Ordem de Servico</param>
         /// <returns>Lista de OSFluxoStatus</returns>
-        public List<OSFluxoStatus>OSFluxoStatus_ListAll()
+        public List<OSFluxoStatus>OSFluxoStatus_ListAll(int tos_id)
         {
-            return new OrdemServicoDAO().OSFluxoStatus_ListAll();
+            return new OrdemServicoDAO().OSFluxoStatus_ListAll(null, tos_id);
         }
 
         /// <summary>
@@ -514,6 +515,9 @@ namespace WebApp.Business
                 lstSaida.Add(new SelectListItem() { Text = txt, Value = temp.sos_id.ToString() });
             }
 
+            lstSaida.Sort((x, y) => x.Text.CompareTo(y.Text));
+
+            lstSaida.Insert(0, new SelectListItem() { Text = "-- Selecione --", Value = "", Disabled = true });
             return lstSaida;
         }
 

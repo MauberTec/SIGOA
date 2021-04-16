@@ -56,6 +56,25 @@ namespace WebApp.Models
         /// </summary>
         public decimal orc_valor_total { get; set; }
 
+
+        /// <summary>
+        ///  Data de Base do Orçamento
+        /// </summary>
+        public string orc_data_base { get; set; }
+
+
+        /// <summary>
+        /// Id de Desonerado(D)/Não Desonerado(O)
+        /// </summary>
+        /// 
+        public string tpt_id { get; set; }
+
+        /// <summary>
+        /// Onerado?
+        /// </summary>
+        public string tpt_descricao { get; set; }
+
+
         /// <summary>
         /// Ativo?
         /// </summary>
@@ -163,6 +182,24 @@ namespace WebApp.Models
         /// Ativo?
         /// </summary>
         public int orc_ativo { get; set; }
+
+
+        /// <summary>
+        ///  Data de Base do Orçamento
+        /// </summary>
+        public string orc_data_base { get; set; }
+
+
+        /// <summary>
+        /// Id de Desonerado(D)/Não Desonerado(O)
+        /// </summary>
+        /// 
+        public string tpt_id { get; set; }
+
+        /// <summary>
+        /// Onerado?
+        /// </summary>
+        public string tpt_descricao { get; set; }
 
 
         /// <summary>
@@ -396,6 +433,88 @@ namespace WebApp.Models
     }
 
 
+    /// <summary>
+    /// Serviços Adicionais por OAE
+    /// </summary>
+    public class ServicosAdicionados
+    {
+       /// <summary>
+        /// Id do Servico Adicionado
+        /// </summary>
+        public int ose_id { get; set; }
+
+        /// <summary>
+        /// Id do Orçamento
+        /// </summary>
+        public int orc_id { get; set; }
+
+        /// <summary>
+        /// id do Objeto OAE do Orçamento
+        /// </summary>
+        public int obj_id { get; set; }
+
+        /// <summary>
+        /// codigo do Objeto OAE do Orçamento
+        /// </summary>
+        public string obj_codigo { get; set; }
+
+        /// <summary>
+        /// Descrição do Objeto OAE do Orçamento
+        /// </summary>
+        public string obj_descricao { get; set; }
+
+
+        /// <summary>
+        /// Tipo Desonerado - Nao Desonerado
+        /// </summary>
+        public string tpt_id { get; set; }
+
+        /// <summary>
+        /// Data
+        /// </summary>
+        public string DataTpu { get; set; }
+
+        /// <summary>
+        /// Código
+        /// </summary>
+        public string CodSubItem { get; set; }
+
+        /// <summary>
+        /// Nome
+        /// </summary>
+        public string NomeSubItem { get; set; }
+
+        /// <summary>
+        /// Quantidade
+        /// </summary>
+        public Decimal ose_quantidade { get; set; }
+
+        /// <summary>
+        /// Unidade 
+        /// </summary>
+        public string UnidMed { get; set; }
+
+        /// <summary>
+        /// Preço Unitário
+        /// </summary>
+        public Decimal PrecoUnit { get; set; }
+
+
+        /// <summary>
+        /// Valor Total 
+        /// </summary>
+        public Decimal ValorTotal { get; set; }
+
+        /// <summary>
+        /// Onerado?
+        /// </summary>
+        public string Onerado { get; set; }
+
+        /// data da ultima atualizacao do banco sigoa
+        /// </summary>
+        public string tpu_data_atualizacao { get; set; }
+
+    }
 
 
     // *************  STATUS  ***************************************

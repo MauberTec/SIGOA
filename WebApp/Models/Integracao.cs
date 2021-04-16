@@ -51,6 +51,11 @@ namespace WebApp.Models
         public int rod_id { get; set; }
 
         /// <summary>
+        /// Id da Rodovia do sistema Sigoa
+        /// </summary>
+        public int rod_id_sigoa { get; set; }
+
+        /// <summary>
         /// Código da Rodovia
         /// </summary>
         public string rod_codigo { get; set; }
@@ -74,6 +79,12 @@ namespace WebApp.Models
         /// Extensao da Rodovia
         /// </summary>
         public string rod_km_extensao { get; set; }
+
+        /// <summary>
+        /// data da ultima atualizacao do banco
+        /// </summary>
+        public string rod_data_atualizacao { get; set; }
+
     }
 
     /// <summary>
@@ -135,10 +146,23 @@ namespace WebApp.Models
         /// </summary>
         public string oat_id { get; set; }
 
+
         /// <summary>
         /// Data da Criação desse registro da Rodovia
         /// </summary>
         public string oae_data_criacao { get; set; }
+
+
+        /// <summary>
+        /// Id do Objeto correspondenteno SIGOA
+        /// </summary>
+        public int oae_id_sigoa { get; set; }
+
+        /// <summary>
+        /// data da ultima atualizacao do banco sigoa
+        /// </summary>
+        public string oae_data_atualizacao { get; set; }
+
     }
 
     /// <summary>
@@ -225,6 +249,12 @@ namespace WebApp.Models
         /// fax da Regional 
         /// </summary>
         public string reg_fax { get; set; }
+
+
+        /// <summary>
+        /// data da ultima atualizacao do banco
+        /// </summary>
+        public string reg_data_atualizacao { get; set; }
 
     }
 
@@ -364,6 +394,21 @@ namespace WebApp.Models
         public string vdm_sentido1 { get; set; }
 
         /// <summary>
+        /// Passeio 1
+        /// </summary>
+        public string vdm_passeio1 { get; set; }
+
+        /// <summary>
+        /// Com 1
+        /// </summary>
+        public string vdm_com1 { get; set; }
+
+        /// <summary>
+        /// Moto 1
+        /// </summary>
+        public string vdm_moto1 { get; set; }
+
+        /// <summary>
         /// Valor do VDM sentido 1
         /// </summary>
         public string vdm_valor1 { get; set; }
@@ -374,14 +419,50 @@ namespace WebApp.Models
         public string vdm_sentido2 { get; set; }
 
         /// <summary>
+        /// Passeio 2
+        /// </summary>
+        public string vdm_passeio2 { get; set; }
+
+        /// <summary>
+        /// Com 2
+        /// </summary>
+        public string vdm_com2 { get; set; }
+
+        /// <summary>
+        /// Moto 2
+        /// </summary>
+        public string vdm_moto2 { get; set; }
+
+        /// <summary>
         /// Valor do VDM sentido 2
         /// </summary>
         public string vdm_valor2 { get; set; }
+
+       /// <summary>
+        /// Valor Passeio Bidirecional
+        /// </summary>
+        public string vdm_passeio_bidirecional { get; set; }
+
+        /// <summary>
+        /// Valor Com Bidirecional
+        /// </summary>
+        public string vdm_com_bidirecional { get; set; }
+
+        /// <summary>
+        /// Valor Moto Bidirecional
+        /// </summary>
+        public string vdm_moto_bidirecional { get; set; }
 
         /// <summary>
         /// Valor Bidirecional
         /// </summary>
         public string vdm_bidirecional { get; set; }
+
+
+        /// <summary>
+        /// data da ultima atualizacao do banco sigoa
+        /// </summary>
+        public string vdm_data_atualizacao { get; set; }
     }
 
     /// <summary>
@@ -475,12 +556,23 @@ namespace WebApp.Models
         /// <summary>
         /// Preço Unitário
         /// </summary>
-        public Double PrecoUnitario { get; set; }
+        public Decimal PrecoUnitario { get; set; }
 
         /// <summary>
         /// Onerado?
         /// </summary>
         public string Onerado { get; set; }
+
+
+        /// <summary>
+        /// Fase
+        /// </summary>
+        public int Fase { get; set; }
+
+        /// data da ultima atualizacao do banco sigoa
+        /// </summary>
+        public string tpu_data_atualizacao { get; set; }
+
     }
 
     /// <summary>

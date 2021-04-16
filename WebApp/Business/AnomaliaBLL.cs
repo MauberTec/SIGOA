@@ -192,8 +192,11 @@ namespace WebApp.Business
 
             foreach (var temp in lst)
             {
-                string txt = temp.leg_codigo + " - " + temp.leg_descricao ;
-                lstSaida.Add(new SelectListItem() { Text = txt, Value = temp.leg_id.ToString() });
+                if (temp.leg_codigo.Trim() != "")
+                {
+                    string txt = temp.leg_codigo + " - " + temp.leg_descricao;
+                    lstSaida.Add(new SelectListItem() { Text = txt, Value = temp.leg_id.ToString() });
+                }
             }
 
             return lstSaida;
@@ -256,6 +259,27 @@ namespace WebApp.Business
             return new AnomaliaDAO().AnomAlerta_Salvar(ale, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
+
+        /// <summary>
+        ///     Lista de todos as Alertas para preenchimento de combo
+        /// </summary>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbAnomAlerta()
+        {
+            List<AnomAlerta> lst = new AnomaliaDAO().AnomAlerta_ListAll(null);
+            List<SelectListItem> lstSaida = new List<SelectListItem>(); // lista de combo
+
+            foreach (var temp in lst)
+            {
+                if (temp.ale_codigo.Trim() != "")
+                {
+                    string txt = temp.ale_codigo + " - " + temp.ale_descricao;
+                    lstSaida.Add(new SelectListItem() { Text = txt, Value = temp.ale_id.ToString() });
+                }
+            }
+
+            return lstSaida;
+        }
 
 
         // *************** STATUS  *************************************************************

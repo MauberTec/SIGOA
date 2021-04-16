@@ -46,11 +46,26 @@ namespace WebApp.Controllers
         /// <param name="filtroObjetos">Filtro por Objeto</param>
         /// <param name="filtroStatus">Filtro por Status</param>
         /// <param name="orc_ativo">Filtro por Ativo/Inativo</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovias</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objetos</param>
         /// <returns>JsonResult Lista de Orcamento</returns>
-        public JsonResult Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1, int? orc_ativo = 2)
+        public JsonResult Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1, int? orc_ativo = 2,
+            string FiltroidRodovias = "", string FiltroidObjetos = "")
         {
-            return Json(new { data = new OrcamentoBLL().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus, orc_ativo) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new OrcamentoBLL().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus, orc_ativo
+                ,FiltroidRodovias, FiltroidObjetos) }, JsonRequestBehavior.AllowGet);
         }
+
+
+        /// <summary>
+        /// Busca o proximo sequencial de Orcamento
+        /// </summary>
+        /// <returns>JsonResult</returns>
+        public JsonResult Orcamento_ProximoSeq()
+        {
+            return Json(new { data = new OrcamentoBLL().Orcamento_ProximoSeq() }, JsonRequestBehavior.AllowGet);
+        }
+
 
         /// <summary>
         /// Dados do Orcamento selecionado
@@ -59,7 +74,7 @@ namespace WebApp.Controllers
         /// <returns>JsonResult Orcamento</returns>
         public JsonResult Orcamento_GetbyID(int ID)
         {
-            return Json(new OrcamentoBLL().Orcamento_ListAll(ID, "", "", -1, 2).FirstOrDefault(), JsonRequestBehavior.AllowGet);
+            return Json(new OrcamentoBLL().Orcamento_ListAll(ID, "", "", -1, 2, "", "").FirstOrDefault(), JsonRequestBehavior.AllowGet);
         }
 
 
@@ -138,6 +153,57 @@ namespace WebApp.Controllers
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
 
+
+
+        /// <summary>
+        ///     Lista dos Serviços Adicionais por Objeto do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do orçamento</param>
+        /// <param name="obj_id">Id do Objeto que contém o serviço</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult Orcamento_Servicos_Adicionados_ListAll(int orc_id, int obj_id)
+        {
+            return Json(new { data = new OrcamentoBLL().Orcamento_Servicos_Adicionados_ListAll(orc_id, obj_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        ///     Lista das TPUs a serem adicionadas em Servicos
+        /// </summary>
+        /// <param name="orc_id">Id do orçamento</param>
+        /// <param name="obj_id">Id do objeto do orcamento</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id)
+        {
+            return Json(new { data = new OrcamentoBLL().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Excluir (logicamente) Serviço
+        /// </summary>
+        /// <param name="id">Id do Serviço Selecionado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult Orcamento_Servicos_Adicionados_Excluir(int id)
+        {
+            int retorno = new OrcamentoBLL().Orcamento_Servicos_Adicionados_Excluir(id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Salvar Serviços Adicionais
+        /// </summary>
+        /// <param name="ids_retorno">Lista dos ids alterados</param>
+        /// <param name="valores_retorno">Lista dos valores alterados</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult Orcamento_ServicosAdicionados_Salvar(string ids_retorno, string valores_retorno)
+        {
+            int retorno = new OrcamentoBLL().Orcamento_ServicosAdicionados_Salvar(ids_retorno, valores_retorno);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
 
         // *************** STATUS  *************************************************************
         /// <summary>

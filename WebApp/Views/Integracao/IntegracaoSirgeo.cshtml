@@ -23,9 +23,9 @@
     if (permissoesConfiguracaoAtributos == null)
     {
         permissoesConfiguracaoAtributos = new UsuarioPermissoes();
-        permissoesConfiguracaoAtributos.mfl_leitura= 0;
-        permissoesConfiguracaoAtributos.mfl_escrita= 0;
-        permissoesConfiguracaoAtributos.mfl_inserir= 0;
+        permissoesConfiguracaoAtributos.mfl_leitura = 0;
+        permissoesConfiguracaoAtributos.mfl_escrita = 0;
+        permissoesConfiguracaoAtributos.mfl_inserir = 0;
         permissoesConfiguracaoAtributos.mfl_excluir = 0;
     }
 
@@ -58,91 +58,92 @@
         </div>
     </div>
 </div>
+<button class="btn btn-info" onclick="sincronizar();"><i class="fa fa-eraser margin-r-5"></i>Sincronizar</button>
 
 <section class="content" style="min-height: 50px;">
     <div class="row">
-            <div class="box box-primary">
-                <div class="box-body">
-                    <label class="control-label">Rodovias</label>
-                    <table id="tblRodovias">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Código</th>
-                                <th>Descrição</th>
-                                <th>Km Inicial</th>
-                                <th>Km Final</th>
-                                <th>Extensão</th>
-                            </tr>
-                        </thead>
-                    </table>
+        <div class="box box-primary">
+            <div class="box-body">
+                <label class="control-label">Rodovias</label>
+                <table id="tblRodovias">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Km Inicial</th>
+                            <th>Km Final</th>
+                            <th>Extensão</th>
+                        </tr>
+                    </thead>
+                </table>
 
-                    <br /><br /><br />
-                    <label class="control-label">Sentido Rodovias</label>
-                    <table id="tblSentidoRodovia">
-                        <thead>
+                <br /><br /><br />
+                <label class="control-label">Sentido Rodovias</label>
+                <table id="tblSentidoRodovia">
+                    <thead>
 
-                            <tr>
-                                <th>Id</th>
-                                <th>Descrição</th>
-                            </tr>
-                        </thead>
-                    </table>
+                        <tr>
+                            <th>Id</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                </table>
 
-                    <br /><br /><br />
-                    <label class="control-label">OAEs</label>
-                    <table id="tblOAEs">
-                        <thead>
-                            <tr>
-                                <th>rod_id</th>
-                                <th>Km Inicial</th>
-                                <th>Km Final</th>
-                                <th>sen_id</th>
-                                <th>reg_id</th>
-                                <th>oae_data_levantamento</th>
-                                <th>Extensão</th>
-                                <th>oat_id</th>
-                                <th>Data Criação</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <br /><br /><br />
+                <label class="control-label">OAEs</label>
+                <table id="tblOAEs">
+                    <thead>
+                        <tr>
+                            <th>rod_id</th>
+                            <th>Km Inicial</th>
+                            <th>Km Final</th>
+                            <th>sen_id</th>
+                            <th>reg_id</th>
+                            <th>oae_data_levantamento</th>
+                            <th>Extensão</th>
+                            <th>oat_id</th>
+                            <th>Data Criação</th>
+                        </tr>
+                    </thead>
+                </table>
 
-                    <br /><br /><br />
-                    <label class="control-label">Tipos OAE</label>
-                    <table id="tblTiposOAE">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Descrição</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <br /><br /><br />
+                <label class="control-label">Tipos OAE</label>
+                <table id="tblTiposOAE">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                </table>
 
-                    <br /><br /><br />
-                    <label class="control-label">Regionais</label>
-                    <table id="tblRegionais">
-                        <thead>
-                            <tr>
-                                <th>reg_id</th>
-                                <th>Código</th>
-                                <th>Descrição</th>
-                                <th>Logradouro</th>
-                                <th>Bairro</th>
-                                <th>CEP</th>
-                                <th>Email</th>
-                                <th>DDD</th>
-                                <th>Telefone</th>
-                                <th>DDD CCO</th>
-                                <th>Telefone CCO</th>
-                                <th>DDD Fax</th>
-                                <th>Fax</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <br /><br /><br />
+                <label class="control-label">Regionais</label>
+                <table id="tblRegionais">
+                    <thead>
+                        <tr>
+                            <th>reg_id</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Logradouro</th>
+                            <th>Bairro</th>
+                            <th>CEP</th>
+                            <th>Email</th>
+                            <th>DDD</th>
+                            <th>Telefone</th>
+                            <th>DDD CCO</th>
+                            <th>Telefone CCO</th>
+                            <th>DDD Fax</th>
+                            <th>Fax</th>
+                        </tr>
+                    </thead>
+                </table>
 
 
-                </div>
             </div>
+        </div>
         @*</div>*@
     </div>
 </section>
@@ -175,6 +176,22 @@
 
 
 <script>
+
+    function sincronizar() {
+       $.ajax({
+            type: 'POST',
+           // "data": { qualFicha: qualFicha },
+           url: '/Integracao/Sincronizar',
+           data: { "forcar_atualizacao": 1},
+            success: function (result) {
+                //$('#tblRodovias').DataTable().ajax.reload(false);
+                //$('#tblRegionais').DataTable().ajax.reload(false);
+                alert(result.erroId);
+            }
+        });
+
+    }
+
     function LimparFiltro() {
 
         $('#txtCodRodovia').val('');
@@ -190,7 +207,7 @@
 
     // montagem do gridview
     $(document).ready(function () {
- 
+
         $('#tblRodovias').DataTable({
             "ajax": {
                 "url": "/Integracao/Integracao_Rodovias_ListAll",
@@ -203,9 +220,9 @@
             , "columns": [
                 { data: "rod_id", "className": "Centralizado", "searchable": false },
                 { data: "rod_codigo", "width": "200px", "searchable": false },
-                { data: "rod_descricao",  "autoWidth": true, "searchable": false },
+                { data: "rod_descricao", "autoWidth": true, "searchable": false },
                 { data: "rod_km_inicial", "className": "Centralizado", "width": "80px", "searchable": false },
-                { data: "rod_km_final", "className": "Centralizado","width": "80px", "searchable": false },
+                { data: "rod_km_final", "className": "Centralizado", "width": "80px", "searchable": false },
                 { data: "rod_km_extensao", "className": "Centralizado", "width": "80px", "searchable": false }
             ]
             , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
@@ -286,8 +303,8 @@
                 { data: "reg_id", "width": "200px", "searchable": false },
                 { data: "oae_data_levantamento", "autoWidth": true, "searchable": false },
                 { data: "oae_extensao", "className": "Centralizado", "width": "80px", "searchable": false },
-                { data: "oat_id", "className": "Centralizado",  "searchable": false },
-                { data: "oae_data_criacao", "className": "Centralizado",  "searchable": false }
+                { data: "oat_id", "className": "Centralizado", "searchable": false },
+                { data: "oae_data_criacao", "className": "Centralizado", "searchable": false }
             ]
             , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
             , select: {
@@ -319,7 +336,7 @@
                 "url": "/Integracao/Integracao_Regionais_ListAll",
                 "type": "GET",
                 "datatype": "json"
-                
+
                 //,"data": function (d) {
                 //    d.rod_id = $('#txtCodRodovia').val().trim();
                 //}

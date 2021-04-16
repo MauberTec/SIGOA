@@ -67,6 +67,11 @@ namespace WebApp.Models
         public int con_id { get; set; }
 
         /// <summary>
+        /// Data da Última Mudança de Status
+        /// </summary>
+        public string ord_data_atualizacao_status { get; set; }
+
+        /// <summary>
         /// Data Início Programada
         /// </summary>
         public string ord_data_inicio_programada { get; set; }
@@ -259,16 +264,6 @@ namespace WebApp.Models
         public string ord_descricao_pai { get; set; }
 
         /// <summary>
-        /// Codigo da TPU
-        /// </summary>
-        public string tpu_codigo_der { get; set; }
-
-        /// <summary>
-        /// Descrição da TPU
-        /// </summary>
-        public string tpu_descricao { get; set; }
-
-        /// <summary>
         /// Codigo do Contrato de Fiscalização
         /// </summary>
         public string con_codigofiscalizacao { get; set; }
@@ -446,6 +441,11 @@ namespace WebApp.Models
         /// Id do Fluxo de Status da Ordem de Servico
         /// </summary>
         public int fos_id { get; set; }
+        
+        /// <summary>
+        /// Id do Tipo de Ordem de Servico
+        /// </summary>
+        public int tos_id { get; set; }
 
         /// <summary>
         /// Id do Status Origem da Ordem de Servico

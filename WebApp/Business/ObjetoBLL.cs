@@ -267,7 +267,7 @@ namespace WebApp.Business
             string quilometragem = pedacos[1];
             decimal km = Convert.ToDecimal(quilometragem.Replace(",", "."));
 
-            Gerais saida = new Gerais();
+            IntegracaoDAO saida = new IntegracaoDAO();
             List<vdm> listaVDM = saida.get_VDMs(rodovia, 0 , 1500);
 
             decimal valorVDM = 0;
@@ -395,6 +395,18 @@ namespace WebApp.Business
             return new ObjetoDAO().ObjTipo_ListAll(clo_id, tip_id);
         }
 
+
+        /// <summary>
+        /// lista concatenada dos pais de tipos de objeto por classe
+        /// </summary>
+        /// <param name="clo_id">Classe do Objeto selecionado</param>
+        /// <returns>string</returns>
+        public string lstTipos_da_Classe(int clo_id)
+        {
+            return new ObjetoDAO().lstTipos_da_Classe(clo_id);
+        }
+
+
         /// <summary>
         /// Dados do Tipo selecionado
         /// </summary>
@@ -477,7 +489,7 @@ namespace WebApp.Business
         {
             List<ObjTipo> lstObjTipo = new ObjetoDAO().ObjTipo_ListAll(clo_id, null, tip_pai, excluir_existentes, obj_id);
 
-            if (clo_id == 6) // para ordenar Superestrutra, Mesoestrutura, Infraestrutura, encontro
+            if (clo_id == 6) // para ordenar Superestrutura, Mesoestrutura, Infraestrutura, encontro
                 lstObjTipo = lstObjTipo.OrderBy(o => o.tip_id).ToList();
 
             List<SelectListItem> lstListaCmbTiposObjeto = new List<SelectListItem>(); // lista de combo
@@ -954,7 +966,7 @@ namespace WebApp.Business
                                                             int? somenteINSP_ESPECIAIS = 0)
         {
             // cria lista de Regionais
-            string strRegionais = new Gerais().str_Regionais();
+            string strRegionais = new IntegracaoDAO().str_Regionais();
 
             return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS, strRegionais);
 
@@ -968,7 +980,7 @@ namespace WebApp.Business
         public List<SelectListItem> PreenchecmbFiltroRegionais()
         {
             List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
-            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
+            List<Regional> lstRegionais = new IntegracaoDAO().get_Regionais(); // lista de "Regional"
             if (lstRegionais[0].reg_id > 0)
             {
                 foreach (var temp in lstRegionais)
@@ -996,7 +1008,7 @@ namespace WebApp.Business
         public List<SelectListItem> PreenchecmbEmailRegionais()
         {
             List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
-            List<Regional> lstRegionais = new Gerais().get_Regionais(); // lista de "Regional"
+            List<Regional> lstRegionais = new IntegracaoDAO().get_Regionais(); // lista de "Regional"
             if (lstRegionais[0].reg_id > 0)
             {
                 foreach (var temp in lstRegionais)
@@ -1040,7 +1052,7 @@ namespace WebApp.Business
         public List<SelectListItem> PreenchecmbFiltroRodovias(string rod_codigo = "")
         {
             List<SelectListItem> lstListacmbFiltroRodovias = new List<SelectListItem>(); // lista de combo
-            List<Rodovia> lstRodovias = new Gerais().get_Rodovias(""); // lista de "Rodovias"
+            List<Rodovia> lstRodovias = new IntegracaoDAO().get_Rodovias(""); // lista de "Rodovias"
 
             // filtra aqui por aproximacao porque a busca pelo SirGeo é exata
             rod_codigo = rod_codigo.ToUpper();

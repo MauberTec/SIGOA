@@ -403,10 +403,11 @@ namespace WebApp.Controllers
         /// <summary>
         /// Lista de todas os Fluxos de Status de Ordens de Servicos não deletados
         /// </summary>
+        /// <param name="tos_id">Id do Tipo de Ordem de Servico</param>
         /// <returns>JsonResult Lista de OSFluxoStatuss</returns>
-        public JsonResult OSFluxoStatus_ListAll()
+        public JsonResult OSFluxoStatus_ListAll(int tos_id)
         {
-            return Json(new { data = new OrdemServicoBLL().OSFluxoStatus_ListAll() }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new OrdemServicoBLL().OSFluxoStatus_ListAll(tos_id) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

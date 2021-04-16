@@ -15,6 +15,7 @@
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
+        ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft "  style="display:none" ></td> ' +
         ' <td class="borderLeft  borderRight" ></td> ' +
         ' <td class="borderLeft " id="tdFICHA4_ReparoIndicado_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
@@ -50,8 +51,8 @@
         '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label> ' +
         ' </td > ' +
         ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
-        // ' <td class="borderLeft centroH qualClasse" > <label id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " >txt_Numero_VVV</label></td> ' +
-       ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" onkeyup="txt_Numero_onchange(this)"  /></td> ' +
+        ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Localizacao_Especifica_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Localizacao_Especifica_VVV"  /></td> ' +
+        ' <td class="borderLeft centroH qualClasse" ><input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" onkeyup="txt_Numero_onchange(this)"  /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  title="TOOLTIP_cmb_Cod"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Alerta_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Alerta"  onchange="cmb_Alerta_onchange(this)" >OPCOES_cmb_Alerta</select></td > ' +
@@ -163,6 +164,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
             {
                 var txt_Numero_ian_id = document.getElementById("txt_Numero_ian_id_" + ian_id);
                 if (txt_Numero_ian_id) {
+                    var ian_localizacao_especifica = $("#txt_Localizacao_Especifica_ian_id_" + ian_id).val();
                     var ian_numero = $("#txt_Numero_ian_id_" + ian_id).val();
                     var leg_codigo = $("#cmb_Sigla_ian_id_" + ian_id).val() + '';
                     var atp_codigo = $("#cmb_Cod_ian_id_" + ian_id).val() + '';
@@ -373,6 +375,9 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                     if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == ""))
                         ian_largura = " ";
 
+                    if (ian_localizacao_especifica.trim() == "")
+                        ian_localizacao_especifica = " ";
+
                     if (ian_numero.trim() == "")
                         ian_numero = " ";
 
@@ -427,6 +432,7 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                         + rpt_id_sugerido + '<quebra>' + rpt_id_adotado + '<quebra>'
                         + qt_sugerido.replace(',', '.') + '<quebra>' + qt_adotado.replace(',', '.') + '<quebra>'
                         + i  + '<quebra>'
+                        + ian_localizacao_especifica + '<quebra>'
                         + '</tr_linha>';
 
                     saida = saida + linhaMontada;
@@ -631,6 +637,7 @@ function preenchetblFicha4_CAMPO(ehRead) {
                 }
 
                 if (parseInt(result.data[i].clo_id) >= 10) {
+                    linhaAux = linhaAux.replace(/txt_Localizacao_Especifica_VVV/g, result.data[i].ian_localizacao_especifica);
                     linhaAux = linhaAux.replace(/txt_Numero_VVV/g, result.data[i].ian_numero);
                     linhaAux = linhaAux.replace(/txt_Quantidade_VVV/g, result.data[i].ian_quantidade);
                     linhaAux = linhaAux.replace(/txt_EspacamentoMedio_VVV/g, result.data[i].ian_espacamento);
@@ -800,7 +807,8 @@ function preenchetblFicha4_CAMPO(ehRead) {
             var tblFicha4_INSPECAO_ESPECIAL_CAMPO = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
             if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
                 Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
-         }
+        }
+
    });
 
 

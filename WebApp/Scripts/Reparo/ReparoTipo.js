@@ -26,7 +26,8 @@ function ReparoTipo_Salvar() {
     var txtrpt_descricao = document.getElementById('txtrpt_descricao');
     txtrpt_descricao.value = txtrpt_descricao.value.trim();
 
-    if (validaAlfaNumerico(txtrpt_descricao) && (ChecaRepetido(txtrpt_codigo)) && validaAlfaNumericoSemAcentosNemEspaco(txtrpt_codigo, 0)) {
+    if (validaAlfaNumericoAcentosAfins(txtrpt_descricao, 0, 0) && (ChecaRepetido(txtrpt_codigo)) && validaAlfaNumericoSemAcentosNemEspaco(txtrpt_codigo, 0))
+{   
 
         var ReparoTipo = {
             rpt_id: selectedrpt_id,

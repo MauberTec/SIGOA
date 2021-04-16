@@ -147,7 +147,7 @@
                                                 </td>
                                                 <td>
                                                     <input id="filtro_data_De" name="filtro_data_De"
-                                                           placeholder="De" maxlength="20"
+                                                           placeholder="De" maxlength="20" readonly
                                                            class="form-control" style="background-color:#f4f4f4; width:120px; " />
                                                 </td>
                                                 <td style="width:10px;"></td>
@@ -156,7 +156,7 @@
                                                 </td>
                                                 <td>
                                                     <input id="filtro_data_Ate" name="filtro_data_Ate"
-                                                           placeholder="Até" maxlength="20"
+                                                           placeholder="Até" maxlength="20" readonly
                                                            class="form-control" style="background-color:#f4f4f4; width:120px" />
                                                 </td>
 
@@ -402,6 +402,7 @@
         $('#cmbFiltroRegionais').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });
@@ -409,6 +410,7 @@
         $('#cmbFiltroTiposOS').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });
@@ -416,6 +418,7 @@
         $('#cmbFiltroStatusOS').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });
@@ -715,7 +718,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="modalLocalizarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">

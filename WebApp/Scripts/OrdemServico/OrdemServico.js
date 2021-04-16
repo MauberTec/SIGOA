@@ -262,7 +262,6 @@ function cmbTiposOS_Novo_onchange()
 
 // *****************************************************************
 
-
 function mostraAba(selectedId_tos_id, bool_posicionar) {
 
     var liDetalhesOS = document.getElementById("liDetalhesOS");
@@ -278,6 +277,7 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     var liFichaNotificacaoOcorrencia = document.getElementById("liFichaNotificacaoOcorrencia");
 
     var liIndicacaoServicos = document.getElementById("liIndicacaoServicos");
+
 
 
     //if (liDetalhesOS)
@@ -320,6 +320,7 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
             break;
 
         case 8:
+            liFichaInspecaoCadastral.style.display = "unset";
             liFichaInspecaoRotineira.style.display = "unset";
             liFichaInspecaoRotineiraProvidencias.style.display = "unset";
             if (bool_posicionar)
@@ -346,6 +347,10 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
                  $('[href="#tabFichaNotificacaoOcorrencia"]').tab('show');
             break;
 
+        case 21: // projeto obra nova
+            liFichaInspecaoCadastral.style.display = "unset";
+            liIndicacaoServicos.style.display = "unset";
+            break;
 
         default:
             liIndicacaoServicos.style.display = "unset";
@@ -357,6 +362,14 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
 
 function OrdemServico_setaReadWrite(ehRead) {
+
+    var conceptName = $('#cmbStatusOS').val();
+    if (parseInt(conceptName) == 14) // encerrada
+    {
+        document.getElementById("cmbStatusOS").disabled = ehRead;
+        return;
+    }
+
     var tabela = document.getElementById("divDetalhes");
 
     // habilita ou desabilita todos os controles editaveis
@@ -365,7 +378,7 @@ function OrdemServico_setaReadWrite(ehRead) {
     var lstTextareas = tabela.getElementsByTagName('textarea');
     var lstButtons = tabela.getElementsByTagName('button');
 
-    var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos"];
+    var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos", "txtord_criticidade", "txtord_data_atualizacao_status"];
     if (ehEdicao)
         controlesReadOnly.push("cmbTiposOS");
 
@@ -445,9 +458,9 @@ function OrdemServico_LimparDetalhes()
   // $('#txtord_quantidade_estimada').val("");
     $('#txtord_custo_estimado').val("");
 
-    $('#txttpu_codigo_der').val("");
-    $('#txttpu_descricao').val("");
-    $('#txttpu_data_base_der').val("");
+  //  $('#txttpu_codigo_der').val("");
+  //  $('#txttpu_descricao').val("");
+  //  $('#txttpu_data_base_der').val("");
 
     $('#cmbClassesOS').val(null);
     $('#txtord_codigo_pai').val("");
@@ -625,6 +638,7 @@ function OrdemServico_Editar(id, origem) {
             selectedId_obj_id = result.obj_id;
             $('#txtobj_codigo').val(result.obj_codigo.trim());
             $('#txtobj_codigo_Novo2').val(result.obj_codigo.trim());
+            $('#txtord_data_atualizacao_status').val(result.ord_data_atualizacao_status);
 
             $('#txtord_aberta_por').val(result.ord_aberta_por_nome.trim());
             $('#txtord_responsavel_der').val(result.ord_responsavel_der.trim());
@@ -642,9 +656,9 @@ function OrdemServico_Editar(id, origem) {
         //    $('#txtord_quantidade_estimada').val(result.ord_quantidade_estimada);
             $('#txtord_custo_estimado').val(result.ord_custo_estimado);
 
-            $('#txttpu_codigo_der').val(result.tpu_codigo_der.trim());
-            $('#txttpu_descricao').val(result.tpu_descricao.trim());
-            $('#txttpu_data_base_der').val(result.tpu_data_base_der.substring(0, 10));
+        //    $('#txttpu_codigo_der').val(result.tpu_codigo_der.trim());
+        //    $('#txttpu_descricao').val(result.tpu_descricao.trim());
+        //    $('#txttpu_data_base_der').val(result.tpu_data_base_der.substring(0, 10));
 
             $('#cmbClassesOS').val(result.ocl_id);
 

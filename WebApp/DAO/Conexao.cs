@@ -26,6 +26,7 @@ namespace WebApp.DAO
              //this.strConn = @"Data Source=DESKTOP-LVBFKSQ\SQLEXPRESS;Database=SIGOA_DESENV;Integrated Security=True;";
         }
 
+
         /// <summary>
         /// Checa se existe conexão com o banco de dados. Timeout padrão 15 segundos
         /// </summary>
@@ -60,7 +61,7 @@ namespace WebApp.DAO
                if (pedacos[i].StartsWith("Initial Catalog"))
                  {
                     string[] valores = pedacos[i].Split("=".ToCharArray());
-                    return valores[1].Replace("SIGOA_", "");
+                    return valores[1].Replace("SIGOA", "").Replace("_", "");
                 }
             }
 

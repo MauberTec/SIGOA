@@ -76,9 +76,22 @@
                                 <th>Km Inicial</th>
                                 <th>Km Final</th>
                                 <th>Sentido 1</th>
+                                <th>Passeio 1</th>
+                                <th>Com 1</th>
+                                <th>Moto 1</th>
                                 <th>Valor 1</th>
+
                                 <th>Sentido 2</th>
+                                <th>Passeio 2</th>
+                                <th>Com 2</th>
+                                <th>Moto 2</th>
                                 <th>Valor 2</th>
+
+
+                                <th>Passeio Bidirecional</th>
+                                <th>Com Bidirecional</th>
+                                <th>Moto Bidirecional</th>
+
                                 <th>Bidirecional</th>
                             </tr>
                         </thead>
@@ -218,17 +231,30 @@
                 }
             }
             , "columns": [
-                { data: "vdm_ano", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "vdm_rodovia", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "pcl_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "pcl_kminicial", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "pcl_kmfinal", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "vdm_sentido1", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "vdm_valor1", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "vdm_sentido2", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "vdm_valor2", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "vdm_bidirecional", "className": "Centralizado", "autoWidth": true, "searchable": false }
+                { data: "vdm_ano", "className": "Centralizado", "searchable": false },
+                { data: "vdm_rodovia", "className": "Centralizado", "searchable": false },
+                { data: "pcl_numero", "className": "Centralizado", "searchable": false },
+                { data: "pcl_kminicial", "className": "Centralizado", "searchable": false },
+                { data: "pcl_kmfinal", "className": "Centralizado", "searchable": false },
+
+                { data: "vdm_sentido1", "className": "Centralizado", "searchable": false },
+                { data: "vdm_passeio1", "className": "Centralizado", "searchable": false },
+                { data: "vdm_com1", "className": "Centralizado", "searchable": false },
+                { data: "vdm_moto1", "className": "Centralizado", "searchable": false },
+                { data: "vdm_valor1", "className": "Centralizado", "searchable": false },
+
+                { data: "vdm_sentido2", "className": "Centralizado", "searchable": false },
+                { data: "vdm_passeio2", "className": "Centralizado", "searchable": false },
+                { data: "vdm_com2", "className": "Centralizado", "searchable": false },
+                { data: "vdm_moto2", "className": "Centralizado", "searchable": false },
+                { data: "vdm_valor2", "className": "Centralizado", "searchable": false },
+
+                { data: "vdm_passeio_bidirecional", "className": "Centralizado",  "searchable": false },
+                { data: "vdm_com_bidirecional", "className": "Centralizado",  "searchable": false },
+                { data: "vdm_moto_bidirecional", "className": "Centralizado",  "searchable": false },
+                { data: "vdm_bidirecional", "className": "Centralizado", "searchable": false }
             ]
+            , "ordering": false
             , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
             , select: {
                 style: 'single'

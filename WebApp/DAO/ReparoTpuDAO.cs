@@ -15,79 +15,12 @@ namespace WebApp.DAO
     /// </summary>
     public class ReparoTpuDAO: Conexao
     {
-        /// <summary>
-        ///     Lista de todos os Tipos de Reparos não deletados
-        /// </summary>
-        /// <param name="rpt_id">Filtro por Id do Tipo de Reparo, null para todos</param>
-        /// <returns>Lista de Tipo de Reparo</returns>
-        public List<ReparoTipo> ReparoTipo_ListAll(int? rpt_id)
-        {
-            try
-            {
-                List<ReparoTipo> lst = new List<ReparoTipo>();
-                using (SqlConnection con = new SqlConnection(strConn))
-                {
-                    con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_REPARO_TIPO", con);
-                    com.CommandType = CommandType.StoredProcedure;
-                    com.Parameters.AddWithValue("@rpt_id", rpt_id);
-
-                    SqlDataReader rdr = com.ExecuteReader();
-                    while (rdr.Read())
-                    {
-                        lst.Add(new ReparoTipo
-                        {
-                            rpt_id = Convert.ToInt32(rdr["rpt_id"]),
-                            rpt_codigo = rdr["rpt_codigo"].ToString(),
-                            rpt_descricao = rdr["rpt_descricao"].ToString(),
-                            rpt_ativo = Convert.ToInt16(rdr["rpt_ativo"])
-                        });
-                    }
-                    return lst;
-                }
-            }
-            catch (Exception ex)
-            {
-                int id = 0;
-                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
-                throw new Exception(ex.Message);
-            }
-        }
 
         /// <summary>
-        /// 
+        /// Busca lista de Reparos associados a TPU
         /// </summary>
-        /// <returns></returns>
-        public List<TpuFontesModel> GetFontes()
-        {
-            List<TpuFontesModel> lista = new List<TpuFontesModel>();
-            using (SqlConnection con = new SqlConnection(strConn))
-            {
-                con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_tpu_fontes order by fon_id asc", con);
-                com.CommandType = CommandType.Text;
-
-                SqlDataReader reader = com.ExecuteReader();
-                while (reader.Read())
-                {
-                    lista.Add(new TpuFontesModel
-                    {
-                        fon_id = reader["fon_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["fon_id"].ToString()),
-                        fon_nome = reader["fon_nome"].ToString()
-                    });
-
-                }
-            }
-
-            return lista;
-        }
-
-        /// <summary>
-        /// Preenche Grid da Home GetReparoTpu
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public List<TpuDtoModel> GetReparoTpu(TpuDtoModel model)
+        /// <returns>Lista de TpuDtoModel</returns>
+        public List<TpuDtoModel> ReparoTpu_ListAll()
         {
 
             List<TpuDtoModel> lista = new List<TpuDtoModel>();
@@ -104,15 +37,15 @@ namespace WebApp.DAO
                         lista.Add(new TpuDtoModel
                         {
                             fon_nome = reader["fon_nome"] == DBNull.Value ? string.Empty : reader["fon_nome"].ToString(),
-                            rtu_data_base = reader["rtu_data_base"].ToString(),
+                            rtu_data_base = reader["rtu_data_base"] == DBNull.Value ? "" : reader["rtu_data_base"].ToString(),
                             rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString(),
-                            rtu_preco_unitario = Convert.ToDecimal(reader["rtu_preco_unitario"].ToString()),
+                            rtu_preco_unitario = reader["rtu_preco_unitario"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["rtu_preco_unitario"].ToString()),
                             rtu_codigo_tpu = reader["rtu_codigo_tpu"] == DBNull.Value ? string.Empty : reader["rtu_codigo_tpu"].ToString(),
                             rtu_id = reader["rtu_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["rtu_id"].ToString()),
                             rtu_fonte_txt = reader["rtu_fonte_txt"] == DBNull.Value ? string.Empty : reader["rtu_fonte_txt"].ToString(),
                             rpt_id = reader["rpt_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["rpt_id"].ToString()),
                             datastring = reader["datastring"] == DBNull.Value ? string.Empty : reader["datastring"].ToString(),
-                            rtu_ativo = reader["rtu_ativo"] == DBNull.Value ? false : Convert.ToBoolean(reader["rtu_ativo"].ToString()),
+                            rtu_ativo = reader["rtu_ativo"] == DBNull.Value ? 1 : Convert.ToInt16(reader["rtu_ativo"]),
                             fon_id = reader["fon_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["fon_id"].ToString()),
                             unidade = reader["unidade"] == DBNull.Value ? string.Empty : reader["unidade"].ToString()
 
@@ -130,79 +63,48 @@ namespace WebApp.DAO
         }
 
         /// <summary>
-        /// Preeche combo home
+        ///  Ativa/Desativa ReparoTpu
         /// </summary>
-        /// <returns></returns>
-        public List<PoliticaReparoModel> GerReparo()
+        /// <param name="id">Id do Reparo Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int ReparoTpu_AtivarDesativar(int id, int usu_id, string ip)
         {
-            List<PoliticaReparoModel> lista = new List<PoliticaReparoModel>();
-            using (SqlConnection con = new SqlConnection(strConn))
+            try
             {
-                con.Open();
-                SqlCommand com = new SqlCommand("select * from tab_reparo_tipos order by convert(int, rpt_codigo) asc ", con);
-                com.CommandType = CommandType.Text;
-
-                SqlDataReader reader = com.ExecuteReader();
-                while (reader.Read())
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
                 {
-                    lista.Add(new PoliticaReparoModel
-                    {
-                        rpt_id = reader["rpt_id"].ToString(),
-                        rpt_descricao = reader["rpt_descricao"].ToString(),
-                        rpt_codigo = reader["rpt_codigo"].ToString()
-                    });
-                }
-            }
-
-            return lista;
-        }
-
-        /// <summary>
-        /// DeletaConserva
-        /// </summary>
-        /// <param name="rtu_id"></param>
-        /// <param name="ativo"></param>
-        /// <returns></returns>
-        public string AtualizaRtuStatu(int rtu_id, int ativo)
-        {
-            string response;
-            using (SqlConnection con = new SqlConnection(new Conexao().strConn))
-            {
-                try
-                {
-                    
                     con.Open();
-                    SqlCommand com = new SqlCommand();
-                    com.CommandText = "update tab_reparo_tpu set rtu_ativo = "+ativo+" where rtu_id = " + rtu_id;
-                    com.Connection = con;
+                    SqlCommand com = new SqlCommand("STP_UPD_ATIVARDESATIVAR_REPAROTPU", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@id", id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
 
-                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
-                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
-                    com.Parameters.Add(p_return);
-                    com.Parameters[0].Size = 32000;
-                    com.ExecuteScalar();
-                    int id = Convert.ToInt32(p_return.Value);
-
-                    response = "ok";
+                    i = com.ExecuteNonQuery();
                 }
-                catch (Exception ex)
-                {
-                    response = ex.Message;
-                }
-
+                return i;
             }
-
-            return response;
+            catch (Exception ex)
+            {
+                int id22 = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id22);
+                throw new Exception(ex.Message);
+            }
         }
+
 
         /// <summary>
         /// AtualizaRtuEdit
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
-        public string AtualizaRtuEdit(TpuDtoModel model)
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int ReparoTpu_Salvar(TpuDtoModel model, int usu_id, string ip)
         {
-            string response;
             using (SqlConnection con = new SqlConnection(new Conexao().strConn))
             {
                 try
@@ -231,19 +133,54 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@rtu_preco_unitario", model.rtu_preco_unitario);
                     com.Parameters.AddWithValue("@rtu_data_base", model.rtu_data_base);
                     com.Parameters.AddWithValue("@rtu_id", model.rtu_id);
-                    com.ExecuteScalar();
-                    int id = Convert.ToInt32(p_return.Value);
 
-                    response = "ok";
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
                 }
                 catch (Exception ex)
                 {
-                    response = ex.Message;
+                    int id = 0;
+                    new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                    throw new Exception(ex.Message);
                 }
 
             }
-
-            return response;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<TpuFontesModel> ReparoTpu_GetFontesTPU()
+        {
+            List<TpuFontesModel> lista = new List<TpuFontesModel>();
+            using (SqlConnection con = new SqlConnection(strConn))
+            {
+                con.Open();
+
+                 SqlCommand com = new SqlCommand("STP_SEL_PRECOS_UNITARIOS_FONTES", con);
+                 com.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    lista.Add(new TpuFontesModel
+                    {
+                        fon_id = reader["fon_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["fon_id"].ToString()),
+                        fon_nome = reader["fon_nome"].ToString()
+                    });
+
+                }
+            }
+
+            return lista;
+        }
+
+
     }
 }

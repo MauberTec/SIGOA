@@ -96,8 +96,6 @@ namespace WebApp.DAO
 
                             ord_codigo_pai = rdr["ord_codigo_pai"] == DBNull.Value ? string.Empty : rdr["ord_codigo_pai"].ToString(),
                             ord_descricao_pai = rdr["ord_descricao_pai"] == DBNull.Value ? string.Empty : rdr["ord_descricao_pai"].ToString(),
-                            tpu_codigo_der = rdr["tpu_codigo_der"] == DBNull.Value ? string.Empty : rdr["tpu_codigo_der"].ToString(),
-                            tpu_descricao = rdr["tpu_descricao"] == DBNull.Value ? string.Empty : rdr["tpu_descricao"].ToString(),
 
                             con_codigofiscalizacao = rdr["con_codigofiscalizacao"] == DBNull.Value ? string.Empty : rdr["con_codigofiscalizacao"].ToString(),
                             con_descricaofiscalizacao = rdr["con_descricaofiscalizacao"] == DBNull.Value ? string.Empty : rdr["con_descricaofiscalizacao"].ToString(),
@@ -108,6 +106,7 @@ namespace WebApp.DAO
                             con_descricaoorcamento = rdr["con_descricaoorcamento"] == DBNull.Value ? string.Empty : rdr["con_descricaoorcamento"].ToString(),
                             ord_aberta_por_usuario = rdr["ord_aberta_por_usuario"] == DBNull.Value ? string.Empty : rdr["ord_aberta_por_usuario"].ToString(),
                             ord_aberta_por_nome = rdr["ord_aberta_por_nome"] == DBNull.Value ? string.Empty : rdr["ord_aberta_por_nome"].ToString(),
+                            ord_data_atualizacao_status = rdr["ord_data_atualizacao_status"] == DBNull.Value ? string.Empty : rdr["ord_data_atualizacao_status"].ToString(),
 
                             con_id = rdr["con_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id"]),
                             ord_data_inicio_programada = rdr["ord_data_inicio_programada"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_programada"].ToString(),
@@ -133,10 +132,7 @@ namespace WebApp.DAO
                             ord_data_cancelamento = rdr["ord_data_cancelamento"] == DBNull.Value ? string.Empty : rdr["ord_data_cancelamento"].ToString(),
                             ord_data_reinicio = rdr["ord_data_reinicio"] == DBNull.Value ? string.Empty : rdr["ord_data_reinicio"].ToString(),
                             con_id_orcamento = rdr["con_id_orcamento"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id_orcamento"]),
-                            tpt_id = rdr["tpt_id"] == DBNull.Value ? string.Empty : rdr["tpt_id"].ToString(),
-                            tpu_data_base_der = rdr["tpu_data_base_der"] == DBNull.Value ? string.Empty : rdr["tpu_data_base_der"].ToString(),
-                            tpu_id = rdr["tpu_id"] == DBNull.Value ? string.Empty : rdr["tpu_id"].ToString(),
-                            tpu_preco_unitario = rdr["tpu_preco_unitario"] == DBNull.Value ? -1 : Convert.ToDouble(rdr["tpu_preco_unitario"]),
+
                             lst_proximos_status = rdr["lst_proximos_status"] == DBNull.Value ? string.Empty : rdr["lst_proximos_status"].ToString(),
                             ord_indicacao_servico = rdr["ord_indicacao_servico"] == DBNull.Value ? string.Empty : rdr["ord_indicacao_servico"].ToString()
 
@@ -198,7 +194,6 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@ord_data_inicio_programada", ord.ord_data_inicio_programada);
                     com.Parameters.AddWithValue("@ord_data_termino_programada", ord.ord_data_termino_programada);
-
                     com.Parameters.AddWithValue("@ord_data_inicio_execucao", ord.ord_data_inicio_execucao);
                     com.Parameters.AddWithValue("@ord_data_termino_execucao", ord.ord_data_termino_execucao);
 
@@ -1258,8 +1253,9 @@ namespace WebApp.DAO
         ///     Lista de Fluxo de Status de OS não deletados / null para todos
         /// </summary>
         /// <param name="fos_id">Id do Fluxo de Status de Ordem de Servico / vazio para todos </param>
+        /// <param name="tos_id">Id do Tipo de Ordem de Servico</param>
         /// <returns>Lista de OrdemServico</returns>
-        public List<OSFluxoStatus> OSFluxoStatus_ListAll(int? fos_id = null)
+        public List<OSFluxoStatus> OSFluxoStatus_ListAll(int? fos_id = null, int? tos_id = null)
         {
             try
             {
@@ -1275,12 +1271,15 @@ namespace WebApp.DAO
                     if (fos_id != null)
                         com.Parameters.AddWithValue("@fos_id", fos_id);
 
-                    SqlDataReader rdr = com.ExecuteReader();
+                   com.Parameters.AddWithValue("@tos_id", tos_id);
+
+                   SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
                         lst.Add(new OSFluxoStatus
                         {
                             fos_id = Convert.ToInt16(rdr["fos_id"]),
+                            tos_id = Convert.ToInt16(rdr["tos_id"]),
                             fos_descricao = rdr["fos_descricao"].ToString(),
                             fos_ativo = Convert.ToInt16(rdr["fos_ativo"]),
 
@@ -1337,6 +1336,7 @@ namespace WebApp.DAO
                     if (fos.fos_id > 0)
                         com.Parameters.AddWithValue("@fos_id", fos.fos_id);
 
+                    com.Parameters.AddWithValue("@tos_id", fos.tos_id);
                     com.Parameters.AddWithValue("@sos_id_de", fos.sos_id_de);
                     com.Parameters.AddWithValue("@sos_id_para", fos.sos_id_para);
                     com.Parameters.AddWithValue("@fos_descricao", fos.fos_descricao);

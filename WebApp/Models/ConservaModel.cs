@@ -55,25 +55,29 @@ namespace WebApp.Models
     public class ConservaTipo
     {
         /// <summary>
-        /// oct_criado_por
+        /// Id do Tipo de Conserva
         /// </summary>
-        public int oct_id { get; set; }
+        public int cot_id { get; set; }
+
         /// <summary>
-        /// oct_criado_por
+        /// Código
         /// </summary>
-        public int oct_codigo { get; set; }
+        public string cot_codigo { get; set; }
+
         /// <summary>
-        /// oct_criado_por
+        /// Descrição
         /// </summary>
-        public string oct_descricao { get; set; }
+        public string cot_descricao { get; set; }
+
         /// <summary>
-        /// oct_criado_por
+        /// Ativo?
         /// </summary>
-        public Boolean oct_ativo { get; set; }
+        public int cot_ativo { get; set; }
+
         /// <summary>
-        /// oct_criado_por
+        /// cot_criado_por
         /// </summary>
-        public int oct_criado_por { get; set; }
+        public int cot_criado_por { get; set; }
     }
 
 }
