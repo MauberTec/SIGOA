@@ -253,6 +253,7 @@ function preenchetblFicha4_PROVIDENCIAS() {
         }
     });
 
+    travaBotoes();
   //  Ficha4_PROVIDENCIAS_setaReadWrite($("#tblFicha4_INSPECAO_ESPECIAL_PROVIDENCIAS"), true);
 }
 

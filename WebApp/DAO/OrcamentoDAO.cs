@@ -483,12 +483,13 @@ namespace WebApp.DAO
                             tpt_id = rdr["tpt_id"].ToString(),
                             ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"]),
                             DataTpu = rdr["DataTpu"].ToString(),
+                            ose_fase = rdr["ose_fase"].ToString(),
                             CodSubItem = rdr["CodSubItem"].ToString(),
                             NomeSubItem = rdr["NomeSubItem"].ToString(),
                             UnidMed = rdr["UnidMed"].ToString(),
                             PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
                             ValorTotal = Convert.ToDecimal(rdr["PrecoUnitario"]) * Convert.ToDecimal(rdr["ose_quantidade"]),
-                            Onerado = rdr["Onerado"].ToString(),
+                            Desonerado = rdr["Desonerado"].ToString(),
 
                             tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()
                         });
@@ -583,8 +584,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="orc_id">Id do orçamento</param>
         /// <param name="obj_id">Id do objeto do orcamento</param>
+        /// <param name="ose_fase">Fase da TPU</param>
         /// <returns>Lista de Detalhes do Orcamento</returns>
-        public List<ServicosAdicionados> OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id)
+        public List<ServicosAdicionados> OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id, int ose_fase)
         {
             try
             {
@@ -597,6 +599,7 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@orc_id", orc_id);
                     com.Parameters.AddWithValue("@obj_id", obj_id);
+                    com.Parameters.AddWithValue("@ose_fase", ose_fase);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -611,12 +614,13 @@ namespace WebApp.DAO
                             tpt_id = rdr["tpt_id"].ToString(),
                             ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"]),
                             DataTpu = rdr["DataTpu"].ToString(),
+                            ose_fase = rdr["ose_fase"].ToString(),
                             CodSubItem = rdr["CodSubItem"].ToString(),
                             NomeSubItem = rdr["NomeSubItem"].ToString(),
                             UnidMed = rdr["UnidMed"].ToString(),
                             PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
                             ValorTotal = Convert.ToDecimal(rdr["PrecoUnitario"]) * Convert.ToDecimal(rdr["ose_quantidade"]),
-                            Onerado = rdr["Onerado"].ToString(),
+                            Desonerado = rdr["Desonerado"].ToString(),
                             tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()
                         });
                     }
@@ -630,6 +634,81 @@ namespace WebApp.DAO
                 throw new Exception(ex.Message);
             }
         }
+
+
+        /// <summary>
+        ///  Salvar Serviços Adicionais
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <param name="obj_id">Id do Objeto do Orçamento</param>
+        /// <param name="ose_fase">Fase da TPU</param>
+        /// <param name="ose_codigo_der">Código do Serviço da TPU</param>
+        /// <param name="ose_quantidade">Quantidade a ser utilizada</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int Orcamento_Adicionar_Servico(int orc_id, int obj_id, int ose_fase, string ose_codigo_der, decimal ose_quantidade, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_INS_ORCAMENTO_SERVICO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@orc_id", orc_id);
+                    com.Parameters.AddWithValue("@obj_id", obj_id);
+                    com.Parameters.AddWithValue("@ose_fase", ose_fase);
+                    com.Parameters.AddWithValue("@ose_codigo_der", ose_codigo_der);
+                    com.Parameters.AddWithValue("@ose_quantidade", ose_quantidade);
+
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Calcula o Valor Total do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <returns>decimal</returns>
+        public decimal Orcamento_Total(int orc_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_TotalOrcamento(" + orc_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                     decimal retorno =  Convert.ToDecimal( com.ExecuteScalar());
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
 
 
         // *************** STATUS  *************************************************************

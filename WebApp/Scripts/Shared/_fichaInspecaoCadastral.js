@@ -505,6 +505,8 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
                         }
 
             }
+
+            travaBotoes();
         }
     });
 
@@ -1326,8 +1328,11 @@ function header_click(quem, expandir) {
                     document.getElementById("iconAngle_HISTORICO_INTERVENCOES").classList.toggle('rotate');
                     break;
                 }
-        }
-}
+    }
+
+        travaBotoes();
+
+    }
 
 function tica_chktxt(quem) {
     var chk = $('#' + quem.replace("txt", "chk"));

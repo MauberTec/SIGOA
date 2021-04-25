@@ -474,6 +474,13 @@ namespace WebApp.Models
         /// </summary>
         public string DataTpu { get; set; }
 
+
+        /// <summary>
+        /// Fase da TPU
+        /// </summary>
+        public string ose_fase { get; set; }
+
+
         /// <summary>
         /// Código
         /// </summary>
@@ -506,9 +513,9 @@ namespace WebApp.Models
         public Decimal ValorTotal { get; set; }
 
         /// <summary>
-        /// Onerado?
+        /// Desonerado?
         /// </summary>
-        public string Onerado { get; set; }
+        public string Desonerado { get; set; }
 
         /// data da ultima atualizacao do banco sigoa
         /// </summary>

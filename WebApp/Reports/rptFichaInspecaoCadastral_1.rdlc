@@ -24206,7 +24206,7 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</Value>
+                      <Value>=IIF(Parameters!tos_id.Value = 7, "FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL", "FICHA BÁSICA DE CADASTRO")</Value>
                       <Style>
                         <FontFamily>Calibri</FontFamily>
                       </Style>

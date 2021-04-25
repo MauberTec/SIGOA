@@ -419,7 +419,8 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                     //if (isNaN(ovv_tpu_quantidade))
                     //    ovv_tpu_quantidade = 0;
 
-                    var linhaMontada = '<tr_linha>'
+                    var linhaMontada = '';
+                    linhaMontada = '<tr_linha>'
                         + ian_id + '<quebra>'
                         + ian_numero + '<quebra>' + leg_codigo + '<quebra>'
                         + atp_codigo + '<quebra>' + ale_codigo + '<quebra>'
@@ -582,232 +583,237 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
             // limpa as linhas se houver
             var table = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
-            var rowCount = table.rows.length;
-            for (var i = rowCount - 1; i >= 0; i--) {
-                if (table.rows[i].id.indexOf("trFICHA4_CAMPO_ian_id") >= 0)
-                    table.deleteRow(i);
-            }
-
-            var linhas = '';
-            var celulaPai = document.getElementById("tr_pai");
-
-            for (var i = 0; i < result.data.length; i++) {
-                if (i == 0) {
-                    $('#txt_ins_anom_Responsavel').val(result.data[i].ins_anom_Responsavel);
-                    $('#txt_ins_anom_data').val(result.data[i].ins_anom_data);
-                    $('#cmb_ins_anom_quadroA_1').val(result.data[i].ins_anom_quadroA_1);
-                    $('#txt_ins_anom_quadroA_2').val(result.data[i].ins_anom_quadroA_2);
+            if (table) {
+                var rowCount = table.rows.length;
+                for (var i = rowCount - 1; i >= 0; i--) {
+                    if (table.rows[i].id.indexOf("trFICHA4_CAMPO_ian_id") >= 0)
+                        table.deleteRow(i);
                 }
 
-                var linhaAux = linhaObjetos;
-                if (parseInt(result.data[i].clo_id) < 10)
-                    linhaAux = linhaCabecalhos;
+                var linhas = '';
+                var celulaPai = document.getElementById("tr_pai");
 
-                if (parseInt(result.data[i].clo_id) == 6)  // subdivisao1
-                    linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/qualClasse/g, "cabecalho_subdivisao1");
-                else
-                    if (parseInt(result.data[i].clo_id) == 7) // subdivisao2
-                        linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/qualClasse/g, "cabecalho_subdivisao2");
+                for (var i = 0; i < result.data.length; i++) {
+                    if (i == 0) {
+                        $('#txt_ins_anom_Responsavel').val(result.data[i].ins_anom_Responsavel);
+                        $('#txt_ins_anom_data').val(result.data[i].ins_anom_data);
+                        $('#cmb_ins_anom_quadroA_1').val(result.data[i].ins_anom_quadroA_1);
+                        $('#txt_ins_anom_quadroA_2').val(result.data[i].ins_anom_quadroA_2);
+                    }
+
+                    var linhaAux = linhaObjetos;
+                    if (parseInt(result.data[i].clo_id) < 10)
+                        linhaAux = linhaCabecalhos;
+
+                    if (parseInt(result.data[i].clo_id) == 6)  // subdivisao1
+                        linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/qualClasse/g, "cabecalho_subdivisao1");
                     else
-                        if (parseInt(result.data[i].clo_id) == 9) // grupo
-                            linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/qualClasse/g, "cabecalho_grupos");
+                        if (parseInt(result.data[i].clo_id) == 7) // subdivisao2
+                            linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/qualClasse/g, "cabecalho_subdivisao2");
                         else
-                            if (!isNaN(result.data[i].obj_id)) // LINHA NORMAL
-                            {
-                                linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/XXX/g, result.data[i].obj_id).replace(/qualClasse/g, "linha_normal");
-                            }
+                            if (parseInt(result.data[i].clo_id) == 9) // grupo
+                                linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/qualClasse/g, "cabecalho_grupos");
+                            else
+                                if (!isNaN(result.data[i].obj_id)) // LINHA NORMAL
+                                {
+                                    linhaAux = linhaAux.replace(/YYY/g, result.data[i].rownum).replace(/XXX/g, result.data[i].obj_id).replace(/qualClasse/g, "linha_normal");
+                                }
 
-                linhaAux = linhaAux.replace(/ZZZ/g, result.data[i].ian_id); // id da linha
+                    linhaAux = linhaAux.replace(/ZZZ/g, result.data[i].ian_id); // id da linha
 
-                linhaAux = linhaAux.replace(/lbl_ObjCodigo_VVV/g, result.data[i].obj_codigo);
-                linhaAux = linhaAux.replace(/lbl_Item_VVV/g, result.data[i].item);
+                    linhaAux = linhaAux.replace(/lbl_ObjCodigo_VVV/g, result.data[i].obj_codigo);
+                    linhaAux = linhaAux.replace(/lbl_Item_VVV/g, result.data[i].item);
 
-                if (!isNaN(result.data[i].obj_id))
-                    if (parseInt(result.data[i].clo_id) < 10) {
+                    if (!isNaN(result.data[i].obj_id))
+                        if (parseInt(result.data[i].clo_id) < 10) {
+                            linhaAux = linhaAux.replace(/lbl_Localizacao_VVV/g, result.data[i].tip_nome);
+                            linhaAux = linhaAux.replace(/lbl_Localizacao_tooltip/g, result.data[i].obj_codigo);
+                        }
+                        else {
+                            linhaAux = linhaAux.replace(/lbl_Localizacao_VVV/g, result.data[i].obj_descricao);
+                            linhaAux = linhaAux.replace(/lbl_Localizacao_tooltip/g, result.data[i].obj_codigo);
+                        }
+                    else {
                         linhaAux = linhaAux.replace(/lbl_Localizacao_VVV/g, result.data[i].tip_nome);
                         linhaAux = linhaAux.replace(/lbl_Localizacao_tooltip/g, result.data[i].obj_codigo);
                     }
-                    else {
-                        linhaAux = linhaAux.replace(/lbl_Localizacao_VVV/g, result.data[i].obj_descricao);
-                        linhaAux = linhaAux.replace(/lbl_Localizacao_tooltip/g, result.data[i].obj_codigo);
+
+                    if (parseInt(result.data[i].clo_id) >= 10) {
+                        linhaAux = linhaAux.replace(/txt_Localizacao_Especifica_VVV/g, result.data[i].ian_localizacao_especifica);
+                        linhaAux = linhaAux.replace(/txt_Numero_VVV/g, result.data[i].ian_numero);
+                        linhaAux = linhaAux.replace(/txt_Quantidade_VVV/g, result.data[i].ian_quantidade);
+                        linhaAux = linhaAux.replace(/txt_EspacamentoMedio_VVV/g, result.data[i].ian_espacamento);
+                        linhaAux = linhaAux.replace(/txt_Largura_VVV/g, result.data[i].ian_largura);
+                        linhaAux = linhaAux.replace(/txt_Comprimento_VVV/g, result.data[i].ian_comprimento);
+                        linhaAux = linhaAux.replace(/txt_AberturaMinima_VVV/g, result.data[i].ian_abertura_minima);
+                        linhaAux = linhaAux.replace(/txt_AberturaMaxima_VVV/g, result.data[i].ian_abertura_maxima);
+                        linhaAux = linhaAux.replace(/txt_Foto_VVV/g, result.data[i].ian_fotografia);
+                        linhaAux = linhaAux.replace(/txt_Croqui_VVV/g, result.data[i].ian_croqui);
+                        linhaAux = linhaAux.replace(/txt_Desenho_VVV/g, result.data[i].ian_desenho);
+                        linhaAux = linhaAux.replace(/txt_Obs_VVV/g, result.data[i].ian_observacoes);
+
+                        linhaAux = linhaAux.replace(/lbl_ReparoIndicado_VVV/g, result.data[i].rpt_id_sugerido_codigo);
+                        linhaAux = linhaAux.replace(/TOOLTIP_ReparoIndicado_ian_id/g, result.data[i].rpt_id_sugerido_descricao);
+
+                        if (result.data[i].apt_id == 0)
+                            linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, '');
+                        else
+                            linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, result.data[i].apt_id);
+
+                        linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
+
+                        if (!isNaN((result.data[i].ian_quantidade_adotada)))
+                            linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
+                        else
+                            linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, '');
+
+                        linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
+
+                        // linhaAux = linhaAux.replace(/txt_ReparoAdotado_VVV/g, result.data[i].rownum);
+                        if (!isNaN((result.data[i].ian_quantidade_adotada)))
+                            linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, (((result.data[i].ian_quantidade_adotada.toFixed(2)) + " ").replace(".", ",").trim()));
+                        else
+                            linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, '');
+
+                        // substitui o valor -1 por vazio
+                        linhaAux = linhaAux.replace(/-1/g, '');
+
+                        // insere o valor "-1" para desabilitar algumas tabulacoes
+                        linhaAux = linhaAux.replace(/tabindexValor/g, '-1');
+
+                        // cria os itens dos combos ========================================
+                        linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
+
+                        linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Alerta', result.data[i].lstAlertas, result.data[i].ale_codigo, linhaAux);
+
+                        linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Cod', result.data[i].lstTipos, result.data[i].atp_codigo, linhaAux);
+
+                        linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
+
+                        linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
                     }
-                else {
-                    linhaAux = linhaAux.replace(/lbl_Localizacao_VVV/g, result.data[i].tip_nome);
-                    linhaAux = linhaAux.replace(/lbl_Localizacao_tooltip/g, result.data[i].obj_codigo);
+
+
+                    linhas = linhas + linhaAux;
                 }
 
-                if (parseInt(result.data[i].clo_id) >= 10) {
-                    linhaAux = linhaAux.replace(/txt_Localizacao_Especifica_VVV/g, result.data[i].ian_localizacao_especifica);
-                    linhaAux = linhaAux.replace(/txt_Numero_VVV/g, result.data[i].ian_numero);
-                    linhaAux = linhaAux.replace(/txt_Quantidade_VVV/g, result.data[i].ian_quantidade);
-                    linhaAux = linhaAux.replace(/txt_EspacamentoMedio_VVV/g, result.data[i].ian_espacamento);
-                    linhaAux = linhaAux.replace(/txt_Largura_VVV/g, result.data[i].ian_largura);
-                    linhaAux = linhaAux.replace(/txt_Comprimento_VVV/g, result.data[i].ian_comprimento);
-                    linhaAux = linhaAux.replace(/txt_AberturaMinima_VVV/g, result.data[i].ian_abertura_minima);
-                    linhaAux = linhaAux.replace(/txt_AberturaMaxima_VVV/g, result.data[i].ian_abertura_maxima);
-                    linhaAux = linhaAux.replace(/txt_Foto_VVV/g, result.data[i].ian_fotografia);
-                    linhaAux = linhaAux.replace(/txt_Croqui_VVV/g, result.data[i].ian_croqui);
-                    linhaAux = linhaAux.replace(/txt_Desenho_VVV/g, result.data[i].ian_desenho);
-                    linhaAux = linhaAux.replace(/txt_Obs_VVV/g, result.data[i].ian_observacoes);
-
-                    linhaAux = linhaAux.replace(/lbl_ReparoIndicado_VVV/g, result.data[i].rpt_id_sugerido_codigo);
-                    linhaAux = linhaAux.replace(/TOOLTIP_ReparoIndicado_ian_id/g, result.data[i].rpt_id_sugerido_descricao);
-
-                    if (result.data[i].apt_id == 0) 
-                        linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, '');
-                    else
-                        linhaAux = linhaAux.replace(/lbl_Providencia_VVV/g, result.data[i].apt_id);
-
-                    linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
-
-                    if (!isNaN((result.data[i].ian_quantidade_adotada)))
-                        linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
-                    else
-                        linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, '');
-
-                    linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
-
-                   // linhaAux = linhaAux.replace(/txt_ReparoAdotado_VVV/g, result.data[i].rownum);
-                    if (!isNaN((result.data[i].ian_quantidade_adotada)))
-                        linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, (((result.data[i].ian_quantidade_adotada.toFixed(2)) + " ").replace(".", ",").trim()));
-                    else
-                        linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, '');
-
-                    // substitui o valor -1 por vazio
-                    linhaAux = linhaAux.replace(/-1/g, '');
-
-                    // insere o valor "-1" para desabilitar algumas tabulacoes
-                    linhaAux = linhaAux.replace(/tabindexValor/g, '-1');
-
-                    // cria os itens dos combos ========================================
-                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Sigla', result.data[i].lstLegendas, result.data[i].leg_codigo, linhaAux);
-
-                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Alerta', result.data[i].lstAlertas, result.data[i].ale_codigo, linhaAux);
-
-                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Cod', result.data[i].lstTipos, result.data[i].atp_codigo, linhaAux);
-
-                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
-
-                    linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
-                }
-
-
-                linhas = linhas + linhaAux;
-            }
-
-            // oculta algumas colunas se a pagina for O.S. ou Inspecao
-            if (paginaPai == "OrdemServico")
-                linhas = linhas.replace(/EhOrdemServico/g, 'none');
-            else
-                if (paginaPai == "Inspecao") 
-                    linhas = linhas.replace(/display:EhOrdemServico/g, '');
-
-               
-            // mescla na tabela existente
-            celulaPai.insertAdjacentHTML('afterend', linhas);
-
-            // coloca mascara no campo quantidade
-            var qts = $('[id^="txt_Quantidade"]');
-            for (var i = 0; i < qts.length; i++) {
-                if (!ehRead)
-                    jQuery(qts[i]).attr('placeholder', "000,00");
-                else
-                    jQuery(qts[i]).attr('placeholder', "");
-
-                jQuery(qts[i]).mask("999,99");
-            }
-            
-            if (paginaPai == "Inspecao")
-            {
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000a").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001a").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = '';
-
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = '';
-                
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000b").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001b").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = '';
-
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = '';
-
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = '';
-            
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = '';
-
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000f").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001f").style.display = '';
-
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = '';
-                document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = '';
-            }
-            else
+                // oculta algumas colunas se a pagina for O.S. ou Inspecao
                 if (paginaPai == "OrdemServico")
-                {
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000a").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001a").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = 'none';
+                    linhas = linhas.replace(/EhOrdemServico/g, 'none');
+                else
+                    if (paginaPai == "Inspecao")
+                        linhas = linhas.replace(/display:EhOrdemServico/g, '');
 
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = 'none';
 
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000b").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001b").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = 'none';
+                // mescla na tabela existente
+                celulaPai.insertAdjacentHTML('afterend', linhas);
 
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = 'none';
+                // coloca mascara no campo quantidade
+                var qts = $('[id^="txt_Quantidade"]');
+                for (var i = 0; i < qts.length; i++) {
+                    if (!ehRead)
+                        jQuery(qts[i]).attr('placeholder', "000,00");
+                    else
+                        jQuery(qts[i]).attr('placeholder', "");
 
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = 'none';
-
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = 'none';
-
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000f").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001f").style.display = 'none';
-
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = 'none';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = 'none';
+                    jQuery(qts[i]).mask("999,99");
                 }
 
-            // alterna os campos para leitura/edicao
-            var tblFicha4_INSPECAO_ESPECIAL_CAMPO = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
-            if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
-                Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
+                if (paginaPai == "Inspecao") {
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000a").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001a").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000b").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001b").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000f").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001f").style.display = '';
+
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = '';
+                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = '';
+                }
+                else
+                    if (paginaPai == "OrdemServico") {
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000a").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001a").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header002a").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header003a").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header004a").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header005a").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header1a").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header1b").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000b").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001b").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header002b").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header003b").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header004b").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header005b").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000c").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001c").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header002c").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header003c").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header004c").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header005c").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000d").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001d").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000f").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001f").style.display = 'none';
+
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = 'none';
+                        document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = 'none';
+                    }
+
+                // alterna os campos para leitura/edicao
+                var tblFicha4_INSPECAO_ESPECIAL_CAMPO = document.getElementById("tblFicha4_INSPECAO_ESPECIAL_CAMPO");
+                if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
+                    Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
+
+            }
         }
+        ,"error": function (errormessage) {
+            alert(errormessage.responseText);
+        return false;
+    }
 
    });
 
@@ -1177,7 +1183,15 @@ function Ficha4_CAMPO_preencheLocalizacao(tip_id_Grupo) {
                 $.each(lstSubNiveis, function (i, objeto) {
                     i++;
                     if (i < 1000) {
-                        var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+
+                        var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" CHKED value="valueXXX" style="margin-right:5px">';
+
+                            // se for pavimento flexivel, Objeto = O PROPRIO
+                        if ((tip_id_Grupo == 45) || (tip_id_Grupo == 104))
+                            tagchk = tagchk.replace("CHKED", "checked = true");
+                        else
+                            tagchk = tagchk.replace("CHKED", "");
+
                         tagchk = tagchk.replace("idXXX", "chk" + i);
                         tagchk = tagchk.replace("nameXXX", "chk" + i);
                         tagchk = tagchk.replace("valueXXX", objeto.Value);
@@ -1194,8 +1208,17 @@ function Ficha4_CAMPO_preencheLocalizacao(tip_id_Grupo) {
             {
                 var taglbl00a = '<label class="chklst" >Objeto(s) não cadastrado(s)</label> <br />';
                 $("#divFicha4_CAMPO_LocalizacaoObjeto").append(taglbl00a);
-
             }
+
+            
+            // se for pavimento flexivel entao oculta a linha Objetos
+            if ((tip_id_Grupo == 45) || (tip_id_Grupo == 104)) {
+                $("#Ficha4_CAMPO_divLocalizacaoObjeto").css("visibility", "hidden");
+            }
+            else {
+                $("#Ficha4_CAMPO_divLocalizacaoObjeto").css("visibility", "visible");
+            }
+            
 
         }
     });
@@ -1286,15 +1309,15 @@ function Ficha4_CAMPO_cmbSubdivisao2_onchange() {
     $("#Ficha4_CAMPO_cmbGrupoObjetos").html("");
     $("#divFicha4_CAMPO_LocalizacaoObjeto").html("");
 
-    if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
+    //if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
         Ficha4_CAMPO_LimparCampos(9);
         Ficha4_CAMPO_preencheCombo(9, 'Ficha4_CAMPO_cmbGrupoObjetos', '--Selecione--', ivalor)
-    }
-    else {
-        Ficha4_CAMPO_LimparCampos(8);
-        document.getElementById("Ficha4_CAMPO_divSubdivisao3").style.display = 'block';
-        Ficha4_CAMPO_preencheCombo(8, 'Ficha4_CAMPO_cmbSubdivisao3', '--Selecione--', ivalor)
-    }
+    //}
+    //else {
+    //    Ficha4_CAMPO_LimparCampos(8);
+    //    document.getElementById("Ficha4_CAMPO_divSubdivisao3").style.display = 'block';
+    //    Ficha4_CAMPO_preencheCombo(8, 'Ficha4_CAMPO_cmbSubdivisao3', '--Selecione--', ivalor)
+    //}
 
 
 }
@@ -1313,10 +1336,10 @@ function Ficha4_CAMPO_cmbGrupoObjetos_onchange() {
     // preenche proximo combo
     var valor = document.getElementById("Ficha4_CAMPO_cmbGrupoObjetos").value;
     var ivalor = getTipoId(valor);
-
-    //   Ficha4_CAMPO_preencheCombo(10, 'divFicha4_CAMPO_LocalizacaoObjeto', '--Selecione--', ivalor)
     Ficha4_CAMPO_preencheLocalizacao(ivalor);
+
 }
+
 
 function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
 
@@ -1331,7 +1354,8 @@ function Ficha4_CAMPO_bntSalvar_Localizacao_click() {
     });
 
     //se houver grupos selecionados, salva
-    if (selchks.length > 0) {
+    if (selchks.length > 0)
+    {
         if (Ficha4_CAMPO_cmbSubdivisao1.selectedIndex > 0) {
 
             //cria a lista de objetos

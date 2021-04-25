@@ -31,12 +31,12 @@ function cmbStatusDe_onchange(quem) {
         op[i].disabled = false;
 
     // desabilita os encontrados
-    for (var i = 0; i < op.length; i++) {
-        for (var j = 0; j < arr_encontrados.length; j++) {
-            if (parseInt(op[i].value) == parseInt(arr_encontrados[j]))
-                op[i].disabled = true;
-        }
-    }
+    //for (var i = 0; i < op.length; i++) {
+    //    for (var j = 0; j < arr_encontrados.length; j++) {
+    //        if (parseInt(op[i].value) == parseInt(arr_encontrados[j]))
+    //            op[i].disabled = true;
+    //    }
+    //}
 
     $("#cmbStatusPara").val(null);
 

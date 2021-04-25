@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using WebApp.Models;
 using WebApp.Business;
+using WebApp.DAO;
 
 namespace WebApp.Controllers
 {
@@ -22,20 +23,20 @@ namespace WebApp.Controllers
         /// <returns>View</returns>
         public ActionResult Orcamento()
         {
-            //OrcamentoBLL orcamento = new OrcamentoBLL();
-            //List<Orcamento> orcamentos = orcamento.GetOrcamentos();
-            //return View(orcamentos);
-
             // preenche o combos
             List<SelectListItem> lstListacmbFiltroRegionais = new ObjetoBLL().PreenchecmbFiltroRegionais();
             ViewBag.cmbFiltroRegionais = lstListacmbFiltroRegionais;
-
-
             ViewBag.cmbFiltroStatusOrcamento = new OrcamentoBLL().PreencheCmbStatusOrcamento();
-            ViewBag.cmbStatusOrcamento = new OrcamentoBLL().PreencheCmbStatusOrcamento();
-            ViewBag.cmbStatusOrcamentoDetalhes = new OrcamentoBLL().PreencheCmbStatusOrcamento();
 
             return View();
+        }
+        /// <summary>
+        /// Busca os Proximos Status de Orcamento
+        /// </summary>
+        /// <returns>JsonResult</returns>
+        public JsonResult PreencheCmbStatusOrcamento()
+        {
+            return Json(new { data = new OrcamentoBLL().PreencheCmbStatusOrcamento() }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -66,6 +67,17 @@ namespace WebApp.Controllers
             return Json(new { data = new OrcamentoBLL().Orcamento_ProximoSeq() }, JsonRequestBehavior.AllowGet);
         }
 
+
+        /// <summary>
+        /// Calcula o Valor Total do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult Orcamento_Total(int orc_id)
+        {
+            return Json(new { data = new OrcamentoBLL().Orcamento_Total(orc_id) }, JsonRequestBehavior.AllowGet);
+
+        }
 
         /// <summary>
         /// Dados do Orcamento selecionado
@@ -172,10 +184,11 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="orc_id">Id do orçamento</param>
         /// <param name="obj_id">Id do objeto do orcamento</param>
+        /// <param name="ose_fase">Fase da TPU</param>
         /// <returns>JsonResult</returns>
-        public JsonResult OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id)
+        public JsonResult OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id, int ose_fase)
         {
-            return Json(new { data = new OrcamentoBLL().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new OrcamentoBLL().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id, ose_fase) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -204,6 +217,26 @@ namespace WebApp.Controllers
             bool valid = retorno >= 0;
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
+
+
+        /// <summary>
+        ///  Salvar Serviços Adicionais
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <param name="obj_id">Id do Objeto do Orçamento</param>
+        /// <param name="ose_fase">Fase da TPU</param>
+        /// <param name="ose_codigo_der">Código do Serviço da TPU</param>
+        /// <param name="ose_quantidade">Quantidade a ser utilizada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult Orcamento_Adicionar_Servico(int orc_id, int obj_id, int ose_fase, string ose_codigo_der, decimal ose_quantidade)
+        {
+            int retorno = new OrcamentoBLL().Orcamento_Adicionar_Servico(orc_id,  obj_id,  ose_fase,  ose_codigo_der,  ose_quantidade);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         // *************** STATUS  *************************************************************
         /// <summary>

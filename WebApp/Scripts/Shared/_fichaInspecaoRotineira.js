@@ -3,31 +3,31 @@
 var cabecalho2 =
     ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
     ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
-    '     <table style="width:100%"> ' +
-    '      <tr> ' +
-    '        <td> ' +
-    '          <button id="btn_ExcluirSubDivisao2_INSPECAO_ROTINEIRA_TIPP_IIDD" ' +
-    '            type="button" ' +
-    '             onclick="return Ficha2_ExcluirSubDivisao2(TIPP_IIDD)" ' +
-    '             title="Excluir Subdivisão" ' +
-    '             style="margin-left:26px; border:none; box-shadow:none; background-color:transparent; display:none"> ' +
-    '             <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
-    '          </button> ' +
-    '        </td> ' +
-    '        <td> ' +
-    '           <label class="lblsBold" > XXXXX</label >' +
-    '       </td> ' +
-    '        <td> ' +
-    '           <label class="lblsBold" > </label >' +
-    '       </td> ' +
-    '     </tr> ' +
-    '   </table> ' +
-
+    '    <label class="lblsBold" > XXXXX</label >' +
     ' </td >' +
     ' </tr > ';
 
 
-var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
+var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
+                    '<td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="10">' +
+                    '     <table style="width:100%"> ' +
+                    '      <tr> ' +
+                    '       <td style="width:30px"> ' +
+                    '            <button id="btn_ExcluirSubDivisao3_INSPECAO_ROTINEIRA_TIPP_IIDD" ' +
+                    '                 type="button" ' +
+                    '                 onclick="return Ficha2_ExcluirSubDivisao3(TIPP_IIDD)" ' +
+                    '                 title="Excluir Subdivisão" ' +
+                    '                 style="margin-left:0; border:none; box-shadow:none; background-color:transparent; display:none"> ' +
+                    '               <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
+                    '          </button> ' +
+                    '       </td> ' +
+                    '       <td> ' +
+                    '           <label class="lblsBold" >XXXXX</label>' +
+                    '       </td> ' +
+                    '     </tr> ' +
+                    '   </table> ' +                   
+                    '</td>' +
+                 '</tr>';
 
     var MesclarGrupo =
         '   <td class="borderLeft borderTop borderRight borderBottomPt" rowspan=N_ROWSPAN > ' +
@@ -281,6 +281,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                     }
 
             }
+
+        travaBotoes();
     }
 
     function nome_segundo_cabecalho2(controleId) {
@@ -545,6 +547,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
             }
         }
 
+
+        travaBotoes();
     }
 
     function Ficha2_setaReadWrite(tabela, ehRead) {
@@ -751,12 +755,15 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                             var visibilitySub2 = "hidden";
                             //if ((parseInt(result.data[i].tip_pai) == 22) || (parseInt(result.data[i].tip_pai) == 23) )
                             //    visibilitySub2 = "visible";
+                            linhas = linhas + cabecalho2.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
 
-                            linhas = linhas + cabecalho2.replace(/TIPP_IIDD/g, result.data[i].tip_pai).replace(/XXXXX/g, result.data[i].nome_pai).replace(/YYY/g, i).replace("visibilitySubdivisao2", visibilitySub2);
                         }
                         else
                             if (parseInt(result.data[i].nCabecalhoGrupo) == 3) // CABECALHO 3
+                            {
                                 linhas = linhas + cabecalho3.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+                                linhas = linhas.replace(/TIPP_IIDD/g, result.data[i].tip_pai);
+                            }
                             else
                                 if (parseInt(result.data[i].nCabecalhoGrupo) == 0) // LINHA NORMAL
                                 {
@@ -885,7 +892,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                                     for (k = 0; k < pedacos.length; k++) {
                                         var aux = pedacos[k].split(":");
                                         var opt = op;
-                                        opt = opt.replace("valor", aux[0]+ ":" + aux[1]).replace("texto", aux[2]);
+                                        opt = opt.replace("valor", aux[0] + ":" + aux[1]).replace("texto", aux[2]);
 
                                         // checa se é o item selecionado
                                         if (parseInt(selectedValue) == parseInt(aux[1])) {
@@ -954,6 +961,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
                 ////    jQuery(qts[i]).mask("999.99", optionsObs);
                 ////}
 
+                var tblFicha2_INSPECAO_ROTINEIRA = document.getElementById("tblFicha2_INSPECAO_ROTINEIRA");
                 if (tblFicha2_INSPECAO_ROTINEIRA)
                     Ficha2_setaReadWrite(tblFicha2_INSPECAO_ROTINEIRA, ehRead);
             }
@@ -1350,7 +1358,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         preenchetblFicha2(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
     }
 
-    function Ficha2_ExcluirSubDivisao2(tip_id) {
+    function Ficha2_ExcluirSubDivisao3(tip_id) {
         var form = this;
 
         swal({
@@ -1364,7 +1372,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
             focusCancel: true
         }).then(function (isConfirm) {
             if (isConfirm) {
-                var response = POST("/Objeto/Objeto_Subdivisao2_Excluir", JSON.stringify({ tip_id: tip_id, obj_id_tipoOAE: selectedId_obj_id }))
+                var response = POST("/Objeto/Objeto_Subdivisao3_Excluir", JSON.stringify({ tip_id: tip_id, obj_id_tipoOAE: selectedId_obj_id }))
                 if (response.erroId.trim() == "") {
                     swal({
                         type: 'success',
@@ -1525,15 +1533,15 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
         var valor = document.getElementById("Ficha2_cmbSubdivisao2").value;
         var ivalor = getTipoId(valor);
 
-        if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
+        //if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
             Ficha2_LimparCampos(9);
             Ficha2_preencheCombo(9, 'divFicha2_GrupoObjetos', '--Selecione--', ivalor)
-        }
-        else {
-            Ficha2_LimparCampos(8);
-            document.getElementById("Ficha2_divSubdivisao3").style.display = 'block';
-            Ficha2_preencheCombo(8, 'Ficha2_cmbSubdivisao3', '--Selecione--', ivalor)
-        }
+        //}
+        //else {
+        //    Ficha2_LimparCampos(8);
+        //    document.getElementById("Ficha2_divSubdivisao3").style.display = 'block';
+        //    Ficha2_preencheCombo(8, 'Ficha2_cmbSubdivisao3', '--Selecione--', ivalor)
+        //}
 
 
     }
@@ -1640,63 +1648,67 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft
     // parte 3
     function Ficha2_Calcula_Notas_1_Requisito() {
         var cmb_atr_id_99 = document.getElementById("cmb_atr_id_99");
-        var cmb_atr_id_99_val = 0;
-        if (cmb_atr_id_99.selectedIndex > -1)
-            cmb_atr_id_99_val = parseInt(cmb_atr_id_99.options[cmb_atr_id_99.selectedIndex].text);
-        else
-            cmb_atr_id_99_val = 0;
-
         var cmb_atr_id_100 = document.getElementById("cmb_atr_id_100");
-        var cmb_atr_id_100_val = 0;
-        if (cmb_atr_id_100.selectedIndex > -1)
-            cmb_atr_id_100_val = parseInt(cmb_atr_id_100.options[cmb_atr_id_100.selectedIndex].text);
-        else
-            cmb_atr_id_100_val = 0;
-
-
         var cmb_atr_id_130 = document.getElementById("cmb_atr_id_130");
         var cmb_atr_id_131 = document.getElementById("cmb_atr_id_131");
-        cmb_atr_id_130.selectedIndex = cmb_atr_id_99.selectedIndex;
-        cmb_atr_id_131.selectedIndex = cmb_atr_id_100.selectedIndex;
-
-        if (cmb_atr_id_130.selectedIndex > -1)
-            document.getElementById("lblcmb_130").innerText = cmb_atr_id_130.options[cmb_atr_id_130.selectedIndex].text;
-        else
-            document.getElementById("lblcmb_130").innerText = "";
-
-        if (cmb_atr_id_131.selectedIndex > -1)
-            document.getElementById("lblcmb_131").innerText = cmb_atr_id_131.options[cmb_atr_id_131.selectedIndex].text;
-        else
-            document.getElementById("lblcmb_131").innerText = "";
-
-        document.getElementById("txt_atr_id_151").value = cmb_atr_id_99_val + cmb_atr_id_100_val;
-
-
-        var soma22 = document.getElementById("txt_atr_id_152").value; // = parseInt(cmb_atr_id_100_val);
-        if (isNaN(soma22))
-            soma2 = 0;
-        else
-            soma2 = parseFloat(soma22);
-
-        var total = parseFloat(soma22) + cmb_atr_id_99_val + cmb_atr_id_100_val;
-        document.getElementById("txt_atr_id_157").value = total.toFixed(2);
-        document.getElementById("txt_historico_Pontuacao_Geral_OAE_1").value = total.toFixed(2);
-
-        // preenche o ultimo item do menu acordeon
         var cmb1_Nota = document.getElementById("cmb_atr_id_147");
         var cmb1_Desc = document.getElementById("cmb_atr_id_148");
 
-        if ((cmb_atr_id_99_val <= cmb_atr_id_100_val) && (cmb_atr_id_99_val > 0)) {
-            cmb1_Nota.selectedIndex = cmb_atr_id_99.selectedIndex;
-            cmb1_Desc.selectedIndex = cmb_atr_id_99.selectedIndex;
-            document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_99.selectedIndex].text;
-        }
-        else
-            if ((cmb_atr_id_99_val > cmb_atr_id_100_val) && (cmb_atr_id_100_val > 0)) {
-                cmb1_Nota.selectedIndex = cmb_atr_id_100.selectedIndex;
-                cmb1_Desc.selectedIndex = cmb_atr_id_100.selectedIndex;
-                document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_100.selectedIndex].text;
+        if ((cmb_atr_id_99) && (cmb_atr_id_100) && (cmb_atr_id_130) && (cmb_atr_id_131) && (cmb1_Nota) && (cmb1_Desc)) {
+
+            var cmb_atr_id_99_val = 0;
+            if (cmb_atr_id_99.selectedIndex > -1)
+                cmb_atr_id_99_val = parseInt(cmb_atr_id_99.options[cmb_atr_id_99.selectedIndex].text);
+            else
+                cmb_atr_id_99_val = 0;
+
+            var cmb_atr_id_100_val = 0;
+            if (cmb_atr_id_100.selectedIndex > -1)
+                cmb_atr_id_100_val = parseInt(cmb_atr_id_100.options[cmb_atr_id_100.selectedIndex].text);
+            else
+                cmb_atr_id_100_val = 0;
+
+
+            cmb_atr_id_130.selectedIndex = cmb_atr_id_99.selectedIndex;
+            cmb_atr_id_131.selectedIndex = cmb_atr_id_100.selectedIndex;
+
+            if (cmb_atr_id_130.selectedIndex > -1)
+                document.getElementById("lblcmb_130").innerText = cmb_atr_id_130.options[cmb_atr_id_130.selectedIndex].text;
+            else
+                document.getElementById("lblcmb_130").innerText = "";
+
+            if (cmb_atr_id_131.selectedIndex > -1)
+                document.getElementById("lblcmb_131").innerText = cmb_atr_id_131.options[cmb_atr_id_131.selectedIndex].text;
+            else
+                document.getElementById("lblcmb_131").innerText = "";
+
+            document.getElementById("txt_atr_id_151").value = cmb_atr_id_99_val + cmb_atr_id_100_val;
+
+
+            var soma22 = document.getElementById("txt_atr_id_152").value; // = parseInt(cmb_atr_id_100_val);
+            if (isNaN(soma22))
+                soma2 = 0;
+            else
+                soma2 = parseFloat(soma22);
+
+            var total = parseFloat(soma22) + cmb_atr_id_99_val + cmb_atr_id_100_val;
+            document.getElementById("txt_atr_id_157").value = total.toFixed(2);
+            document.getElementById("txt_historico_Pontuacao_Geral_OAE_1").value = total.toFixed(2);
+
+            // preenche o ultimo item do menu acordeon
+
+            if ((cmb_atr_id_99_val <= cmb_atr_id_100_val) && (cmb_atr_id_99_val > 0)) {
+                cmb1_Nota.selectedIndex = cmb_atr_id_99.selectedIndex;
+                cmb1_Desc.selectedIndex = cmb_atr_id_99.selectedIndex;
+                document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_99.selectedIndex].text;
             }
+            else
+                if ((cmb_atr_id_99_val > cmb_atr_id_100_val) && (cmb_atr_id_100_val > 0)) {
+                    cmb1_Nota.selectedIndex = cmb_atr_id_100.selectedIndex;
+                    cmb1_Desc.selectedIndex = cmb_atr_id_100.selectedIndex;
+                    document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_100.selectedIndex].text;
+                }
+        }
 
     }
     function Ficha2_Calcula_Notas_2_Requisito() {

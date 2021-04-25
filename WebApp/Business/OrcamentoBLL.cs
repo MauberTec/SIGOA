@@ -176,10 +176,44 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="orc_id">Id do orçamento</param>
         /// <param name="obj_id">Id do objeto do orcamento</param>
+        /// <param name="ose_fase">Fase da TPU</param>
         /// <returns>Lista de Detalhes do Orcamento</returns>
-        public List<ServicosAdicionados> OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id)
+        public List<ServicosAdicionados> OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id, int ose_fase)
         {
-            return new OrcamentoDAO().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id);
+            // checa se a tabela DER.TPUs esta sincronizada
+            //List<tpu> listaTPU = new IntegracaoDAO().DER_SincronizarTPUs(0,  ano, ose_fase, mes, "", "");
+            //if ((listaTPU.Count == 1) && (listaTPU[0].CodSubItem == "-1"))
+            //{
+
+            //}
+            return new OrcamentoDAO().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id, ose_fase);
+        }
+
+
+
+        /// <summary>
+        ///  Salvar Serviços Adicionais
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <param name="obj_id">Id do Objeto do Orçamento</param>
+        /// <param name="ose_fase">Fase da TPU</param>
+        /// <param name="ose_codigo_der">Código do Serviço da TPU</param>
+        /// <param name="ose_quantidade">Quantidade a ser utilizada</param>
+        /// <returns>int</returns>
+        public int Orcamento_Adicionar_Servico(int orc_id, int obj_id, int ose_fase, string ose_codigo_der, decimal ose_quantidade)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrcamentoDAO().Orcamento_Adicionar_Servico(orc_id, obj_id, ose_fase, ose_codigo_der, ose_quantidade, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+        /// <summary>
+        /// Calcula o Valor Total do Orcamento
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <returns>decimal</returns>
+        public decimal Orcamento_Total(int orc_id)
+        {
+            return new OrcamentoDAO().Orcamento_Total(orc_id);
         }
 
 

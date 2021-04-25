@@ -98,7 +98,10 @@ namespace WebApp.Controllers
         /// <returns>JsonResult</returns>
         public JsonResult InspecaoAnomalias_Valores_ListAll(int ord_id)
         {
-            return Json(new { data = new InspecaoBLL().InspecaoAnomalias_Valores_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { data = new InspecaoBLL().InspecaoAnomalias_Valores_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         /// <summary>

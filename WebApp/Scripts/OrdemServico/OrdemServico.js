@@ -2,6 +2,7 @@
 var selectedId_ord_id = 0;
 var selectedId_obj_id = 0;
 var selectedId_tos_id = 0;
+var selectedId_sos_id = 0;
 var selected_obj_codigo = '';
 
 var filtroOrdemServico_codigo = '';
@@ -315,12 +316,19 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
             liFichaInspecaoCadastral.style.display = "unset";
             liFichaInspecao1aRotineira.style.display = "unset";
             liFichaInspecaoRotineiraProvidencias.style.display = "unset";
+
+            $("#tabFichaInspecaoCadastralheader").val("Ficha Básica - Inspeção Cadastral");
+            $("#lblModalHeaderAbaCadastral").text("FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL");
+
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoCadastral"]').tab('show');
             break;
 
         case 8:
             liFichaInspecaoCadastral.style.display = "unset";
+            $("#tabFichaInspecaoCadastralheader").text("Ficha Básica de Cadastro");
+            $("#lblModalHeaderAbaCadastral").text("FICHA BÁSICA DE CADASTRO");
+
             liFichaInspecaoRotineira.style.display = "unset";
             liFichaInspecaoRotineiraProvidencias.style.display = "unset";
             if (bool_posicionar)
@@ -347,8 +355,11 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
                  $('[href="#tabFichaNotificacaoOcorrencia"]').tab('show');
             break;
 
-        case 21: // projeto obra nova
+        case 24: // projeto obra nova
             liFichaInspecaoCadastral.style.display = "unset";
+            $("#tabFichaInspecaoCadastralheader").text("Ficha Básica de Cadastro");
+            $("#lblModalHeaderAbaCadastral").text("FICHA BÁSICA DE CADASTRO");
+
             liIndicacaoServicos.style.display = "unset";
             break;
 
@@ -361,13 +372,69 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 }
 
 
-function OrdemServico_setaReadWrite(ehRead) {
+function travaBotoes()
+{
+    var controle_none = ["btnSalvar_Detalhes", "btnCancelar_Detalhes",
+                            "btn_Editar_NOTIFICACAO_OCORRENCIA", "btn_Editar_DADOS_GERAIS2", "btn_Editar_HISTORICO_INSPECOES", "btn_Editar_INSPECAO_ROTINEIRA",
+                            "btn_Editar_CRITERIO_DE_CLASSIFICACAO", "btn_Editar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Editar_POLITICA_ACOES_A_IMPLEMENTAR",
+                            "btn_Editar_INSPECAO_ESPECIAL_CAMPO", "btn_Editar_DADOS_GERAIS", "btn_Editar_HISTORICO_INSPECOES",
+                            "btn_Editar_ATRIBUTOS_FUNCIONAIS", "btn_Editar_ATRIBUTOS_FIXOS", "btn_Editar_SUPERESTRUTURA", "btn_Editar_MESOESTRUTURA",
+                            "btn_Editar_INFRAESTRUTURA", "btn_Editar_ENCONTROS", "btn_Editar_CRITERIO_DE_CLASSIFICACAO", "btn_Editar_NOTA_OAE_PARAMETRO_FUNCIONAL",
+                            "btn_Editar_POLITICA_ACOES_A_IMPLEMENTAR", "btn_Editar_DADOS_GERAIS", "btn_Editar_ATRIBUTOS_FUNCIONAIS", "btn_Editar_ATRIBUTOS_FIXOS",
+                            "btn_Editar_SUPERESTRUTURA", "btn_Editar_MESOESTRUTURA", "btn_Editar_INFRAESTRUTURA", "btn_Editar_ENCONTROS", "btn_Editar_HISTORICO_INTERVENCOES",
+                            "btnAssociarDocumentoOS", "btnEditar_IndicacaoServicos",
+                            "btn_Cancelar_NOTIFICACAO_OCORRENCIA", "btn_Cancelar_DADOS_GERAIS2", "btn_Cancelar_HISTORICO_INSPECOES", "btn_Cancelar_INSPECAO_ROTINEIRA",
+                            "btn_Cancelar_CRITERIO_DE_CLASSIFICACAO", "btn_Cancelar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Cancelar_POLITICA_ACOES_A_IMPLEMENTAR",
+                            "btn_Cancelar_INSPECAO_ESPECIAL_CAMPO", "btn_Cancelar_INSPECAO_ESPECIAL_CAMPO", "btn_Cancelar_DADOS_GERAIS", "btn_Cancelar_HISTORICO_INSPECOES",
+                            "btn_Cancelar_ATRIBUTOS_FUNCIONAIS", "btn_Cancelar_ATRIBUTOS_FIXOS", "btn_Cancelar_SUPERESTRUTURA", "btn_Cancelar_MESOESTRUTURA",
+                            "btn_Cancelar_INFRAESTRUTURA", "btn_Cancelar_ENCONTROS", "btn_Cancelar_CRITERIO_DE_CLASSIFICACAO", "btn_Cancelar_NOTA_OAE_PARAMETRO_FUNCIONAL",
+                            "btn_Cancelar_POLITICA_ACOES_A_IMPLEMENTAR", "btn_Cancelar_DADOS_GERAIS", "btn_Cancelar_ATRIBUTOS_FUNCIONAIS", "btn_Cancelar_ATRIBUTOS_FIXOS",
+                            "btn_Cancelar_SUPERESTRUTURA", "btn_Cancelar_MESOESTRUTURA", "btn_Cancelar_INFRAESTRUTURA", "btn_Cancelar_ENCONTROS", "btn_Cancelar_HISTORICO_INTERVENCOES",
+                            "btn_Salvar_NOTIFICACAO_OCORRENCIA", "btn_Salvar_DADOS_GERAIS2", "btn_Salvar_HISTORICO_INSPECOES", "btn_Salvar_INSPECAO_ROTINEIRA",
+                            "btn_Salvar_CRITERIO_DE_CLASSIFICACAO", "btn_Salvar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Salvar_POLITICA_ACOES_A_IMPLEMENTAR",
+                            "btn_Salvar_INSPECAO_ESPECIAL_CAMPO", "btn_Salvar_INSPECAO_ESPECIAL_CAMPO", "btn_Salvar_DADOS_GERAIS", "btn_Salvar_HISTORICO_INSPECOES",
+                            "btn_Salvar_ATRIBUTOS_FUNCIONAIS", "btn_Salvar_ATRIBUTOS_FIXOS", "btn_Salvar_SUPERESTRUTURA", "btn_Salvar_MESOESTRUTURA", "btn_Salvar_INFRAESTRUTURA",
+                            "btn_Salvar_ENCONTROS", "btn_Salvar_CRITERIO_DE_CLASSIFICACAO", "btn_Salvar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Salvar_POLITICA_ACOES_A_IMPLEMENTAR",
+                            "btn_Salvar_DADOS_GERAIS", "btn_Salvar_ATRIBUTOS_FUNCIONAIS", "btn_Salvar_ATRIBUTOS_FIXOS", "btn_Salvar_SUPERESTRUTURA", "btn_Salvar_MESOESTRUTURA",
+                            "btn_Salvar_INFRAESTRUTURA", "btn_Salvar_ENCONTROS", "btn_Salvar_HISTORICO_INTERVENCOES", "btnSalvar_IndicacaoServicos", "btnCancelar_IndicacaoServicos"
+                          ];
 
-    var conceptName = $('#cmbStatusOS').val();
-    if (parseInt(conceptName) == 14) // encerrada
+    var controles_block = ["btnEditar_Detalhes"];
+
+
+    var cmbStatusOS = $('#cmbStatusOS').val();
+    if (parseInt(cmbStatusOS) == 14) // encerrada
     {
-        document.getElementById("cmbStatusOS").disabled = ehRead;
-        return;
+        // oculta os botoes 
+        for (var i=0; i < controle_none.length; i++)
+        {
+            var btn = document.getElementById(controle_none[i]);
+            if (btn)
+                btn.style.display = 'none';
+        }
+
+        // mostra os botoes permitidos 
+        for (var i = 0; i < controles_block.length; i++) {
+            var btn = document.getElementById(controles_block[i]);
+            if (btn)
+                btn.style.display = 'block';
+        }
+    }
+
+
+}
+
+
+function OrdemServico_setaReadWrite(ehRead) {
+    var ehEncerrada = false;
+    var ehReadOrig = ehRead;
+
+    var cmbStatusOS = $('#cmbStatusOS').val();
+    if (parseInt(cmbStatusOS) == 14) // encerrada
+    {
+        ////document.getElementById("cmbStatusOS").disabled = ehRead;
+        ehRead = true;
+        ehEncerrada = true;
     }
 
     var tabela = document.getElementById("divDetalhes");
@@ -415,7 +482,8 @@ function OrdemServico_setaReadWrite(ehRead) {
         lstButtons[i].disabled = ehRead;
 
     
-    if (ehRead) {
+    if ((ehRead) && (!ehEncerrada))
+    {
         ehEdicao = false;
         //document.getElementById("btnNovo_Detalhes").style.display = "inline";
         document.getElementById("btnEditar_Detalhes").style.display = "inline";
@@ -427,6 +495,8 @@ function OrdemServico_setaReadWrite(ehRead) {
         document.getElementById("lblModalHeader").innerText = "Editar Ordem de Serviço: " + $('#txtord_codigo').val().trim();
     }
 
+
+    document.getElementById("cmbStatusOS").disabled = ehReadOrig;
 }
 
 function OrdemServico_LimparDetalhes()
@@ -578,6 +648,8 @@ function OrdemServico_Salvar() {
                 $("#cmbFiltroStatusOS").val($('#cmbStatusOS').val());
                 $('#txtfiltroord_data_De').val("");
                 $('#txtfiltroord_data_Ate').val("");
+
+                selectedId_sos_id = $('#cmbStatusOS').val();
 
                 carregaGridOS(selectedId_ord_id);
               //  $('#tblOrdemServicos').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
@@ -858,6 +930,9 @@ function LimparFiltro() {
 
     selectedId_ord_id = 0;
     selectedId_ord_pai = -1;
+
+    selectedId_tos_id = 0;
+    selectedId_sos_id = 0;
 
     filtroOrdemServico_codigo = '';
     filtroObj_codigo = '';
@@ -1285,6 +1360,7 @@ function carregaGridOS(selectedId_ord_id) {
             {
                 $(row).addClass('selected');
                 selectedId_obj_id = data.obj_id;
+                selectedId_sos_id= data.sos_id;
             }
         }
         , "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]]
@@ -1327,6 +1403,7 @@ $(document).ready(function () {
         selectedId_ord_id = ord_rowId;
         selectedId_ocl_id = parseInt(tblOrdemServicos.row(this).selector.rows.children[4].innerText);
         selectedId_tos_id = parseInt(tblOrdemServicos.row(this).selector.rows.children[5].innerText);
+        selectedId_sos_id = parseInt(tblOrdemServicos.row(this).selector.rows.children[4].innerText);
 
         var ord_descricao = tblOrdemServicos.row(this).selector.rows.children[8].innerText;
         var ord_codigo = tblOrdemServicos.row(this).selector.rows.children[7].innerText;

@@ -100,15 +100,15 @@ namespace WebApp.Controllers
         }
 
         /// <summary>
-        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// Exclui Objeto do tipo Subdivisao3 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
         /// <param name="tip_id">Id Tipo do Objeto Selecionado</param>
         /// <param name="obj_id_tipoOAE">Id Objeto Selecionado</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
+        public JsonResult Objeto_Subdivisao3_Excluir(int tip_id, int obj_id_tipoOAE)
         {
-            string retorno = new ObjetoBLL().Objeto_Subdivisao2_Excluir(tip_id, obj_id_tipoOAE);
+            string retorno = new ObjetoBLL().Objeto_Subdivisao3_Excluir(tip_id, obj_id_tipoOAE);
             bool valid = retorno.Trim() == "";
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
@@ -559,7 +559,9 @@ namespace WebApp.Controllers
         /// <returns>JsonResult Lista de GruposVariaveisValores</returns>
         public JsonResult GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id) }, JsonRequestBehavior.AllowGet);
+            var jsonResult =  Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id) }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         /// <summary>

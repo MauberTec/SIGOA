@@ -251,7 +251,8 @@ namespace WebApp.Business
                                 switch (col)
                                 {
                                     case 65: valor = lstDADOS[li].item; break;
-                                    case 66: valor = lstDADOS[li].col_Localizacao; break;
+                              //      case 66: valor = lstDADOS[li].col_Localizacao; break;
+                                    case 66: valor = lstDADOS[li].obj_descricao; break;
                                 }
 
                                 if (lstDADOS[li].ian_id > 0)

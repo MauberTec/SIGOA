@@ -53,7 +53,49 @@ namespace WebApp.Business
         public int OrdemServico_Salvar(OrdemServico ord)
         {
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
-            return new OrdemServicoDAO().OrdemServico_Salvar(ord, paramUsuario.usu_id, paramUsuario.usu_ip);
+            int retorno = new OrdemServicoDAO().OrdemServico_Salvar(ord, paramUsuario.usu_id, paramUsuario.usu_ip);
+
+            // TODO
+            // se retorno > 0 entao verifica se tem que mandar email
+            if (retorno > 0) // salvou com sucesso
+            {
+                if ((ord.sos_codigo == "E") || (ord.sos_id == 14)) // encerrada
+                {
+                    if ((ord.tos_id == 7) || (ord.tos_id == 8)) //cadastral(7), rotineira(8)
+                    {
+                        // Sistema notifica a Regional 
+                        // os itens de conserva, 
+                        // seus quantitativos estimados 
+                        // e o prazo de ação sugerido pela política estabelecida
+                    }
+
+                    if ((ord.tos_id == 7) || (ord.tos_id == 8) || (ord.tos_id == 9)) //cadastral(7), rotineira(8), especial(9)
+                    {
+                        // Sistema notifica a Seção de OAE da Sede  
+                        // o encerramento da OS
+                    }
+
+                    if ((ord.tos_id == 5) || (ord.tos_id == 10) || (ord.tos_id == 13)
+                        || (ord.tos_id == 14) || (ord.tos_id == 16) || (ord.tos_id == 17)
+                          || (ord.tos_id == 18) || (ord.tos_id == 22) || (ord.tos_id == 23)
+                             || (ord.tos_id == 24)
+                        ) // ocorrencia(18), extraordinaria(5), reparo(14), reforco(13), monitoramento(10), ensaios(16), levantamento cadastral(17), conserva(22), projeto de oae(24), execucao de obra(23)
+                    {
+                        //Sistema notifica a Seção de OAE da Sede  
+                        // e a Regional
+                        // o encerramento da OS
+                    }
+
+                    if (ord.tos_id == 18)  // ocorrencia (18)
+                    {
+                        // Sistema notifica a Seção de OAE da Sede
+                        // para verificar a ocorrência
+                    }
+                }
+            }
+
+
+            return retorno;
         }
 
         /// <summary>

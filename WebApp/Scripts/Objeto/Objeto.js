@@ -1135,6 +1135,8 @@ function carregaGrid(id) {
                             || (parseInt(row["tip_id"]) == 14) // Encontro Subdivisao1
                             || (parseInt(row["tip_id"]) == 19) // Encontro Subdivisao2
                             || (parseInt(row["clo_id"]) >= 10)  // 10 = objeto numero
+                            || (parseInt(row["tip_id"]) == 45)  // Pavimento Flexível da Superestrutura
+                            || (parseInt(row["tip_id"]) == 104)  // Pavimento Flexível do Encontro
                             || ((parseInt(row["tip_id"]) >= 85) && (parseInt(row["tip_id"]) <= 93)) // drenagem, protecao, terreno
                             || (parseInt(row["tip_id"]) == 97) || (parseInt(row["tip_id"]) == 100)// drenagem, protecao, terreno
                             ) 

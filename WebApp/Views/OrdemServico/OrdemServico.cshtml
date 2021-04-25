@@ -35,7 +35,15 @@
         font-weight: bold;
     }
 
-    .fundoBranco {background-color:transparent !important; background-image:none;}
+    .fundoBranco, .form-control[readonly] {
+        background-color: transparent !important;
+        background-image: none;
+    }
+
+    input[type="text"]:disabled, .form-control[disabled] {
+        background: #eee !important;
+    }
+
 </style>
 <h2></h2>
 <script>
@@ -232,6 +240,9 @@
         });
     }
 
+
+
+
 </script>
 
 
@@ -275,7 +286,7 @@
                         <a id="tabDetalhesOSheader" data-toggle="tab" href="#tabDetalhesOS" onclick="OrdemServico_PreencheDetalhes(selectedId_ord_id);">Detalhes O.S.</a>
                     </li>
                     <li style="display:none" id="liFichaInspecaoCadastral">
-                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral </a>
+                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral</a>
                     </li>
                     <li style="display:none" id="liFichaInspecao1aRotineira">
                         <a id="tabFichaInspecao1aRotineiraheader" data-toggle="tab" href="#tabFichaInspecao1aRotineira" onclick="abreFicha(2);">Ficha Básica - Primeira Rotineira</a>
@@ -629,7 +640,7 @@
                                     <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoCadastral_1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id + '&tos_id=' + selectedId_tos_id, '_blank');">Imprimir Ficha</button>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</label></h3>
+                                    <h3 class="modal-title"><label id="lblModalHeaderAbaCadastral" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</label></h3>
                                 </div>
                             </div>
                         </div>
@@ -772,7 +783,6 @@
                             <div class="form-group">
                                 <div class="col-sm-4">
                                     <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEnviarEmail">Enviar Email</button>
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEnviarEmail">Comunicar Seção de OAE</button>
                                 </div>
                                 <div class="col-sm-8">
@@ -820,7 +830,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="AssociarDocumento()">Associar Documento(s)</button>
+                                    <button type="button" class="btn btn-primary" id="btnAssociarDocumentoOS" onclick="AssociarDocumento()">Associar Documento(s)</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="HeaderOS_Documentos" class="titulosAbas">Documentos associados à Ordem de Serviço</label></h3>

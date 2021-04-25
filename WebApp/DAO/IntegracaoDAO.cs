@@ -24,6 +24,14 @@ namespace WebApp.DAO
             // busca pela API
             List<Rodovia> lstRodovias = get_Rodovias_API("");
 
+            if (lstRodovias.Count == 1)
+            {
+                if (lstRodovias[0].rod_codigo == "-1")
+                {
+                    return lstRodovias;
+                }
+            }
+
             // transforma em DataTable
             DataTable dtRodovias = new Gerais().ToDataTable<Rodovia>(lstRodovias);
 
@@ -277,6 +285,14 @@ namespace WebApp.DAO
         {
             // busca pela API
             List<OAE> lstOAE = get_OAEs_API("");
+
+            if (lstOAE.Count == 1)
+            {
+                if (lstOAE[0].rod_id == -1)
+                {
+                    return lstOAE;
+                }
+            }
 
             // transforma em DataTable
             DataTable dtOAE = new Gerais().ToDataTable<OAE>(lstOAE);
@@ -532,6 +548,15 @@ namespace WebApp.DAO
         {
             // busca pela API
             List<Regional> lstRegionais = get_Regionais_API();
+
+            if (lstRegionais.Count == 1)
+            {
+                if (lstRegionais[0].reg_id == -1)
+                {
+                    return lstRegionais;
+                }
+            }
+
 
             // transforma em DataTable
             DataTable dtRegionais = new Gerais().ToDataTable<Regional>(lstRegionais);
@@ -990,6 +1015,14 @@ namespace WebApp.DAO
             // busca pela API
             List<vdm> lstVDMs = get_VDMs_API(rod_codigo, kminicial, kmfinal);
 
+            if (lstVDMs.Count == 1)
+            {
+                if (lstVDMs[0].vdm_ano == -1)
+                {
+                    return lstVDMs;
+                }
+            }
+
             // transforma em DataTable
             DataTable dtVDMs = new Gerais().ToDataTable<vdm>(lstVDMs);
 
@@ -1240,6 +1273,15 @@ namespace WebApp.DAO
             // busca pela API
             List<tpu> lstTPUs = get_TPUs_API(ano, fase, mes, onerado, codSubItem);
 
+            if (lstTPUs.Count == 1)
+            {
+                if (lstTPUs[0].DataTpu == "-1")
+                {
+                    return lstTPUs;
+                }
+            }
+
+
             // transforma em DataTable
             DataTable dtTPUs = new Gerais().ToDataTable<tpu>(lstTPUs);
 
@@ -1289,8 +1331,8 @@ namespace WebApp.DAO
             {
                 List<tpu> saida_erro = new List<tpu>();
                 tpu err = new tpu();
-                err.CodSubItem = "-1";
-                err.NomeSubItem = ex.Message;
+                err.DataTpu = "-1";
+                err.CodSubItem = ex.Message;
 
                 saida_erro.Add(err);
                 return saida_erro;

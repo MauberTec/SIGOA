@@ -124,7 +124,7 @@ namespace WebApp.DAO
                             valor = dt1.Rows[li]["atv_valor"].ToString().Trim();
                             if (valor.Length > 0)
                             {
-                                if (valor.Substring(0, 1) == "0")
+                                if ((valor.Substring(0, 1) == "0"))
                                     valor = "0";
                                 else
                                     if (valor.Length <= 2)
@@ -132,7 +132,10 @@ namespace WebApp.DAO
                                     else
                                         valor = valor.Substring(2);
                             }
-                            
+                            else 
+                             if (valor == "")
+                                valor = "0";
+
                             // chk_atr_id_30_48
                             listaSaida.Add(new KeyValuePair<string, string>(nomecontrole, valor));
 

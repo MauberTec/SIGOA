@@ -169,7 +169,7 @@ namespace WebApp.Controllers
             List<tpu> retorno = saida.get_TPUs(ano == "" ? DateTime.Now.Year.ToString() : ano, fase,  mes.Trim() == "" ? "01" : mes, onerado.Trim() == "" ? "" : onerado);
 
             // inverte o campo "Onerado" porque na tela é Desonerado. email nelson 30/03/2021
-            if ((retorno.Count > 0) && (retorno[0].CodSubItem != "-1"))
+            if ((retorno.Count > 0) && (retorno[0].DataTpu != "-1"))
             {
                 for (int i = 0; i < retorno.Count; i++)
                     retorno[i].Onerado = retorno[i].Onerado.ToUpper() == "SIM" ? "não" : "sim";
