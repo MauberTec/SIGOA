@@ -203,7 +203,7 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
-    <Compile Include="Controllers\ManualController.cs" />
+    <Compile Include="Controllers\AjudaController.cs" />
     <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
@@ -297,6 +297,13 @@
       <DependentUpon>frmReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Views\Ajuda\WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Ajuda\WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AdminLTE.min.css" />
@@ -412,6 +419,97 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="imagens\an\content\img-modulo.png" />
+    <Content Include="imagens\an\content\img-modulo10.png" />
+    <Content Include="imagens\an\content\img-modulo11.png" />
+    <Content Include="imagens\an\content\img-modulo12.png" />
+    <Content Include="imagens\an\content\img-modulo13.png" />
+    <Content Include="imagens\an\content\img-modulo14.png" />
+    <Content Include="imagens\an\content\img-modulo15.png" />
+    <Content Include="imagens\an\content\img-modulo2.png" />
+    <Content Include="imagens\an\content\img-modulo3.png" />
+    <Content Include="imagens\an\content\img-modulo4.png" />
+    <Content Include="imagens\an\content\img-modulo5.png" />
+    <Content Include="imagens\an\content\img-modulo6.png" />
+    <Content Include="imagens\an\content\img-modulo7.png" />
+    <Content Include="imagens\an\content\img-modulo8.png" />
+    <Content Include="imagens\an\content\img-modulo9.png" />
+    <Content Include="imagens\an\css\style.css" />
+    <Content Include="imagens\an\js\js.js" />
+    <Content Include="imagens\conservas\content\img-1.png" />
+    <Content Include="imagens\conservas\content\img-10.PNG" />
+    <Content Include="imagens\conservas\content\img-11.PNG" />
+    <Content Include="imagens\conservas\content\img-12.PNG" />
+    <Content Include="imagens\conservas\content\img-13.PNG" />
+    <Content Include="imagens\conservas\content\img-14.PNG" />
+    <Content Include="imagens\conservas\content\img-15.png" />
+    <Content Include="imagens\conservas\content\img-16.png" />
+    <Content Include="imagens\conservas\content\img-17.png" />
+    <Content Include="imagens\conservas\content\img-18.png" />
+    <Content Include="imagens\conservas\content\img-19.png" />
+    <Content Include="imagens\conservas\content\img-2.PNG" />
+    <Content Include="imagens\conservas\content\img-20.png" />
+    <Content Include="imagens\conservas\content\img-21.png" />
+    <Content Include="imagens\conservas\content\img-22.png" />
+    <Content Include="imagens\conservas\content\img-23.png" />
+    <Content Include="imagens\conservas\content\img-24.png" />
+    <Content Include="imagens\conservas\content\img-25.png" />
+    <Content Include="imagens\conservas\content\img-3.PNG" />
+    <Content Include="imagens\conservas\content\img-4.PNG" />
+    <Content Include="imagens\conservas\content\img-5.PNG" />
+    <Content Include="imagens\conservas\content\img-6.PNG" />
+    <Content Include="imagens\conservas\content\img-7.PNG" />
+    <Content Include="imagens\conservas\content\img-8.PNG" />
+    <Content Include="imagens\conservas\content\img-9.PNG" />
+    <Content Include="imagens\conservas\css\style.css" />
+    <Content Include="imagens\conservas\js\js.js" />
+    <Content Include="imagens\documentos\content\img-1.png" />
+    <Content Include="imagens\documentos\content\img-10.png" />
+    <Content Include="imagens\documentos\content\img-11.png" />
+    <Content Include="imagens\documentos\content\img-12.png" />
+    <Content Include="imagens\documentos\content\img-13.png" />
+    <Content Include="imagens\documentos\content\img-14.png" />
+    <Content Include="imagens\documentos\content\img-15.png" />
+    <Content Include="imagens\documentos\content\img-16.png" />
+    <Content Include="imagens\documentos\content\img-17.png" />
+    <Content Include="imagens\documentos\content\img-18.png" />
+    <Content Include="imagens\documentos\content\img-2.png" />
+    <Content Include="imagens\documentos\content\img-3.png" />
+    <Content Include="imagens\documentos\content\img-4.png" />
+    <Content Include="imagens\documentos\content\img-5.png" />
+    <Content Include="imagens\documentos\content\img-6.png" />
+    <Content Include="imagens\documentos\content\img-7.png" />
+    <Content Include="imagens\documentos\content\img-8.png" />
+    <Content Include="imagens\documentos\content\img-9.png" />
+    <Content Include="imagens\documentos\css\style.css" />
+    <Content Include="imagens\documentos\js\js.js" />
+    <Content Include="imagens\reparos\content\img-1.png" />
+    <Content Include="imagens\reparos\content\img-10.PNG" />
+    <Content Include="imagens\reparos\content\img-11.PNG" />
+    <Content Include="imagens\reparos\content\img-12.PNG" />
+    <Content Include="imagens\reparos\content\img-13.PNG" />
+    <Content Include="imagens\reparos\content\img-14.PNG" />
+    <Content Include="imagens\reparos\content\img-15.PNG" />
+    <Content Include="imagens\reparos\content\img-16.PNG" />
+    <Content Include="imagens\reparos\content\img-17.PNG" />
+    <Content Include="imagens\reparos\content\img-18.PNG" />
+    <Content Include="imagens\reparos\content\img-19.png" />
+    <Content Include="imagens\reparos\content\img-2.png" />
+    <Content Include="imagens\reparos\content\img-20.png" />
+    <Content Include="imagens\reparos\content\img-21.png" />
+    <Content Include="imagens\reparos\content\img-22.png" />
+    <Content Include="imagens\reparos\content\img-23.png" />
+    <Content Include="imagens\reparos\content\img-24.png" />
+    <Content Include="imagens\reparos\content\img-25.png" />
+    <Content Include="imagens\reparos\content\img-3.png" />
+    <Content Include="imagens\reparos\content\img-4.png" />
+    <Content Include="imagens\reparos\content\img-5.png" />
+    <Content Include="imagens\reparos\content\img-6.png" />
+    <Content Include="imagens\reparos\content\img-7.png" />
+    <Content Include="imagens\reparos\content\img-8.png" />
+    <Content Include="imagens\reparos\content\img-9.PNG" />
+    <Content Include="imagens\reparos\css\style.css" />
+    <Content Include="imagens\reparos\js\js.js" />
     <Content Include="images\1.png" />
     <Content Include="images\default.png" />
     <Content Include="images\logo.png" />
@@ -631,6 +729,7 @@
     <Content Include="imagens\anomalias\statusLista.png" />
     <Content Include="imagens\anomalias\tipos.png" />
     <Content Include="imagens\anomalias\tiposLista.png" />
+    <Content Include="Views\Ajuda\WebForm1.aspx" />
     <Content Include="Views\PoliticaReparos\multiselect.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -708,10 +807,10 @@
     <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
     <Content Include="Views\Relatorio\Relatorio.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoRotineiraProvidencias.cshtml" />
-    <Content Include="Views\Manual\Anomalias.cshtml" />
-    <Content Include="Views\Manual\Reparos.cshtml" />
-    <Content Include="Views\Manual\Conservas.cshtml" />
-    <Content Include="Views\Manual\Documentos.cshtml" />
+    <Content Include="Views\Ajuda\Anomalias.cshtml" />
+    <Content Include="Views\Ajuda\Reparos.cshtml" />
+    <Content Include="Views\Ajuda\Conservas.cshtml" />
+    <Content Include="Views\Ajuda\Documentos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

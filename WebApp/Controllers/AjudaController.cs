@@ -9,7 +9,7 @@ namespace WebApp.Controllers
     /// <summary>
     /// Manual do Usuario
     /// </summary>
-    public class ManualController : Controller
+    public class AjudaController : Controller
     {
         /// <summary>
         /// Pagina inicial
