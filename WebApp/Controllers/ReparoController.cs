@@ -83,8 +83,158 @@ namespace WebApp.Controllers
         }
 
 
+        // *************** REPARO TPU  *************************************************************
+
+        /// <summary>
+        /// ReparoTpu
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ReparoTpu()
+        {
+            // preenche o combos
+            ViewBag.reparo_ad = new ReparoBLL().PreenchecmbFiltroTiposReparo();
+            ViewBag.fonte_ad = new ReparoBLL().PreenchecmbFontesTPU();
+
+            return View();
+        }
+
+        /// <summary>
+        /// Lista de todos os ReparoTpu não deletados
+        /// </summary>
+        /// <returns>JsonResult Lista de TpuDtoModel</returns>
+        public JsonResult ReparoTpu_ListAll()
+        {
+            return Json(new { data = new ReparoBLL().ReparoTpu_ListAll() }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Ativa/Desativa ReparoTpu
+        /// </summary>
+        /// <param name="id">Id do Reparo Selecionado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult ReparoTpu_AtivarDesativar(int id)
+        {
+            int retorno = new ReparoBLL().ReparoTpu_AtivarDesativar(id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Editar
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult ReparoTpu_Salvar(TpuDtoModel model)
+        {
+            return Json(new ReparoBLL().ReparoTpu_Salvar(model), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Lista das TPUs
+        /// </summary>
+        /// <param name="ano">Ano</param>
+        /// <param name="codItem"></param>
+        /// <returns>JsonResult Lista tpu</returns>
+        public JsonResult IntegracaoTPU(string ano = "", string codItem = "")
+        {
+            return Json(new ReparoBLL().IntegracaoTPU(ano, codItem), JsonRequestBehavior.AllowGet);
+        }
+
+        // *************** POLITICA DE REPARO  *************************************************************
+
+        /// <summary>
+        /// Index
+        /// </summary>
+        // Politica Reparos
+        public ActionResult PoliticaReparos()
+        {
+            // preenche o combos
+            ViewBag.cmbFiltroTiposReparo = new ReparoBLL().PreenchecmbFiltroTiposReparo();
+            ViewBag.cmbFiltroLegenda = new AnomaliaBLL().PreenchecmbAnomLegenda();
+            ViewBag.cmbFiltroAlerta = new AnomaliaBLL().PreenchecmbAnomAlerta();
+
+            ViewBag.cmbTiposReparo = new ReparoBLL().PreenchecmbFiltroTiposReparo();
+            ViewBag.cmbLegenda = new AnomaliaBLL().PreenchecmbAnomLegenda();
+
+            return View();
+        }
+
+        /// <summary>
+        /// Busca todas as Politicas de Reparo
+        /// </summary>
+        /// <returns>JsonResult</returns>
+        public JsonResult PoliticaReparo_ListAll()
+        {
+            return Json(new { data = new ReparoBLL().PoliticaReparo_ListAll() }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Busca grid home
+        /// </summary>
+        /// <param name="model">Dados de Filtro</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult PoliticaReparo_GetbyID(PoliticaReparoModel model)
+        {
+            return Json(new { data = new ReparoBLL().PoliticaReparo_GetbyID(model) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Insere Politica de Reparo
+        /// </summary>
+        /// <param name="model">Dados a serem inseridos</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult PoliticaReparo_Inserir(PoliticaReparoModel model)
+        {
+            return Json(new ReparoBLL().PoliticaReparo_Inserir(model), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Deleta a Politica de Reparo
+        /// </summary>
+        /// <param name="rpp_id"></param>
+        /// <returns>JsonResult</returns>
+        public JsonResult PoliticaReparo_Excluir(int rpp_id)
+        {
+            int retorno = new ReparoBLL().PoliticaReparo_Excluir(rpp_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
 
 
+        /// <summary>
+        /// Preenche combo de Legenda 
+        /// </summary>
+        /// <param name="id">Id da Legenda Selecionada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult PreenchecmbFiltroAnomalia(int id)
+        {
+            return Json(new ReparoBLL().PreenchecmbFiltroAnomalia(id), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Preenche combo de Legenda 
+        /// </summary>
+        /// <param name="id">Id da Legenda Selecionada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult PreenchecmbFiltroCausa(int id)
+        {
+            return Json(new ReparoBLL().PreenchecmbFiltroCausa(id), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Preenche combo de Alerta 
+        /// </summary>
+        /// <param name="id">Id da Legenda Selecionada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult PreenchecmbAlerta(int id)
+        {
+            return Json(new AnomaliaBLL().PreenchecmbAnomAlerta(), JsonRequestBehavior.AllowGet);
+        }
 
     }
+
 }

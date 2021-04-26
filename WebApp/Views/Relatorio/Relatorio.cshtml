@@ -138,7 +138,7 @@
                                             <option value="Reinicio">Data Reinício</option>
                                         </select>
                                     </td>
-                                    <td  id="tdEspaco" style="width:10px; visibility:hidden"></td>
+                                    <td id="tdEspaco" style="width:10px; visibility:hidden"></td>
                                     <td id="tdDatasDeAte" style="visibility:hidden">
                                         <table id="tblDatasDeAte" style="visibility:hidden">
                                             <tr>
@@ -147,7 +147,7 @@
                                                 </td>
                                                 <td>
                                                     <input id="filtro_data_De" name="filtro_data_De"
-                                                           placeholder="De" maxlength="20"
+                                                           placeholder="De" maxlength="20" readonly
                                                            class="form-control" style="background-color:#f4f4f4; width:120px; " />
                                                 </td>
                                                 <td style="width:10px;"></td>
@@ -156,7 +156,7 @@
                                                 </td>
                                                 <td>
                                                     <input id="filtro_data_Ate" name="filtro_data_Ate"
-                                                           placeholder="Até" maxlength="20"
+                                                           placeholder="Até" maxlength="20" readonly
                                                            class="form-control" style="background-color:#f4f4f4; width:120px" />
                                                 </td>
 
@@ -190,14 +190,14 @@
 <script src="~/Content/plugins/sweetalert2.min.js"></script>
 
 
-<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
-<script src="~/Scripts/bootstrap-multiselect.js"></script>
-
 
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/moment.min.js"></script>
 <script src="~/Scripts/datetime-moment.js"></script>
+
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
 
 
 @section Scripts{
@@ -214,6 +214,7 @@
 
     var idsObjetosSelecionados = '';
     var idsRodoviasSelecionados = '';
+    var qualModuloId = @qualModuloId;
 
 
     function cmbDatas_onchange()
@@ -227,26 +228,71 @@
             tblDatasDeAte.style.visibility = "visible";
     }
 
-    function LimparFiltroRelatorios() {
 
+    function limpaCamposAux() {
+
+        $("#divFiltroOAE").css("display", "none");
+        $("#divFiltroTipoOS").css("display", "none");
+        $("#divFiltroStatusOS").css("display", "none");
+
+        $("#lblData").css("display", "none");
+        $("#tdCmbDatas").css("display", "none");
+
+        var tdEspaco = document.getElementById("tdEspaco");
+        var tdDatasDeAte = document.getElementById("tdDatasDeAte");
+        var tblDatasDeAte = document.getElementById("tblDatasDeAte");
+
+        tdEspaco.style.visibility = "hidden";
+        tdDatasDeAte.style.visibility = "hidden";
+        tblDatasDeAte.style.visibility = "hidden";
+
+        switch (qualModuloId) {
+            case 910: $('#divFiltroTipoOS').css("display", "block");
+                $('#divFiltroStatusOS').css("display", "block");
+                $("#lblData").css("display", "block");
+                $("#tdCmbDatas").css("display", "block");
+                break;
+
+            case 920: $('#divFiltroOAE').css("display", "block");
+                $("#lblData").css("display", "block");
+                tdDatasDeAte.style.visibility = "visible";
+                tblDatasDeAte.style.visibility = "visible";
+
+                break;
+            // case 930: ;  break; // nao precisa porque é somente filtro rodovia+regional
+
+            case 940:
+                $('#divFiltroOAE').css("display", "block");
+                $("#lblData").css("display", "block");
+                tdDatasDeAte.style.visibility = "visible";
+                tblDatasDeAte.style.visibility = "visible";
+
+                break;
+        }
+
+        $('#txtFiltroRodovias').val("");
         $('#txtCodRodovia').val("");
         $('#txtCodOAE').val("");
         $('#txtFiltroObj_codigo').val("");
-
-        tblDatasDeAte.style.visibility = "hidden";
         $("#cmbDatas").val('');
         $('#filtro_data_De').val('');
         $('#filtro_data_Ate').val('');
+
+        idsRodoviasSelecionados = "";
+        idsObjetosSelecionados = "";
+    }
+
+    function LimparFiltroRelatorios()
+    {
+
+        limpaCamposAux();
 
         $("#cmbFiltroRegionais").multiselect("clearSelection");
         $("#cmbFiltroTiposOS").multiselect("clearSelection");
         $("#cmbFiltroStatusOS").multiselect("clearSelection");
 
-
-        idsRodoviasSelecionados = "";
-        idsObjetosSelecionados = "";
-
         return false;
+
     }
 
     function ExecutarFiltroRelatorios()
@@ -265,8 +311,6 @@
             parametros = parametros + '&FiltroRegionais=' + cmbFiltroRegionais;
         else
             parametros = parametros + '&FiltroRegionais=';
-
-        var qualModuloId = @qualModuloId;
 
         if (qualModuloId == 910) // relatorio O.S.
         {
@@ -332,7 +376,7 @@
             }
 
 
-        switch (@qualModuloId) {
+        switch (qualModuloId) {
             case 910: relatorio = 'rptRelatorio_OS'; break;
             case 920: relatorio = 'rptRelatorio_PerformanceOAEs'; break;
             case 930: relatorio = 'rptRelatorio_Priorizacao'; break;
@@ -349,62 +393,16 @@
 
     $(document).ready(function () {
 
-        $("#divFiltroOAE").css("display", "none");
-        $("#divFiltroTipoOS").css("display", "none");
-        $("#divFiltroStatusOS").css("display", "none");
-
-        $("#lblData").css("display", "none");
-        $("#tdCmbDatas").css("display", "none");
-
-        var tdEspaco = document.getElementById("tdEspaco");
-        var tdDatasDeAte = document.getElementById("tdDatasDeAte");
-        var tblDatasDeAte = document.getElementById("tblDatasDeAte");
-
-        tdEspaco.style.visibility = "hidden";
-        tdDatasDeAte.style.visibility = "hidden";
-        tblDatasDeAte.style.visibility = "hidden";
-
-        switch  (@qualModuloId)
-        {
-            case 910: $('#divFiltroTipoOS').css("display", "block");
-                $('#divFiltroStatusOS').css("display", "block");
-                $("#lblData").css("display", "block");
-                $("#tdCmbDatas").css("display", "block");
-                break;
-            case 920: $('#divFiltroOAE').css("display", "block");
-                $("#lblData").css("display", "block");
-                tdDatasDeAte.style.visibility = "visible";
-                tblDatasDeAte.style.visibility = "visible";
-
-                break;
-           // case 930: ;  break; // nao precisa porque é somente filtro rodovia+regional
-            case 940:
-                $('#divFiltroOAE').css("display", "block");
-                $("#lblData").css("display", "block");
-                tdDatasDeAte.style.visibility = "visible";
-                tblDatasDeAte.style.visibility = "visible";
-
-                break;
-        }
-
+        limpaCamposAux();
 
     }); // document.ready
 
-
     // transforma o combo em multipla escolha
-    //$(function () {
-
-    //    $('#cmbFiltroRodovias').multiselect({
-    //        includeSelectAllOption: false,
-    //        nonSelectedText: "-- Selecione --",
-    //        delimiterText: '; '
-    //    });
-    //});
-
     $(function () {
         $('#cmbFiltroRegionais').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });
@@ -412,6 +410,7 @@
         $('#cmbFiltroTiposOS').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });
@@ -419,9 +418,13 @@
         $('#cmbFiltroStatusOS').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });
+
+
+
 
     // ******** selecao de Rodovias ***********************
     function abrirLocalizarRodovias() {
@@ -715,7 +718,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="modalLocalizarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">

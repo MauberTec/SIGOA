@@ -1,273 +1,291 @@
-﻿preencheRep_in();
-preencheLegenda_in();
-GetAll($('#GridHome'));
-
+﻿
 function OpenModalReparo() {
     $("#modalNovo").modal('show');
-    preencheRep();
-    preencheLegenda();
 }
 
-function closeModalReparo() {
-    $("#modalNovo").modal('hide');
-    if ($('#cmdLegAdd').val() == "0-0") {
-        GetAll();
+
+
+
+// ********** filtros ************************************************
+function cmbFiltroLegenda_onchange()
+{
+    id = $('#cmbFiltroLegenda option:selected').val();
+    PoliticaReparos_preencheCombo('cmbFiltroAnomalia',id);
+    PoliticaReparos_preencheCombo('cmbFiltroCausa', id);
+}
+function cmbFiltroAnomalia_onchange()
+{
+    id = $('#cmbFiltroLegenda option:selected').val();
+    PoliticaReparos_preencheCombo('cmbFiltroCausa', id);
+}
+function btnExecutarFiltro_onclick() {
+    carregaGridPoliticaReparos(1);
+}
+function btnLimparFiltro_onclick() {
+    
+    $("#cmbFiltroTiposReparo").val("");
+    $("#cmbFiltroLegenda").val("");
+    $("#cmbFiltroAlerta").val("");
+
+    $("#cmbFiltroAnomalia").html("");
+    $("#cmbFiltroCausa").html("");
+
+    carregaGridPoliticaReparos(0);
+}
+
+// **********************************************************
+
+function cmbLegenda_onchange()
+{
+    var id = $('#cmbLegenda option:selected').val();
+
+    PoliticaReparos_preencheCombo('divCodAnomaliaUp', id);
+    PoliticaReparos_preencheCombo('divAlertaAdd', id);
+    PoliticaReparos_preencheCombo('divCausaAdd', id);
+}
+
+
+function PoliticaReparos_preencheCombo(qualCombo, id) {
+
+    var url;
+
+    if ((qualCombo == "cmbFiltroAnomalia") || (qualCombo == "divCodAnomaliaUp"))
+    {
+        url = '/Reparo/PreenchecmbFiltroAnomalia';
+    }
+    else
+        if ((qualCombo == "cmbFiltroCausa") || (qualCombo == "divCausaAdd")) {
+            url = '/Reparo/PreenchecmbFiltroCausa';
+        }
+    else
+            if (qualCombo == "divAlertaAdd") {
+                url = '/Reparo/PreenchecmbAlerta';
+        }
+
+    var cmb = $("#" + qualCombo);
+
+    // limpa os itens existentes
+    if (qualCombo.indexOf("div") >= 0) {
+        cmb.empty();
     }
     else {
-        Buscar();
+        cmb.html("");
+        cmb.append($('<option selected ></option>').val(-1).html("-- Selecione --")); // 1o item vazio
     }
 
-}
-
-function preencheLegenda() {
     $.ajax({
-        url: '/PoliticaReparos/PreencheLeg',
-        type: "Get",
+        url: url,
+        type: "POST",
         dataType: "JSON",
-        success: function (data) {
-            $('#cmdLegAdd').empty();
-            $('#cmdLegAdd').append($('<option selected></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-            $.each(data, function (i, item) {
-                $('#cmdLegAdd').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
-            });
+        data: { id: id },
+        success: function (lstSubNiveis) {
+            $.each(lstSubNiveis, function (i, subNivel) {
+
+                if (qualCombo.indexOf("cmb") >= 0) {
+                    cmb.append($('<option></option>').val(subNivel.Value.trim()).html(subNivel.Text.trim()));
+                }
+                else
+                    if (qualCombo.indexOf("div") >= 0) {
+                        var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+                        tagchk = tagchk.replace("idXXX", "chk" + i);
+                        tagchk = tagchk.replace("nameXXX", "chk" + i);
+                        tagchk = tagchk.replace("valueXXX", subNivel.Value.trim());
+
+                        var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
+                        taglbl = taglbl.replace("idXXX", "chk" + i);
+                        taglbl = taglbl.replace("TextoXXX", subNivel.Text.trim());
+                        cmb.append(tagchk + taglbl);
+                    }
+
+                });
         }
     });
 }
 
-function preencheLegenda_in() {
-    $.ajax({
-        url: '/PoliticaReparos/PreencheLeg',
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#cmdLegAdd_in').empty();
-            $('#cmdLegAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-            $.each(data, function (i, item) {
-                $('#cmdLegAdd_in').append($('<option value=' + item.Id + '> ' + item.leg_codigo + ' - ' + item.leg_descricao + '</option>'));
-            });
-        }
-    });
-}
-
-
-function preencheAnomalia() {
-    $.ajax({
-        url: '/PoliticaReparos/PreencheAno?id=' + $('#cmdLegAdd option:selected').val(),
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-           
-            $('#divCodAnomaliaUp').empty();           
-            $.each(data, function (i, item) {
-                var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                tagchk = tagchk.replace("idXXX", "chk" + i);
-                tagchk = tagchk.replace("nameXXX", "chk" + i);
-                tagchk = tagchk.replace("valueXXX", item.atp_id);
-
-                var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.atp_codigo + '-' + item.atp_descricao);
-
-                $("#divCodAnomaliaUp").append(tagchk + taglbl);
-              
-            });
-            //$('select[multiple]').multiselect();
-        }
-        
-    });
-
-    prencheAlCa();
-}
-
-function preencheAnomalia_in() {
-    preencheCausa_in();
-    $.ajax({
-        url: '/PoliticaReparos/PreencheAno?id=' + $('#cmdLegAdd_in option:selected').val(),
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#cmdCodAnomaliaAdd_in').empty();
-            $('#cmdCodAnomaliaAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-            $.each(data, function (i, item) {
-                $('#cmdCodAnomaliaAdd_in').append($('<option value=' + item.atp_id + '> ' + item.atp_codigo + ' - ' + item.atp_descricao + ' </option>'));
-                
-            });
-        }
-    });
-}
-
-function prencheAlCa() {
-    preencheAlerta();
-    preencheCausa($('#cmdLegAdd').val());
-   
-}
-
-function preencheAlerta() {
-    $.ajax({
-        url: '/PoliticaReparos/PreencheAlerta',
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#divAlertaAdd').empty();
-            $.each(data, function (i, item) {
-                var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                tagchk = tagchk.replace("idXXX", "chk" + i);
-                tagchk = tagchk.replace("nameXXX", "chk" + i);
-                tagchk = tagchk.replace("valueXXX", item.ale_id);
-                var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX", item.ale_codigo + '-'+ item.ale_descricao);
-                $("#divAlertaAdd").append(tagchk + taglbl);
-
-               
-            });
-        }
-    });
-}
-function preencheCausa(id) {
-   
-    $.ajax({
-        url: '/PoliticaReparos/PreencheCausa?id=' + id,
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#cmdCausaAdd').empty();
-           
-            $.each(data, function (i, item) {
-                var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                tagchk = tagchk.replace("idXXX", "chk" + i);
-                tagchk = tagchk.replace("nameXXX", "chk" + i);
-                tagchk = tagchk.replace("valueXXX", item.aca_id);
-                var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                taglbl = taglbl.replace("idXXX", "chk" + i);
-                taglbl = taglbl.replace("TextoXXX",item.aca_codigo + '-'+ item.aca_descricao);
-                $("#cmdCausaAdd").append(tagchk + taglbl);
-                
-            });
-        }
-    });
-}
-
-function preencheCausa_in() {
-
-    $.ajax({
-        url: '/PoliticaReparos/PreencheCausa?id=' + $('#cmdLegAdd_in').val(),
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-           
-            $('#cmdCausaAdd_in').empty();
-            $('#cmdCausaAdd_in').append($('<option selected ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-
-            $.each(data, function (i, item) {
-                $('#cmdCausaAdd_in').append($('<option value=' + item.aca_id + '>'+item.aca_codigo+' - ' + item.aca_descricao + ' </option>'));
-            });
-        }
-    });
-}
-
-function preencheRep_in() {
-    $.ajax({
-        url: '/PoliticaReparos/PreencheRep',
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#cmbReparoAdd_in').empty();
-            $('#cmbReparoAdd_in').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-            $.each(data, function (i, item) {
-                $('#cmbReparoAdd_in').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
-            });
-        }
-    });
-}
-
-function preencheRep() {
-    $.ajax({
-        url: '/PoliticaReparos/PreencheRep',
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#cmbReparoAdd').empty();
-            $('#cmbReparoAdd').append($('<option ></option>').val("0-0").html("--Selecione--")); // 1o item vazio
-            $.each(data, function (i, item) {
-                $('#cmbReparoAdd').append($('<option value=' + item.rpt_id + '> ' + item.rpt_codigo + ' - ' + item.rpt_descricao + ' </option>'));
-            });
-        }
-    });
-}
 
 function GetAll() {
-    $('#msg').val('Aguarde...');
-    $.ajax({
-        url: '/PoliticaReparos/PreencheRepAll',
-        type: "Get",
-        dataType: "JSON",
-        success: function (data) {
-            $('#DivGrid').empty();
-            $('#DivGrid').append('<table id="tblSubs" class="no-footer dataTable">' +
-                '<thead>' +
-                '<tr>' +
-                '<th style="width:40px; text-align:center">Reparo</th>' +
-                '<th style="width:70px; text-align:center">Legenda</th>' +
-                '<th style="width:270px; text-align:center">Anomalia</th>' +
-                '<th style="width:70px; text-align:center">Alerta</th>' +
-                '<th style="text-align:center">Causa</th>' +
-                '<th style="text-align:center">Opções</th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody id="GridHome">' +
-                '</tbody>' +
-                '</table >');
-            
-            $.each(data, function (i, valor) {
-                $('#GridHome').append($('<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Deletar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'));
-            });
-            $('#msg').hide();
-            paginar();  
-            
-        }
-    });
+    carregaGridPoliticaReparos();
 }
 
-function paginar() {
-    $(document).ready(function () {
-        $('#tblSubs').DataTable({
-            "oLanguage": idioma
+
+// ********************   montagem do gridview  ************************************
+$(document).ready(function () {
+    carregaGridPoliticaReparos();
+});
+
+function carregaGridPoliticaReparos(filtrado)
+{
+    $('#msg').show();
+    $('#msg').val('Aguarde...');
+
+    var data = {};
+    var url = "/Reparo/PoliticaReparo_ListAll";
+    if (filtrado == 1) {
+        url = "/Reparo/PoliticaReparo_GetbyID";
+        data = {
+            rpt_id: $('#cmbFiltroTiposReparo').val(),
+            leg_id: $('#cmbFiltroLegenda').val(),
+            atp_id: $('#cmbFiltroAnomalia').val(),
+            ale_id: $('#cmbFiltroAlerta').val(),
+            aca_id: $('#cmbFiltroCausa').val()
+        };
+    }
+
+    $('#tblSubs2').DataTable().destroy();
+    $('#tblSubs2').DataTable({
+        "ajax": {
+            "url": url,
+            "type": "GET",
+            "datatype": "json",
+            data: data,
+        }
+         , "columns": [
+                { data: "rpp_id", "className": "hide_column" },
+                { data: "rpt_codigo", "autoWidth": true, "className": "Centralizado", "searchable": true },
+                { data: "leg_codigo", "autoWidth": true, "className": "Centralizado", "searchable": true },
+
+                {
+                    data: "atp_codigo", "autoWidth": true, "searchable": true,
+                    "render": function (data, type, row) {
+                        return row["atp_codigo"] + " - " + row["atp_descricao"];
+                    }
+                },
+
+                { data: "ale_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                {
+                    data: "aca_codigo", "autoWidth": true, "searchable": true,
+                    "render": function (data, type, row) {
+                                    return row["aca_codigo"] + " - " + row["aca_descricao"];
+                                }
+                },
+                {
+                    "title": "Opções",
+                    data: "rpp_id",
+                    "className": "Centralizado",
+                    "searchable": false,
+                    "sortable": false,
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        if (permissaoExclusao > 0)
+                            retorno += '<a href="#" onclick="return DeleteReparo(' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
+                        else
+                            retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
+
+                        return retorno;
+                    }
+                }
+            ]
+        , "columnDefs": [
+            {
+                targets: [1] // coloca tooltip no campo rpt_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["rpt_descricao"]);
+                }
+            },
+            {
+                targets: [2] // coloca tooltip no campo leg_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["leg_descricao"]);
+                }
+            },
+            {
+                targets: [3] // coloca tooltip no campo atp_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["atp_descricao"]);
+                }
+            },
+            {
+                targets: [4] // coloca tooltip no campo ale_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["ale_descricao"]);
+                }
+            },
+            {
+                targets: [5] // coloca tooltip no campo aca_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["aca_descricao"]);
+                }
+            }
+        ]
+            , "rowId": "rpp_id"
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: true
+            , "oLanguage": idioma
             , "pagingType": "input"
             , "sDom": '<"top">rt<"bottom"pfli><"clear">'
-        });
+          , "initComplete": function (settings, json) {
+              $('#msg').hide();
+          }
     });
+
 }
 
-function btnAddReparo() {
-    if ($('#cmbReparoAdd').val() == null) {
-        alert('Selecione Reparo');
-        return;
+// ********************************************************************************
+
+function btnSalvar_onclick() {
+
+    if ($('#cmbTiposReparo').val() == null) {
+       swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Selecione Reparo'
+            }).then(
+                    function () {
+                        return false;
+                    });
+        return false;
     }
-    if ($('#cmdLegAdd').val() == null)
+    else
+    if ($('#cmbLegenda').val() == null)
     {
-        alert('Selecione a Legenda');
-        return;
+        swal({
+            type: 'error',
+            title: 'Aviso',
+            text: 'Selecione a Legenda'
+        }).then(
+             function () {
+                 return false;
+             });
+        return false;
     }
   
+
     // cria lista dos IDs de Cod Anomalia
     var CodAnomalia = [];
     $('#divCodAnomaliaUp input:checked').each(function () {
         CodAnomalia.push($(this).attr('value'));
     });
-    if (CodAnomalia == '') {
-        alert('Selecione Cod Anomalia');
-        return;
-    }
+
+        if (CodAnomalia == '') {
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: 'Selecione o Tipo de Anomalia'
+            }).then(
+                 function () {
+                     return false;
+                 });
+            return false;
+        }
 
     //cria lista de Ids do Causa
     var IdCausa = [];
-    $('#cmdCausaAdd input:checked').each(function () {
+    $('#divCausaAdd input:checked').each(function () {
         IdCausa.push($(this).attr('value'));
     });   
     if (IdCausa == '') {
-        alert('Selecione Causa');
-        return;
+        swal({
+            type: 'error',
+            title: 'Aviso',
+            text: 'Selecione Causa de Anomalia'
+        }).then(
+             function () {
+                 return false;
+             });
+        return false;
     }
 
     //cria lista de Ids do Alerta
@@ -276,11 +294,17 @@ function btnAddReparo() {
         IdAlerta.push($(this).attr('value'));
     });
     if (IdAlerta == '') {
-        alert('Selecione Alerta');
-        return;
+        swal({
+            type: 'error',
+            title: 'Aviso',
+            text: 'Selecione Alerta'
+        }).then(
+             function () {
+                 return false;
+             });
+        return false;
     }
-
-   
+      
 
     var Grupo = [
         { Nome: 'Alerta', Qtd: IdAlerta.length, Ids: [IdAlerta] },
@@ -299,15 +323,19 @@ function btnAddReparo() {
                 for (var c = 0; c < IdCausa.length; c++) {
                     for (var an = 0; an < CodAnomalia.length; an++) {
                         $.ajax({
-                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            url: '/Reparo/PoliticaReparo_Inserir',
                             type: "Post",
-                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            data: { rpt_id: $('#cmbTiposReparo').val(), leg_id: $('#cmbLegenda').val(), atp_id: CodAnomalia[an], ale_id: IdAlerta[a], aca_id: IdCausa[c] },
                             dataType: "JSON",
                             success: function (data) {
                                
                             },
                             error: function (erro) {
-                               
+                                swal({
+                                    type: 'error',
+                                    title: 'Aviso',
+                                    text: 'Erro ao inserir registro'
+                                });
                             }
                         });
                     }
@@ -318,13 +346,13 @@ function btnAddReparo() {
     if (Grupo[0].Nome == 'Alerta') {
         for (var a = 0; a < IdAlerta.length; a++) {
             if (Grupo[1].Nome == 'Anomalia') {
-                console.log(IdAlerta);
+                //console.log(IdAlerta);
                 for (var an = 0; an < CodAnomalia.length; an++) {
                     for (var c = 0; c < IdCausa.length; c++) {
                         $.ajax({
-                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            url: '/Reparo/PoliticaReparo_Inserir',
                             type: "Post",
-                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            data: { rpt_id: $('#cmbTiposReparo').val(), leg_id: $('#cmbLegenda').val(), atp_id: CodAnomalia[an], ale_id: IdAlerta[a], aca_id: IdCausa[c] },
                             dataType: "JSON",
                             success: function (data) {
                               
@@ -344,9 +372,9 @@ function btnAddReparo() {
                 for (var a = 0; a < IdAlerta.length; a++) {
                     for (var an = 0; an < CodAnomalia.length; an++) {
                         $.ajax({
-                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            url: '/Reparo/PoliticaReparo_Inserir',
                             type: "Post",
-                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            data: { rpt_id: $('#cmbTiposReparo').val(), leg_id: $('#cmbLegenda').val(), atp_id: CodAnomalia[an], ale_id: IdAlerta[a], aca_id: IdCausa[c] },
                             dataType: "JSON",
                             success: function (data) {
                               
@@ -366,9 +394,9 @@ function btnAddReparo() {
                 for (var an = 0; an < CodAnomalia.length; an++) {
                     for (var a = 0; a < IdAlerta.length; a++) {
                         $.ajax({
-                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            url: '/Reparo/PoliticaReparo_Inserir',
                             type: "Post",
-                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            data: { rpt_id: $('#cmbTiposReparo').val(), leg_id: $('#cmbLegenda').val(), atp_id: CodAnomalia[an], ale_id: IdAlerta[a], aca_id: IdCausa[c] },
                             dataType: "JSON",
                             success: function (data) {
 
@@ -388,9 +416,9 @@ function btnAddReparo() {
                 for (var c = 0; c < IdCausa.length; c++) {
                     for (var a = 0; a < IdAlerta.length; a++) {
                         $.ajax({
-                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            url: '/Reparo/PoliticaReparo_Inserir',
                             type: "Post",
-                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            data: { rpt_id: $('#cmbTiposReparo').val(), leg_id: $('#cmbLegenda').val(), atp_id: CodAnomalia[an], ale_id: IdAlerta[a], aca_id: IdCausa[c] },
                             dataType: "JSON",
                             success: function (data) {
                                 
@@ -410,9 +438,9 @@ function btnAddReparo() {
                 for (var a = 0; a < IdAlerta.length; a++) {
                     for (var c = 0; c < IdCausa.length; c++) {
                         $.ajax({
-                            url: '/PoliticaReparos/InsertPoliticaReparo',
+                            url: '/Reparo/PoliticaReparo_Inserir',
                             type: "Post",
-                            data: { rpt_id: $('#cmbReparoAdd').val(), leg_codigo: $('#cmdLegAdd').val(), atp_codigo: CodAnomalia[an], ale_codigo: IdAlerta[a], aca_id: IdCausa[c] },
+                            data: { rpt_id: $('#cmbTiposReparo').val(), leg_id: $('#cmbLegenda').val(), atp_id: CodAnomalia[an], ale_id: IdAlerta[a], aca_id: IdCausa[c] },
                             dataType: "JSON",
                             success: function (data) {
 
@@ -428,23 +456,32 @@ function btnAddReparo() {
     }
    
     $('#divAlertaAdd').empty();
-    $('#cmdCausaAdd').empty();
     $('#divCodAnomaliaUp').empty();
-    $("#divAlertaAdd").empty();
 
-    $('#cmbReparoAdd').val("0-0").change();
-    $('#cmdLegAdd').val("0-0").change();
+    $('#cmdCausaAdd').empty();
+    $('#cmbTiposReparo').val("0-0").change();
+    $('#cmbAlerta').val("0-0").change();
    
-    alert('Reparos incluido com sucesso!');
-    if ($('#cmdLegAdd').val() == "0-0") {
+    //    alert('Reparos incluido com sucesso!');
+    swal({
+        type: 'success',
+        title: 'Sucesso',
+        text: 'Política(s) incluída(s) com sucesso'
+    });
+
+    $("#modalNovo").modal('hide');
+
+    if ($('#cmbAlerta').val() == "0-0") {
         GetAll();
     }
     else {
-        Buscar();
+        btnExecutarFiltro_onclick();
     }
 }
 
 function DeleteReparo(rpp_id) {
+
+
     swal({
         title: "Excluir. Tem certeza?",
         icon: "warning",
@@ -456,70 +493,32 @@ function DeleteReparo(rpp_id) {
         focusCancel: true
     }).then(function (isConfirm) {
         if (isConfirm) {
-            $.ajax({
-                url: '/PoliticaReparos/DeleteReparo?rpp_id=' + rpp_id,
-                type: "Post",
-                dataType: "JSON",
-                success: function (data) {
-                    alert('Reparo deletado com sucesso!'); 
-                    $('#DivGrid').empty();
-                    Buscar();
-                },
-                error: function (erro) {
-                    alert(erro);
-                }
-            });
+            var response = POST("/Reparo/PoliticaReparo_Excluir", JSON.stringify({ rpp_id: rpp_id }))
+            if (response.erroId >= 1) {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Registro excluído com sucesso'
+                });
+
+              //  carregaGridPoliticaReparos();
+                $('#tblSubs2').DataTable().ajax.reload(null, false);
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao excluir registro'
+                });
+            }
+            return true;
+        } else {
+            return false;
         }
-    });
-   
+    })
+
 }
 
-function Buscar() {
-
-    $.ajax({
-        url: '/PoliticaReparos/BuscaReparo',
-        type: "Post",
-        data: { rpt_id: $('#cmbReparoAdd_in').val(), leg_id: $('#cmdLegAdd_in').val(), atp_id: $('#cmdCodAnomaliaAdd_in').val(), ale_id: $('#cmdAlertaAdd_in').val(), aca_id: $('#cmdCausaAdd_in').val() },
-        dataType: "JSON",
-        success: function (data) {
-            $('#DivGrid').empty();
-            $('#DivGrid').append('<table id="tblSubs" class="no-footer dataTable">' +
-                '<thead>' +
-                '<tr>' +
-                '<th style="width:40px; text-align:center">Reparo</th>' +
-                '<th style="width:70px; text-align:center">Legenda</th>' +
-                '<th style="width:270px; text-align:center">Anomalia</th>' +
-                '<th style="width:70px; text-align:center">Alerta</th>' +
-                '<th style="text-align:center">Causa</th>' +
-                '<th style="text-align:center">Opções</th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody id="GridHome">' +
-                '</tbody>' +
-                '</table >');
-            $.each(data, function (i, valor) {
-                $('#GridHome').append($(
 
 
-                    '<tr><td tyle="text-align:center" title="' + valor.rpt_descricao + '">' + valor.rpt_codigo + '</td><td tyle="text-align:center" title="' + valor.leg_descricao + '">' + valor.leg_codigo + '</td><td tyle="text-align:center" title="' + valor.atp_descricao + '">' + valor.atp_codigo + ' - ' + valor.atp_descricao + '  </td><td style="text-align:center">' + valor.ale_codigo + '</td><td tyle="text-align:center" >' + valor.aca_codigo + '- ' + valor.aca_descricao + '</td><td style="text-align:center"><a href="#" onclick="return DeleteReparo(' + valor.rpp_id + ')" title="Editar"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
-                )
 
-                );
-            });
-            paginar();
-
-        },
-        error: function (erro) {
-
-        }
-    });
-}
-
-function Limpar() {
-    
-    $("#cmbReparoAdd_in").val("0-0").change();
-    $("#cmdLegAdd_in").val("0-0").change();
-    $("#cmdCodAnomaliaAdd_in").val("0-0").change();
-    $("#cmdAlertaAdd_in").val("0-0").change();
-    GetAll($('#GridHome'));
-}

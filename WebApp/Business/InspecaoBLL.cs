@@ -241,7 +241,7 @@ namespace WebApp.Business
                         //   for (int li = 0; li < 4; li++)
                         {
 
-                            for (int col = 65; col <= 81; col++) // VARRE as COLUNAS A até Q
+                            for (int col = 65; col <= 82; col++) // VARRE as COLUNAS A até R
                             {
 
 
@@ -251,28 +251,30 @@ namespace WebApp.Business
                                 switch (col)
                                 {
                                     case 65: valor = lstDADOS[li].item; break;
-                                    case 66: valor = lstDADOS[li].col_Localizacao; break;
+                              //      case 66: valor = lstDADOS[li].col_Localizacao; break;
+                                    case 66: valor = lstDADOS[li].obj_descricao; break;
                                 }
 
                                 if (lstDADOS[li].ian_id > 0)
                                 {
                                     switch (col)
                                     {
-                                        case 67: valor = lstDADOS[li].ian_numero.ToString(); break;
-                                        case 68: valor = lstDADOS[li].leg_codigo; break;
-                                        case 69: valor = lstDADOS[li].atp_codigo; break;
-                                        case 70: valor = lstDADOS[li].ale_codigo; break;
-                                        case 71: valor = lstDADOS[li].ian_quantidade.ToString(); break;
-                                        case 72: valor = lstDADOS[li].ian_espacamento.ToString(); break;
-                                        case 73: valor = lstDADOS[li].ian_largura.ToString(); break;
-                                        case 74: valor = lstDADOS[li].ian_comprimento.ToString(); break;
-                                        case 75: valor = lstDADOS[li].ian_abertura_minima.ToString(); break;
-                                        case 76: valor = lstDADOS[li].ian_abertura_maxima.ToString(); break;
-                                        case 77: valor = lstDADOS[li].aca_codigo; break;
-                                        case 78: valor = lstDADOS[li].ian_fotografia.ToString(); break;
-                                        case 79: valor = lstDADOS[li].ian_croqui.ToString(); break;
-                                        case 80: valor = lstDADOS[li].ian_desenho; break;
-                                        case 81: valor = lstDADOS[li].ian_observacoes; break;
+                                        case 67: valor = lstDADOS[li].ian_localizacao_especifica.ToString(); break;
+                                        case 68: valor = lstDADOS[li].ian_numero.ToString(); break;
+                                        case 69: valor = lstDADOS[li].leg_codigo; break;
+                                        case 70: valor = lstDADOS[li].atp_codigo; break;
+                                        case 71: valor = lstDADOS[li].ale_codigo; break;
+                                        case 72: valor = lstDADOS[li].ian_quantidade.ToString(); break;
+                                        case 73: valor = lstDADOS[li].ian_espacamento.ToString(); break;
+                                        case 74: valor = lstDADOS[li].ian_largura.ToString(); break;
+                                        case 75: valor = lstDADOS[li].ian_comprimento.ToString(); break;
+                                        case 76: valor = lstDADOS[li].ian_abertura_minima.ToString(); break;
+                                        case 77: valor = lstDADOS[li].ian_abertura_maxima.ToString(); break;
+                                        case 78: valor = lstDADOS[li].aca_codigo; break;
+                                        case 79: valor = lstDADOS[li].ian_fotografia.ToString(); break;
+                                        case 80: valor = lstDADOS[li].ian_croqui.ToString(); break;
+                                        case 81: valor = lstDADOS[li].ian_desenho; break;
+                                        case 82: valor = lstDADOS[li].ian_observacoes; break;
                                     }
                                 }
 
@@ -302,7 +304,7 @@ namespace WebApp.Business
 
                         for (int li = 1; li <= 3; li++)
                         {
-                            for (int col = 65; col <= 81; col++) // VARRE as COLUNAS A até Q
+                            for (int col = 65; col <= 82; col++) // VARRE as COLUNAS A até Q
                             {
                                 // copia o Quadro A da planilha "Rodape" para o rodape dos dados
                                 Cell cellOrigem = ger.InsertCellInWorksheet(((char)col).ToString(), Convert.ToUInt32(li), worksheetRodape);

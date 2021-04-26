@@ -208,7 +208,7 @@ namespace WebApp.DAO
                             mfl_escrita = Convert.ToInt16(rdr["escrita"]),
                             mfl_excluir = Convert.ToInt16(rdr["exclusao"]),
                             mfl_inserir = Convert.ToInt16(rdr["insercao"]),
-                            mod_pai_id = Convert.ToInt16(rdr["mod_pai_id"])
+                            mod_pai_id = Convert.ToInt32(rdr["mod_pai_id"])
                         });
                     }
                     return lst;

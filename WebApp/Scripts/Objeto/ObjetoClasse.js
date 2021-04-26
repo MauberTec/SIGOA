@@ -21,10 +21,51 @@ function Inserir(qual) {
 
     $("#modalSalvarRegistro").modal('show');
 
-    if (qual == 1) {
+    document.getElementById("divTip_Pai").style.display = 'none';
+   if (qual == 1) {
         document.getElementById("div_tip_codigo").style.display = 'block';
         document.getElementById("lblModalHeader").innerText = "Novo Tipo de Objeto";
         selectedId_ObjTipo = -1;
+
+            
+        $.ajax({
+            url: "/Objeto/lstTipos_da_Classe",
+            type: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            "data": { "clo_id": selectedId_ObjClasse },
+            success: function (result) {
+                    var combo = document.getElementById("cmbtip_pai");
+                    if (combo) {
+                        combo.innerText = null; // limpa
+                        // preenche combo
+                        var lista = result.data.split(";");
+
+                        for (var m = 0; m < lista.length; m++) {
+                            var opt = document.createElement("option");
+                            if (lista[m].indexOf(":") > 0) {
+                                var aux = lista[m].split(":");
+                                opt.value = aux[0];
+                                opt.textContent = aux[1];
+
+                                combo.appendChild(opt);
+                            }
+                        }
+                    }
+
+
+                    switch (selectedId_ObjClasse)
+                    {
+                    case -1: case 1: case 2: case 3: case 6: case 10: case 11: document.getElementById("divTip_Pai").style.display = 'none'; break;
+                    default: document.getElementById("divTip_Pai").style.display = 'block';
+                }
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+
+
     }
     else {
         document.getElementById("div_tip_codigo").style.display = 'none';
@@ -33,6 +74,7 @@ function Inserir(qual) {
     }
 
 }
+
 
 function Salvar() {
     var tabela;
@@ -103,10 +145,10 @@ function Salvar() {
     }
 
     // checa repeticoes
-     if (qual == 1) {
-        if (!ChecaRepetido(txtcodigo))
-            return false;
-     }
+     //if (qual == 1) {
+     //   if (!ChecaRepetido(txtcodigo))
+     //       return false;
+     //}
 
     if (qual == 2) {
         if (!ChecaRepetido(txtnome))
@@ -132,6 +174,7 @@ function Salvar() {
                 tip_codigo: $('#txtcodigo').val(),
                 tip_nome: $('#txtnome').val(),
                 tip_descricao: $('#txtdescricao').val(),
+                tip_pai: $('#cmbtip_pai').val(),
                 tip_ativo: $('#chkativo').prop('checked') ? 1 : 0 //,
             };
         }
@@ -329,6 +372,37 @@ function Editar(qual, id) {
                 $('#txtnome').val(result.tip_nome);
                 $('#txtdescricao').val(result.tip_descricao);
                 $('#chkativo').prop('checked', (result.tip_ativo == '1' ? true : false));
+
+                var combo = document.getElementById("cmbtip_pai");
+                if (combo)
+                {
+                    combo.innerText = null; // limpa
+                    // preenche combo
+                    var lista = result.lsttip_pai.split(";");
+
+                    for (var m = 0; m < lista.length; m++) {
+                        var opt = document.createElement("option");
+                        if (lista[m].indexOf(":") > 0) {
+                            var aux = lista[m].split(":");
+                            opt.value = aux[0];
+                            opt.textContent = aux[1];
+
+                            combo.appendChild(opt);
+                        }
+                    }
+                    combo.value = result.tip_pai;
+
+                    var divTip_Pai = document.getElementById("divTip_Pai");
+                    if (divTip_Pai) {
+                        if (parseInt(result.tip_pai) < 0)
+                            divTip_Pai.style.display = 'none';
+                        else
+                            divTip_Pai.style.display = 'block';
+                    }
+
+                }
+
+
             }
             else {
                 $('#txt_id').val(result.clo_id);
@@ -501,7 +575,7 @@ $(document).ready(function () {
     var tblObjClasses = $('#tblObjClasses').DataTable();
     $('#tblObjClasses tbody').on('click', 'tr', function () {
         if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
+            //$(this).removeClass('selected');
         }
         else {
             tblObjClasses.$('tr.selected').removeClass('selected');
@@ -516,6 +590,20 @@ $(document).ready(function () {
 
         $('#tblObjTipos').DataTable().ajax.reload();
         document.getElementById('subGrids').style.visibility = "visible";
+
+
+        // oculta/mostra coluna TIpPAI
+        var table = $('#tblObjTipos').DataTable();
+        var column = table.column(5);
+        column.visible(false);
+
+        switch(selectedId_ObjClasse)
+        {
+            case 1: case 2: case 3: case 6: case 10: case 11: column.visible(false); break;
+                default:column.visible(true);
+        }
+
+        
 
     });
 
@@ -537,6 +625,8 @@ $(document).ready(function () {
             { data: "tip_codigo", "width": "50px", "searchable": true },
             { data: "tip_nome", "width": "150px", "searchable": true },
             { data: "tip_descricao", "autoWidth": true, "searchable": true },
+            { data: "tip_pai_nome", "autoWidth": true, "searchable": true },
+            { data: "tip_pai", "className": "hide_column" },
             {
                 "title": "Opções",
                 data: "tip_id",

@@ -1,35 +1,4 @@
 ﻿
-//function abreFicha(qualFicha1) {
-//    // limpa todas as fichas
-//    $('#partialFicha1').empty();
-//    $('#partialFicha2').empty();
-//    $('#partialFicha3').empty();
-//    $('#partialFicha4').empty();
-//    $('#partialFicha5').empty();
-
-//    qualFicha = qualFicha1;
-
-//    $.ajax({
-//        type: 'GET',
-//        "data": { qualFicha: qualFicha },
-//        url: '@Url.Action("CarregaFicha", "OrdemServico")',
-//        success: function (result) {
-//            document.getElementById('partialFicha' + qualFicha).innerHTML = result;
-
-//            switch (qualFicha) {
-//                case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
-//                case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
-//                case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
-//                case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
-//                case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
-//            }
-
-//            colocaDatePickers();
-
-//        }
-//    });
-//}
-
 function colocaDatePickers() {
     moment.locale('pt-br');         // pt-br
     $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');

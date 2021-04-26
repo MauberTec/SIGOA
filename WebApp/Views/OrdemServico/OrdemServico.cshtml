@@ -34,6 +34,16 @@
         font-size: 20px;
         font-weight: bold;
     }
+
+    .fundoBranco, .form-control[readonly] {
+        background-color: transparent !important;
+        background-image: none;
+    }
+
+    input[type="text"]:disabled, .form-control[disabled] {
+        background: #eee !important;
+    }
+
 </style>
 <h2></h2>
 <script>
@@ -190,6 +200,9 @@
 <script src="~/Scripts/Shared/_fichasInspecao.js"></script>
 
 <script>
+
+
+
     function abreFicha(qualFicha1) {
        // limpa todas as fichas
         $('#partialFicha1').empty();
@@ -226,6 +239,9 @@
             }
         });
     }
+
+
+
 
 </script>
 
@@ -270,7 +286,7 @@
                         <a id="tabDetalhesOSheader" data-toggle="tab" href="#tabDetalhesOS" onclick="OrdemServico_PreencheDetalhes(selectedId_ord_id);">Detalhes O.S.</a>
                     </li>
                     <li style="display:none" id="liFichaInspecaoCadastral">
-                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral </a>
+                        <a id="tabFichaInspecaoCadastralheader" data-toggle="tab" href="#tabFichaInspecaoCadastral" onclick="abreFicha(1);">Ficha Básica - Inspeção Cadastral</a>
                     </li>
                     <li style="display:none" id="liFichaInspecao1aRotineira">
                         <a id="tabFichaInspecao1aRotineiraheader" data-toggle="tab" href="#tabFichaInspecao1aRotineira" onclick="abreFicha(2);">Ficha Básica - Primeira Rotineira</a>
@@ -353,7 +369,7 @@
                                                    placeholder="Descrição" data-val="true" required
                                                    maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
                                                    autocomplete="off"
-                                                   onkeyup="validaAlfaNumerico(this)" />
+                                                   onkeyup="validaAlfaNumericoAcentosAfins(this, 0, 0)" />
                                         </div>
                                     </div>
                                 </div>
@@ -383,6 +399,7 @@
                                             </table>
                                         </div>
                                     </div>
+
 
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Status<span class="text-danger">*</span></label>
@@ -432,7 +449,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Início Programada<span class="text-danger">*</span></label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_inicio_programada" name="txtord_data_inicio_programada" placeholder="Data Início Programada"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -440,7 +457,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Início Execução</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_inicio_execucao" name="txtord_data_inicio_execucao" placeholder="Data Início Execução"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -448,7 +465,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Suspensão</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_suspensao" name="txtord_data_suspensao" placeholder="Data Suspensão"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -456,7 +473,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Cancelamento</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_cancelamento" name="txtord_data_cancelamento" placeholder="Data Cancelamento"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -464,14 +481,14 @@
                                         <nobr><label class="control-label col-sm-4">Data Reinício</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_reinicio" name="txtord_data_reinicio" placeholder="Data Reinício"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Criticidade (Nota OAE)</label>
                                         <div class="col-sm-8">
-                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade" maxlength="5" readonly />
+                                            <input id="txtord_criticidade" name="txtord_criticidade" class="form-control" placeholder="Criticidade" maxlength="5" disabled readonly />
 
                                             @*@Html.DropDownList("cmbCriticidade", null, "-- Selecione --", new { @class = "form-control " })*@
                                         </div>
@@ -491,38 +508,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group" style="display:none">
-                                        <label class="control-label col-sm-4">Valor TPU??</label>
-                                        <div class="col-sm-8">
-                                            <input id="txttpu_codigo_der" name="txttpu_codigo_der" class="form-control" placeholder="Valor TPU" maxlength="20" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group" style="display:none">
-                                        <label class="control-label col-sm-4">Descrição TPU??</label>
-                                        <div class="col-sm-8">
-                                            <input id="txttpu_descricao" name="txttpu_descricao" class="form-control" placeholder="Descrição TPU" maxlength="100" />
-                                            <button id="bntBuscarTPU" name="bntBuscarTPU">Buscar TPU</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group" style="display:none">
-                                        <label class="control-label col-sm-4">Data Base TPU</label>
-                                        <div class="col-sm-8">
-                                            <input id="txttpu_data_base_der" name="txttpu_data_base_der" class="form-control" placeholder="Data Base TPU" maxlength="20" />
-                                        </div>
-                                    </div>
-
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <div class="form-group">
-                                        @*<label class="control-label col-sm-4">Classe</label>*@
-                                        <div class="col-sm-8">
-                                            @*@Html.DropDownList("cmbClassesOS", null, "-- Selecione --", new { @class = "form-control " })*@
-                                        </div>
-                                    </div>
-
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">O.S. Principal</label></nobr>
                                         <div class="col-sm-8">
@@ -534,7 +522,14 @@
                                     <div class="form-group">
                                         <nobr></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtDummy12" class="form-control" style="visibility:hidden" />
+                                            <input id="txtDummy1" class="form-control" style="visibility:hidden" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Atualização Status</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_atualizacao_status" name="txtord_data_atualizacao_status" class="form-control" readonly disabled />
                                         </div>
                                     </div>
 
@@ -542,7 +537,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Abertura</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_abertura" name="txtord_data_abertura" placeholder="Data Abertura" maxlength="20"
-                                                   class="form-control" readonly />
+                                                   class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -572,7 +567,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Término Programada</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_termino_programada" name="txtord_data_termino_programada" placeholder="Data Término Programada"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -580,7 +575,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Término Execução</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_termino_execucao" name="txtord_data_termino_execucao" placeholder="Data Término Execução"
-                                                   maxlength="20" class="form-control" readonly />
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
 
@@ -642,10 +637,10 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoCadastral_1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoCadastral_1&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id + '&tos_id=' + selectedId_tos_id, '_blank');">Imprimir Ficha</button>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</label></h3>
+                                    <h3 class="modal-title"><label id="lblModalHeaderAbaCadastral" class="titulosAbas">FICHA BÁSICA PARA EXECUÇÃO DA INSPEÇÃO CADASTRAL</label></h3>
                                 </div>
                             </div>
                         </div>
@@ -788,7 +783,7 @@
                             <div class="form-group">
                                 <div class="col-sm-4">
                                     <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEnviarEmail">Enviar Email</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEnviarEmail">Comunicar Seção de OAE</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Formulário de Notificação de Ocorrência em Obras de Arte Especiais</label></h3>
@@ -835,7 +830,7 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" onclick="AssociarDocumento()">Associar Documento(s)</button>
+                                    <button type="button" class="btn btn-primary" id="btnAssociarDocumentoOS" onclick="AssociarDocumento()">Associar Documento(s)</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="HeaderOS_Documentos" class="titulosAbas">Documentos associados à Ordem de Serviço</label></h3>
@@ -1232,6 +1227,7 @@
         $('#cmbEmailRegionais').multiselect({
             includeSelectAllOption: false,
             nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
             delimiterText: '; '
         });
     });

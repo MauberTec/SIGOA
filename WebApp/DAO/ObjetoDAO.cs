@@ -206,21 +206,12 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
 
-                    //System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
-                    //p_return.Direction = System.Data.ParameterDirection.ReturnValue;
-                    //com.Parameters.Add(p_return);
-                    //com.Parameters[0].Size = 32000;
-
                     com.Parameters.AddWithValue("@obj_codigo", obj_codigo);
                     com.Parameters.AddWithValue("@obj_descricao", obj_descricao);
                     com.Parameters.AddWithValue("@obj_NumeroObjetoAte", obj_NumeroObjetoAte);
                     com.Parameters.AddWithValue("@obj_localizacaoAte", obj_localizacaoAte);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
-
-                    //com.ExecuteScalar();
-                    // return Convert.ToInt32(p_return.Value);
-                    // return p_return.Value.ToString();
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -242,14 +233,14 @@ namespace WebApp.DAO
 
 
         /// <summary>
-        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// Exclui Objeto do tipo Subdivisao3 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
         /// <param name="tip_id">Id do tipo do Objeto Selecionado</param>
         /// <param name="obj_id_tipoOAE">Id do Objeto Selecionado</param>
         /// <param name="usu_id">Id do Usuário Logado</param>
         /// <param name="ip">IP do Usuário Logado</param>
         /// <returns>string</returns>
-        public string Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE, int usu_id, string ip)
+        public string Objeto_Subdivisao3_Excluir(int tip_id, int obj_id_tipoOAE, int usu_id, string ip)
         {
             try
             {
@@ -257,7 +248,7 @@ namespace WebApp.DAO
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand("STP_DEL_OBJETO_SUBDIVISAO2", con);
+                    SqlCommand com = new SqlCommand("STP_DEL_OBJETO_SUBDIVISAO3", con);
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@tip_id", tip_id);
                     com.Parameters.AddWithValue("@obj_id_tipoOAE", obj_id_tipoOAE);
@@ -765,6 +756,10 @@ namespace WebApp.DAO
                             tip_codigo = rdr["tip_codigo"].ToString(),
                             tip_nome = rdr["tip_nome"].ToString(),
                             tip_descricao = rdr["tip_descricao"].ToString(),
+                            tip_pai = Convert.ToInt32(rdr["tip_pai"]),
+                            tip_pai_nome = rdr["tip_pai_nome"].ToString(),
+                            lsttip_pai = rdr["lsttip_pai"].ToString(),
+
                            // tip_mascara_codificacao = rdr["tip_mascara_codificacao"].ToString(),
                             tip_ativo = Convert.ToInt16(rdr["tip_ativo"]),
                             tem_var_inspecao = Convert.ToInt16(rdr["tem_var_inspecao"])
@@ -817,6 +812,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@tip_codigo", objTipo.tip_codigo);
                     com.Parameters.AddWithValue("@tip_nome", objTipo.tip_nome);
                     com.Parameters.AddWithValue("@tip_descricao", objTipo.tip_descricao);
+                    com.Parameters.AddWithValue("@tip_pai", objTipo.tip_pai);
                     com.Parameters.AddWithValue("@tip_ativo", objTipo.tip_ativo);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
@@ -900,6 +896,36 @@ namespace WebApp.DAO
         }
 
 
+        /// <summary>
+        /// lista concatenada dos pais de tipos de objeto por classe
+        /// </summary>
+        /// <param name="clo_id">Classe do Objeto selecionado</param>
+        /// <returns>string</returns>
+        public string lstTipos_da_Classe(int clo_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.ConcatenarObjetoTip_pai(@clo_id)", con);
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@clo_id", clo_id);
+
+                    string retorno = com.ExecuteScalar().ToString();
+
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
         // *************** ATRIBUTOS DE OBJETO  *************************************************************
@@ -1749,10 +1775,10 @@ namespace WebApp.DAO
                             pri_classificacao = (rdr["pri_classificacao"] == DBNull.Value) ? -1 : Convert.ToInt16(rdr["pri_classificacao"]),
                             pri_data_classificacao = rdr["pri_data_classificacao"].ToString(),
                             pri_data_inspecao = rdr["pri_data_inspecao"].ToString(),
-                            pri_nota_final = (rdr["pri_nota_final"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_final"]), 2),
-                            pri_nota_estrutura = (rdr["pri_nota_estrutura"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_estrutura"]), 2),
-                            pri_nota_durabilidade = (rdr["pri_nota_durabilidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_durabilidade"]), 2),
-                            pri_nota_acao = (rdr["pri_nota_acao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_acao"]), 2),
+                            pri_nota_final = rdr["pri_nota_final"] == DBNull.Value ? "0.00" :rdr["pri_nota_final"].ToString(),
+                            pri_nota_estrutura = rdr["pri_nota_estrutura"] == DBNull.Value ? "0.00" : rdr["pri_nota_estrutura"].ToString(),
+                            pri_nota_durabilidade = rdr["pri_nota_durabilidade"] == DBNull.Value ? "0.00" : rdr["pri_nota_durabilidade"].ToString(),
+                            pri_nota_acao = rdr["pri_nota_acao"] == DBNull.Value ? "0.00" :rdr["pri_nota_acao"].ToString(),
                             pri_acao = rdr["pri_acao"].ToString(),
 
                             prs_id = rdr["prs_id"].ToString(),
@@ -1760,21 +1786,21 @@ namespace WebApp.DAO
                             status_descricao = rdr["status_descricao"].ToString(),
                             corFundo = rdr["corFundo"].ToString(),
 
-                            //pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_funcionalidade"]), 2),
-                            pri_nota_importancia_oae_malha = (rdr["pri_nota_importancia_oae_malha"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_importancia_oae_malha"]), 2),
-                            pri_nota_vdm = (rdr["pri_nota_vdm"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_vdm"]), 2),
-                            pri_nota_principal_utilizacao = (rdr["pri_nota_principal_utilizacao"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_principal_utilizacao"]), 2),
-                            pri_nota_facilidade_desvio = (rdr["pri_nota_facilidade_desvio"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_facilidade_desvio"]), 2),
-                            pri_nota_gabarito_vertical = (rdr["pri_nota_gabarito_vertical"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_gabarito_vertical"]), 2),
-                            pri_nota_gabarito_horizontal = (rdr["pri_nota_gabarito_horizontal"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_gabarito_horizontal"]), 2),
-                            pri_nota_largura_plataforma = (rdr["pri_nota_largura_plataforma"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_largura_plataforma"]), 2),
-                            pri_nota_agressividade_ambiental = (rdr["pri_nota_agressividade_ambiental"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_agressividade_ambiental"]), 2),
-                            pri_nota_trem_tipo = (rdr["pri_nota_trem_tipo"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_trem_tipo"]), 2),
-                            pri_nota_barreira_seguranca = (rdr["pri_nota_barreira_seguranca"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_nota_barreira_seguranca"]), 2),
-                            pri_restricao_treminhoes = (rdr["pri_restricao_treminhoes"] == DBNull.Value) ? 0 : Math.Round(Convert.ToDouble(rdr["pri_restricao_treminhoes"]), 2),
+                            //pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : rdr["pri_nota_funcionalidade"]), 2),
+                            pri_nota_importancia_oae_malha = rdr["pri_nota_importancia_oae_malha"] == DBNull.Value ? "0.00" : rdr["pri_nota_importancia_oae_malha"].ToString(),
+                            pri_nota_vdm = rdr["pri_nota_vdm"] == DBNull.Value ? "0.00" : rdr["pri_nota_vdm"].ToString(),
+                            pri_nota_principal_utilizacao = rdr["pri_nota_principal_utilizacao"] == DBNull.Value ? "0.00" : rdr["pri_nota_principal_utilizacao"].ToString(),
+                            pri_nota_facilidade_desvio = rdr["pri_nota_facilidade_desvio"] == DBNull.Value ? "0.00" : rdr["pri_nota_facilidade_desvio"].ToString(),
+                            pri_nota_gabarito_vertical = rdr["pri_nota_gabarito_vertical"] == DBNull.Value ? "0.00" : rdr["pri_nota_gabarito_vertical"].ToString(),
+                            pri_nota_gabarito_horizontal = rdr["pri_nota_gabarito_horizontal"] == DBNull.Value ? "0.00" : rdr["pri_nota_gabarito_horizontal"].ToString(),
+                            pri_nota_largura_plataforma = rdr["pri_nota_largura_plataforma"] == DBNull.Value ? "0.00" : rdr["pri_nota_largura_plataforma"].ToString(),
+                            pri_nota_agressividade_ambiental = rdr["pri_nota_agressividade_ambiental"] == DBNull.Value ? "0.00" : rdr["pri_nota_agressividade_ambiental"].ToString(),
+                            pri_nota_trem_tipo = rdr["pri_nota_trem_tipo"] == DBNull.Value ? "0.00" : rdr["pri_nota_trem_tipo"].ToString(),
+                            pri_nota_barreira_seguranca = rdr["pri_nota_barreira_seguranca"] == DBNull.Value ? "0.00" : rdr["pri_nota_barreira_seguranca"].ToString(),
+                            pri_restricao_treminhoes = rdr["pri_restricao_treminhoes"] == DBNull.Value ? "0.00" : rdr["pri_restricao_treminhoes"].ToString(),
 
-                            ord_data_termino_execucao = (rdr["ord_data_termino_execucao"] == DBNull.Value) ? "" : rdr["ord_data_termino_execucao"].ToString(),
-                            tos_descricao = (rdr["tos_descricao"] == DBNull.Value) ? "" :rdr["tos_descricao"].ToString()
+                            ord_data_termino_execucao = ((rdr["ord_data_termino_execucao"] == DBNull.Value) ? "" : rdr["ord_data_termino_execucao"]).ToString(),
+                            tos_descricao = ((rdr["tos_descricao"] == DBNull.Value) ? "" :rdr["tos_descricao"]).ToString()
 
                         });
                     }

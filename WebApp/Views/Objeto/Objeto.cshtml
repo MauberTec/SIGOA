@@ -106,7 +106,6 @@
 <script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
 
 
-
 <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
     @{
         ViewBag.Title = "::.. Objetos ..::";
@@ -660,14 +659,6 @@
                         </div>
                     </div>
 
-                    <div id="divSubdivisao3" class="form-group" style="display:none">
-                        <label class="control-label col-sm-3">Subdivisão 3</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" id="cmbSubdivisao3" name="cmbSubdivisao3"
-                                    onchange="cmbSubdivisao3_onchange()"
-                                    placeholder="Subdivisão 3"></select>
-                        </div>
-                    </div>
 
                     <div class="form-group" id="divGrupoObjetos">
                         <label class="control-label col-sm-3">Grupo de Objetos</label>
@@ -697,38 +688,6 @@
                                     </td>
                                     <td>
                                         <input id="txtNumeroObjetoAte_Novo" name="txtNumeroObjetoAte_Novo"
-                                               class="form-control"
-                                               maxlength="3" title="Valor Opcional para inserção em sequência"
-                                               autocomplete="off" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="divLocalizacao">
-                        <label class="control-label col-sm-3">Localização</label>
-                        <div class="col-sm-9">
-                            <table cellpadding="0" cellspacing="0" style="width:100%">
-                                <tr>
-                                    <td style="width:60px;">
-                                        <select class="form-control" id="cmbAEVCVG_Novo" style="width:60px; margin-right:10px; margin-top:-8px;" onchange="PreenchetxtCodigoDigitavel()"></select>
-                                    </td>
-
-                                    <td id="tdTxtLocalizacao" style="width:60px;">
-                                        <input id="txtLocalizacao" name="txtLocalizacao" style="width:60px;  margin-top: -8px; margin-left: 10px;"
-                                               class="form-control" autocomplete="off" 
-                                               onkeyup="txtLocalizacao_onkeyup()"
-                                                onblur="txtLocalizacao_onblur()"
-                                               maxlength="3" />
-                                    </td>
-                                    <td style="width:30px;">
-                                        <label id="lblAte_Novo"
-                                               style="border:none !important; box-shadow:none !important; text-align:left;"
-                                               class="form-control">Até</label>
-                                    </td>
-                                    <td>
-                                        <input id="txtLocalizacaoAte_Novo" name="txtLocalizacaoAte_Novo" style="margin-top: -8px;"
                                                class="form-control"
                                                maxlength="3" title="Valor Opcional para inserção em sequência"
                                                autocomplete="off" />

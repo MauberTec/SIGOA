@@ -100,15 +100,15 @@ namespace WebApp.Controllers
         }
 
         /// <summary>
-        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// Exclui Objeto do tipo Subdivisao3 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
         /// <param name="tip_id">Id Tipo do Objeto Selecionado</param>
         /// <param name="obj_id_tipoOAE">Id Objeto Selecionado</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
+        public JsonResult Objeto_Subdivisao3_Excluir(int tip_id, int obj_id_tipoOAE)
         {
-            string retorno = new ObjetoBLL().Objeto_Subdivisao2_Excluir(tip_id, obj_id_tipoOAE);
+            string retorno = new ObjetoBLL().Objeto_Subdivisao3_Excluir(tip_id, obj_id_tipoOAE);
             bool valid = retorno.Trim() == "";
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
@@ -332,6 +332,17 @@ namespace WebApp.Controllers
             return Json(new { data = new ObjetoBLL().ObjTipo_ListAll(clo_id, null) }, JsonRequestBehavior.AllowGet);
         }
 
+
+        /// <summary>
+        /// lista concatenada dos pais de tipos de objeto por classe
+        /// </summary>
+        /// <param name="clo_id">Classe do Objeto selecionado</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult lstTipos_da_Classe(int clo_id)
+        {
+            return Json(new { data = new ObjetoBLL().lstTipos_da_Classe(clo_id) }, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Dados do Tipo selecionado
         /// </summary>
@@ -393,8 +404,6 @@ namespace WebApp.Controllers
             List<SelectListItem> lstListacmbClassesObjeto = new ObjetoBLL().PreenchecmbClassesObjeto();
             ViewBag.cmbClassesObjeto = lstListacmbClassesObjeto;
             ViewBag.cmbFiltroClassesObjeto = lstListacmbClassesObjeto;
-
-            ViewBag.cmbUnidade_Tipo = new UnidadeBLL().PreenchecmbUnidade_Tipo();
 
             return View();
         }
@@ -550,7 +559,9 @@ namespace WebApp.Controllers
         /// <returns>JsonResult Lista de GruposVariaveisValores</returns>
         public JsonResult GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id) }, JsonRequestBehavior.AllowGet);
+            var jsonResult =  Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id) }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         /// <summary>
@@ -637,29 +648,8 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="paramUsuario">Usuario</param>
         public void ListaMenus_Lateral(ref Usuario paramUsuario)
-        {
-            // busca a lista de menus permitidos pelo usuario
-            System.Data.DataSet ds = new UsuarioBLL().Usuario_ListMenus(paramUsuario.usu_id);
-
-            // montagem do menu lateral
-            List<MenuModel> lstMenus = new List<MenuModel>();
-            if (ds != null)
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-                {
-                    lstMenus.Add(
-                        new MenuModel()
-                        {
-                            men_menu_id = (int)ds.Tables[0].Rows[i]["men_menu_id"],
-                            men_icone = ds.Tables[0].Rows[i]["men_icone"].ToString(),
-                            men_pai_id = (int)ds.Tables[0].Rows[i]["men_pai_id"],
-                            men_descricao = ds.Tables[0].Rows[i]["men_descricao"].ToString(),
-                            LinkText = ds.Tables[0].Rows[i]["men_item"].ToString(),
-                            ActionName = ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim() == "" ? "#" : "/Home/Menu_Click?caminho=" + ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim() + "&id=" + ds.Tables[0].Rows[i]["men_menu_id"].ToString().Trim(),
-                            ControllerName = "Home"
-                        });
-                }
-
-            paramUsuario.lstMenus = lstMenus;
+        {  // preenche paramUsuario.lstMenus
+             new HomeController().ListaMenus_Lateral(ref paramUsuario);
         }
         /// <summary>
         /// Todos os controles do menu apontam para este metodo ("../Home/Menu_Click?caminho=") pois o evento pode vir de origens diferentes, e chama a View 

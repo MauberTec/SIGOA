@@ -47,7 +47,7 @@ namespace WebApp
                 if (relatorio.StartsWith("rptRelatorio"))
                 {
                     // cria lista de Regionais
-                    string strRegionais = new Gerais().str_Regionais();
+                    string strRegionais = new IntegracaoDAO().str_Regionais();
 
                     switch (relatorio)
                     {
@@ -135,9 +135,15 @@ namespace WebApp
 
                         if (relatorio.Trim() == "rptFichaInspecaoCadastral_1")
                         {
+                            string tos_id = Request["tos_id"];  // 1 = cadastral; 2 = rotineira
+
                             ReportDataSource rds = new ReportDataSource("dtFicha", ds.Tables[0]);
                             ReportViewer1.LocalReport.DataSources.Add(rds);
                             ReportViewer1.LocalReport.ReportPath = Server.MapPath("~/Reports/rptFichaInspecaoCadastral_1.rdlc");
+
+                            List<ReportParameter> listReportParameter = new List<ReportParameter>();
+                            listReportParameter.Add(new ReportParameter("tos_id", tos_id));
+                            ReportViewer1.LocalReport.SetParameters(listReportParameter);
                         }
                         else
                         if (relatorio.Trim() == "rptFichaInspecaoRotineira")

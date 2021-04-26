@@ -250,14 +250,14 @@ function preenchetblFicha4(obj_id, classe, tipo) {
         }
     }
 
-
-
     $.ajax({
         "url": url,
         "type": "GET",
         "datatype": "json",
         "data": data,
         "success": function (result) {
+
+
             for (var i = 0; i < result.data.length; i++) {
 
                 // coloca a imagem ESQUEMA_ESTRUTURAL
@@ -390,6 +390,8 @@ function preenchetblFicha4(obj_id, classe, tipo) {
             Ficha4_Calcula_Notas_Tudo();
         }
     });
+
+    travaBotoes();
 
 }
 
@@ -1089,6 +1091,9 @@ function header_click4(quem, expandir) {
                 }
 
         }
+
+    travaBotoes();
+
 }
 
 function tica_chktxt4(quem) {

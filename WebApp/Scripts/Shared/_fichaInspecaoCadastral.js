@@ -268,6 +268,59 @@ function nome_segundo_cabecalho2(controleId) {
 }
 
 
+
+function mudaTitulosAbas() {
+
+    if (paginaPai == "Objeto")
+        return;
+
+    var ehCadastral = 1;
+
+    var liFichaInspecaoRotineira = document.getElementById("liFichaInspecaoRotineira");
+    var liFichaInspecaoEspecial = document.getElementById("liFichaInspecaoEspecial");
+
+    if ((liFichaInspecaoRotineira.style.display == "unset")
+        || (liFichaInspecaoEspecial.style.display == "unset"))
+        ehCadastral = 0;
+
+
+    var tblFicha_DOCUMENTOS = document.getElementById("tblFicha_DOCUMENTOS");
+    var btn_Toggle_ATRIBUTOS_FUNCIONAIS = document.getElementById("btn_Toggle_ATRIBUTOS_FUNCIONAIS");
+    var btn_Toggle_ATRIBUTOS_FIXOS = document.getElementById("btn_Toggle_ATRIBUTOS_FIXOS");
+    var btn_Toggle_HISTORICO_INTERVENCOES = document.getElementById("btn_Toggle_HISTORICO_INTERVENCOES");
+
+    var btnTextos_Cadastral = ["unset", "3 - ATRIBUTOS DE IMPORTÂNCIA DA OBRA DE ARTE DENTRO DA MALHA VIÁRIA", "4 - ATRIBUTOS FIXOS", "5 - HISTÓRICO DE INTERVENÇÕES"];
+    var btnTextos_Rotineira = ["none", , , ];
+
+    if (ehCadastral == 0) {
+        if (tblFicha_DOCUMENTOS)
+            tblFicha_DOCUMENTOS.style.display = "none";
+        if (btn_Toggle_ATRIBUTOS_FUNCIONAIS)
+            btn_Toggle_ATRIBUTOS_FUNCIONAIS.innerHTML = "2 - ATRIBUTOS DE IMPORTÂNCIA DA OBRA DE ARTE DENTRO DA MALHA VIÁRIA";
+
+        if (btn_Toggle_ATRIBUTOS_FIXOS)
+            btn_Toggle_ATRIBUTOS_FIXOS.innerHTML = "3 - ATRIBUTOS FIXOS";
+
+        if (btn_Toggle_HISTORICO_INTERVENCOES)
+            btn_Toggle_HISTORICO_INTERVENCOES.innerHTML = "4 - HISTÓRICO DE INTERVENÇÕES";
+    }
+    else {
+        if (tblFicha_DOCUMENTOS)
+            tblFicha_DOCUMENTOS.style.display = "table";
+
+        if (btn_Toggle_ATRIBUTOS_FUNCIONAIS)
+            btn_Toggle_ATRIBUTOS_FUNCIONAIS.innerHTML = "3 - ATRIBUTOS DE IMPORTÂNCIA DA OBRA DE ARTE DENTRO DA MALHA VIÁRIA";
+
+        if (btn_Toggle_ATRIBUTOS_FIXOS)
+            btn_Toggle_ATRIBUTOS_FIXOS.innerHTML = "4 - ATRIBUTOS FIXOS";
+
+        if (btn_Toggle_HISTORICO_INTERVENCOES)
+            btn_Toggle_HISTORICO_INTERVENCOES.innerHTML = "5 - HISTÓRICO DE INTERVENÇÕES";
+    }
+}
+
+
+
 function limpatblFicha() {
 
     var tabela;
@@ -329,6 +382,9 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
         "datatype": "json",
         "data": data,
         "success": function (result) {
+
+            mudaTitulosAbas();
+
             for (var i = 0; i < result.data.length; i++) {
 
                 // preenche os LABELS
@@ -449,6 +505,8 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
                         }
 
             }
+
+            travaBotoes();
         }
     });
 
@@ -464,6 +522,8 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
     if ($('#div_Ficha_HISTORICO_INTERVENCOES').hasClass('collapse in')) abas_abertas = abas_abertas + ";9";
 
     accordion_encolher(abas_abertas);
+
+    mudaTitulosAbas();
 
 /*
     // expande o item correspondente
@@ -1268,8 +1328,11 @@ function header_click(quem, expandir) {
                     document.getElementById("iconAngle_HISTORICO_INTERVENCOES").classList.toggle('rotate');
                     break;
                 }
-        }
-}
+    }
+
+        travaBotoes();
+
+    }
 
 function tica_chktxt(quem) {
     var chk = $('#' + quem.replace("txt", "chk"));

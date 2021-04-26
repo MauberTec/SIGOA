@@ -103,7 +103,6 @@ function Inserir() {
 
     $("#cmbClassesObjeto").val(0);
     $("#cmbTiposObjeto").val(0);
-    $("#cmbUnidade_Tipo").val(0);
 
     $('#txt_id').val("");
     $('#txtcodigo').val("");
@@ -198,7 +197,6 @@ function Salvar() {
     else
         selectedId_tip_id = -1;
 
-    var selecttedUnidade_Tipo = $('#cmbUnidade_Tipo').val();
 
     var selectedatr_apresentacao_itens = "";
     switch ($("#cmbApresentacaoItens").val()) {

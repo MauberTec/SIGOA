@@ -97,10 +97,10 @@
     $('#txt_Responsavel_Recebimento_Data').val(result.data[0].responsavel_recebimento_data);
 }
 }
-});
+                });
 
 
-
+        travaBotoes();
 }
 
     function CancelarDados_FichaNotificacaoOcorrencia(tabela) {

@@ -320,6 +320,13 @@ namespace WebApp.Models
 
 
         /// <summary>
+        /// Valor da Coluna Localizacao especifica 
+        /// </summary>
+        public string ian_localizacao_especifica { get; set; }
+
+
+
+        /// <summary>
         /// Id do nivel de alerta 
         /// </summary>
         public int ale_id { get; set; }

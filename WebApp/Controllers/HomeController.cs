@@ -38,9 +38,21 @@ namespace WebApp.Controllers
 
             // montagem do menu lateral
             List<MenuModel> lstMenus = new List<MenuModel>();
+            string actionname = "";
+            string sActionName = "";
             if (ds != null)
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    actionname = ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim();
+                    if (actionname == "")
+                        sActionName = "#";
+                    else
+                    {
+                        if (actionname.IndexOf("/Manuais/") >= 0)
+                            sActionName = ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim();
+                        else
+                            sActionName = "/Home/Menu_Click?caminho=" + ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim() + "&id=" + ds.Tables[0].Rows[i]["men_menu_id"].ToString().Trim();
+                    }
                     lstMenus.Add(
                         new MenuModel()
                         {
@@ -49,7 +61,7 @@ namespace WebApp.Controllers
                             men_pai_id = (int)ds.Tables[0].Rows[i]["men_pai_id"],
                             men_descricao = ds.Tables[0].Rows[i]["men_descricao"].ToString(),
                             LinkText = ds.Tables[0].Rows[i]["men_item"].ToString(),
-                            ActionName = ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim() == "" ? "#" : "/Home/Menu_Click?caminho=" + ds.Tables[0].Rows[i]["men_caminho"].ToString().Trim() + "&id=" + ds.Tables[0].Rows[i]["men_menu_id"].ToString().Trim(),
+                            ActionName = sActionName,
                             ControllerName = "Home"
                         });
                 }

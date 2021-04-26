@@ -311,7 +311,10 @@ namespace WebApp.DAO
             {
                 int obj_id_anterior = -1;
                 int obj_id_atual = -1;
+                int clo_id_atual = -1;
+                int tip_id_atual = -1;
 
+                string obj_descricao_atual = "";
 
                 List<InspecaoAnomalia> lst = new List<InspecaoAnomalia>();
                 using (SqlConnection con = new SqlConnection(strConn))
@@ -328,8 +331,21 @@ namespace WebApp.DAO
                     while (rdr.Read())
                     {
                        obj_id_atual = Convert.ToInt32(rdr["obj_id"]);
+                       clo_id_atual = Convert.ToInt32(rdr["clo_id"]);
+                       tip_id_atual = Convert.ToInt32(rdr["tip_id"]);
 
-                       lst.Add(new InspecaoAnomalia
+                        if ((clo_id_atual == 10)
+                              && ((tip_id_atual == 45) || (tip_id_atual == 104)))
+                            obj_descricao_atual = "";
+                        else
+                        {
+                            if (obj_id_atual != obj_id_anterior)
+                                obj_descricao_atual = rdr["obj_descricao"].ToString();
+                            else
+                                obj_descricao_atual = "";
+                        }
+
+                        lst.Add(new InspecaoAnomalia
                         {
                            //ins_id = Convert.ToInt32(rdr["ins_id"]),
 
@@ -343,17 +359,18 @@ namespace WebApp.DAO
                             obj_id = obj_id_atual,
                             obj_pai = Convert.ToInt32(rdr["obj_pai"]),
                             obj_codigo = rdr["obj_codigo"].ToString(),
-                            obj_descricao = obj_id_atual != obj_id_anterior ? rdr["obj_descricao"].ToString() : "",
+                            obj_descricao = obj_descricao_atual,
 
                             level = Convert.ToInt32(rdr["level"]),
                             item = rdr["item"].ToString(),
                             //path = rdr["path"].ToString(),
-                            clo_id = Convert.ToInt32(rdr["clo_id"]),
+                            clo_id = clo_id_atual,
                             clo_nome = rdr["clo_nome"].ToString(),
-                            tip_id = Convert.ToInt32(rdr["tip_id"]),
+                            tip_id = tip_id_atual,
                             tip_nome = rdr["tip_nome"].ToString() ,
 
                             col_Localizacao =  rdr["col_Localizacao"] == DBNull.Value ? "" : rdr["col_Localizacao"].ToString(),
+                            ian_localizacao_especifica =  rdr["ian_localizacao_especifica"] == DBNull.Value ? "" : rdr["ian_localizacao_especifica"].ToString(),
                            
                             ian_id = rdr["ian_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ian_id"]),
 
@@ -802,6 +819,7 @@ namespace WebApp.DAO
                             ins_anom_Responsavel = rdr["ins_anom_Responsavel"].ToString(),
                             ins_anom_data = rdr["ins_anom_data"].ToString(),
 
+                            ian_localizacao_especifica = rdr["ian_localizacao_especifica"] == DBNull.Value ? "" : rdr["ian_localizacao_especifica"].ToString(),
                             col_Localizacao = rdr["col_Localizacao"].ToString(),
                             clo_id = Convert.ToInt32(rdr["clo_id"]),
                             clo_nome = rdr["clo_nome"].ToString(),

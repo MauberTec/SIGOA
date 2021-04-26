@@ -53,7 +53,7 @@ namespace WebApp.Models
         /// <summary>
         /// rtu_ativo
         /// </summary>
-        public Boolean rtu_ativo { get; set; }
+        public int rtu_ativo { get; set; }
         /// <summary>
         /// unidade
         /// </summary>

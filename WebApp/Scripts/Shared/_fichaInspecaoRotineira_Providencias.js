@@ -341,5 +341,7 @@ function Ficha2_PROVIDENCIAS_CriarTabelaGrupos() {
         }
     });
 
+
+    travaBotoes();
 }
 

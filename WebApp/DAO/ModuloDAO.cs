@@ -43,7 +43,7 @@ namespace WebApp.DAO
                             mod_id = Convert.ToInt32(rdr["mod_id"]),
                             mod_nome_modulo = rdr["mod_nome_modulo"].ToString(),
                             mod_descricao = rdr["mod_descricao"].ToString(),
-                            mod_pai_id = Convert.ToInt16(rdr["mod_pai_id"]),
+                            mod_pai_id = Convert.ToInt32(rdr["mod_pai_id"]),
                             mod_ativo = Convert.ToInt16(rdr["mod_ativo"])
                         });
                     }

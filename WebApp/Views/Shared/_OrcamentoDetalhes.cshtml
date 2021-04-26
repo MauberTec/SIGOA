@@ -23,263 +23,326 @@
 }
 
 
-    <style>
-        .borderBottom {
-            border-bottom: solid 1px black;
-        }
+<style>
+    .borderBottom {
+        border-bottom: solid 1px black;
+    }
 
-        .borderTop {
-            border-top: solid 1px black;
-        }
+    .borderTop {
+        border-top: solid 1px black;
+    }
 
-        .borderLeft {
-            border-left: solid 1px black;
-        }
+    .borderLeft {
+        border-left: solid 1px black;
+    }
 
-        .borderRight {
-            border-right: solid 1px black;
-        }
+    .borderRight {
+        border-right: solid 1px black;
+    }
 
-        .lblsBold {
-            font-weight: bold;
-            height: 25px;
-            margin: 0 !important;
-            margin-left: 5px !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-            margin-top:0 !important;
-            text-align:left;
-        }
+    .lblsBold {
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        margin-left: 5px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-top: 0 !important;
+        text-align: left;
+    }
 
-        .lblsNormal {
-            font-weight: normal;
-            height: 25px;
-            margin: 5px !important;
-            padding: 5px !important;
-            border: none;
-        }
+    .lblsNormal {
+        font-weight: normal;
+        height: 25px;
+        margin: 5px !important;
+        padding: 5px !important;
+        border: none;
+    }
 
-        input.txts, .txts {
-            border: solid 1px lightgray !important;
-            width: 75%;
-            height: 95%;
-            margin: 0 !important;
-            margin-left: 3px !important;
-            margin-top: 5px !important;
-            display: inline-block;
-            color: blue;
-            font-weight: normal;
-            resize: none;
-        }
+    input.txts, .txts {
+        border: solid 1px lightgray !important;
+        width: 75%;
+        height: 95%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        resize: none;
+    }
 
-        .lblTitulos {
-            height: 25px;
-            color: #FFFFFF;
-            background-color: gray;
-            font-weight: bold;
-            /*border: solid 1px black;*/
-            padding-left: 5px;
-            border-left: solid 1px black;
-            border-right: solid 1px black;
-            border-bottom: solid 1px black;
-        }
+    .lblTitulos {
+        height: 25px;
+        color: #FFFFFF;
+        background-color: gray;
+        font-weight: bold;
+        /*border: solid 1px black;*/
+        padding-left: 5px;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
 
-        .btnHeader1 {
-            width: 100%;
-            height: 35px;
-            background-color: transparent;
-            border: none;
-            padding: 5px;
-            margin: 0;
-            text-align: left;
-            font-size:12pt;
-        }
+    .btnHeader1 {
+        width: 100%;
+        height: 35px;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: left;
+        font-size: 12pt;
+    }
 
 
-        .altura50 {
-            height: 50px;
-        }
-    </style>
+    .altura50 {
+        height: 50px;
+    }
 
-        <br />
-        <table id="tblOrcamento_Dados" style="width:90%">
+
+</style>
+
+<br />
+<div style="margin:15px">
+    <table id="tblOrcamento_Dados" style="width:90%">
+        <tr>
+            <td style="width:150px">
+                <label class="lblsBold">Código</label>
+            </td>
+            <td>
+                <input id="txtorc_codigo_Detalhes" name="txtorc_codigo_Detalhes"
+                       Disabled
+                       onkeyup="limpaFundo(this);"
+                       class="lblsNormal" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Versão</label>
+            </td>
+            <td>
+                <input id="txtorc_versaoDetalhes" name="txtorc_versaoDetalhes"
+                       Disabled
+                       onkeyup="limpaFundo(this);"
+                       class="lblsNormal" />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Descrição</label>
+            </td>
+            <td>
+                <input id="txtorc_descricao_Detalhes" name="txtorc_descricao_Detalhes"
+                       class="lblsNormal"
+                       onkeyup="limpaFundo(this);"
+                       Disabled />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Status<span class="text-danger">*</span></label>
+            </td>
+            <td>
+                <select class="form-control" id="cmbStatusOrcamentoDetalhes" name="cmbStatusOrcamentoDetalhes"
+                     disabled   onchange="cmbStatusOrcamento_onchange()"></select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Objeto(s)</label>
+            </td>
+            <td>
+                <table style="width:100%">
+                    <tr>
+                        <td style="width:100%">
+                            <input id="txtobj_ids_Detalhes" name="txtobj_ids_Detalhes" style="display:none" />
+                            <input id="txtorc_id_Detalhes" name="txtorc_id_Detalhes" style="display:none" />
+
+                            <input id="txtobj_codigoDetalhes" name="txtobj_codigoDetalhes"
+                                   class="lblsNormal" style="width:100%"
+                                   Disabled readonly
+                                   autocomplete="off" />
+                        </td>
+                        <td>
+                            <button style="visibility:hidden; width:40px; height:25px; margin-left:5px; " id="btnAbrirPriorizacao" onclick="return btnAbrirPriorizacao_onclick(this)">...</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Validade</label>
+            </td>
+            <td>
+                <input id="txtorc_data_Validade_Detalhes" name="txtorc_data_Validade_Detalhes"
+                       class="lblsNormal" Disabled readonly />
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Data Base</label>
+            </td>
+            <td>
+                <nobr>
+                    <select id="cmbMes" disabled onchange="$('#cmbMes').css('background-color', corBranca)">
+                        <option value="01">Janeiro</option>
+                        <option value="02">Fevereiro</option>
+                        <option value="03">Março</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Maio</option>
+                        <option value="06">Junho</option>
+                        <option value="07">Julho</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    /
+                    <select id="cmbAno" disabled  onchange="$('#cmbAno').css('background-color', corBranca)">
+                    </select>
+                    &nbsp
+
+                    <select id="cmbDesonerado" disabled  onchange="$('#cmbDesonerado').css('background-color', corBranca)">
+                        <option value="D">Desonerado</option>
+                        <option value="O">Não Desonerado</option>
+                    </select>
+
+
+                    <label class="lblsNormal" id="lblDataBase" style="display:none"></label>
+                    <label class="lblsNormal" id="lblDesonerado" style="display:none"></label>
+                </nobr>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold" for="chkorc_ativoDetalhes">Ativo</label>
+            </td>
+            <td id="tdchkorc_ativoDetalhes">
+                <input type="checkbox" id="chkorc_ativoDetalhes" readonly style="margin-top:10px; margin-left: 7px !important; -webkit-appearance:default-button !important;">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label class="lblsBold">Valor Total</label>
+            </td>
+            <td>
+                <input id="txtorc_valor_total" name="txtorc_valor_total" class="lblsNormal" Disabled readonly />
+            </td>
+        </tr>
+
+    </table>
+
+
+    <table id="tblServicosAdicionados">
+        <thead>
             <tr>
-                <td style="width:150px">
-                    <label class="lblsBold" >Código</label>
-                </td>
-                <td>
-                    <input id="txtorc_codigo_Detalhes" name="txtorc_codigo_Detalhes"
-                           Disabled 
-                           onkeyup="limpaFundo(this);" 
-                           class="lblsNormal" />
+                <td colspan="10">
+                    <h4 style="display:inline-table; font-weight:bold; margin-left: -15px;">Serviços Adicionais</h4>
+                    <button id="btnServicosAdicionais"
+                            title="Inserir Serviços Adicionais"
+                            onclick="return btnServicosAdicionais_onclick(this)"
+                            style="border:none; box-shadow:none; background-color:transparent; display:none; ">
+                        <span class="glyphicon glyphicon-plus text-success contornoBranco"></span>
+                    </button>
                 </td>
             </tr>
-
             <tr>
-                <td>
-                    <label class="lblsBold">Versão</label>
-                </td>
-                <td>
-                    <input id="txtorc_versaoDetalhes" name="txtorc_versaoDetalhes"
-                           Disabled
-                           onkeyup="limpaFundo(this);" 
-                           class="lblsNormal" />
-                </td>
+                <th>ose_id</th>
+                <th>OAE</th>
+                <th>Quantidade</th>
+                <th>Unidade</th>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Data Base</th>
+                <th>Fase</th>
+                <th>Preço Unitário</th>
+                <th>Valor Total</th>
+                <th>Opções</th>
             </tr>
+        </thead>
+    </table>
 
+
+    <table id="tblOrcamentoDetalhes">
+        <thead>
             <tr>
-                <td>
-                    <label class="lblsBold">Descrição</label>
-                </td>
-                <td>
-                    <input id="txtorc_descricao_Detalhes" name="txtorc_descricao_Detalhes"
-                           class="lblsNormal"
-                           onkeyup="limpaFundo(this);" 
-                           Disabled />
-                </td>
+                <td colspan="19">
+                    <h4 style="display:inline-table; font-weight:bold; margin-left: -15px;">Reparos</h4>
+                 </td>
             </tr>
-
-
             <tr>
-                <td>
-                    <label class="lblsBold">Status<span class="text-danger">*</span></label>
-                </td>
-                <td>
-                    @Html.DropDownList("cmbStatusOrcamentoDetalhes", null, "-- Selecione --", new { @class = "form-control", @onchange = "cmbStatusOrcamento_onchange()", @disabled="true"})
-                </td>
+                <th colspan="8" class="borderBottom "></th>
+                <th colspan="5" class="borderLeft borderBottom Centralizado">Indicado</th>
+                <th colspan="5" class="borderLeft borderBottom borderRight Centralizado">Adotado</th>
+                <th class="borderBottom"></th>
             </tr>
-
             <tr>
-                <td>
-                    <label class="lblsBold">Objeto(s)</label>
-                </td>
-                <td>
-                    <table style="width:100%">
-                        <tr>
-                            <td style="width:100%">
-                                <input id="txtobj_codigoDetalhes" name="txtobj_codigoDetalhes"
-                                       class="lblsNormal" style="width:100%"
-                                       Disabled readonly
-                                       autocomplete="off" />
-                            </td>
-                            <td>
-                                <button style="visibility:hidden; width:40px; height:25px; margin-left:5px; " id="btnAbrirPriorizacao" onclick="return btnAbrirPriorizacao_onclick(this)">...</button>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
+                <th>ian_ordem_apresentacao</th>
+                <th>ore_id</th>
+                <th>orc_id</th>
+                <th>orc_cod_orcamento</th>
+                <th>orc_descricao</th>
+                <th>orc_versao</th>
+                <th>ocs_id</th>
+                <th>ocs_codigo</th>
+                <th>ocs_descricao</th>
+                <th>orc_data_validade</th>
+
+                <th>orc_valor_total</th>
+                <th>orc_id_pai</th>
+                <th>OAE</th>
+                <th>Elemento</th>
+                <th>Núm</th>
+                <th>Tipo</th>
+                <th>Sigla</th>
+                <th>Alerta</th>
+                <th>Causa</th>
+                <th>Qtde</th>
+
+                <th>Reparo</th>
+                <th>Qtde</th>
+                <th>Unid</th>
+                <th>Val Unit</th>
+                <th>Val Total</th>
+                <th>Reparo</th>
+                <th>Qtde</th>
+                <th>Unid</th>
+                <th>Val Unit</th>
+                <th>Val Total</th>
+
+                <th>orc_objetos_associados</th>
+                <th>pri_ids_associados</th>
+                <th>orc_ativo</th>
+                <th></th>
+                <th>Opções</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
-
-            <tr>
-                <td>
-                    <label class="lblsBold">Validade</label>
-                </td>
-                <td>
-                    <input id="txtorc_data_Validade_Detalhes" name="txtorc_data_Validade_Detalhes"
-                           class="lblsNormal" Disabled readonly />
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <label class="lblsBold" for="chkorc_ativoDetalhes">Ativo</label>
-                </td>
-                <td  id="tdchkorc_ativoDetalhes">
-                    <input type="checkbox" id="chkorc_ativoDetalhes" readonly style="margin-top:10px; margin-left: 7px !important; -webkit-appearance:default-button !important;">
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <label class="lblsBold">Valor Total</label>
-                </td>
-                <td>
-                    <input id="txtorc_valor_total" name="txtorc_valor_total"
-                           class="lblsNormal" Disabled readonly />
-                </td>
-            </tr>
-
-        </table>
-
-        <table id="tblOrcamentoDetalhes" style="padding: 15px;">
-            <thead>
-                <tr>
-                    <th colspan="8" class="borderBottom "></th>
-                    <th colspan="5" class="borderLeft borderBottom Centralizado">Indicado</th>
-                    <th colspan="5" class="borderLeft borderBottom borderRight Centralizado">Adotado</th>
-                    <th class="borderBottom"></th>
-                </tr>
-                <tr>
-                    <th>ian_ordem_apresentacao</th>
-                    <th>ore_id</th>
-                    <th>orc_id</th>
-                    <th>orc_cod_orcamento</th>
-                    <th>orc_descricao</th>
-                    <th>orc_versao</th>
-                    <th>ocs_id</th>
-                    <th>ocs_codigo</th>
-                    <th>ocs_descricao</th>
-                    <th>orc_data_validade</th>
-                    <th>orc_valor_total</th>
-                    <th>orc_id_pai</th>
-
-                    <th>OAE</th>
-                    <th>Elemento</th>
-                    <th>Núm</th>
-                    <th>Tipo</th>
-                    <th>Sigla</th>
-                    <th>Alerta</th>
-                    <th>Causa</th>
-                    <th>Qtde</th>
-
-                    <th>Reparo</th>
-                    <th>Qtde</th>
-                    <th>Unid</th>
-                    <th>Val Unit</th>
-                    <th>Val Total</th>
-
-                    <th>Reparo</th>
-                    <th>Qtde</th>
-                    <th>Unid</th>
-                    <th>Val Unit</th>
-                    <th>Val Total</th>
-                    <th>orc_objetos_associados</th>
-                    <th>pri_ids_associados</th>
-                    <th>orc_ativo</th>
-
-                    <th>Opções</th>
-                </tr>
-            </thead>
-        </table>
-        <br />
+        </thead>
+    </table>
+    <br />
+</div>
 
 
-
-    <link href="~/Content/Gerais.css" rel="stylesheet" />
-    <link href="~/Content/font-awesome.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
-    <script src="~/Content/plugins/sweetalert2.min.js"></script>
-
-    @section Scripts{
-        <script>
+@section Scripts{
+    <script>
                     var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
                     var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
                     var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
                     var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
-        </script>
+    </script>
 
-    }
-
-    <script src="~/Scripts/Base.js"></script>
-
-    <link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
-    <script src="~/Scripts/bootstrap-multiselect.js"></script>
-
-    <script src="~/Content/plugins/jquery.mask.min.js"></script>
-    <script src="~/Content/plugins/jquery.mask.js"></script>
-
-    <script src="~/Scripts/jquery-ui.js"></script>
-    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
-    <script src="~/Scripts/moment.min.js"></script>
-    <script src="~/Scripts/datetime-moment.js"></script>
+}
