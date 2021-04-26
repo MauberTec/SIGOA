@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace WebApp.Controllers
 {
     /// <summary>
-    /// Manual do Usuario
+    /// Ajuda do Usuario
     /// </summary>
     public class AjudaController : Controller
     {
