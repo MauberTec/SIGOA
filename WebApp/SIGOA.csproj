@@ -184,13 +184,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Business\ConservaBLL.cs" />
     <Compile Include="Business\InspecaoBLL.cs" />
     <Compile Include="Business\NotificacaoOcorrenciaBLL.cs" />
     <Compile Include="Business\OrcamentoBLL.cs" />
     <Compile Include="Business\ReparoBLL.cs" />
     <Compile Include="Business\AnomaliaBLL.cs" />
-    <Compile Include="Business\PrecoUnitarioBLL.cs" />
-    <Compile Include="Business\UnidadeBLL.cs" />
     <Compile Include="Business\LoginBLL.cs" />
     <Compile Include="Business\OrdemServicoBLL.cs" />
     <Compile Include="Business\ObjetoBLL.cs" />
@@ -204,20 +203,16 @@
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
     <Compile Include="Controllers\AjudaController.cs" />
+    <Compile Include="Controllers\ConservaController.cs" />
     <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
     <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
     <Compile Include="Controllers\OrcamentoController.cs" />
-    <Compile Include="Controllers\PoliticaConservaController.cs" />
-    <Compile Include="Controllers\PoliticaReparosController.cs" />
     <Compile Include="Controllers\ReparoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\AnomaliaController.cs" />
     <Compile Include="Controllers\OrdemServicoController.cs" />
-    <Compile Include="Controllers\Preco_UnitarioController.cs" />
-    <Compile Include="Controllers\ReparoTpuController.cs" />
-    <Compile Include="Controllers\UnidadeController.cs" />
     <Compile Include="Controllers\ObjetoController.cs" />
     <Compile Include="Controllers\LogSistemaController.cs" />
     <Compile Include="Controllers\NamespaceController.cs" />
@@ -228,18 +223,16 @@
     <Compile Include="Controllers\ModuloController.cs" />
     <Compile Include="Controllers\ParametroController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
-    <Compile Include="DAO\GrupoObjetosConserva.cs" />
+    <Compile Include="DAO\ConservaDAO.cs" />
     <Compile Include="DAO\InspecaoDAO.cs" />
+    <Compile Include="DAO\IntegracaoDAO.cs" />
     <Compile Include="DAO\NotificacaoOcorrenciaDAO.cs" />
     <Compile Include="DAO\OrcamentoDAO.cs" />
-    <Compile Include="DAO\PoliticaConservaDAO.cs" />
     <Compile Include="DAO\RelatoriosDAO.cs" />
     <Compile Include="DAO\ReparoDAO.cs" />
     <Compile Include="DAO\Conexao.cs" />
     <Compile Include="DAO\AnomaliaDAO.cs" />
-    <Compile Include="DAO\PrecoUnitarioDAO.cs" />
     <Compile Include="DAO\ReparoTpuDAO.cs" />
-    <Compile Include="DAO\UnidadeDAO.cs" />
     <Compile Include="DAO\OrdemServicoDAO.cs" />
     <Compile Include="DAO\ObjetoDAO.cs" />
     <Compile Include="DAO\LogSistemaDAO.cs" />
@@ -256,6 +249,7 @@
     <Compile Include="Helpers\Gerais.cs" />
     <Compile Include="Helpers\LogErro.cs" />
     <Compile Include="Helpers\NamespaceHelpers.cs" />
+    <Compile Include="Models\Conserva.cs" />
     <Compile Include="Models\ConservaDTO.cs" />
     <Compile Include="Models\ConservaModel.cs" />
     <Compile Include="Models\ConservaPoliticaModel.cs" />
@@ -263,17 +257,14 @@
     <Compile Include="Models\Inspecao.cs" />
     <Compile Include="Models\NotificaoOcorrencia.cs" />
     <Compile Include="Models\Orcamento.cs" />
-    <Compile Include="Models\PoliticaConserva.cs" />
     <Compile Include="Models\PoliticaReparoModel.cs" />
     <Compile Include="Models\Reparo.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\Anomalia.cs" />
-    <Compile Include="Models\PrecoUnitario.cs" />
     <Compile Include="Models\ReparoTipoModel.cs" />
     <Compile Include="Models\ReparoTpuModel.cs" />
     <Compile Include="Models\TpuDtoModel.cs" />
     <Compile Include="Models\TpuFontesModel.cs" />
-    <Compile Include="Models\Unidades.cs" />
     <Compile Include="Models\OrdemServico.cs" />
     <Compile Include="Models\Objeto.cs" />
     <Compile Include="Models\LogSistema.cs" />
@@ -297,13 +288,6 @@
       <DependentUpon>frmReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
-    <Compile Include="Views\Ajuda\WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Ajuda\WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AdminLTE.min.css" />
@@ -539,6 +523,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Manuais\MANUAL DE ANALISE.pdf" />
+    <Content Include="Manuais\MANUAL DE CADASTRO.pdf" />
+    <Content Include="Manuais\MANUAL DE CONSERVA.pdf" />
+    <Content Include="Manuais\MANUAL DE INSPECAO.pdf" />
+    <Content Include="Manuais\MANUAL DE REPAROS.pdf" />
+    <Content Include="Manuais\Manual_do_Usuario A2.pdf" />
     <None Include="Properties\PublishProfiles\SIGOA.pubxml" />
     <Content Include="Content\js\jquery-3.4.1.slim.js" />
     <Content Include="Content\js\jquery-3.4.1.slim.min.js" />
@@ -552,6 +542,8 @@
     <Content Include="Scripts\bootstrap-multiselect.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Conserva\ConservaTipo.js" />
+    <Content Include="Scripts\Conserva\PoliticaConserva.js" />
     <Content Include="Scripts\datetime-moment.js" />
     <Content Include="Scripts\Documento\DocClasse.js" />
     <Content Include="Scripts\Documento\Documento.js" />
@@ -569,12 +561,10 @@
     <Content Include="Scripts\OrdemServico\OrdemServico.js" />
     <Content Include="Scripts\OrdemServico\OSTipo.js" />
     <Content Include="Scripts\Inspecao\InspecaoTipo.js" />
-    <Content Include="Scripts\Politica\ConservaTipo.js" />
-    <Content Include="Scripts\Politica\Politica.js" />
-    <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
-    <Content Include="Scripts\ReparoTpu\tpu.js" />
     <Content Include="Scripts\Reparo\PoliticaReparos.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
+    <Content Include="Scripts\Reparo\ReparoTpu.js" />
+    <Content Include="Scripts\report.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira_Providencias.js" />
@@ -584,7 +574,6 @@
     <Content Include="Scripts\Shared\_fichaNotificacaoOcorrencia.js" />
     <Content Include="Scripts\Shared\_fichasInspecao.js" />
     <Content Include="Scripts\Shared\_SelecionarDocumento.js" />
-    <Content Include="Scripts\Unidade\Unidade.js" />
     <Content Include="Scripts\Grupo\Grupo.js" />
     <Content Include="Scripts\images\ui-icons_444444_256x240.png" />
     <Content Include="Scripts\images\ui-icons_555555_256x240.png" />
@@ -729,8 +718,6 @@
     <Content Include="imagens\anomalias\statusLista.png" />
     <Content Include="imagens\anomalias\tipos.png" />
     <Content Include="imagens\anomalias\tiposLista.png" />
-    <Content Include="Views\Ajuda\WebForm1.aspx" />
-    <Content Include="Views\PoliticaReparos\multiselect.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -768,8 +755,6 @@
     <Content Include="Views\Objeto\ObjAtributo.cshtml" />
     <Content Include="Views\Objeto\ObjClasse.cshtml" />
     <Content Include="Views\Objeto\Objeto.cshtml" />
-    <Content Include="Views\Unidade\Unidade.cshtml" />
-    <Content Include="Views\PrecoUnitario\PrecoUnitario.cshtml" />
     <Content Include="Views\OrdemServico\OSTipo.cshtml" />
     <Content Include="Views\OrdemServico\OSStatus.cshtml" />
     <Content Include="Views\OrdemServico\OSFluxoStatus.cshtml" />
@@ -799,11 +784,7 @@
     <Content Include="Views\Shared\_ObjPriorizacao.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecialProvidencias.cshtml" />
     <Content Include="Views\Shared\_fichaNotificacaoOcorrencia.cshtml" />
-    <Content Include="Views\PoliticaReparos\Index.cshtml" />
-    <Content Include="Views\PoliticaConserva\ConservaTipo.cshtml" />
     <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
-    <Content Include="Views\PoliticaConserva\PoliticaConserva.cshtml" />
-    <Content Include="Views\ReparoTpu\Index.cshtml" />
     <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
     <Content Include="Views\Relatorio\Relatorio.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoRotineiraProvidencias.cshtml" />
@@ -811,6 +792,11 @@
     <Content Include="Views\Ajuda\Reparos.cshtml" />
     <Content Include="Views\Ajuda\Conservas.cshtml" />
     <Content Include="Views\Ajuda\Documentos.cshtml" />
+    <Content Include="Views\Conserva\ConservaTipo.cshtml" />
+    <Content Include="Views\Conserva\PoliticaConserva.cshtml" />
+    <Content Include="Views\Reparo\PoliticaReparos.cshtml" />
+    <Content Include="Views\Reparo\ReparoTpu.cshtml" />
+    <Content Include="Views\Ajuda\teste.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

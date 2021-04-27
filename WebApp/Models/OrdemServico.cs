@@ -339,6 +339,10 @@ namespace WebApp.Models
         public string ord_indicacao_servico { get; set; }
 
 
+        /// <summary>
+        /// Id do Orçamento, caso seja O.S. de Orçamento
+        /// </summary>
+        public int orc_id { get; set; }
 
     }
 
