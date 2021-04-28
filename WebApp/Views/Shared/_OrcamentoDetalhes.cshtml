@@ -99,12 +99,10 @@
     .altura50 {
         height: 50px;
     }
-
-
 </style>
 
 <br />
-<div style="margin:15px">
+<div style="margin:15px" id="divOrcamentoDetalhes">
     <table id="tblOrcamento_Dados" style="width:90%">
         <tr>
             <td style="width:150px">
@@ -148,7 +146,7 @@
             </td>
             <td>
                 <select class="form-control" id="cmbStatusOrcamentoDetalhes" name="cmbStatusOrcamentoDetalhes"
-                     disabled   onchange="cmbStatusOrcamento_onchange()"></select>
+                        disabled onchange="cmbStatusOrcamento_onchange()"></select>
             </td>
         </tr>
 
@@ -162,6 +160,7 @@
                         <td style="width:100%">
                             <input id="txtobj_ids_Detalhes" name="txtobj_ids_Detalhes" style="display:none" />
                             <input id="txtorc_id_Detalhes" name="txtorc_id_Detalhes" style="display:none" />
+                            <input id="txtpri_ids_associados" name="txtpri_ids_associados" style="display:none" />
 
                             <input id="txtobj_codigoDetalhes" name="txtobj_codigoDetalhes"
                                    class="lblsNormal" style="width:100%"
@@ -207,11 +206,10 @@
                         <option value="12">Dezembro</option>
                     </select>
                     /
-                    <select id="cmbAno" disabled  onchange="$('#cmbAno').css('background-color', corBranca)">
-                    </select>
+                    <select id="cmbAno" disabled onchange="$('#cmbAno').css('background-color', corBranca)"></select>
                     &nbsp
 
-                    <select id="cmbDesonerado" disabled  onchange="$('#cmbDesonerado').css('background-color', corBranca)">
+                    <select id="cmbDesonerado" disabled onchange="$('#cmbDesonerado').css('background-color', corBranca)">
                         <option value="D">Desonerado</option>
                         <option value="O">Não Desonerado</option>
                     </select>
@@ -224,7 +222,7 @@
         </tr>
 
         <tr>
-            <td>
+            <td style="padding-top: 7px !important;">
                 <label class="lblsBold" for="chkorc_ativoDetalhes">Ativo</label>
             </td>
             <td id="tdchkorc_ativoDetalhes">
@@ -234,10 +232,14 @@
 
         <tr>
             <td>
-                <label class="lblsBold">Valor Total</label>
+                <h4>
+                     <input class="lblsBold" style="border:none !important;" Disabled readonly value="Valor Total" />
+                </h4>
             </td>
             <td>
-                <input id="txtorc_valor_total" name="txtorc_valor_total" class="lblsNormal" Disabled readonly />
+                <h4>
+                    <input id="txtorc_valor_total" name="txtorc_valor_total"  style="border:none !important;" class="lblsBold" Disabled readonly />
+                </h4>
             </td>
         </tr>
 
@@ -249,6 +251,10 @@
             <tr>
                 <td colspan="10">
                     <h4 style="display:inline-table; font-weight:bold; margin-left: -15px;">Serviços Adicionais</h4>
+                    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+                        <input id="txtServicosAdicionais_valor_total" name="txtServicosAdicionais_valor_total"  style="border:none !important;" Disabled readonly />
+                    </h4>
+
                     <button id="btnServicosAdicionais"
                             title="Inserir Serviços Adicionais"
                             onclick="return btnServicosAdicionais_onclick(this)"
@@ -268,7 +274,7 @@
                 <th>Fase</th>
                 <th>Preço Unitário</th>
                 <th>Valor Total</th>
-                <th>Opções</th>
+                <th></th>
             </tr>
         </thead>
     </table>
@@ -279,7 +285,10 @@
             <tr>
                 <td colspan="19">
                     <h4 style="display:inline-table; font-weight:bold; margin-left: -15px;">Reparos</h4>
-                 </td>
+                    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+                        <input id="txtReparos_valor_total" name="txtReparos_valor_total"  style="border:none !important;" Disabled readonly />
+                    </h4>
+                </td>
             </tr>
             <tr>
                 <th colspan="8" class="borderBottom "></th>
@@ -346,3 +355,14 @@
     </script>
 
 }
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+
+<script>
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+    $('#txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+
+</script>

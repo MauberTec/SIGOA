@@ -23,6 +23,37 @@
 }
 
 <style>
+    .Centralizado {
+        text-align: center;
+    }
+
+    #divOrcamentoDetalhes input:disabled,
+    #divOrcamentoDetalhes textarea:disabled,
+    #divOrcamentoDetalhes select:disabled {
+        background:none !important;
+        background-color: white;
+        border: none !important;
+        margin: 3px !important;
+        box-shadow: none !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-indent: 1px;
+        text-overflow: '';
+    }
+
+    #divOrcamentoDetalhes input:enabled,
+    #divOrcamentoDetalhes textarea:enabled,
+    #divOrcamentoDetalhes select:enabled {
+        background-color: white;
+        border: solid 1px lightgray;
+        margin: 3px !important;
+        -webkit-appearance: default-button;
+        -moz-appearance: button-arrow-down;
+        text-indent: 1px;
+        text-overflow: '';
+    }
+
+
     .rotate-135-left {
         -o-transform: rotate(-135deg);
         -webkit-transform: rotate(-135deg);
@@ -43,7 +74,6 @@
     input[type="text"]:disabled, .form-control[disabled] {
         background: #eee !important;
     }
-
 </style>
 <h2></h2>
 <script>
@@ -56,6 +86,11 @@
 
 <link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
 <script src="~/Scripts/bootstrap-multiselect.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+
 
 
 <div style="width:100%;" id="divFiltros">
@@ -151,6 +186,7 @@
                             <th>Status</th>
                             <th>nNivel</th>
                             <th>Opções</th>
+                            <th>orc_id</th>
                         </tr>
                     </thead>
                 </table>
@@ -215,29 +251,35 @@
         $('#partialFicha8').empty();
 
         qualFicha = qualFicha1;
+        if (qualFicha == 11) {    // Orcamento
+            carregaGridOrcamentoDetalhes(selectedId_orc_id, 11);
+        }
+        else {
+            $.ajax({
+                type: 'GET',
+                "data": { qualFicha: qualFicha },
+                url: '@Url.Action("CarregaFicha", "OrdemServico")',
+                success: function (result) {
+                    document.getElementById('partialFicha' + qualFicha).innerHTML = result;
 
-        $.ajax({
-            type: 'GET',
-            "data": { qualFicha: qualFicha },
-            url: '@Url.Action("CarregaFicha", "OrdemServico")',
-            success: function (result) {
-                document.getElementById('partialFicha' + qualFicha).innerHTML = result;
+                    switch (qualFicha) {
+                        case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
+                        case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
+                        case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
+                        case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
+                        case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
+                        case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
+                        case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
+                        case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos(); break; // inspecao ROTINEIRA - Providencias
+                    }
 
-                switch (qualFicha) {
-                    case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
-                    case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
-                    case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
-                    case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
-                    case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
-                    case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
-                    case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
-                    case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos() ; break; // inspecao ROTINEIRA - Providencias
+                    colocaDatePickers();
+
                 }
+            });
 
-                colocaDatePickers();
+        }
 
-            }
-        });
     }
 
 
@@ -272,6 +314,9 @@
 
 @***** SCRIPT FICHA 6 - NOTIFICACAO OCORRENCIA ***********************@
 <script src="~/Scripts/Shared/_fichaNotificacaoOcorrencia.js"></script>
+
+@***** SCRIPT FICHA 11 - ORCAMENTO ***********************@
+
 
 
 @***** INICIO DAS ABAS ***********************@
@@ -312,18 +357,22 @@
                         <a id="tabFichaInspecaoEspecialAnomaliasProvidenciasheader" data-toggle="tab" href="#tabFichaInspecaoEspecialAnomaliasProvidencias" onclick="abreFicha(7);">Providências</a>
                     </li>
 
+                    <li style="display:none" id="liFichaOrcamento">
+                        <a id="tabFichaOrcamentoheader" data-toggle="tab" href="#tabFichaOrcamento" onclick="abreFicha(11);">Orçamento</a>
+                    </li>
+
                     <li style="display:none" id="liFichaNotificacaoOcorrencia">
                         <a id="tabFichaNotificacaoOcorrenciaheader" data-toggle="tab" href="#tabFichaNotificacaoOcorrencia" onclick="abreFicha(6);">Ficha de Notificação de Ocorrência</a>
                     </li>
 
-                    <li>
+                    <li id="liDocumentosAssociadosOBJ">
                         <a id="tabDocumentosAssociadosOBJHeader" data-toggle="tab" href="#tabDocumentosAssociadosOBJ" onclick="$('#tblDocumentosAssociadosOBJ').DataTable().ajax.reload();">Documentos Associados ao Objeto</a>
                     </li>
-                    <li>
+                    <li id="liDocumentosAssociadosOS">
                         <a id="tabDocumentosAssociadosOSHeader" data-toggle="tab" href="#tabDocumentosAssociadosOS" onclick="$('#tblDocumentosAssociados').DataTable().ajax.reload();">Documentos Associados à Ordem de Serviço</a>
                     </li>
 
-                    <li  style="display:none" id="liIndicacaoServicos">
+                    <li style="display:none" id="liIndicacaoServicos">
                         <a id="tabIndicacaoServicosHeader" data-toggle="tab" href="#tabIndicacaoServicos" onclick="OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id);">Indicação de Serviços</a>
                     </li>
                 </ul>
@@ -537,7 +586,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Abertura</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_abertura" name="txtord_data_abertura" placeholder="Data Abertura" maxlength="20"
-                                                   class="form-control fundoBranco" readonly />
+                                                   class="form-control" readonly disabled />
                                         </div>
                                     </div>
 
@@ -776,6 +825,28 @@
                             @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="tabFichaOrcamento" role="tabpanel" aria-labelledby="tabFichaOrcamento">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaOrcamento&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Exportar para XLS</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Orçamento</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                        <div id="partialFicha10">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                            @Html.Partial("~/Views/Shared/_OrcamentoDetalhes.cshtml")
+                        </div>
+                    </div>
+
 
                     <div class="tab-pane fade" id="tabFichaNotificacaoOcorrencia" role="tabpanel" aria-labelledby="tabFichaNotificacaoOcorrencia">
                         <br /><br />
@@ -1151,12 +1222,12 @@
 
 
 
-<script src="~/Scripts/jquery-ui.js"></script>
+@*<script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/moment.min.js"></script>
-<script src="~/Scripts/datetime-moment.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>*@
+
 <script src="~/Scripts/OrdemServico/OrdemServico.js"></script>
-@*<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>*@
 
 <script>
 
@@ -1175,7 +1246,6 @@
             $('#txtord_data_planejada_Novo').css('background-color', corBranca);
         }
     });
-
 
     $('#txtord_data_inicio_programada').datepicker({ dateFormat: 'dd/mm/yy' });
     $('#txtord_data_inicio_execucao').datepicker({ dateFormat: 'dd/mm/yy' });

@@ -5,6 +5,8 @@ var selectedId_tos_id = 0;
 var selectedId_sos_id = 0;
 var selected_obj_codigo = '';
 
+var selectedId_orc_id = 0;
+
 var filtroOrdemServico_codigo = '';
 var filtroObj_codigo = '';
 var filtroTiposOS = -1;
@@ -12,6 +14,9 @@ var filtroStatusOS = -1;
 var filtroord_data_De = '';
 var filtroord_data_Ate = '';
 var ehEdicao = false;
+
+var totalParcial_Reparos = 0;
+var totalParcial_ServicosAdicionados = 0;
 
 // *********** modal Nova O.S. ******************************************
 function OrdemServico_LimparDetalhes_Novo()
@@ -279,6 +284,9 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
     var liIndicacaoServicos = document.getElementById("liIndicacaoServicos");
 
+    var liFichaOrcamento = document.getElementById("liFichaOrcamento");
+    var liDocumentosAssociadosOBJ = document.getElementById("liDocumentosAssociadosOBJ");
+    var liDocumentosAssociadosOS = document.getElementById("liDocumentosAssociadosOS");
 
 
     //if (liDetalhesOS)
@@ -310,6 +318,10 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
     if (liIndicacaoServicos)
         liIndicacaoServicos.style.display = "none";
+
+    if (liFichaOrcamento)
+        liFichaOrcamento.style.display = "none";
+
 
     switch (parseInt(selectedId_tos_id)) {
         case 7:
@@ -345,6 +357,16 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
             liFichaInspecaoEspecialAnomaliasProvidencias.style.display = "unset";
             if (bool_posicionar)
                 $('[href="#tabFichaInspecaoEspecialProvidencias"]').tab('show');
+
+            break;
+
+        case 11: // orcamento
+            liFichaOrcamento.style.display = "unset";
+            if (liDocumentosAssociadosOBJ)
+                liDocumentosAssociadosOBJ.style.display = "none";
+
+            if (liDocumentosAssociadosOS)
+                liDocumentosAssociadosOS.style.display = "none";
 
             break;
 
@@ -445,7 +467,7 @@ function OrdemServico_setaReadWrite(ehRead) {
     var lstTextareas = tabela.getElementsByTagName('textarea');
     var lstButtons = tabela.getElementsByTagName('button');
 
-    var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos", "txtord_criticidade", "txtord_data_atualizacao_status"];
+    var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos", "txtord_criticidade", "txtord_data_atualizacao_status", "txtord_data_abertura"];
     if (ehEdicao)
         controlesReadOnly.push("cmbTiposOS");
 
@@ -966,6 +988,450 @@ function ExecutarFiltro() {
 
 }
 
+// ********* ORCAMENTO ******************************************
+
+function preenchecmbAno(quem) {
+    var anoAtual = new Date().getFullYear();
+    var cmbAno = quem.get(0);
+ 
+    // se ja tem nao precisa preencher novamente
+    if (cmbAno.options.length > 1)
+        return false;
+
+    var idx = 0;
+    for (var i = 2040; i >= 2001; i--) {
+        var opt = document.createElement("option");
+        opt.value = i;
+        opt.text = i;
+        cmbAno.add(opt);
+
+        if (i == anoAtual)
+            cmbAno.selectedIndex = idx + 1;
+
+        idx = idx + 1;
+    }
+
+}
+
+
+function calculaTotal(orc_id)
+{
+    $.ajax({
+        url: "/Orcamento/Orcamento_Total",
+        data: JSON.stringify({ "orc_id": orc_id }),
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            var total = parseFloat(result.data);
+            $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(total));
+            $("#txtorc_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(total)));
+
+            return false;
+        },
+        error: function (errormessage) {
+            swal({
+                type: 'error',
+                title: 'Aviso',
+                text: errormessage.responseText
+            }).then(
+                function () {
+                    return false;
+                });
+            return false;
+        }
+    });
+
+}
+
+function carregaGridOrcamentoDetalhes(orc_id, tos_id)
+{
+    totalParcial_Reparos = 0;
+
+    orc_valor_total = 0;
+
+    // limpa os campos antes de preencher
+    $("#txtorc_codigo_Detalhes").val("");
+    $("#txtorc_versaoDetalhes").val("");
+    $("#txtorc_descricao_Detalhes").val("");
+    $("#txtobj_codigoDetalhes").val("");
+    $("#txtorc_data_Validade_Detalhes").val("");
+    $("#txtorc_valor_total").val("");
+    $('#cmbStatusOrcamentoDetalhes').val("");
+
+    // CARREGA OS DADOS DO GRID MAIS DA TABELA HEADER COM OS DADOS DA 1A LINHA
+    if ($.fn.dataTable.isDataTable("#tblOrcamentoDetalhes")) {
+        $("#tblOrcamentoDetalhes").DataTable().destroy();
+    }
+
+    $("#tblOrcamentoDetalhes").DataTable({
+        "ajax": {
+            "url": "/Orcamento/OrcamentoDetalhes_ListAll",
+            "type": "GET",
+            "datatype": "json",
+            "data": function (d) {
+                d.orc_id = orc_id;
+                d.ore_ativo = 1;
+            }
+        }
+        , "columns": [
+            { data: "ian_ordem_apresentacao", "className": "hide_column" },
+            { data: "ore_id", "className": "hide_column" },
+            { data: "orc_id", "className": "hide_column" },
+            { data: "orc_cod_orcamento", "className": "hide_column" },
+            { data: "orc_descricao", "className": "hide_column" },
+            { data: "orc_versao", "className": "hide_column" },
+            { data: "ocs_id", "className": "hide_column" },
+            { data: "ocs_codigo", "className": "hide_column" },
+            { data: "ocs_descricao", "className": "hide_column" },
+            { data: "orc_data_validade", "className": "hide_column" },
+            { data: "orc_valor_total", "className": "hide_column" },
+
+            { data: "orc_id_pai", "className": "hide_column" },
+            { data: "obj_codigoOAE", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "obj_codigoElemento", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "atp_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "leg_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ale_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "aca_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rpt_id_sugerido_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+
+            { data: "ian_quantidade_sugerida", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rpt_id_sugerido_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rtu_preco_unitario_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rtu_valor_total_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rpt_id_adotado_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_quantidade_adotada", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rpt_id_adotado_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rtu_preco_unitario_adotado", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rtu_valor_total_adotado", "className": "Centralizado borderRight", "autoWidth": true, "searchable": false },
+            { data: "orc_objetos_associados", "className": "hide_column" },
+
+            { data: "pri_ids_associados", "className": "hide_column" },
+            { data: "orc_ativo", "className": "hide_column" },
+            { data: "orc_obj_ids_associados", "className": "hide_column" },
+            {
+                data: "ore_id", "searchable": false, "className": "Centralizado", "sortable": false,
+                title: tos_id != 11 ? "Reparado?" : "",
+                "render": function (data, type, row) {
+                    var retorno = "";
+                    if (tos_id != 11) {
+                        if (permissaoEscrita > 0) {
+                            //  if (permissaoEscrita > 0) {
+                            if (row.ore_ativo == 1)
+                                retorno = '<a href="#" onclick="return OrcamentoDetalhes_AtivarDesativar(' + orc_id + ',' + data + ', 0)" title="Ativo" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
+                            else
+                                retorno = '<a href="#" onclick="return OrcamentoDetalhes_AtivarDesativar(' + orc_id + ',' + data + ', 1)" title="Desativado" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
+                        }
+                        else
+                            retorno = '<span class="glyphicon glyphicon-ok text-success desabilitado" ></span>' + '  ';
+                    }
+
+                    return retorno;
+                }
+            },
+            { data: "orc_data_base", "className": "hide_column" },
+            { data: "tpt_id", "className": "hide_column" },
+            { data: "tpt_descricao", "className": "hide_column" },
+            { data: "lstStatusOrcamento", "className": "hide_column" }
+        ]
+             , "createdRow": function (row, data, dataIndex) {
+
+                 if ((data["obj_codigoOAE"] != "") && (dataIndex > 1)) {
+                     for (var i = 12; i <= 37; i++)
+                         $(row.childNodes[i]).addClass("borderTop");
+                 }
+
+                 // TABELA HEADER COM OS DADOS DA 1A LINHA
+                 if ((data["obj_codigoOAE"] != "") && (dataIndex == 0)) {
+                     $("#txtorc_codigo_Detalhes").val((row.childNodes[3].innerText));
+                     $("#txtorc_versaoDetalhes").val((row.childNodes[5].innerText.trim()));
+                     $("#txtorc_descricao_Detalhes").val((row.childNodes[4].innerText));
+                     $("#txtobj_codigoDetalhes").val((row.childNodes[30].innerText));
+                     $("#txtobj_ids_Detalhes").val((row.childNodes[33].innerText));
+                     $("#txtorc_id_Detalhes").val((row.childNodes[2].innerText));
+                     $("#txtorc_data_Validade_Detalhes").val((row.childNodes[9].innerText));
+                     $('#chkorc_ativoDetalhes').prop('checked', (row.childNodes[32].innerText == '1' ? true : false));
+
+                     $("#txtpri_ids_associados").val(row.childNodes[31].innerText);
+
+                     $('#lblDataBase').text(row.childNodes[35].innerText);
+                     //$('#lblDesonerado').text(row.childNodes[37].innerText); // "D" ou "O"
+
+                     var quem = $("#cmbAno");
+                     preenchecmbAno(quem);
+
+                     var auxd = row.childNodes[35].innerText.split('/'); // 30/06/2020
+                     $('#cmbMes').val(auxd[1]);
+                     $('#cmbAno').val(auxd[2]);
+                     $('#cmbDesonerado').val(row.childNodes[36].innerText); // "D" ou "O"
+
+                     // preenche o combo de Status
+                     var cmbStatusOrcamentoDetalhes = $("#cmbStatusOrcamentoDetalhes")[0]; //document.getElementById("cmbStatusOrcamentoDetalhes");
+                     if (cmbStatusOrcamentoDetalhes) {
+                         $("#cmbStatusOrcamentoDetalhes").html(""); // limpa os itens existentes
+
+                         var lst_proximos_status = row.childNodes[38].innerText.split(";");
+                         for (var j = 0; j < lst_proximos_status.length; j++) {
+                             var pedacos = lst_proximos_status[j].split(":");
+                             $("#cmbStatusOrcamentoDetalhes").append($('<option></option>').val(parseInt(pedacos[0])).html(pedacos[1]));
+                         }
+
+                         $('#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
+                     }
+
+
+                 }
+
+                 var valorSugerido = parseFloat(data["rtu_valor_total_sugerido"]);
+                 var valorAdotado = parseFloat(data["rtu_valor_total_adotado"]);
+
+                 if (data["ore_ativo"] == 1)
+                     totalParcial_Reparos = totalParcial_Reparos + parseFloat(valorAdotado > 0 ? valorAdotado : valorSugerido);
+
+                 $("#txtReparos_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos));
+                 $("#txtReparos_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos)));
+
+                 //var Reparos_vtotal = parseFloat($("#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+                 var ServicosAdicionais_vtotal = parseFloat($("#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+                 $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos + ServicosAdicionais_vtotal));
+            }
+
+        , "order": [2, "asc"]
+        , "ordering": false
+        , 'columnDefs': [
+            {
+                targets: [12] // tooltip obj_codigoOAE
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["obj_descricaoOAE"]);
+
+                }
+            }
+            , {
+                targets: [13] // tooltip obj_codigoElemento
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["obj_descricaoElemento"]);
+                }
+            }
+            , {
+                targets: [15] // tooltip atp_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["atp_descricao"]);
+                }
+            }
+            , {
+                targets: [16] // tooltip ian_sigla = leg_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["leg_descricao"]);
+                }
+            }
+            , {
+                targets: [17] // tooltip ale_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["ale_descricao"]);
+                }
+            }
+            , {
+                targets: [18] // tooltip aca_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["aca_descricao"]);
+                }
+            }
+            , {
+                targets: [20] // tooltip rpt_id_sugerido_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["rpt_id_sugerido_descricao"]);
+                }
+            }
+            , {
+                targets: [21] // quantidade sugerida
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR').format(data);
+                }
+            }
+            , {
+                targets: [23] // valor unitario sugerido
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+                }
+            }
+            , {
+                targets: [24] // valor total sugerido
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+                }
+            }
+            , {
+                targets: [25] // tooltip rpt_id_adotado_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
+                }
+            }
+            , {
+                targets: [26] // quantidade adotada
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR').format(data);
+                }
+            }
+            , {
+                targets: [28] // valor unitario adotado
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+                }
+            }
+            , {
+                targets: [29] // valor total adotado
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+                }
+            }
+
+        ]
+        , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+        , select: { style: 'single' }
+        , searching: false
+        , "oLanguage": idioma
+        , "pagingType": "input"
+        , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+    });
+
+    var  ehRead = true;
+    orc_servicos_valor_total = 0;
+
+    if ($.fn.dataTable.isDataTable('#tblServicosAdicionados')) {
+        $('#tblServicosAdicionados').DataTable().destroy();
+    }
+
+    totalParcial_ServicosAdicionados = 0;
+    var param = { "orc_id": orc_id, "obj_id": 0 };
+    $('#tblServicosAdicionados').DataTable({
+        "ajax": {
+            "url": "/Orcamento/Orcamento_Servicos_Adicionados_ListAll",
+            "type": "GET",
+            "datatype": "json",
+            "data": param
+            //"data": function (d) {
+            //    d.orc_id = orc_id;
+            //    d.obj_id = 0;
+            //}
+        }
+        , "columns": [
+            { data: "ose_id", "className": "hide_column" },
+            { data: "obj_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ose_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "UnidMed", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "CodSubItem", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "NomeSubItem", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "DataTpu", "className": "hide_column" },
+            { data: "ose_fase", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "PrecoUnit", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ValorTotal", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            {
+                data: "ose_id",
+                "className": "Centralizado",
+                "title":  tos_id != 11 ? "Reparado?" : "",
+                "searchable": false,
+                "sortable": false,
+                "render": function (data, type, row) {
+                    var retorno = "";
+                    if (tos_id != 11) {
+                        if ((permissaoExclusao > 0) && (!ehRead))
+                            retorno += '<a href="#" onclick="return ServicosAdicionados_Deletar(' + aba + ',' + orc_id + ',' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
+                        else
+                            retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
+                    }
+                    return retorno;
+                }
+            }
+        ]
+        , 'columnDefs': [
+            {
+                'targets': [2],
+                'searchable': false,
+                'orderable': false,
+                'className': 'dt-body-center',
+                'render': function (data, type, row) {
+                    if (!isNaN(data)) {
+                        var idd = 'txtQt_' + row.ose_id; // (row[0]);
+                        var qtde = Intl.NumberFormat('pt-BR').format(data);
+                        return '<input type="text" name=' + idd + ' id=' + idd + ' disabled title="' + qtde + '" style="text-align:center; width:100px" onfocus="txtQt_onfocus(this)" onkeyup="txtQt_onkeyup(this)"   value="' + qtde + '" >';
+                    }
+                    else
+                        return 0;
+
+                }
+            }
+
+            , {
+                targets: [8] // PrecoUnit
+                , "render": function (data, type, row) {
+                    if (!isNaN(data)) {
+                        var dado = parseFloat(data);
+                        return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(dado);
+                    }
+                    else
+                        return 0;
+
+                }
+            }
+            , {
+                targets: [9] // ValorTotal
+                , "render": function (data, type, row) {
+                    if (!isNaN(data)) {
+                        var dado = parseFloat(data);
+                        return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(dado);
+                    }
+                    else
+                        return 0;
+                }
+            }
+
+        ]
+        , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+        , select: { style: 'single' }
+        , searching: false
+        , "ordering": false
+        , "oLanguage": idioma
+        , "pagingType": "input"
+        , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+
+        , "createdRow": function (row, data, dataIndex) {
+            if (parseInt(data.DataTpu) == -1) {
+                swal({
+                    type: 'error',
+                    title: 'Erro',
+                    text: data.CodSubItem
+                }).then(
+                    function () {
+                        return false;
+                    });
+            }
+
+            if ((data["obj_codigoOAE"] != "") && (dataIndex == 0)) {
+                $("#lblDataBase").text((row.childNodes[6].innerText));
+            }
+
+            totalParcial_ServicosAdicionados = totalParcial_ServicosAdicionados + parseFloat(data["ValorTotal"]);
+            $("#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados));
+            $("#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados)));
+
+            var Reparos_vtotal = parseFloat($("#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+            var ServicosAdicionais_vtotal = parseFloat($("#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+            $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_vtotal + ServicosAdicionais_vtotal));
+
+        }
+    });
+
+
+    calculaTotal(orc_id);
+
+    return false;
+}
+
+
+
 
 
 // ********* ABA INDICACAO DE SERVICOS ******************************************
@@ -1297,7 +1763,6 @@ function carregaGridOS(selectedId_ord_id) {
                 "sortable": false,
                 "render": function (data, type, row) {
                     var retorno = "";
-
                     //if (permissaoInsercao > 0) {
                     //        var objcod = "'" + row["ord_codigo"] + "'";
                     //        retorno = '<a href="#" onclick="return Inserir(' + data + ',' + row["ocl_id"] + ',' + row["tos_id"] + ',' + objcod + ')" title="Nova O.S. Filha" ><span class="glyphicon glyphicon-plus"></span></a>' + '  ';
@@ -1337,7 +1802,8 @@ function carregaGridOS(selectedId_ord_id) {
                     return retorno;
                 }
             }
-        ]
+            ,{ data: "orc_id", "className": "hide_column" }
+       ]
         , "columnDefs": [
             {
                 targets: [10] // coloca tooltip no campo tos_codigo
@@ -1405,6 +1871,8 @@ $(document).ready(function () {
         selectedId_tos_id = parseInt(tblOrdemServicos.row(this).selector.rows.children[5].innerText);
         selectedId_sos_id = parseInt(tblOrdemServicos.row(this).selector.rows.children[4].innerText);
 
+        selectedId_orc_id = parseInt(tblOrdemServicos.row(this).selector.rows.children[14].innerText);
+
         var ord_descricao = tblOrdemServicos.row(this).selector.rows.children[8].innerText;
         var ord_codigo = tblOrdemServicos.row(this).selector.rows.children[7].innerText;
         selectedord_descricao = ord_descricao;
@@ -1427,7 +1895,6 @@ $(document).ready(function () {
         // deseleciona a linha
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
-
             //if (temFilhos == 0) {
             //    ord_codigo = "";
             //    selectedId_ord_id = 0;
@@ -1502,6 +1969,8 @@ $(document).ready(function () {
     });
 
 });
+
+
 
 
 

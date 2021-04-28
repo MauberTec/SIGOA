@@ -34,6 +34,7 @@
         padding-left: 0 !important;
         vertical-align: middle;
     }
+
     .codigoHeader {
         color: red !important;
         font-weight: bold;
@@ -1135,6 +1136,9 @@
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="~/Content/plugins/sweetalert2.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+
 
 @section Scripts{
     <script>
@@ -1153,16 +1157,16 @@
 <script src="~/Content/plugins/jquery.mask.min.js"></script>
 <script src="~/Content/plugins/jquery.mask.js"></script>
 
-<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
-<script src="~/Scripts/moment.min.js"></script>
-<script src="~/Scripts/datetime-moment.js"></script>
+
 
 <script>
-    var selectedId_orc_id = -1;
+    //var selectedId_orc_id = -1;
     var filtroRodovia = '';
     var filtroObjetos = '';
     var filtroStatus = -1;
+
+    var totalParcial_Reparos = 0;
+    var totalParcial_ServicosAdicionados = 0;
 
     var ehNovoOrcamento_orc_id = -1;
 
@@ -1272,7 +1276,7 @@
     function btnLimparSelecao_onclick() {
         // limpa os arrays
         orc_ids_selecionados = [];
-        selectedId_orc_id = -1;
+        //selectedId_orc_id = -1;
 
         $("#lblSelecionados").html("");
 
@@ -1310,18 +1314,15 @@
 
         var corBranca = "rgb(255, 255, 255)";
         ////$('#txtorc_codigo_Novo').css("background-color", corBranca);
-        $('#txtorc_versao').css("background-color", corBranca);
-        $('#txtorc_descricao_Novo').css("background-color", corBranca);
-        $('#txtobj_codigo_Novo').css("background-color", corBranca);
-        $('#txtorc_data_Validade_Novo').css("background-color", corBranca);
-        $('#cmbStatusOrcamento').css("background-color", corBranca);
-        $('#cmbAno').css('background-color', corBranca);
-        $('#cmbMes').css('background-color', corBranca);
-        $('#cmbOnerado').css('background-color', corBranca);
+        $('#modalSalvarRegistro #txtorc_versao').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtorc_descricao_Novo').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtobj_codigo_Novo').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtorc_data_Validade_Novo').css("background-color", corBranca);
+        $('#modalSalvarRegistro #cmbStatusOrcamento').css("background-color", corBranca);
+        $('#modalSalvarRegistro #cmbAno').css('background-color', corBranca);
+        $('#modalSalvarRegistro #cmbMes').css('background-color', corBranca);
+        $('#modalSalvarRegistro #cmbOnerado').css('background-color', corBranca);
 
-        //$('#cmbAno').val(2000);
-        //$('#cmbMes').val("00");
-        //$('#cmbOnerado').val("");
 
         $.ajax({
             url: "/Orcamento/Orcamento_GetbyID",
@@ -1352,7 +1353,7 @@
                 // preenche o combo de Status
                 var cmbStatusOrcamento = $("#cmbStatusOrcamento")[0]; //document.getElementById("cmbStatusOrcamento");
                 if (cmbStatusOrcamento) {
-                    $("#cmbStatusOrcamento").html(""); // limpa os itens existentes
+                    $("#modalSalvarRegistro #cmbStatusOrcamento").html(""); // limpa os itens existentes
 
                     var lst_proximos_status = result.lstStatusOrcamento.split(";");
                     for (var j = 0; j < lst_proximos_status.length; j++) {
@@ -1360,7 +1361,7 @@
                         $("#cmbStatusOrcamento").append($('<option></option>').val(parseInt(pedacos[0])).html(pedacos[1]));
                     }
 
-                    $('#cmbStatusOrcamento').val(result.ocs_id);
+                    $('#modalSalvarRegistro #cmbStatusOrcamento').val(result.ocs_id);
                 }
 
                 $("#modalSalvarRegistro").modal('show');
@@ -1379,14 +1380,14 @@
         // limpa o background
         var corBranca = "rgb(255, 255, 255)";
         ////$('#txtorc_codigo_Novo').css("background-color", corBranca);
-        $('#txtorc_versao').css("background-color", corBranca);
-        $('#txtorc_descricao_Novo').css("background-color", corBranca);
-        $('#txtobj_codigo_Novo').css("background-color", corBranca);
-        $('#txtorc_data_Validade_Novo').css("background-color", corBranca);
-        $('#cmbStatusOrcamento').css("background-color", corBranca);
-        $('#cmbAno').css("background-color", corBranca);
-        $('#cmbMes').css("background-color", corBranca);
-        $('#cmbDesonerado').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtorc_versao').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtorc_descricao_Novo').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtobj_codigo_Novo').css("background-color", corBranca);
+        $('#modalSalvarRegistro #txtorc_data_Validade_Novo').css("background-color", corBranca);
+        $('#modalSalvarRegistro #cmbStatusOrcamento').css("background-color", corBranca);
+        $('#modalSalvarRegistro #cmbAno').css("background-color", corBranca);
+        $('#modalSalvarRegistro #cmbMes').css("background-color", corBranca);
+        $('#modalSalvarRegistro #cmbDesonerado').css("background-color", corBranca);
 
         // reseta os valores
         $.ajax({
@@ -1396,7 +1397,7 @@
             success: function (result) {
                 // preenche o combo de Status
                 if (result.data.length > 0)
-                    $("#cmbStatusOrcamento").append($('<option selected disabled></option>').val(result.data[0].Value).html(result.data[0].Text));
+                    $("#modalSalvarRegistro #cmbStatusOrcamento").append($('<option selected disabled></option>').val(result.data[0].Value).html(result.data[0].Text));
 
 
                 $.ajax({
@@ -1405,14 +1406,14 @@
                     dataType: "JSON",
                     success: function (result) {
 
-                        $('#txtorc_codigo_Novo').val(result.data);
-                        $('#txtorc_versao').val("");
-                        $('#txtorc_descricao_Novo').val("");
-                        $('#txtobj_codigo_Novo').val("");
-                        $('#txtorc_data_Validade_Novo').val("");
-                        $('#cmbStatusOrcamento').val(1);
+                        $('#modalSalvarRegistro #txtorc_codigo_Novo').val(result.data);
+                        $('#modalSalvarRegistro #txtorc_versao').val("");
+                        $('#modalSalvarRegistro #txtorc_descricao_Novo').val("");
+                        $('#modalSalvarRegistro #txtobj_codigo_Novo').val("");
+                        $('#modalSalvarRegistro #txtorc_data_Validade_Novo').val("");
+                        $('#modalSalvarRegistro #cmbStatusOrcamento').val(1);
 
-                        $('#chkorc_ativo').prop('checked', true);
+                        $('#modalSalvarRegistro #chkorc_ativo').prop('checked', true);
 
                         ehNovoOrcamento_orc_id = -1;
 
@@ -1437,6 +1438,7 @@
         var txtobj_codigo_Novo = document.getElementById('txtobj_codigo_Novo');
         var txtorc_data_Validade_Novo = document.getElementById('txtorc_data_Validade_Novo');
         var cmbStatusOrcamento = document.getElementById('cmbStatusOrcamento');
+        var chkorc_ativo = $('#modalSalvarRegistro #chkorc_ativo')[0];
 
         var cmbMes = $('#modalSalvarRegistro #cmbMes');
         var cmbAno = $('#modalSalvarRegistro #cmbAno');
@@ -1451,7 +1453,7 @@
             cmbStatusOrcamento,
             txtobj_codigo_Novo,
             txtorc_data_Validade_Novo,
-            $('#chkorc_ativo')[0],
+            chkorc_ativo,
             pri_ids_selecionados,
             cmbMes, cmbAno, cmbDesonerado );
 
@@ -1545,14 +1547,6 @@
         return false;
     }
 
-
-    function txtcodigo_onkeyup() {
-        $('#txtcodigo').css("background-color", corBranca);
-    }
-    function txtdescricao_onkeyup() {
-        $('#txtdescricao').css("background-color", corBranca);
-    }
-
     function LimparFiltroOrcamento() {
 
         filtroRodovia = '';
@@ -1604,22 +1598,19 @@
             row.className += " selected";
 
     }
-
-
 </script>
 
 
-@*// ************** ABAS  ******************************************************************************************@
+@*// ************** ORCAMENTO_DETALHES  ******************************************************************************************@
 <script>
-    function acha_orc_id(quem)
-    {
+    function acha_orc_id(quem) {
         var elem = quem;
         while (!elem.id.startsWith("tbl_ORCAMENTO_DETALHES_"))
             elem = elem.parentElement;
 
         var nAba = parseInt(elem.id.replace("tbl_ORCAMENTO_DETALHES_", ""));
 
-        return orc_ids_selecionados[nAba-1];
+        return orc_ids_selecionados[nAba - 1];
     }
     function acha_Aba(quem) {
         var elem = quem;
@@ -1630,7 +1621,6 @@
 
         return nAba;
     }
-
 
     function ORCAMENTO_DETALHES_setaReadWrite(aba, ehRead) {
 
@@ -1759,7 +1749,7 @@
                         swal({
                             type: 'error',
                             title: 'Aviso',
-                            text:"Erro ao Clonar Orçamento"
+                            text: "Erro ao Clonar Orçamento"
                         }).then(
                             function () {
                                 return false;
@@ -1771,7 +1761,7 @@
             else {
                 return false;
             }
-    });
+        });
 
     }
 
@@ -1785,13 +1775,13 @@
         //for (index = 0; index < orc_ids_selecionados.length; index++) {
         //    qualAba = index + 1;
         //    if (qualAba === parseInt(aba)) {
-                // seta para Escrita
-                ORCAMENTO_DETALHES_setaReadWrite(aba, false);
+        // seta para Escrita
+        ORCAMENTO_DETALHES_setaReadWrite(aba, false);
 
-                // recarrega os dados
-                carregaGridOrcamentoDetalhes(aba, orc_id, 2 , false);
-              //  carregaGridServicosAdicionados(aba, orc_id, false);// ja esta embutido no carregaGridOrcamentoDetalhes
-                calculaTotal(aba, orc_id);
+        // recarrega os dados
+        carregaGridOrcamentoDetalhes(aba, orc_id, 2, false);
+        //  carregaGridServicosAdicionados(aba, orc_id, false);// ja esta embutido no carregaGridOrcamentoDetalhes
+        calculaTotal(aba, orc_id);
 
         //        break;
         //    }
@@ -1840,8 +1830,7 @@
         txtorc_data_Validade,
         chkorc_ativo,
         pri_ids_selecionados,
-        cmbMes, cmbAno, cmbDesonerado)
-        {
+        cmbMes, cmbAno, cmbDesonerado) {
 
 
         if (txtorc_codigo.value.trim() == "") {
@@ -1979,7 +1968,7 @@
             ocs_id: $(cmbStatusOrcamento).val(),
             pri_ids_selecionados: pri_ids_selecionados,
             orc_data_base: orc_data_base,
-            tpt_id: $('#cmbDesonerado').val(),
+            tpt_id: cmbDesoneradoVal,
         };
 
         $.ajax({
@@ -1991,16 +1980,15 @@
             success: function (result) {
 
                 if (result > 0) {
-
                     // reseta a variavel ehNovoOrcamento_orc_id
                     var orc_id = ehNovoOrcamento_orc_id;
                     ehNovoOrcamento_orc_id = -1;
                     pri_ids_removidos = [];
                     pri_ids_selecionados = '';
                     pri_ids_associados = '';
+                    //selectedId_orc_id = result;
 
-                    selectedId_orc_id = result;
-
+                    // salva os servicos adicionais
                     if (prefixo != "") {
                         // salva os servicos adicionados
                         var ids_retorno = '';
@@ -2028,8 +2016,8 @@
                             valores_retorno = valores_retorno.substr(1) + ';';
                         }
 
-                        if (valores_retorno.trim() != "") {
-
+                        if (valores_retorno.trim() != "") // se nao teve mudanca, nao precisa salvar
+                        {
                             $.ajax({
                                 url: "/Orcamento/Orcamento_ServicosAdicionados_Salvar",
                                 data: JSON.stringify({ "ids_retorno": ids_retorno, "valores_retorno": valores_retorno }),
@@ -2041,8 +2029,9 @@
                                     if (result.status == true) {
                                         calculaTotal(aba, orc_id);
 
-                                        $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
+                                        //   $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
 
+                                        carregaGridOrcamentoDetalhes(aba, orc_id, 1, true);
                                     }
 
                                     $("#modalSalvarRegistro").modal('hide');
@@ -2060,14 +2049,53 @@
                                     return false;
                                 }
                             });
-
                         }
+
                     }
 
-                  //  $('#tblOrcamento').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
-                    $('#tblOrcamento').DataTable().ajax.reload(); 
+
+                    // atualiza o grid principal
+                    //  $('#tblOrcamento').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
+                    $('#tblOrcamento').DataTable().ajax.reload();
 
                     ORCAMENTO_DETALHES_setaReadWrite(parseInt(aba), true);
+
+                    if (parseInt($(cmbStatusOrcamento).val()) == 3) // 3 = APROVADO
+                    {
+                        swal({
+                            type: 'success',
+                            title: 'Sucesso',
+                            text: "Orçamento salvo com sucesso. Favor desativar as outras versões"
+                        });
+                    }
+                    else
+                        if (parseInt($(cmbStatusOrcamento).val()) == 4) // 4 = ENCERRADO
+                        {
+                            $.ajax({
+                                url: "/OrdemServico/OrdemServico_GetbyID/" + result,
+                                type: "GET",
+                                contentType: "application/json;charset=UTF-8",
+                                dataType: "json",
+                                success: function (result) {
+
+                                    swal({
+                                        type: 'success',
+                                        title: 'Sucesso',
+                                        text: "Orçamento salvo com sucesso. Foi criada a Ordem de Serviço de Orçamento:" + result.ord_codigo 
+                                    });
+
+                                    return false;
+                                },
+                                error: function (errormessage) {
+                                    alert(errormessage.responseText);
+                                }
+                            });
+
+
+
+                        }
+
+
                     $("#modalSalvarRegistro").modal('hide');
                     return false;
                 }
@@ -2108,6 +2136,7 @@
         var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
 
         orc_idd = orc_ids_selecionados[parseInt(aba) - 1];
+        pri_ids_associados = $(prefixo + "#txtpri_ids_associados").val();
 
         // salva
         return ORCAMENTO_Salvar(prefixo,
@@ -2126,26 +2155,24 @@
         );
 
         //ORCAMENTO_DETALHES_setaReadWrite(parseInt(aba), true);
-  /*
-        // "ajuste para o grid carregar corretamente
-        var btnEditar = document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + aba);
-        if (btnEditar)
-            btnEditar.style.display = 'block';
+        /*
+              // "ajuste para o grid carregar corretamente
+              var btnEditar = document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + aba);
+              if (btnEditar)
+                  btnEditar.style.display = 'block';
 
-        // carrega o grid Detalhes
-        carregaGridOrcamentoDetalhes(aba, orc_idd, 1);
-*/
-      //  return retorno;
+              // carrega o grid Detalhes
+              carregaGridOrcamentoDetalhes(aba, orc_idd, 1);
+      */
+        //  return retorno;
     }
 
-    function ORCAMENTO_DETALHES_header_click(senderID)
-    {
+    function ORCAMENTO_DETALHES_header_click(senderID) {
         var sufixo = senderID.replaceAll("btn_Toggle_ORCAMENTO_DETALHES_", "");
         var quem = document.getElementById(senderID);
 
         // mostra o botao editar
-        if (quem.getAttribute('aria-expanded') == "false")
-        {
+        if (quem.getAttribute('aria-expanded') == "false") {
             document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
             document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
             document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
@@ -2157,8 +2184,7 @@
             document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
             document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.add('rotate');
         }
-        else
-        {
+        else {
             //  document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
 
             document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
@@ -2197,8 +2223,8 @@
         //    estado1 = 'block';
         //    estado2 = 'none';
 
-            // roda o icone 90graus
-            document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
+        // roda o icone 90graus
+        document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
         //}
         //else {
         //    // roda o icone 90graus
@@ -2206,35 +2232,35 @@
         //    document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.add('rotate');
         //}
 
-            document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
-            document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
 
-            document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
-            document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
 
-            document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
-            document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
 
 
 
         return false;
     }
 
-
-    function calculaTotal(aba, orc_id)
-    {
+    function calculaTotal(aba, orc_id) {
         var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
 
         $.ajax({
             url: "/Orcamento/Orcamento_Total",
-            data: JSON.stringify({ "orc_id": orc_id}),
+            data: JSON.stringify({ "orc_id": orc_id }),
             type: "POST",
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function (result) {
                 var total = parseFloat(result.data);
                 $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(total));
-               return false;
+                $(prefixo + "#txtorc_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(total)));
+
+                return false;
             },
             error: function (errormessage) {
                 swal({
@@ -2251,8 +2277,7 @@
 
     }
 
-    function carregaGridOrcamentoDetalhes(aba, orc_id, ore_ativo, ehRead)
-    {
+    function carregaGridOrcamentoDetalhes(aba, orc_id, ore_ativo, ehRead) {
         // ore_ativo = 0,1,2
         orc_valor_total = 0;
 
@@ -2289,15 +2314,16 @@
 
         $("#btn_Toggle_ORCAMENTO_DETALHES_" + aba).html("");
 
+
         var btnehRead = true;
-        var btnEditar  = document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + aba);
-        if (btnEditar)
-        {
+        var btnEditar = document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + aba);
+        if (btnEditar) {
             if (btnEditar.style.display == 'none')
                 btnehRead = false;
         }
 
         // CARREGA OS DADOS DO GRID MAIS DA TABELA HEADER COM OS DADOS DA 1A LINHA
+        totalParcial_Reparos = 0;
         if ($.fn.dataTable.isDataTable(tabela)) {
             $(tabela).DataTable().destroy();
         }
@@ -2350,11 +2376,12 @@
                 { data: "pri_ids_associados", "className": "hide_column" },
                 { data: "orc_ativo", "className": "hide_column" },
                 { data: "orc_obj_ids_associados", "className": "hide_column" },
-                { data: "ore_id", "searchable": false, "className": "Centralizado", "sortable": false,
+                {
+                    data: "ore_id", "searchable": false, "className": "Centralizado", "sortable": false, title:"Opções",
                     "render": function (data, type, row) {
                         var retorno = "";
-                       if ((permissaoEscrita > 0) && (btnehRead == false)){
-                       //  if (permissaoEscrita > 0) {
+                        if ((permissaoEscrita > 0) && (btnehRead == false)) {
+                            //  if (permissaoEscrita > 0) {
                             if (row.ore_ativo == 1)
                                 retorno = '<a href="#" onclick="return OrcamentoDetalhes_AtivarDesativar(' + orc_id + ',' + aba + ',' + data + ', 0)" title="Ativo" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
                             else
@@ -2370,7 +2397,7 @@
                 { data: "tpt_id", "className": "hide_column" },
                 { data: "tpt_descricao", "className": "hide_column" },
                 { data: "lstStatusOrcamento", "className": "hide_column" }
-           ]
+            ]
             , "createdRow": function (row, data, dataIndex) {
 
                 if ((data["obj_codigoOAE"] != "") && (dataIndex > 1)) {
@@ -2388,7 +2415,8 @@
                     $(prefixo + "#txtorc_id_Detalhes").val((row.childNodes[2].innerText));
                     $(prefixo + "#txtorc_data_Validade_Detalhes").val((row.childNodes[9].innerText));
                     $(prefixo + '#chkorc_ativoDetalhes').prop('checked', (row.childNodes[32].innerText == '1' ? true : false));
-                    pri_ids_associados = (row.childNodes[31].innerText);
+
+                    $(prefixo + "#txtpri_ids_associados").val(row.childNodes[31].innerText);
 
                     $(prefixo + '#lblDataBase').text(row.childNodes[35].innerText);
                     //$(prefixo + '#lblDesonerado').text(row.childNodes[37].innerText); // "D" ou "O"
@@ -2402,7 +2430,7 @@
                     $(prefixo + '#cmbDesonerado').val(row.childNodes[36].innerText); // "D" ou "O"
 
                     // preenche o combo de Status
-                    var cmbStatusOrcamentoDetalhes = $(prefixo + "#cmbStatusOrcamentoDetalhes")[0] ; //document.getElementById("cmbStatusOrcamentoDetalhes");
+                    var cmbStatusOrcamentoDetalhes = $(prefixo + "#cmbStatusOrcamentoDetalhes")[0]; //document.getElementById("cmbStatusOrcamentoDetalhes");
                     if (cmbStatusOrcamentoDetalhes) {
                         $(prefixo + "#cmbStatusOrcamentoDetalhes").html(""); // limpa os itens existentes
 
@@ -2418,6 +2446,18 @@
 
                 }
 
+                var valorSugerido = parseFloat(data["rtu_valor_total_sugerido"]);
+                var valorAdotado = parseFloat(data["rtu_valor_total_adotado"]);
+
+                if (data["ore_ativo"] == 1)
+                    totalParcial_Reparos = totalParcial_Reparos + parseFloat(valorAdotado > 0 ? valorAdotado : valorSugerido);
+
+                $(prefixo + "#txtReparos_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos));
+                $(prefixo + "#txtReparos_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos)));
+
+                //var Reparos_vtotal = parseFloat($(prefixo + "#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+                var ServicosAdicionais_vtotal = parseFloat($(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+                $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos + ServicosAdicionais_vtotal));
 
                 $("#btn_Toggle_ORCAMENTO_DETALHES_" + aba).html("Orçamento " + $(prefixo + "#txtorc_codigo_Detalhes").val() + " Versão " + $(prefixo + "#txtorc_versaoDetalhes").val());
             }
@@ -2512,14 +2552,15 @@
 
             ]
             , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
-            , select: {  style: 'single' }
+            , select: { style: 'single' }
             , searching: false
             , "oLanguage": idioma
             , "pagingType": "input"
             , "sDom": '<"top">rt<"bottom"pfli><"clear">'
         });
 
-        selectedId_orc_id = orc_id;
+
+        //selectedId_orc_id = orc_id;
         carregaGridServicosAdicionados(aba, orc_id, ehRead);
 
         return false;
@@ -2527,7 +2568,7 @@
 
     function carregaGridServicosAdicionados(aba, orc_id, ehRead) {
         orc_servicos_valor_total = 0;
-
+        totalParcial_ServicosAdicionados = 0;
         var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
 
         if ($.fn.dataTable.isDataTable(prefixo + '#tblServicosAdicionados')) {
@@ -2584,7 +2625,7 @@
                             var idd = 'txtQt_' + row.ose_id; // (row[0]);
                             var disab = ehLeitura == true ? ' disabled ' : '';
                             var qtde = Intl.NumberFormat('pt-BR').format(data);
-                            return '<input type="text" name=' + idd + ' id=' + idd + ' ' + disab + ' title="' + qtde + '" style="text-align:center; width:100px" onfocus="txtQt_onfocus(this.id)" onkeyup="txtQt_onkeyup(this.id)"   value="' + qtde + '" >';
+                            return '<input type="text" name=' + idd + ' id=' + idd + ' ' + disab + ' title="' + qtde + '" style="text-align:center; width:100px" onfocus="txtQt_onfocus(this)" onkeyup="txtQt_onkeyup(this)"   value="' + qtde + '" >';
                         }
                         else
                             return 0;
@@ -2592,7 +2633,7 @@
                     }
                 }
 
-                ,{
+                , {
                     targets: [8] // PrecoUnit
                     , "render": function (data, type, row) {
                         if (!isNaN(data)) {
@@ -2604,7 +2645,7 @@
 
                     }
                 }
-                ,{
+                , {
                     targets: [9] // ValorTotal
                     , "render": function (data, type, row) {
                         if (!isNaN(data)) {
@@ -2638,62 +2679,72 @@
                 }
 
                 if ((data["obj_codigoOAE"] != "") && (dataIndex == 0)) {
-                    $("#lblDataBase").text((row.childNodes[6].innerText));
+                   $("#lblDataBase").text((row.childNodes[6].innerText));
                 }
+
+                totalParcial_ServicosAdicionados = totalParcial_ServicosAdicionados + parseFloat(data["ValorTotal"]);
+                $(prefixo + "#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados));
+                $(prefixo + "#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados)));
+
+                var Reparos_vtotal = parseFloat($(prefixo + "#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+                var ServicosAdicionais_vtotal = parseFloat($(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+                $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_vtotal + ServicosAdicionais_vtotal));
+
             }
         });
+
 
         return false;
     }
 
-    function ServicosAdicionados_Deletar(aba, orc_id, ose_id)
-    {
+    function ServicosAdicionados_Deletar(aba, orc_id, ose_id) {
         var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
 
-            var form = this;
-            swal({
-                title: "Excluir. Tem certeza?",
-                icon: "warning",
-                buttons: [
-                    'Não',
-                    'Sim'
-                ],
-                dangerMode: true,
-                focusCancel: true
-            }).then(function (isConfirm) {
-                if (isConfirm) {
-                    var response = POST("/Orcamento/Orcamento_Servicos_Adicionados_Excluir", JSON.stringify({ id: ose_id }))
-                    if (response.erroId >= 1) {
-                        swal({
-                            type: 'success',
-                            title: 'Sucesso',
-                            text: 'Registro excluído com sucesso'
-                        });
+        var form = this;
+        swal({
+            title: "Excluir. Tem certeza?",
+            icon: "warning",
+            buttons: [
+                'Não',
+                'Sim'
+            ],
+            dangerMode: true,
+            focusCancel: true
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                var response = POST("/Orcamento/Orcamento_Servicos_Adicionados_Excluir", JSON.stringify({ id: ose_id }))
+                if (response.erroId >= 1) {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Registro excluído com sucesso'
+                    });
 
-                        $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload();
+                    totalParcial_ServicosAdicionados = 0;
+                    $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload();
 
-                        calculaTotal(aba, orc_id);
-                    }
-                    else {
-                        swal({
-                            type: 'error',
-                            title: 'Aviso',
-                            text: 'Erro ao excluir registro'
-                        });
-                    }
-                    return true;
-                } else {
+                    calculaTotal(aba, orc_id);
+                }
+                else {
                     swal({
                         type: 'error',
                         title: 'Aviso',
                         text: 'Erro ao excluir registro'
                     });
-
-                    return false;
                 }
-            })
+                return true;
+            } else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao excluir registro'
+                });
 
-            return false;
+                return false;
+            }
+        })
+
+        return false;
     }
 
     function OrcamentoDetalhes_AtivarDesativar(orc_id, aba, ore_id, ativar) {
@@ -2722,6 +2773,7 @@
                             text: ativar == 1 ? msgAtivacaoOK : msgDesativacaoOK
                         });
 
+                        totalParcial_Reparos = 0;
                         $(tabela).DataTable().ajax.reload();
                         calculaTotal(aba, orc_id);
                     }
@@ -2741,193 +2793,6 @@
 
         return false;
     }
-
-
-    // ******************************************************************************************************************
-
-    function carregaGridOrcamento() {
-
-        // limpar selecionados e abas
-        btnLimparSelecao_onclick();
-
-        $('#tblOrcamento').DataTable().destroy();
-        $('#tblOrcamento').DataTable({
-            "ajax": {
-                "url": "/Orcamento/Orcamento_ListAll",
-                "type": "GET",
-                "datatype": "json",
-                "data": {
-                    "orc_id": selectedId_orc_id,
-                    "filtroRodovia": filtroRodovia,
-                    "filtroObjetos": filtroObjetos,
-                    "filtroStatus": filtroStatus == null ? -1 : filtroStatus,
-                    "orc_ativo": $("#chkMostrarInativos").is(":checked") ? 2 : 1,
-                    "FiltroidRodovias": idsRodoviasSelecionados,
-                    "FiltroidObjetos": idsObjetosSelecionados,
-
-                }
-            }
-            , "columns": [
-                { data: "orc_id", "width": "30px", "searchable": false },
-                { data: "orc_id", "className": "hide_column", "searchable": false },
-                { data: "ocs_id", "className": "hide_column", "searchable": false },
-
-                { data: "orc_cod_orcamento",  "className": "Centralizado", "width": "80px", "searchable": true },
-                { data: "orc_versao", "className": "Centralizado", "width": "80px", "searchable": true },
-
-                { data: "orc_data_criacao",  "className": "Centralizado", "width": "30px", "searchable": true },
-                { data: "orc_data_validade",  "className": "Centralizado", "width": "30px", "searchable": true },
-
-                { data: "ocs_codigo",  "className": "Centralizado", "autoWidth": true, "searchable": true },
-
-                { data: "orc_valor_total",  "className": "Centralizado", "width": "80px", "searchable": true },
-
-                { data: "orc_os_associadas", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "orc_objetos_associados", "className": "Centralizado", "autoWidth": true, "searchable": true }
-                , { data: "orc_obj_ids_associados", "className": "hide_column" }
-
-                ,{
-                    data: "orc_id",
-                    "searchable": false,
-                    "sortable": false,
-                    "render": function (data, type, row) {
-
-                        var retorno = "";
-                        if (permissaoEscrita > 0) {
-                            retorno = '<a href="#" onclick="return EditarOrcamento(' + data + ')" title="Editar" ><span class="glyphicon glyphicon-pencil"></span></a>' + '  ';
-
-                            if (row.orc_ativo == 1)
-                                retorno += '<a href="#" onclick="return AtivarDesativarOrcamento(' + data + ', 0)" title="Ativo" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
-                            else
-                                retorno += '<a href="#" onclick="return AtivarDesativarOrcamento(' + data + ', 1)" title="Desativado" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
-                        }
-                        else {
-                            retorno = '<span class="glyphicon glyphicon-pencil desabilitado"  ></span>' + '  ';
-
-                            if (row.orc_ativo == 1)
-                                retorno += '<span class="glyphicon glyphicon-ok text-success desabilitado" ></span>' + '  ';
-                            else
-                                retorno += '<span class="glyphicon glyphicon-remove text-danger desabilitado"  ></span>' + '  ';
-
-                        }
-
-                        if (permissaoExclusao > 0)
-                            retorno += '<a href="#" onclick="return DeletarOrcamento(' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
-                        else
-                            retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
-
-                        return retorno;
-                    }
-                }
-            ]
-            , 'columnDefs': [
-                {
-                    'targets': 0,
-                    'searchable': false,
-                    'orderable': false,
-                    'className': 'dt-body-center',
-                    'render': function (data, type, full, meta) {
-                        var checkd = orc_ids_selecionados.includes(data + "") ? "checked=checked" : "";
-                        var chk_id = "chkSelecionar_" + data;
-                        return '<input type="checkbox" name="' + chk_id + '" id="' + chk_id + '" ' + checkd + ' value="' + $('<div/>').text(data).html() + '" onchange= "chkSelecao_onchange(this);">';
-                    }
-                }
-                , {
-                    targets: [3] // orc_codigo
-                    , "createdCell": function (td, cellData, rowData, row, col) {
-                        $(td).attr('title', rowData["orc_descricao"]);
-                    }
-                }
-
-                , {
-                    targets: [8] // valor total
-                    , "render": function (data, type, row) {
-                        if (!isNaN(data)) {
-                            var dado = parseFloat(data);
-                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(dado);
-                        }
-                        else
-                            return 0;
-                    }
-                }
-
-            ]
-            , "rowId": "orc_id"
-            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
-            , select: {
-                style: 'single'
-            }
-            , searching: true
-            , "oLanguage": idioma
-            , "pagingType": "input"
-            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
-        });
-
-
-    }
-
-    // montagem do gridview
-    $(document).ready(function () {
-
-        var quem = $("#modalSalvarRegistro #cmbAno");
-        preenchecmbAno(quem);
-
-        carregaGridOrcamento();
-
-        var tblOrcamento = $('#tblOrcamento').DataTable();
-        $('#tblOrcamento tbody').on('click', 'tr', function () {
-            /*            var orc = tblOrcamento.row(this).data();
-              selectedId_orc_id = orc["orc_id"];
-
-                          if ($(this).hasClass('selected')) {
-                              $(this).removeClass('selected');
-                          }
-                          else {
-                              tblOrcamento.$('tr.selected').removeClass('selected');
-                              $(this).addClass('selected');
-                          }
-
-
-              // limpa os arrays
-              orc_ids_selecionados = [];
-
-              $("#lblSelecionados").html("");
-
-              // limpa o GridOrcamento
-              tblOrcamento.$('input[type="checkbox"]').each(function () {
-                  if (this.checked)
-                      this.checked = false;
-              });
-
-              // oculta as abas
-              for (var aba = 1; aba <= 10; aba++) {
-                  var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + aba);
-                  if (div_FICHA_ORCAMENTO_DETALHES)
-                      div_FICHA_ORCAMENTO_DETALHES.style.display = 'none';
-              }
-
-
-                          // seta a 1a aba
-                          orc_ids_selecionados.push(selectedId_orc_id);
-
-                          // carrega a aba
-              carregaGridOrcamentoDetalhes(1, selectedId_orc_id, 1);
-
-              ORCAMENTO_DETALHES_header_click("btn_Toggle_ORCAMENTO_DETALHES_1", 1);
-
-              $("#div_ORCAMENTO_DETALHES_1").attr("aria-expanded", "true");
-              $("#div_ORCAMENTO_DETALHES_1").removeClass("collapse");
-              $("#div_ORCAMENTO_DETALHES_1").addClass("collapse in");
-
-              var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_1");
-              if (div_FICHA_ORCAMENTO_DETALHES)
-                  div_FICHA_ORCAMENTO_DETALHES.style.display = 'block';
-     */
-            //  document.getElementById('subGrids').style.visibility = "visible";
-        });
-
-
-    }); // document.ready
 
 
 </script>
@@ -2979,7 +2844,7 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.status == true) {
-
+                        totalParcial_ServicosAdicionados = 0;
                        $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
                        $('#tblSelecionarTPUs').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
                         calculaTotal(aba, orc_id);
@@ -3193,18 +3058,38 @@
 
     function txtQt_onfocus(quem)
     {
-        jQuery("#" + quem).mask('99990.99');
+        jQuery(quem).mask('99999,99');
     }
     function txtQt_onkeyup(quem) {
 
+        var aba = acha_Aba(quem);
+        var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
+
+        var txtQt = quem; // document.getElementById(quem);
+
         // recalcula o total
-        var quantidade = parseFloat(jQuery("#" + quem).val().replaceAll(".", "").replace(",", "."));
-        var txtQt = document.getElementById(quem);
-        var valorUnit = parseFloat(txtQt.parentElement.parentElement.children[8].innerText.replaceAll(".", "").replace(",", "."));
-        var valorTotal = valorUnit * quantidade;
+        var quantidade_linha_novo = parseFloat(txtQt.value.replaceAll(".", "").replace(",", "."));
+        var valorUnit_linha = parseFloat(txtQt.parentElement.parentElement.children[8].innerText.replaceAll(".", "").replace(",", "."));
+        var valorTotal_linha = valorUnit_linha * quantidade_linha_novo;
 
-        txtQt.parentElement.parentElement.children[9].innerText =  new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valorTotal);
+        txtQt.parentElement.parentElement.children[9].innerText = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valorTotal_linha);
 
+        var totalParcial = 0;
+        var table = $(prefixo + '#tblServicosAdicionados').DataTable();
+        table.$('input[type="text"]').each(function () {
+            var quantidade = parseFloat(this.value.trim().replace(".", "").replace(",", "."));
+            var valUnitario = parseFloat(this.parentElement.parentElement.childNodes[8].innerText.trim().replace(".", "").replace(",", "."));
+            var valorTotalLinha = parseFloat(this.parentElement.parentElement.childNodes[9].innerText.trim().replace(".", "").replace(",", "."));
+            totalParcial = totalParcial + valorTotalLinha;
+        });
+
+        // coloca o total parcial
+        var valorTotalLinhaOrig = parseFloat($(prefixo + "#txtServicosAdicionais_valor_total").attr("title").trim().replace(".", "").replace(",", "."));
+        $(prefixo + "#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial));
+
+        // coloca o total geral
+        var totalGeralOriginal = parseFloat($(prefixo + "#txtorc_valor_total").attr('title').replaceAll(".", "").replace(",", "."));
+        $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalGeralOriginal - valorTotalLinhaOrig + totalParcial));
     }
 
 
@@ -3440,11 +3325,14 @@
 
     function btnAbrirPriorizacao_onclick(quem) {
         if (quem != null) {
-            var objeto = quem.parentElement;
-            while (!objeto.id.startsWith("div_FICHA_ORCAMENTO_DETALHES_"))
-                objeto = objeto.parentElement;
+            //var objeto = quem.parentElement;
+            //while (!objeto.id.startsWith("div_FICHA_ORCAMENTO_DETALHES_"))
+            //    objeto = objeto.parentElement;
+            ////abaSelecionada_popupPriorizacao = parseInt(objeto.id.replaceAll("div_FICHA_ORCAMENTO_DETALHES_", ""));
+            abaSelecionada_popupPriorizacao = acha_Aba(quem);
 
-            abaSelecionada_popupPriorizacao = parseInt(objeto.id.replaceAll("div_FICHA_ORCAMENTO_DETALHES_", ""));
+            var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + abaSelecionada_popupPriorizacao + ' ';
+            pri_ids_associados = $(prefixo + "#txtpri_ids_associados").val();
             // alert(objeto.id);
         }
         else
@@ -3458,6 +3346,224 @@
 
 </script>
 
+
+<script>
+    var idsRodoviasSelecionados = '';
+    var idsObjetosSelecionados = '';
+
+    // ******** selecao de Rodovias ***********************
+    function abrirLocalizarRodovias() {
+
+        var txtFiltroRodovias = $('#txtFiltroRodovias').val();
+        $('#txtRodoviasSelecionados').val(txtFiltroRodovias);
+
+        // limpa o texbox
+        $('#txtLocalizarRodovia').val("");
+        $('#lblMsgRodovias').text("");
+
+        // limpa o listbox
+        var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
+        lstRodoviasLocalizados.innerHTML = "";
+
+        $('#txtLocalizarRodovia').focus();
+        $('#modalLocalizarRodovia').modal('show');
+        return false;
+    }
+    function LocalizarRodovias() {
+
+        var params = { filtro_rod_codigo: $('#txtLocalizarRodovia').val() };
+
+        $.ajax({
+            url: '/Relatorio/PreencheCmbRodoviasLocalizados',
+            type: "POST",
+            dataType: "JSON",
+            data: params,
+            success: function (lstRodovias) {
+
+                // limpa o listbox
+                var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
+                lstRodoviasLocalizados.innerHTML = "";
+                $('#lblMsgRodovias').text("");
+
+                var i = 0;
+                $.each(lstRodovias, function (i, Rodovia) {
+                    i++;
+                    if (i < 50) {
+                        $('#lstRodoviasLocalizados')
+                            .append($("<option></option>")
+                                .attr("value", Rodovia.Value)
+                                .text(Rodovia.Text));
+                    }
+                    else {
+                        $('#lblMsgRodovias').text("Refinar pesquisa. Mostrando 50 primeiros");
+                        return false;
+                    }
+                });
+                return false;
+            }
+        });
+
+
+        return false;
+    }
+
+    function lstRodoviasLocalizados_dblclick() {
+        var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
+        if (lstRodoviasLocalizados.selectedIndex >= 0) {
+
+            var selrod_id = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].value;
+            var sel_txt = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].text;
+            var selrod_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
+
+            var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val() + ";" + selrod_codigo;
+            if (txtRodoviasSelecionadosTxt.startsWith(";"))
+                txtRodoviasSelecionadosTxt = txtRodoviasSelecionadosTxt.substr(1);
+
+            $('#txtRodoviasSelecionados').val(txtRodoviasSelecionadosTxt);
+
+            idsRodoviasSelecionados = idsRodoviasSelecionados + ";" + selrod_id;
+            if (idsRodoviasSelecionados.startsWith(";"))
+                idsRodoviasSelecionados = idsRodoviasSelecionados.substr(1);
+
+        }
+
+        $('#modalLocalizarRodovia').modal('show');
+
+        return false;
+    }
+
+    function bntLimpar_Rodovia_onclick() {
+        $('#txtRodoviasSelecionados').val("");
+        idsRodoviasSelecionados = "";
+
+        $('#txtLocalizarRodovia').val("");
+        lstRodoviasLocalizados.innerHTML = "";
+
+
+        $('#modalLocalizarRodovia').modal('show');
+
+        return false;
+    }
+    function bntOK_Rodovia_onclick() {
+        var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val();
+        if (txtRodoviasSelecionadosTxt.startsWith(";"))
+            txtRodoviasSelecionadosTxt = txtRodoviasSelecionadosTxt.substr(1);
+
+        $('#txtFiltroRodovias').val(txtRodoviasSelecionadosTxt);
+
+        $('#modalLocalizarRodovia').modal('hide');
+        return false;
+    }
+
+
+    // ******** selecao de objetos ***********************
+    function abrirLocalizarObjetos() {
+
+        var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
+        $('#txtObjetosSelecionados').val(txtFiltroObj_codigo);
+
+        // limpa o texbox
+        $('#txtLocalizarObjeto').val("");
+        $('#lblMsgObjetos').text("");
+        $('#txtobj_codigo_Novo').css('background-color', corBranca);
+
+        // limpa o listbox
+        var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
+        lstObjetosLocalizados.innerHTML = "";
+
+        $('#txtLocalizarObjeto').focus();
+        $('#modalLocalizarObjeto').modal('show');
+        return false;
+    }
+    function LocalizarObjetos() {
+
+        var params = {
+            doc_id: -1,
+            filtro_obj_codigo: $('#txtLocalizarObjeto').val(),
+            filtro_obj_descricao: '',
+            filtro_clo_id: 3, //filtro_clo_id, // -13 ===> 2 = OAE = quilometragem; ou 3 = Tipo OAE
+            filtro_tip_id: -1
+        };
+
+        $.ajax({
+            url: '/Documento/PreencheCmbObjetosLocalizados',
+            type: "POST",
+            dataType: "JSON",
+            data: params,
+            success: function (lstObjetos) {
+
+                // limpa o listbox
+                var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
+                lstObjetosLocalizados.innerHTML = "";
+
+                var i = 0;
+                $.each(lstObjetos, function (i, objeto) {
+                    i++;
+                    if (i < 50) {
+                        $('#lstObjetosLocalizados')
+                            .append($("<option></option>")
+                                .attr("value", objeto.Value)
+                                .text(objeto.Text));
+                    }
+                    else {
+                        $('#lblMsgObjetos').text("Refinar pesquisa. Mostrando 50 primeiros");
+                        return false;
+                    }
+                });
+                return false;
+            }
+        });
+
+
+        return false;
+    }
+
+    function lstObjetosLocalizados_dblclick() {
+        var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
+        if (lstObjetosLocalizados.selectedIndex >= 0) {
+
+            var selObj_id = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].value;
+            var sel_txt = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text;
+            var selObj_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
+
+            var txtObjetosSelecionadosTxt = $('#txtObjetosSelecionados').val() + ";" + selObj_codigo;
+            if (txtObjetosSelecionadosTxt.startsWith(";"))
+                txtObjetosSelecionadosTxt = txtObjetosSelecionadosTxt.substr(1);
+
+            $('#txtObjetosSelecionados').val(txtObjetosSelecionadosTxt);
+
+            idsObjetosSelecionados = idsObjetosSelecionados + ";" + selObj_id;
+            if (idsObjetosSelecionados.startsWith(";"))
+                idsObjetosSelecionados = idsObjetosSelecionados.substr(1);
+        }
+
+        $('#modalLocalizarObjeto').modal('show');
+
+        return false;
+    }
+
+    function bntLimpar_Objeto_onclick() {
+        $('#txtObjetosSelecionados').val("");
+        idsObjetosSelecionados = "";
+
+        $('#txtLocalizarObjeto').val("");
+        lstObjetosLocalizados.innerHTML = "";
+
+
+        $('#modalLocalizarObjeto').modal('show');
+
+        return false;
+    }
+    function bntOK_Objeto_onclick() {
+        var txtObjetosSelecionadosTxt = $('#txtObjetosSelecionados').val();
+        if (txtObjetosSelecionadosTxt.startsWith(";"))
+            txtObjetosSelecionadosTxt = txtObjetosSelecionadosTxt.substr(1);
+
+        $('#txtFiltroObj_codigo').val(txtObjetosSelecionadosTxt);
+        $('#modalLocalizarObjeto').modal('hide');
+        return false;
+    }
+</script>
 
 
 @*// *************** MODAIS  **********************************@
@@ -3504,8 +3610,7 @@
                         <div class="form-group">
                             <label class="control-label col-sm-3">Status<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                               <select class="form-control" id="cmbStatusOrcamento" name="cmbStatusOrcamento" >
-                                    </select>
+                                <select class="form-control" id="cmbStatusOrcamento" name="cmbStatusOrcamento"></select>
                             </div>
                         </div>
 
@@ -3808,7 +3913,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="modalServicosAdicionais" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="margin-left:150px; width:850px;">
@@ -3820,7 +3924,7 @@
                 <br />
                 <div class="modal-body form-group">
                     <div class="form-group">
-                        <div class="col-sm-12" >
+                        <div class="col-sm-12">
                             <div class="col-sm-5" style="margin-left:15px">
                                 <input id="txtDataTpu" style="display:none" />
                                 <input id="txtorc_id" style="display:none" />
@@ -3880,226 +3984,10 @@
 </div>
 
 
-
-<script>
-    var idsRodoviasSelecionados = '';
-    var idsObjetosSelecionados = '';
-
-    // ******** selecao de Rodovias ***********************
-    function abrirLocalizarRodovias() {
-
-        var txtFiltroRodovias = $('#txtFiltroRodovias').val();
-        $('#txtRodoviasSelecionados').val(txtFiltroRodovias);
-
-        // limpa o texbox
-        $('#txtLocalizarRodovia').val("");
-        $('#lblMsgRodovias').text("");
-
-        // limpa o listbox
-        var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
-        lstRodoviasLocalizados.innerHTML = "";
-
-        $('#txtLocalizarRodovia').focus();
-        $('#modalLocalizarRodovia').modal('show');
-        return false;
-    }
-    function LocalizarRodovias() {
-
-        var params = { filtro_rod_codigo: $('#txtLocalizarRodovia').val() };
-
-        $.ajax({
-            url: '/Relatorio/PreencheCmbRodoviasLocalizados',
-            type: "POST",
-            dataType: "JSON",
-            data: params,
-            success: function (lstRodovias) {
-
-                // limpa o listbox
-                var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
-                lstRodoviasLocalizados.innerHTML = "";
-                $('#lblMsgRodovias').text("");
-
-                var i = 0;
-                $.each(lstRodovias, function (i, Rodovia) {
-                    i++;
-                    if (i < 50) {
-                        $('#lstRodoviasLocalizados')
-                            .append($("<option></option>")
-                                .attr("value", Rodovia.Value)
-                                .text(Rodovia.Text));
-                    }
-                    else {
-                        $('#lblMsgRodovias').text("Refinar pesquisa. Mostrando 50 primeiros");
-                        return false;
-                    }
-                });
-                return false;
-            }
-        });
-
-
-        return false;
-    }
-
-    function lstRodoviasLocalizados_dblclick() {
-        var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
-        if (lstRodoviasLocalizados.selectedIndex >= 0) {
-
-            var selrod_id = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].value;
-            var sel_txt = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].text;
-            var selrod_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
-
-            var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val() + ";" + selrod_codigo;
-            if (txtRodoviasSelecionadosTxt.startsWith(";"))
-                txtRodoviasSelecionadosTxt = txtRodoviasSelecionadosTxt.substr(1);
-
-            $('#txtRodoviasSelecionados').val(txtRodoviasSelecionadosTxt);
-
-            idsRodoviasSelecionados = idsRodoviasSelecionados + ";" + selrod_id;
-            if (idsRodoviasSelecionados.startsWith(";"))
-                idsRodoviasSelecionados = idsRodoviasSelecionados.substr(1);
-
-        }
-
-        $('#modalLocalizarRodovia').modal('show');
-
-        return false;
-    }
-
-    function bntLimpar_Rodovia_onclick() {
-        $('#txtRodoviasSelecionados').val("");
-        idsRodoviasSelecionados = "";
-
-        $('#txtLocalizarRodovia').val("");
-        lstRodoviasLocalizados.innerHTML = "";
-
-
-        $('#modalLocalizarRodovia').modal('show');
-
-        return false;
-    }
-    function bntOK_Rodovia_onclick() {
-        var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val();
-        if (txtRodoviasSelecionadosTxt.startsWith(";"))
-            txtRodoviasSelecionadosTxt = txtRodoviasSelecionadosTxt.substr(1);
-
-        $('#txtFiltroRodovias').val(txtRodoviasSelecionadosTxt);
-
-        $('#modalLocalizarRodovia').modal('hide');
-        return false;
-    }
-
-
-    // ******** selecao de objetos ***********************
-    function abrirLocalizarObjetos() {
-
-        var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
-        $('#txtObjetosSelecionados').val(txtFiltroObj_codigo);
-
-        // limpa o texbox
-        $('#txtLocalizarObjeto').val("");
-        $('#lblMsgObjetos').text("");
-        $('#txtobj_codigo_Novo').css('background-color', corBranca);
-
-        // limpa o listbox
-        var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
-        lstObjetosLocalizados.innerHTML = "";
-
-        $('#txtLocalizarObjeto').focus();
-        $('#modalLocalizarObjeto').modal('show');
-        return false;
-    }
-    function LocalizarObjetos() {
-
-        var params = {
-            doc_id: -1,
-            filtro_obj_codigo: $('#txtLocalizarObjeto').val(),
-            filtro_obj_descricao: '',
-            filtro_clo_id: 3, //filtro_clo_id, // -13 ===> 2 = OAE = quilometragem; ou 3 = Tipo OAE
-            filtro_tip_id: -1
-        };
-
-        $.ajax({
-            url: '/Documento/PreencheCmbObjetosLocalizados',
-            type: "POST",
-            dataType: "JSON",
-            data: params,
-            success: function (lstObjetos) {
-
-                // limpa o listbox
-                var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
-                lstObjetosLocalizados.innerHTML = "";
-
-                var i = 0;
-                $.each(lstObjetos, function (i, objeto) {
-                    i++;
-                    if (i < 50) {
-                        $('#lstObjetosLocalizados')
-                            .append($("<option></option>")
-                                .attr("value", objeto.Value)
-                                .text(objeto.Text));
-                    }
-                    else {
-                        $('#lblMsgObjetos').text("Refinar pesquisa. Mostrando 50 primeiros");
-                        return false;
-                    }
-                });
-                return false;
-            }
-        });
-
-
-        return false;
-    }
-
-    function lstObjetosLocalizados_dblclick() {
-        var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
-        if (lstObjetosLocalizados.selectedIndex >= 0) {
-
-            var selObj_id = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].value;
-            var sel_txt = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text;
-            var selObj_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
-
-            var txtObjetosSelecionadosTxt = $('#txtObjetosSelecionados').val() + ";" + selObj_codigo;
-            if (txtObjetosSelecionadosTxt.startsWith(";"))
-                txtObjetosSelecionadosTxt = txtObjetosSelecionadosTxt.substr(1);
-
-            $('#txtObjetosSelecionados').val(txtObjetosSelecionadosTxt);
-
-            idsObjetosSelecionados = idsObjetosSelecionados + ";" + selObj_id;
-            if (idsObjetosSelecionados.startsWith(";"))
-                idsObjetosSelecionados = idsObjetosSelecionados.substr(1);
-        }
-
-        $('#modalLocalizarObjeto').modal('show');
-
-        return false;
-    }
-
-    function bntLimpar_Objeto_onclick() {
-        $('#txtObjetosSelecionados').val("");
-        idsObjetosSelecionados = "";
-
-        $('#txtLocalizarObjeto').val("");
-        lstObjetosLocalizados.innerHTML = "";
-
-
-        $('#modalLocalizarObjeto').modal('show');
-
-        return false;
-    }
-    function bntOK_Objeto_onclick() {
-        var txtObjetosSelecionadosTxt = $('#txtObjetosSelecionados').val();
-        if (txtObjetosSelecionadosTxt.startsWith(";"))
-            txtObjetosSelecionadosTxt = txtObjetosSelecionadosTxt.substr(1);
-
-        $('#txtFiltroObj_codigo').val(txtObjetosSelecionadosTxt);
-        $('#modalLocalizarObjeto').modal('hide');
-        return false;
-    }
-</script>
-
-
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
 
 <script>
     moment.locale('pt-br');         // pt-br
@@ -4107,7 +3995,191 @@
 
     $('#txtorc_data_abertura').datepicker({ dateFormat: 'dd/mm/yy' });
     $('#txtorc_data_Validade_Novo').datepicker({ dateFormat: 'dd/mm/yy' });
-    $('#txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+    function carregaGridOrcamento() {
+
+        // limpar selecionados e abas
+        btnLimparSelecao_onclick();
+
+        $('#tblOrcamento').DataTable().destroy();
+        $('#tblOrcamento').DataTable({
+            "ajax": {
+                "url": "/Orcamento/Orcamento_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": {
+                    "orc_id": 0,
+                    "filtroRodovia": filtroRodovia,
+                    "filtroObjetos": filtroObjetos,
+                    "filtroStatus": filtroStatus == null ? -1 : filtroStatus,
+                    "orc_ativo": $("#chkMostrarInativos").is(":checked") ? 2 : 1,
+                    "FiltroidRodovias": idsRodoviasSelecionados,
+                    "FiltroidObjetos": idsObjetosSelecionados,
+
+                }
+            }
+            , "columns": [
+                { data: "orc_id", "width": "30px", "searchable": false },
+                { data: "orc_id", "className": "hide_column", "searchable": false },
+                { data: "ocs_id", "className": "hide_column", "searchable": false },
+
+                { data: "orc_cod_orcamento", "className": "Centralizado", "width": "80px", "searchable": true },
+                { data: "orc_versao", "className": "Centralizado", "width": "80px", "searchable": true },
+
+                { data: "orc_data_criacao", "className": "Centralizado", "width": "30px", "searchable": true },
+                { data: "orc_data_validade", "className": "Centralizado", "width": "30px", "searchable": true },
+
+                { data: "ocs_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+                { data: "orc_valor_total", "className": "Centralizado", "width": "80px", "searchable": true },
+
+                { data: "orc_os_associadas", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "orc_objetos_associados", "className": "Centralizado", "autoWidth": true, "searchable": true }
+                , { data: "orc_obj_ids_associados", "className": "hide_column" }
+
+                , {
+                    data: "orc_id",
+                    "searchable": false,
+                    "sortable": false,
+                    "render": function (data, type, row) {
+
+                        var retorno = "";
+                        if (permissaoEscrita > 0) {
+                            retorno = '<a href="#" onclick="return EditarOrcamento(' + data + ')" title="Editar" ><span class="glyphicon glyphicon-pencil"></span></a>' + '  ';
+
+                            if (row.orc_ativo == 1)
+                                retorno += '<a href="#" onclick="return AtivarDesativarOrcamento(' + data + ', 0)" title="Ativo" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
+                            else
+                                retorno += '<a href="#" onclick="return AtivarDesativarOrcamento(' + data + ', 1)" title="Desativado" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
+                        }
+                        else {
+                            retorno = '<span class="glyphicon glyphicon-pencil desabilitado"  ></span>' + '  ';
+
+                            if (row.orc_ativo == 1)
+                                retorno += '<span class="glyphicon glyphicon-ok text-success desabilitado" ></span>' + '  ';
+                            else
+                                retorno += '<span class="glyphicon glyphicon-remove text-danger desabilitado"  ></span>' + '  ';
+
+                        }
+
+                        if (permissaoExclusao > 0)
+                            retorno += '<a href="#" onclick="return DeletarOrcamento(' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
+                        else
+                            retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
+
+                        return retorno;
+                    }
+                }
+            ]
+            , 'columnDefs': [
+                {
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full, meta) {
+                        var checkd = orc_ids_selecionados.includes(data + "") ? "checked=checked" : "";
+                        var chk_id = "chkSelecionar_" + data;
+                        return '<input type="checkbox" name="' + chk_id + '" id="' + chk_id + '" ' + checkd + ' value="' + $('<div/>').text(data).html() + '" onchange= "chkSelecao_onchange(this);">';
+                    }
+                }
+                , {
+                    targets: [3] // orc_codigo
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["orc_descricao"]);
+                    }
+                }
+
+                , {
+                    targets: [8] // valor total
+                    , "render": function (data, type, row) {
+                        if (!isNaN(data)) {
+                            var dado = parseFloat(data);
+                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(dado);
+                        }
+                        else
+                            return 0;
+                    }
+                }
+
+            ]
+            , "rowId": "orc_id"
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: true
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+        });
+
+
+    }
+
+    // montagem do gridview
+    $(document).ready(function () {
+
+        var quem = $("#modalSalvarRegistro #cmbAno");
+        preenchecmbAno(quem);
+
+        carregaGridOrcamento();
+
+        var tblOrcamento = $('#tblOrcamento').DataTable();
+     //   $('#tblOrcamento tbody').on('click', 'tr', function () {
+     //       /*            var orc = tblOrcamento.row(this).data();
+     //         selectedId_orc_id = orc["orc_id"];
+
+     //                     if ($(this).hasClass('selected')) {
+     //                         $(this).removeClass('selected');
+     //                     }
+     //                     else {
+     //                         tblOrcamento.$('tr.selected').removeClass('selected');
+     //                         $(this).addClass('selected');
+     //                     }
+
+
+     //         // limpa os arrays
+     //         orc_ids_selecionados = [];
+
+     //         $("#lblSelecionados").html("");
+
+     //         // limpa o GridOrcamento
+     //         tblOrcamento.$('input[type="checkbox"]').each(function () {
+     //             if (this.checked)
+     //                 this.checked = false;
+     //         });
+
+     //         // oculta as abas
+     //         for (var aba = 1; aba <= 10; aba++) {
+     //             var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + aba);
+     //             if (div_FICHA_ORCAMENTO_DETALHES)
+     //                 div_FICHA_ORCAMENTO_DETALHES.style.display = 'none';
+     //         }
+
+
+     //                     // seta a 1a aba
+     //                     orc_ids_selecionados.push(selectedId_orc_id);
+
+     //                     // carrega a aba
+     //         carregaGridOrcamentoDetalhes(1, selectedId_orc_id, 1);
+
+     //         ORCAMENTO_DETALHES_header_click("btn_Toggle_ORCAMENTO_DETALHES_1", 1);
+
+     //         $("#div_ORCAMENTO_DETALHES_1").attr("aria-expanded", "true");
+     //         $("#div_ORCAMENTO_DETALHES_1").removeClass("collapse");
+     //         $("#div_ORCAMENTO_DETALHES_1").addClass("collapse in");
+
+     //         var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_1");
+     //         if (div_FICHA_ORCAMENTO_DETALHES)
+     //             div_FICHA_ORCAMENTO_DETALHES.style.display = 'block';
+     //*/
+     //       //  document.getElementById('subGrids').style.visibility = "visible";
+     //   });
+
+
+    }); // document.ready
 
 
 </script>

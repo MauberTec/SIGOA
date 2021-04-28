@@ -133,6 +133,8 @@ namespace WebApp.DAO
                             ord_data_reinicio = rdr["ord_data_reinicio"] == DBNull.Value ? string.Empty : rdr["ord_data_reinicio"].ToString(),
                             con_id_orcamento = rdr["con_id_orcamento"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id_orcamento"]),
 
+                            orc_id = rdr["orc_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["orc_id"]),
+
                             lst_proximos_status = rdr["lst_proximos_status"] == DBNull.Value ? string.Empty : rdr["lst_proximos_status"].ToString(),
                             ord_indicacao_servico = rdr["ord_indicacao_servico"] == DBNull.Value ? string.Empty : rdr["ord_indicacao_servico"].ToString()
 
