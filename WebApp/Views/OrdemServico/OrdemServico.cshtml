@@ -586,7 +586,7 @@
                                         <nobr><label class="control-label col-sm-4">Data Abertura</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_abertura" name="txtord_data_abertura" placeholder="Data Abertura" maxlength="20"
-                                                   class="form-control fundoBranco" readonly />
+                                                   class="form-control" readonly disabled />
                                         </div>
                                     </div>
 
@@ -1222,12 +1222,12 @@
 
 
 
-<script src="~/Scripts/jquery-ui.js"></script>
+@*<script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/moment.min.js"></script>
-<script src="~/Scripts/datetime-moment.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>*@
+
 <script src="~/Scripts/OrdemServico/OrdemServico.js"></script>
-@*<script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>*@
 
 <script>
 
@@ -1246,7 +1246,6 @@
             $('#txtord_data_planejada_Novo').css('background-color', corBranca);
         }
     });
-
 
     $('#txtord_data_inicio_programada').datepicker({ dateFormat: 'dd/mm/yy' });
     $('#txtord_data_inicio_execucao').datepicker({ dateFormat: 'dd/mm/yy' });

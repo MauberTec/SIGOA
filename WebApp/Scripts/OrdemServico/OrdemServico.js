@@ -467,7 +467,7 @@ function OrdemServico_setaReadWrite(ehRead) {
     var lstTextareas = tabela.getElementsByTagName('textarea');
     var lstButtons = tabela.getElementsByTagName('button');
 
-    var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos", "txtord_criticidade", "txtord_data_atualizacao_status"];
+    var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos", "txtord_criticidade", "txtord_data_atualizacao_status", "txtord_data_abertura"];
     if (ehEdicao)
         controlesReadOnly.push("cmbTiposOS");
 
