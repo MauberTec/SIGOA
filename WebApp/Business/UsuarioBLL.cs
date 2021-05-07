@@ -177,7 +177,7 @@ namespace WebApp.Business
             string saida = retorno > 0 ? "" : "Erro ao salvar usuário";
 
             // se for insercao entao envia a senha por email
-            if ((retorno > 0) && (usu.usu_id == 0))
+            if ((retorno > 0) && (usu.usu_id == 0) && (usu.usu_ativo == 1))
             {
                 string saida2 = new LoginBLL().CriaEnviaEmailComSenha(usu.usu_usuario).Trim();
                 saida = saida + saida2;

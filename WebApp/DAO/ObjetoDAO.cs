@@ -25,9 +25,9 @@ namespace WebApp.DAO
         /// <param name="filtro_obj_codigo">Filtro por codigo de Objeto, null para todos</param> 
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
-        /// <param name="filtro_tip_id">Filtro por tipo de Objeto, -1 para todos</param> 
+        /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, int? filtro_tip_id = -1)
+        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
             try
             {
@@ -44,8 +44,8 @@ namespace WebApp.DAO
                     if ((filtro_clo_id >=0) || (filtro_clo_id == -13)) // -13  retorna classe 2 e 3
                         com.Parameters.AddWithValue("@filtro_clo_id", filtro_clo_id);
 
-                    if (filtro_tip_id >= 0)
-                    com.Parameters.AddWithValue("@filtro_tip_id", filtro_tip_id);
+                    if (filtro_tip_nome != "")
+                    com.Parameters.AddWithValue("@filtro_tip_nome", filtro_tip_nome);
 
 
 

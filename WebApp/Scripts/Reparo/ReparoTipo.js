@@ -290,5 +290,5 @@ $(document).ready(function () {
 
     });
 
-
+    jQuery('#txtrpt_codigo').mask('999')
 });

@@ -43,11 +43,11 @@ namespace WebApp.Controllers
         /// <param name="filtro_obj_codigo">Filtro por codigo de Objeto, 0 para todos</param> 
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
-        /// <param name="filtro_tip_id">Filtro por tipo de Objeto, -1 para todos</param> 
+        /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
         /// <returns>JsonResult Lista de Objetos</returns>
-        public JsonResult Objeto_ListAll(int obj_id, string filtro_obj_codigo, string filtro_obj_descricao, int filtro_clo_id, int filtro_tip_id)
+        public JsonResult Objeto_ListAll(int obj_id, string filtro_obj_codigo, string filtro_obj_descricao, int filtro_clo_id, string filtro_tip_nome)
         {
-            return Json(new { data = new ObjetoBLL().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

@@ -228,6 +228,9 @@ function preenchetblFicha4(obj_id, classe, tipo) {
     selectedId_clo_id = classe;
     selectedId_tip_id = tipo;
 
+    // a cada refresh, reseta o timer
+    resetTimeout();
+
 
     // limpa antes de preencher
     limpatblFicha4();

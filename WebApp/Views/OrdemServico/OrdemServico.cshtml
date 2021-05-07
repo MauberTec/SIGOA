@@ -236,11 +236,11 @@
 <script src="~/Scripts/Shared/_fichasInspecao.js"></script>
 
 <script>
-
-
-
     function abreFicha(qualFicha1) {
-       // limpa todas as fichas
+        // reseta o timer
+        resetTimeout();
+
+        // limpa todas as fichas
         $('#partialFicha1').empty();
         $('#partialFicha2').empty();
         $('#partialFicha3').empty();
@@ -254,31 +254,38 @@
         if (qualFicha == 11) {    // Orcamento
             carregaGridOrcamentoDetalhes(selectedId_orc_id, 11);
         }
-        else {
-            $.ajax({
-                type: 'GET',
-                "data": { qualFicha: qualFicha },
-                url: '@Url.Action("CarregaFicha", "OrdemServico")',
-                success: function (result) {
-                    document.getElementById('partialFicha' + qualFicha).innerHTML = result;
+        else
+            if (qualFicha == 14) {    // Reparo
+                ehEdicaoGridReparo = true;
+                carregaGridReparos(selectedId_ord_id, ehEdicaoGridReparo);
+            }
 
-                    switch (qualFicha) {
-                        case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
-                        case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
-                        case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
-                        case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
-                        case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
-                        case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
-                        case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
-                        case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos(); break; // inspecao ROTINEIRA - Providencias
+            else {
+                $.ajax({
+                    type: 'GET',
+                    "data": { qualFicha: qualFicha },
+                    url: '@Url.Action("CarregaFicha", "OrdemServico")',
+                    success: function (result) {
+                        document.getElementById('partialFicha' + qualFicha).innerHTML = result;
+
+
+                        switch (qualFicha) {
+                            case 1: preenchetblFicha(selectedId_obj_id, 3, -1); break;  // inspecao cadastral
+                            case 2: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao cadastral 2 = 1a rotineira
+                            case 3: preenchetblFicha2(selectedId_obj_id, 3, -1); break; // inspecao rotineira
+                            case 4: preenchetblFicha4(selectedId_obj_id, 3, -1); break; // inspecao especial
+                            case 5: preenchetblFicha4_CAMPO(); break; // inspecao especial campo
+                            case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
+                            case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
+                            case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos(); break; // inspecao ROTINEIRA - Providencias
+                        }
+
+                        colocaDatePickers();
+
                     }
+                });
 
-                    colocaDatePickers();
-
-                }
-            });
-
-        }
+            }
 
     }
 
@@ -359,6 +366,10 @@
 
                     <li style="display:none" id="liFichaOrcamento">
                         <a id="tabFichaOrcamentoheader" data-toggle="tab" href="#tabFichaOrcamento" onclick="abreFicha(11);">Orçamento</a>
+                    </li>
+
+                    <li style="display:none" id="liFichaReparo">
+                        <a id="tabFichaReparoheader" data-toggle="tab" href="#tabFichaReparo" onclick="abreFicha(14);">Recuperação / Reparo</a>
                     </li>
 
                     <li style="display:none" id="liFichaNotificacaoOcorrencia">
@@ -841,10 +852,65 @@
 
                         <br /><br /><br />
 
-                        <div id="partialFicha10">
+                        <div id="partialFicha11">
                             @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
                             @Html.Partial("~/Views/Shared/_OrcamentoDetalhes.cshtml")
                         </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabFichaReparo" role="tabpanel" aria-labelledby="tabFichaReparo">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" id="btnEditar_FichaReparos" style="display:inline" onclick="FichaReparo_Editar()">Editar</button>
+                                    @*<button type="button" class="btn btn-primary" id="btnSalvar_FichaReparo" style="display:none" onclick="FichaReparo_Salvar()">Salvar</button>*@
+                                    <button type="button" class="btn btn-primary" id="btnSairEdicao_FichaReparo" style="display:none" onclick="FichaReparo_SairEdicao()">Sair da Edição</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Reparo</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+
+                                    <div id="partialFicha14">
+                                        <table id="tblOrcamentoReparo">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="7" class="borderBottom "></th>
+                                                    <th colspan="3" class="borderLeft borderBottom Centralizado">Indicado</th>
+                                                    <th colspan="3" class="borderLeft borderBottom Centralizado">Adotado</th>
+                                                    <th class="borderLeft borderBottom Centralizado"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>ian_ordem_apresentacao</th>
+                                                    <th>ore_id</th>
+                                                    <th>orc_id</th>
+                                                    <th>orc_id</th>
+                                                    <th>Elemento</th>
+                                                    <th>Núm</th>
+                                                    <th>Tipo</th>
+                                                    <th>Sigla</th>
+                                                    <th>Alerta</th>
+                                                    <th>Causa</th>
+                                                    <th>Qtde</th>
+
+                                                    <th>Reparo</th>
+                                                    <th>Qtde</th>
+                                                    <th>Unid</th>
+
+                                                    <th>Reparo</th>
+                                                    <th>Qtde</th>
+                                                    <th>Unid</th>
+                                                    <th class="borderLeft borderBottom Centralizado">Reparado</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+
+                                    </div>
                     </div>
 
 
@@ -1047,8 +1113,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <nobr><label class="control-label col-sm-3">Data Início Planejada<span class="text-danger">*</span></label></nobr>
+                        <div class="form-group" id="divDataInicioPlanejada">
+                            <nobr><label class="control-label col-sm-3" id="lblDataInicioPlanejada">Data Início Planejada<span class="text-danger">*</span></label></nobr>
                             <div class="col-sm-9">
                                 <input id="txtord_data_planejada_Novo" name="txtord_data_planejada_Novo" placeholder="Data Início Planejada"
                                        maxlength="20" class="form-control" readonly style="background-color:transparent" />
@@ -1135,8 +1201,6 @@
     </div>
 </div>
 
-
-
 <div class="modal fade" id="modalLocalizarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" style="margin-left:150px; width:750px;">
@@ -1182,8 +1246,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="modalEnviarEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -1240,7 +1302,7 @@
     });
 
     $('#txtord_data_planejada_Novo').datepicker({
-        minDate: 0,
+        //minDate: 0,
         dateFormat: 'dd/mm/yy',
         onSelect: function () {
             $('#txtord_data_planejada_Novo').css('background-color', corBranca);

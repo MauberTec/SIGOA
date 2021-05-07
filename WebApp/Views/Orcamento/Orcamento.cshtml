@@ -1136,8 +1136,11 @@
 <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="~/Content/plugins/sweetalert2.min.js"></script>
-<script src="~/Scripts/moment.min.js"></script>
-<script src="~/Scripts/datetime-moment.js"></script>
+
+@*<script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/datetime-moment.js"></script>*@
 
 
 @section Scripts{
@@ -1156,7 +1159,10 @@
 
 <script src="~/Content/plugins/jquery.mask.min.js"></script>
 <script src="~/Content/plugins/jquery.mask.js"></script>
-
+@*<script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/datetime-moment.js"></script>*@
 
 
 <script>
@@ -1377,6 +1383,7 @@
         return false;
     }
     function btnNovoOrcamento_onclick() {
+
         // limpa o background
         var corBranca = "rgb(255, 255, 255)";
         ////$('#txtorc_codigo_Novo').css("background-color", corBranca);
@@ -1396,9 +1403,11 @@
             dataType: "JSON",
             success: function (result) {
                 // preenche o combo de Status
-                if (result.data.length > 0)
+                $("#modalSalvarRegistro #cmbStatusOrcamento").html(""); // limpa os itens existentes
+                if (result.data.length > 0) {
                     $("#modalSalvarRegistro #cmbStatusOrcamento").append($('<option selected disabled></option>').val(result.data[0].Value).html(result.data[0].Text));
-
+                    $("#modalSalvarRegistro #cmbStatusOrcamento").attr('title', result.data[0].Text);
+                }
 
                 $.ajax({
                     url: '/Orcamento/Orcamento_ProximoSeq',
@@ -1411,6 +1420,8 @@
                         $('#modalSalvarRegistro #txtorc_descricao_Novo').val("");
                         $('#modalSalvarRegistro #txtobj_codigo_Novo').val("");
                         $('#modalSalvarRegistro #txtorc_data_Validade_Novo').val("");
+
+
                         $('#modalSalvarRegistro #cmbStatusOrcamento').val(1);
 
                         $('#modalSalvarRegistro #chkorc_ativo').prop('checked', true);
@@ -1419,6 +1430,9 @@
 
                         document.getElementById("lblModalHeader").innerText = "Novo Orçamento";
                         $("#modalSalvarRegistro").modal('show');
+
+                        //$('#txtorc_data_Validade_Novo').datepicker({ dateFormat: 'dd/mm/yy' });
+                        jQuery("#txtorc_data_Validade_Novo").mask("00/00/0000");
                     }
 
 
@@ -1832,6 +1846,9 @@
         pri_ids_selecionados,
         cmbMes, cmbAno, cmbDesonerado) {
 
+        var statusOrcamento_anterior = $(cmbStatusOrcamento).attr('title');
+        var statusOrcamento_novo = cmbStatusOrcamento.options[cmbStatusOrcamento.selectedIndex].text;
+        var statusOrcamento_valor = cmbStatusOrcamento.options[cmbStatusOrcamento.selectedIndex].value;
 
         if (txtorc_codigo.value.trim() == "") {
             txtorc_codigo.style.backgroundColor = corVermelho;
@@ -2055,47 +2072,49 @@
 
 
                     // atualiza o grid principal
-                    //  $('#tblOrcamento').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
                     $('#tblOrcamento').DataTable().ajax.reload();
+
+                    carregaGridOrcamentoDetalhes(parseInt(aba), orc_id, 1, true);
 
                     ORCAMENTO_DETALHES_setaReadWrite(parseInt(aba), true);
 
-                    if (parseInt($(cmbStatusOrcamento).val()) == 3) // 3 = APROVADO
-                    {
-                        swal({
-                            type: 'success',
-                            title: 'Sucesso',
-                            text: "Orçamento salvo com sucesso. Favor desativar as outras versões"
-                        });
-                    }
-                    else
-                        if (parseInt($(cmbStatusOrcamento).val()) == 4) // 4 = ENCERRADO
+                    if (statusOrcamento_anterior != statusOrcamento_novo) {
+                        if (parseInt(statusOrcamento_valor) == 3) // 3 = APROVADO
                         {
-                            $.ajax({
-                                url: "/OrdemServico/OrdemServico_GetbyID/" + result,
-                                type: "GET",
-                                contentType: "application/json;charset=UTF-8",
-                                dataType: "json",
-                                success: function (result) {
-
-                                    swal({
-                                        type: 'success',
-                                        title: 'Sucesso',
-                                        text: "Orçamento salvo com sucesso. Foi criada a Ordem de Serviço de Orçamento:" + result.ord_codigo 
-                                    });
-
-                                    return false;
-                                },
-                                error: function (errormessage) {
-                                    alert(errormessage.responseText);
-                                }
+                            swal({
+                                type: 'success',
+                                title: 'Sucesso',
+                                text: "Orçamento salvo com sucesso. Favor desativar as outras versões"
                             });
-
-
-
                         }
+                        else
+                            if (parseInt(statusOrcamento_valor) == 4) // 4 = ENCERRADO
+                            {
+                                $.ajax({
+                                    url: "/OrdemServico/OrdemServico_GetbyID/" + result,
+                                    type: "GET",
+                                    contentType: "application/json;charset=UTF-8",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        swal({
+                                            type: 'success',
+                                            title: 'Sucesso',
+                                            text: "Orçamento salvo com sucesso. Foi criada a Ordem de Serviço de Orçamento:" + result.ord_codigo
+                                        });
+
+                                        return false;
+                                    },
+                                    error: function (errormessage) {
+                                        alert(errormessage.responseText);
+                                    }
+                                });
 
 
+
+                            }
+                    }
+
+                    calculaTotal(parseInt(aba), orc_id);
                     $("#modalSalvarRegistro").modal('hide');
                     return false;
                 }
@@ -2278,6 +2297,10 @@
     }
 
     function carregaGridOrcamentoDetalhes(aba, orc_id, ore_ativo, ehRead) {
+        // reseta o timer
+        resetTimeout();
+
+
         // ore_ativo = 0,1,2
         orc_valor_total = 0;
 
@@ -2295,10 +2318,10 @@
         // limpa os backgrounds
         var corBranca = "rgb(255, 255, 255)";
         ////$(prefixo + '#txtorc_codigo_Novo').css("background-color", corBranca);
-        $(prefixo + '#txtorc_versao').css("background-color", corBranca);
-        $(prefixo + '#txtorc_descricao_Novo').css("background-color", corBranca);
-        $(prefixo + '#txtobj_codigo_Novo').css("background-color", corBranca);
-        $(prefixo + '#txtorc_data_Validade_Novo').css("background-color", corBranca);
+        $(prefixo + '#txtorc_versaoDetalhes').css("background-color", corBranca);
+        $(prefixo + '#txtorc_descricao_Detalhes').css("background-color", corBranca);
+        $(prefixo + '#txtobj_codigoDetalhes').css("background-color", corBranca);
+        $(prefixo + '#txtorc_data_Validade_Detalhes').css("background-color", corBranca);
         $(prefixo + '#cmbStatusOrcamentoDetalhes').css("background-color", corBranca);
 
 
@@ -2438,6 +2461,9 @@
                         for (var j = 0; j < lst_proximos_status.length; j++) {
                             var pedacos = lst_proximos_status[j].split(":");
                             $(prefixo + "#cmbStatusOrcamentoDetalhes").append($('<option></option>').val(parseInt(pedacos[0])).html(pedacos[1]));
+                            if (parseInt(row.childNodes[6].innerText) == parseInt(pedacos[0]))
+                                $(prefixo + '#cmbStatusOrcamentoDetalhes').attr('title', pedacos[1]);
+
                         }
 
                         $(prefixo + '#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
@@ -2570,6 +2596,7 @@
         orc_servicos_valor_total = 0;
         totalParcial_ServicosAdicionados = 0;
         var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
+        $(prefixo + "#txtorc_valor_total").val(0);
 
         if ($.fn.dataTable.isDataTable(prefixo + '#tblServicosAdicionados')) {
             $(prefixo + '#tblServicosAdicionados').DataTable().destroy();
@@ -2687,7 +2714,8 @@
                 $(prefixo + "#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados)));
 
                 var Reparos_vtotal = parseFloat($(prefixo + "#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
-                var ServicosAdicionais_vtotal = parseFloat($(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+                var ServicosAdicionais_Aux = $(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", ".");
+                var ServicosAdicionais_vtotal=  isNaN(ServicosAdicionais_Aux) ? 0 :   parseFloat(ServicosAdicionais_Aux) ;
                 $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_vtotal + ServicosAdicionais_vtotal));
 
             }
@@ -2722,8 +2750,14 @@
 
                     totalParcial_ServicosAdicionados = 0;
                     $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload();
-
                     calculaTotal(aba, orc_id);
+                    var tbl = $(prefixo + '#tblServicosAdicionados').DataTable();
+                    if (tbl.rows.length == 0)
+                    {
+                        $(prefixo + "#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(0));
+                        $(prefixo + "#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(0)));
+                    }
+
                 }
                 else {
                     swal({
@@ -2945,8 +2979,8 @@
         var cmbObjetos = document.getElementById("cmbObjetos");
         if (cmbObjetos) {
 
-            var obj_ids  = $("#txtobj_ids_Detalhes").val().split(';');
-            var obj_codigos = $("#txtobj_codigoDetalhes").val().split(';');
+            var obj_ids  = $("#txtobj_ids_Detalhes").val().trim().split(';');
+            var obj_codigos = $("#txtobj_codigoDetalhes").val().trim().split(';');
             var idx = 0;
             for (var i = 0; i < obj_codigos.length; i++)
             {
@@ -3573,7 +3607,7 @@
         <div class="modal-content" style="width:850px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Nova Orçamento</label></b></h3>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Novo Orçamento</label></b></h3>
             </div>
             <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
                 <br />
@@ -3633,11 +3667,10 @@
                         </div>
 
                         <div class="form-group">
-                            <nobr><label class="control-label col-sm-3">Data Validade<span class="text-danger">*</span></label></nobr>
+                            <label class="control-label col-sm-3">Data Validade<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input id="txtorc_data_Validade_Novo" name="txtorc_data_Validade_Novo" placeholder="Data Validade"
-                                       maxlength="20" class="form-control" readonly style="background-color:transparent" />
-
+                                <input id="txtorc_data_Validade_Novo" name="txtorc_data_Validade_Novo" placeholder="dd/mm/aaaa"
+                                    maxlength="10" class="form-control" readonly style="background-color:transparent" />
                             </div>
                         </div>
 
@@ -3779,7 +3812,7 @@
 
                 <div class="modal-footer">
                     <div class="col-md-3 col-md-offset-4">
-                        <button id="bntSalvarObjetos" name="bntSalvarObjetos" onclick="return bntSalvarObjetos_onclick();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                        <button id="bntSalvarObjetos" name="bntSalvarObjetos" onclick="return bntSalvarObjetos_onclick();" class="btn btn-primary btn-block btn-flat">Fechar</button>
                     </div>
                 </div>
             </form>
@@ -3990,14 +4023,34 @@
 <script src="~/Scripts/datetime-moment.js"></script>
 
 <script>
+    $("#modalSalvarRegistro").on('shown.bs.modal', function () {
+        moment.locale('pt-br');         // pt-br
+      //  $('#modalSalvarRegistro #txtorc_data_Validade_Novo').datepicker({ dateFormat: 'dd/mm/yy' });
+        // alert("I want this to appear after the modal has opened!");
+
+    });
+
+
     moment.locale('pt-br');         // pt-br
-    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+    $('#txtorc_data_Validade_Novo').datepicker({ dateFormat: 'dd/mm/yy' });
 
     $('#txtorc_data_abertura').datepicker({ dateFormat: 'dd/mm/yy' });
-    $('#txtorc_data_Validade_Novo').datepicker({ dateFormat: 'dd/mm/yy' });
+
+    $('#div_ORCAMENTO_DETALHES_1 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_2 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_3 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_4 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_5 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_6 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_7 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_8 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_9 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#div_ORCAMENTO_DETALHES_10 #txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
 
 
     function carregaGridOrcamento() {
+        // reseta o timer
+        resetTimeout();
 
         // limpar selecionados e abas
         btnLimparSelecao_onclick();
@@ -4120,66 +4173,11 @@
 
     // montagem do gridview
     $(document).ready(function () {
-
         var quem = $("#modalSalvarRegistro #cmbAno");
         preenchecmbAno(quem);
 
         carregaGridOrcamento();
-
-        var tblOrcamento = $('#tblOrcamento').DataTable();
-     //   $('#tblOrcamento tbody').on('click', 'tr', function () {
-     //       /*            var orc = tblOrcamento.row(this).data();
-     //         selectedId_orc_id = orc["orc_id"];
-
-     //                     if ($(this).hasClass('selected')) {
-     //                         $(this).removeClass('selected');
-     //                     }
-     //                     else {
-     //                         tblOrcamento.$('tr.selected').removeClass('selected');
-     //                         $(this).addClass('selected');
-     //                     }
-
-
-     //         // limpa os arrays
-     //         orc_ids_selecionados = [];
-
-     //         $("#lblSelecionados").html("");
-
-     //         // limpa o GridOrcamento
-     //         tblOrcamento.$('input[type="checkbox"]').each(function () {
-     //             if (this.checked)
-     //                 this.checked = false;
-     //         });
-
-     //         // oculta as abas
-     //         for (var aba = 1; aba <= 10; aba++) {
-     //             var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + aba);
-     //             if (div_FICHA_ORCAMENTO_DETALHES)
-     //                 div_FICHA_ORCAMENTO_DETALHES.style.display = 'none';
-     //         }
-
-
-     //                     // seta a 1a aba
-     //                     orc_ids_selecionados.push(selectedId_orc_id);
-
-     //                     // carrega a aba
-     //         carregaGridOrcamentoDetalhes(1, selectedId_orc_id, 1);
-
-     //         ORCAMENTO_DETALHES_header_click("btn_Toggle_ORCAMENTO_DETALHES_1", 1);
-
-     //         $("#div_ORCAMENTO_DETALHES_1").attr("aria-expanded", "true");
-     //         $("#div_ORCAMENTO_DETALHES_1").removeClass("collapse");
-     //         $("#div_ORCAMENTO_DETALHES_1").addClass("collapse in");
-
-     //         var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_1");
-     //         if (div_FICHA_ORCAMENTO_DETALHES)
-     //             div_FICHA_ORCAMENTO_DETALHES.style.display = 'block';
-     //*/
-     //       //  document.getElementById('subGrids').style.visibility = "visible";
-     //   });
-
-
-    }); // document.ready
+     }); // document.ready
 
 
 </script>

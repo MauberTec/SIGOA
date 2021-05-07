@@ -277,7 +277,7 @@ namespace WebApp.DAO
                         lst.Add(new UsuarioPermissoes
                         {
                             mod_id = Convert.ToInt32(rdr["mod_id"]),
-                            per_id = Convert.ToInt32(rdr["per_id"]),
+                           // per_id = Convert.ToInt32(rdr["per_id"]),
                             mfl_leitura = Convert.ToInt32(rdr["mfl_leitura"]),
                             mfl_escrita = Convert.ToInt32(rdr["mfl_escrita"]),
                             mfl_excluir = Convert.ToInt32(rdr["mfl_excluir"]),

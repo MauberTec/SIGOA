@@ -475,6 +475,52 @@ namespace WebApp.Controllers
         }
 
 
+        /// <summary>
+        /// Lista dos Itens da Ordens de Servico de Reparo selecionada
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico a se filtrar</param>
+        /// <returns>JsonResult Lista de OrcamentoDetalhes</returns>
+        public JsonResult OrdemServicoReparo_ListAll(int ord_id)
+        {
+            return Json(new { data = new OrdemServicoBLL().OrdemServicoReparo_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Busca as O.Ss de Reparo criadas a partir da O.S. de Orçamento
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. de Orçamento</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult ConcatenaOSReparo(int ord_id)
+        {
+            return Json(new { data = new OrdemServicoBLL().ConcatenaOSReparo(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Altera Status de Item de Reparo  Ordem de Servico
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServicoReparoItem_Status(int ore_id, int ast_id)
+        {
+            int retorno = new OrdemServicoBLL().OrdemServicoReparoItem_Status(ore_id, ast_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Altera Status dos Itens Nao Reparados da Ordem de Servico
+        /// </summary>
+        /// <param name="ord_id">Id do Reparo Selecionado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServicoReparo_Atualiza_Itens_NaoReparados(int ord_id)
+        {
+            int retorno = new OrdemServicoBLL().OrdemServicoReparo_Atualiza_Itens_NaoReparados(ord_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

@@ -40,7 +40,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult PreencheCmbRodoviasLocalizados(string filtro_rod_codigo = "")
         {
-            return Json(new ObjetoBLL().PreenchecmbFiltroRodovias(filtro_rod_codigo), JsonRequestBehavior.AllowGet);
+             return Json(new ObjetoBLL().PreenchecmbFiltroRodovias(filtro_rod_codigo), JsonRequestBehavior.AllowGet);
         }
 
 

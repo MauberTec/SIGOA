@@ -1426,6 +1426,221 @@ namespace WebApp.DAO
         }
 
 
+        // *************** OrdemServico DE REPARO *************************************************************
+
+
+        /// <summary>
+        /// Lista dos Itens da Ordens de Servico de Reparo selecionada
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico a se filtrar</param>
+        /// <returns>Lista de OrcamentoDetalhes</returns>
+        public List<OrcamentoDetalhes> OrdemServicoReparo_ListAll(int ord_id)
+        {
+            try
+            {
+                int obj_idElemento_atual = -1;
+                int obj_idElemento_anterior = -1;
+
+                List<OrcamentoDetalhes> lst = new List<OrcamentoDetalhes>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_OS_REPARO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        obj_idElemento_atual = Convert.ToInt16(rdr["obj_idElemento"]);
+
+                        lst.Add(new OrcamentoDetalhes
+                        {
+
+                            ore_id = Convert.ToInt32(rdr["ore_id"]),
+                            orc_id_pai = Convert.ToInt32(rdr["orc_id_pai"]),
+
+                            obj_idElemento = obj_idElemento_atual,
+                            obj_codigoElemento = obj_idElemento_atual != obj_idElemento_anterior ? rdr["obj_codigoElemento"].ToString() : "",
+                            obj_descricaoElemento = obj_idElemento_atual != obj_idElemento_anterior ? rdr["obj_descricaoElemento"].ToString() : "",
+
+                            ian_id = rdr["ian_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ian_id"]),
+                            ian_numero = ((rdr["ian_numero"] == DBNull.Value) || (Convert.ToInt32(rdr["ian_numero"]) == 0)) ? "" : rdr["ian_numero"].ToString(),
+
+                            ian_ordem_apresentacao = Convert.ToInt16(rdr["ian_ordem_apresentacao"]),
+
+                            atp_id = rdr["atp_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["atp_id"]),
+                            atp_codigo = rdr["atp_codigo"] == DBNull.Value ? "" : rdr["atp_codigo"].ToString(),
+                            atp_descricao = rdr["atp_descricao"] == DBNull.Value ? "" : rdr["atp_descricao"].ToString(),
+
+                            ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
+                            leg_id = rdr["leg_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["leg_id"]),
+                            leg_codigo = rdr["leg_codigo"] == DBNull.Value ? "" : rdr["leg_codigo"].ToString(),
+                            leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
+
+                            ale_id = rdr["ale_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ale_id"]),
+                            ale_codigo = rdr["ale_codigo"] == DBNull.Value ? "" : rdr["ale_codigo"].ToString(),
+                            ale_descricao = rdr["ale_descricao"] == DBNull.Value ? "" : rdr["ale_descricao"].ToString(),
+
+                            aca_id = rdr["aca_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["aca_id"]),
+                            aca_codigo = rdr["aca_codigo"] == DBNull.Value ? "" : rdr["aca_codigo"].ToString(),
+                            aca_descricao = rdr["aca_descricao"] == DBNull.Value ? "" : rdr["aca_descricao"].ToString(),
+                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade"]),
+                                                                          
+
+                             rpt_id_sugerido = rdr["rpt_id_sugerido"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_sugerido"]),
+                            rpt_id_sugerido_codigo = rdr["rpt_id_sugerido_codigo"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_codigo"].ToString(),
+                            rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
+                            rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
+                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"]),
+
+                            rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
+                            rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
+                            rpt_id_adotado_descricao = rdr["rpt_id_adotado_descricao"] == DBNull.Value ? "" : rdr["rpt_id_adotado_descricao"].ToString(),
+                            rpt_id_adotado_unidade = rdr["rpt_id_adotado_unidade"] == DBNull.Value ? "" : rdr["rpt_id_adotado_unidade"].ToString(),
+                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"]),
+
+                            ast_id = rdr["ast_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ast_id"]),
+                            ast_codigo = rdr["ast_codigo"] == DBNull.Value ? "" : rdr["ast_codigo"].ToString(),
+                            ast_descricao = rdr["ast_descricao"] == DBNull.Value ? "" : rdr["ast_descricao"].ToString()
+                       });
+
+                        obj_idElemento_anterior = obj_idElemento_atual;
+                    }
+
+
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Busca as O.Ss de Reparo criadas a partir da O.S. de Orçamento
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. de Orçamento</param>
+        /// <returns>string</returns>
+        public string ConcatenaOSReparo(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("SELECT dbo.ConcatenaOSReparo(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    return com.ExecuteScalar().ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+        /// <summary>
+        ///  Altera Status de Item de Reparo  Ordem de Servico
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int OrdemServicoReparoItem_Status(int ore_id, int ast_id, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_OS_REPARO_ITEM_STATUS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ore_id", ore_id);
+                    com.Parameters.AddWithValue("@ast_id", ast_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///  Altera Status dos Itens Nao Reparados da Ordem de Servico
+        /// </summary>
+        /// <param name="ord_id">Id do Reparo Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int OrdemServicoReparo_Atualiza_Itens_NaoReparados(int ord_id, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_OS_REPARO_ITEM_NAO_REPARADOS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+
 
     }
 }

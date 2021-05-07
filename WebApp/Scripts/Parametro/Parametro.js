@@ -56,7 +56,8 @@ function Parametro_Editar(id) {
 
             // coloca mascara de senha
             var x = document.getElementById("txtpar_valor");
-            if (result.par_id == "email_Senha") 
+          //  if (result.par_id.indexOf("Senha") > 0) // == "email_Senha") 
+            if  ((result.par_id.indexOf("Senha") > 0) && (result.par_id != "email_txtEsqueciSenha"))
                 x.type = "password";
             else
                 x.type = "text";
@@ -84,7 +85,8 @@ $(document).ready(function () {
             {
                 data: "par_valor", "autoWidth": true,
                 "render": function (data, type, row) {
-                    if (row["par_id"] == "email_Senha")
+                  //  if (row["par_id"] == "email_Senha")
+                    if ((row["par_id"].indexOf("Senha") > 0) && (row["par_id"] != "email_txtEsqueciSenha"))
                         return retorno = '***************';
                     else
                         return row["par_valor"];

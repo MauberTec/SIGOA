@@ -21,7 +21,7 @@ var selectedGrid = -1;
 var filtro_obj_codigo = '';
 var filtro_obj_descricao = '';
 var filtro_clo_id = -1;
-var filtro_tip_id = -1;
+var filtro_tip_nome = "";
 
 var ehInsercao = 0;
 var lstExcecoes_Tipos = [45, 46, 53, 104, 105, 111, 126];
@@ -955,7 +955,7 @@ function LimparFiltro() {
     filtro_obj_codigo = '';
     filtro_obj_descricao = '';
     filtro_clo_id = -1;
-    filtro_tip_id = -1;
+    filtro_tip_nome = "";
 
     carregaGrid(0);
 
@@ -1010,8 +1010,7 @@ function ExecutarFiltro() {
     filtro_obj_descricao = $("#txtFiltroObj_Descricao").val().trim();
     filtro_clo_id = selectedId_clo_id;
 
-    filtro_tip_id = selectedId_tip_id;
-    filtro_tip_id = selectedId_tip_id;
+    filtro_tip_nome = $("#cmbFiltroTiposObjeto option:selected").text();
 
 
     carregaGrid(selectedId_obj_id);
@@ -1056,6 +1055,9 @@ function txtcodigo_onblur() {
 
 function carregaGrid(id) {
 
+    // reseta o timer
+    resetTimeout();
+
     // guarda os valores da paginacao
     var tblObjetos = $('#tblObjetos').DataTable();
     var info = tblObjetos.page.info();
@@ -1074,7 +1076,7 @@ function carregaGrid(id) {
                 "filtro_obj_codigo" : filtro_obj_codigo,
                 "filtro_obj_descricao": filtro_obj_descricao,
                 "filtro_clo_id": filtro_clo_id,
-                "filtro_tip_id" : filtro_tip_id
+                "filtro_tip_nome": filtro_tip_nome
             }
         }
         , "columns": [
@@ -1413,7 +1415,7 @@ function LimparPopup() {
     filtro_obj_codigo = '';
     filtro_obj_descricao = '';
     filtro_clo_id = -1;
-    filtro_tip_id = -1;
+    filtro_tip_nome = "";
 
     carregaGrid(0);
 

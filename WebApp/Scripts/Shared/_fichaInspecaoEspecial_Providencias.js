@@ -135,6 +135,10 @@ function tblFicha4_PROVIDENCIA_prenchetdCombos(qualCombo, listadeValores, select
 
 function preenchetblFicha4_PROVIDENCIAS() {
 
+    // a cada refresh, reseta o timer
+    resetTimeout();
+
+
     $("#lblOAE").text(selected_obj_codigo);
     $('#txt_ins_anom_data').datepicker({ dateFormat: 'dd/mm/yy' });
 

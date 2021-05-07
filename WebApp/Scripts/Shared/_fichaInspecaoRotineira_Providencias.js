@@ -141,6 +141,9 @@ function Ficha2_PROVIDENCIAS_limpar() {
 }
 
 function preenchetblFicha2_PROVIDENCIAS() {
+    // a cada refresh, reseta o timer
+    resetTimeout();
+
 
     if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao")) {
 

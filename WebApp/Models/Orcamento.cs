@@ -183,12 +183,10 @@ namespace WebApp.Models
         /// </summary>
         public int orc_ativo { get; set; }
 
-
         /// <summary>
         ///  Data de Base do Orçamento
         /// </summary>
         public string orc_data_base { get; set; }
-
 
         /// <summary>
         /// Id de Desonerado(D)/Não Desonerado(O)
@@ -200,7 +198,6 @@ namespace WebApp.Models
         /// Onerado?
         /// </summary>
         public string tpt_descricao { get; set; }
-
 
         /// <summary>
         /// id do Status do Orçamento
@@ -429,6 +426,23 @@ namespace WebApp.Models
         /// lista de Status de Orçamento
         /// </summary>
         public string lstStatusOrcamento { get; set; }
+
+
+        /// <summary>
+        /// Id do Status da anomalia 
+        /// </summary>
+        public int ast_id { get; set; }
+
+        /// <summary>
+        /// Código do Status da anomalia
+        /// </summary>
+        public string ast_codigo { get; set; }
+
+        /// <summary>
+        /// Descrição do Status da anomalia
+        /// </summary>
+        public string ast_descricao { get; set; }
+
 
     }
 

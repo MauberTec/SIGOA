@@ -109,13 +109,22 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         ' </tr> ';
 
 
-    //  var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_105", "txt_atr_id_106", "txt_atr_id_107", "cmb_atr_id_130", "cmb_atr_id_131",
-        //"cmb_atr_id_1020", "cmb_atr_id_1084", "cmb_atr_id_1085", "cmb_atr_id_1087", "cmb_atr_id_1088", "cmb_atr_id_1089", "cmb_atr_id_1091", "cmb_atr_id_1092", "cmb_atr_id_1093", "cmb_atr_id_1094",
     var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_106", "cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153"
         //,"txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"
     ];
 
     var controlesExcecoes_Salvar = ["cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "cmb_atr_id_148", "cmb_atr_id_150", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153", "txt_atr_id_157"];
+
+    $(window).scroll(function () {
+        sessionStorage.scrollTop = $(this).scrollTop();
+    });
+
+    $(document).ready(function () {
+        if (sessionStorage.scrollTop != "undefined") {
+            $(window).scrollTop(sessionStorage.scrollTop);
+        }
+    });
+
 
     function Ficha2_header_click(quem, expandir) {
         if (expandir == null)
@@ -335,6 +344,9 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         tipo = parseInt(tipo);
         selectedId_clo_id = classe;
         selectedId_tip_id = tipo;
+
+        // a cada refresh, reseta o timer
+        resetTimeout();
 
 
         // limpa antes de preencher
@@ -991,7 +1003,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                     });
 
                     // atualiza tabela grupos
-                    Ficha2_CriarTabelaGrupos();
+                    Ficha2_CriarTabelaGrupos(false);
                     return false;
                 }
                 else {
@@ -1415,7 +1427,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
             url: '/Objeto/PreenchecmbTiposObjeto',
             type: "POST",
             dataType: "JSON",
-            data: { clo_id: clo_id, tip_pai: tip_pai, excluir_existentes: excluir_existentes, obj_id: selectedId_obj_id, somente_com_variaveis_inspecao:1 },
+            data: { clo_id: clo_id, tip_pai: tip_pai, excluir_existentes: excluir_existentes, obj_id: selectedId_obj_id, somente_com_variaveis_inspecao:0 },
             success: function (lstSubNiveis) {
 
                 if (clo_id != 9) {
@@ -1428,17 +1440,28 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                     $("#divFicha2_GrupoObjetos").empty();
                     $.each(lstSubNiveis, function (i, objeto) {
                         i++;
+                        var podeIr = true;
                         if (i < 50) {
-                            var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                            tagchk = tagchk.replace("idXXX", "chk" + i);
-                            tagchk = tagchk.replace("nameXXX", "chk" + i);
-                            tagchk = tagchk.replace("valueXXX", objeto.Value);
+                            if (tip_pai == 23)
+                            {
+                                if ((objeto.Text != "Cortina") && (objeto.Text != "Muro de Ala"))  // se for estrutura de concreto, mostra somente muro de ala e cortina
+                                { 
+                                    podeIr = false;
+                                }
+                            }
 
-                            var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                            taglbl = taglbl.replace("idXXX", "chk" + i);
-                            taglbl = taglbl.replace("TextoXXX", objeto.Text);
+                            if (podeIr) {
+                                var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+                                tagchk = tagchk.replace("idXXX", "chk" + i);
+                                tagchk = tagchk.replace("nameXXX", "chk" + i);
+                                tagchk = tagchk.replace("valueXXX", objeto.Value);
 
-                            $("#divFicha2_GrupoObjetos").append(tagchk + taglbl);
+                                var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
+                                taglbl = taglbl.replace("idXXX", "chk" + i);
+                                taglbl = taglbl.replace("TextoXXX", objeto.Text);
+
+                                $("#divFicha2_GrupoObjetos").append(tagchk + taglbl);
+                            }
                         }
                     });
                 }
@@ -1500,11 +1523,16 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         else
             // ENCONTROS
             if (ivalor == 14) {
+                // mostra Subdivisao2
+                document.getElementById("Ficha2_divSubdivisao2").style.display = 'block';
+                Ficha2_preencheCombo(7, 'Ficha2_cmbSubdivisao2', '--Selecione--', ivalor);
+
                 // oculta tudo e deixa somente o botao salvar
-                document.getElementById("Ficha2_divGrupoObjetos").style.display = 'none';
+                //document.getElementById("Ficha2_divGrupoObjetos").style.display = 'none';
 
                 //// mostra Subdivisao2 e 3
                 //document.getElementById("Ficha2_divSubdivisao2").style.display = 'block';
+                //Ficha2_preencheCombo(8, 'Ficha2_cmbSubdivisao2', '--Selecione--', ivalor);
 
                 //// preenche combo manualmente, tip_id = 22,23,24 ESTRUTURAS DE TERRRA, DE CONCRETO E ACESSOS
                 //$("#Ficha2_cmbSubdivisao2").append($('<option></option>').val("").html("--Selecione--"));
@@ -1533,7 +1561,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         var valor = document.getElementById("Ficha2_cmbSubdivisao2").value;
         var ivalor = getTipoId(valor);
 
-        //if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
+        //if (ivalor != 24) //|| (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
+        //{
             Ficha2_LimparCampos(9);
             Ficha2_preencheCombo(9, 'divFicha2_GrupoObjetos', '--Selecione--', ivalor)
         //}

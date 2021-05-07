@@ -350,6 +350,9 @@ function limpatblFicha() {
 }
 function preenchetblFicha(obj_id, classe, tipo, ins_id)
 {
+    // a cada refresh, reseta o timer
+    resetTimeout();
+
     classe = parseInt(classe);
     tipo = parseInt(tipo);
     selectedId_clo_id = classe;

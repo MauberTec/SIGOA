@@ -566,6 +566,10 @@ function preenchetblFicha4_CAMPO(ehRead) {
     if (ehRead == null)
         ehRead = true;
 
+    // a cada refresh, reseta o timer
+    resetTimeout();
+
+
     $("#lblOAE").text(selected_obj_codigo);
     $('#txt_ins_anom_data').datepicker({ dateFormat: 'dd/mm/yy' });
 
@@ -1032,6 +1036,10 @@ function cmb_Causa_onchange(quem) {
 }
 
 function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
+
+    // a cada refresh, reseta o timer
+    resetTimeout();
+
     // habilita ou desabilita todos os controles editaveis
     var lstTxtBoxes = tabela.getElementsByTagName('input');
     var lstCombos = tabela.getElementsByTagName('select');

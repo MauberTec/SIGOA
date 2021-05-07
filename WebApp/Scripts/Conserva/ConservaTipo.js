@@ -274,4 +274,6 @@ $(document).ready(function () {
     });
 
 
+    jQuery('#txtcot_codigo').mask('999')
+
 });

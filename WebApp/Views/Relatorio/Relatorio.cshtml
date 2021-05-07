@@ -494,7 +494,7 @@
 
             var selrod_id = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].value;
             var sel_txt = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].text;
-            var selrod_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
+            var selrod_codigo = sel_txt; //.substring(0, sel_txt.indexOf("(") - 1);
 
             var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val() + ";" + selrod_codigo;
             if (txtRodoviasSelecionadosTxt.startsWith(";"))

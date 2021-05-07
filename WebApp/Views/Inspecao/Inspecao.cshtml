@@ -384,6 +384,11 @@
 
 <script>
     function abreFicha(qualFicha1) {
+
+        // a cada refresh, reseta o timer
+        resetTimeout();
+
+
         // limpa todas as fichas
         $('#partialFicha1').empty();
         $('#partialFicha2').empty();

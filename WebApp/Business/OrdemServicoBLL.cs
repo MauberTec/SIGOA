@@ -592,5 +592,55 @@ namespace WebApp.Business
             return new Gerais().MandaEmail(av1, pEmail);
         }
 
+
+
+        // *************** Ordem Servico  DE REPARO *************************************************************
+
+        /// <summary>
+        /// Lista dos Itens da Ordens de Servico de Reparo selecionada
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico a se filtrar</param>
+        /// <returns>Lista de OrcamentoDetalhes</returns>
+        public List<OrcamentoDetalhes> OrdemServicoReparo_ListAll(int ord_id)
+        {
+            return new OrdemServicoDAO().OrdemServicoReparo_ListAll(ord_id);
+        }
+
+        /// <summary>
+        /// Busca as O.Ss de Reparo criadas a partir da O.S. de Orçamento
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. de Orçamento</param>
+        /// <returns>string</returns>
+        public string ConcatenaOSReparo(int ord_id)
+        {
+            return new OrdemServicoDAO().ConcatenaOSReparo(ord_id);
+        }
+
+
+        /// <summary>
+        ///  Altera Status de Item de Reparo  Ordem de Servico
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
+        /// <returns>int</returns>
+        public int OrdemServicoReparoItem_Status(int ore_id, int ast_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().OrdemServicoReparoItem_Status(ore_id, ast_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
+        /// <summary>
+        ///  Altera Status dos Itens Nao Reparados da Ordem de Servico
+        /// </summary>
+        /// <param name="ord_id">Id do Reparo Selecionado</param>
+        /// <returns>int</returns>
+        public int OrdemServicoReparo_Atualiza_Itens_NaoReparados(int ord_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().OrdemServicoReparo_Atualiza_Itens_NaoReparados(ord_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
     }
 }

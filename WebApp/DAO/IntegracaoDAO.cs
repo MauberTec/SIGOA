@@ -24,6 +24,16 @@ namespace WebApp.DAO
             // busca pela API
             List<Rodovia> lstRodovias = get_Rodovias_API("");
 
+            if (lstRodovias.Count == 0)
+            {
+                List<Rodovia> saida_erro = new List<Rodovia>();
+                Rodovia err = new Rodovia();
+                err.rod_codigo = "-1";
+                err.rod_descricao = "Lista de Rodovias não encontrada no Sirgeo";
+                saida_erro.Add(err);
+                return saida_erro;
+
+            }
             if (lstRodovias.Count == 1)
             {
                 if (lstRodovias[0].rod_codigo == "-1")
@@ -96,7 +106,7 @@ namespace WebApp.DAO
             try
             {
                 bool sincronizar = true;
-                List<Rodovia> lst = new List<Rodovia>();
+                 List<Rodovia> lst = new List<Rodovia>();
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();

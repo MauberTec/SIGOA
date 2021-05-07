@@ -293,12 +293,12 @@ namespace WebApp.Controllers
         /// <param name="filtro_obj_codigo">Código ou Parte a se localizar</param>
         /// <param name="filtro_obj_descricao">Descrição ou Parte a se localizar</param>
         /// <param name="filtro_clo_id">Id da Classe a se filtrar</param>
-        /// <param name="filtro_tip_id">Id do Tipo a se filtrar</param>
+        /// <param name="filtro_tip_nome">Tipo a se filtrar</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult PreencheCmbObjetosLocalizados(int doc_id, string filtro_obj_codigo, string filtro_obj_descricao = "", int? filtro_clo_id = -1, int? filtro_tip_id = -1)
+        public JsonResult PreencheCmbObjetosLocalizados(int doc_id, string filtro_obj_codigo, string filtro_obj_descricao = "", int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
-            return Json(new DocumentoBLL().PreencheCmbObjetosLocalizados(doc_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_id), JsonRequestBehavior.AllowGet);
+            return Json(new DocumentoBLL().PreencheCmbObjetosLocalizados(doc_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome), JsonRequestBehavior.AllowGet);
         }
 
 

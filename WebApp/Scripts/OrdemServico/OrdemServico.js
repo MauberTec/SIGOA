@@ -14,6 +14,7 @@ var filtroStatusOS = -1;
 var filtroord_data_De = '';
 var filtroord_data_Ate = '';
 var ehEdicao = false;
+var ehEdicaoGridReparo = false;
 
 var totalParcial_Reparos = 0;
 var totalParcial_ServicosAdicionados = 0;
@@ -141,7 +142,8 @@ function bntSalvar_Novo_onclick()
         success: function (result) {
 
 
-            if (result.data.length > 0) {
+            if ((result.data.length > 0) && ( parseInt(sel_tos_id) != 18)) // 18 = notificacao de ocorrencia
+            {
                 // entao já tem mesmo tipo para a data planejada e mesmo objeto
                 swal({
                     type: 'error',
@@ -257,8 +259,20 @@ function cmbTiposOS_Novo_onchange()
             }
         });
 
+        var divDataInicioPlanejada = document.getElementById("divDataInicioPlanejada");
+       if ($('#cmbTiposOS_Novo').val() == "18") {
+            if (divDataInicioPlanejada)
+                divDataInicioPlanejada.style.display = "none";
+            $('#txtord_data_planejada_Novo').val($('#txtord_data_abertura_Novo').val());
 
+        }
+       else {
+           if (divDataInicioPlanejada)
+               divDataInicioPlanejada.style.display = "block";
 
+            //$('#lblDataInicioPlanejada').text("Data Início Planejada");
+            //$('#txtord_data_planejada_Novo').attr("placeholder", "Data Início Planejada");
+        }
 
     }
     else
@@ -288,6 +302,7 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     var liDocumentosAssociadosOBJ = document.getElementById("liDocumentosAssociadosOBJ");
     var liDocumentosAssociadosOS = document.getElementById("liDocumentosAssociadosOS");
 
+    var liFichaReparo = document.getElementById("liFichaReparo");
 
     //if (liDetalhesOS)
     //    $('[href="#tabDetalhesOS"]').tab('show');
@@ -321,6 +336,9 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
 
     if (liFichaOrcamento)
         liFichaOrcamento.style.display = "none";
+
+    if (liFichaReparo)
+        liFichaReparo.style.display = "none";
 
 
     switch (parseInt(selectedId_tos_id)) {
@@ -369,6 +387,16 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
                 liDocumentosAssociadosOS.style.display = "none";
 
             break;
+
+        case 14: // reparo
+
+            liFichaReparo.style.display = "unset";
+            if (bool_posicionar)
+                $('[href="#tabFichaReparo"]').tab('show');
+
+
+            break;
+
 
         case 18:
             liFichaNotificacaoOcorrencia.style.display = "unset";
@@ -676,9 +704,63 @@ function OrdemServico_Salvar() {
                 carregaGridOS(selectedId_ord_id);
               //  $('#tblOrdemServicos').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
 
+
+                if ((parseInt($('#cmbTiposOS').val()) == 11) && (parseInt(selectedId_sos_id) == 14)) // tipo Orcamento status encerrada.
+                {
+                    $.ajax({
+                        url: "/OrdemServico/ConcatenaOSReparo",
+                        data: JSON.stringify({ "ord_id": selectedId_ord_id }),
+                        type: "POST",
+                        contentType: "application/json;charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            swal({
+                                type: 'success',
+                                title: 'Sucesso',
+                                text: 'A(s) OS(s) ' + result.data.replaceAll(";",",") + ' foi(ram) criada(s). Favor fazer o seu planejamento pois o sistema abre com a data atual, mas o usuário deverá colocar a data correta de planejamento'
+                            }).then(
+                                function () {
+                                    //desabilita os controles
+                                    OrdemServico_setaReadWrite(divDetalhes, true);
+                                    return false;
+                                });
+
+                            return false;
+                        },
+                        error: function (errormessage) {
+                            swal({
+                                type: 'error',
+                                title: 'Aviso',
+                                text: errormessage.responseText
+                            }).then(
+                                function () {
+                                    return false;
+                                });
+                            return false;
+                        }
+                    });
+                }
+
+                //tipo Recuperação Reparo status Parcialmente Executada
+                if ((parseInt($('#cmbTiposOS').val()) == 14) && (parseInt(selectedId_sos_id) == 12)) 
+                {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Como a O.S. foi parcialmente executada, favor selecionar os Itens que foram Reparados.'
+                    }).then(
+                                 function () {
+ 
+                                     mostraAba(14, true);
+
+                                     FichaReparo_Editar();
+
+                                     return false;
+                                 });
+                }
+
                 //desabilita os controles
                 OrdemServico_setaReadWrite(divDetalhes, true);
-
                 return false;
             },
             error: function (errormessage) {
@@ -707,6 +789,11 @@ function OrdemServico_Editar(id, origem) {
     ehEdicao = true;
     if (origem == 'btnEditar_Detalhes')
         OrdemServico_PreencheDetalhes(selectedId_ord_id);
+
+    var liDetalhesOS = document.getElementById("liDetalhesOS");
+    if (liDetalhesOS)
+        $('[href="#tabDetalhesOS"]').tab('show');
+
     return false;
 }
 
@@ -1431,7 +1518,212 @@ function carregaGridOrcamentoDetalhes(orc_id, tos_id)
 }
 
 
+// ********* REPAROS ******************************************
 
+function carregaGridReparos(ord_id, ehRead)
+{
+
+    // CARREGA OS DADOS DO GRID MAIS DA TABELA HEADER COM OS DADOS DA 1A LINHA
+    if ($.fn.dataTable.isDataTable("#tblOrcamentoReparo")) {
+        $("#tblOrcamentoReparo").DataTable().destroy();
+    }
+    $("#tblOrcamentoReparo").DataTable({
+        "ajax": {
+            "url": "/OrdemServico/OrdemServicoReparo_ListAll",
+            "type": "GET",
+            "datatype": "json",
+            "data": function (d) {
+                d.ord_id = ord_id;
+            }
+        }
+        , "columns": [
+            { data: "ian_ordem_apresentacao", "className": "hide_column" },
+            { data: "ore_id", "className": "hide_column" },
+            { data: "orc_id", "className": "hide_column" },
+            { data: "orc_id_pai", "className": "hide_column" },
+
+            { data: "obj_codigoElemento", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "atp_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "leg_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ale_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "aca_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+
+            { data: "rpt_id_sugerido_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_quantidade_sugerida", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rpt_id_sugerido_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+
+            { data: "rpt_id_adotado_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+            { data: "ian_quantidade_adotada", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "rpt_id_adotado_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            {
+                data: "ore_id", "searchable": false, "className": "borderLeft Centralizado", "sortable": false,
+                "render": function (data, type, row) {
+                    var retorno = "";
+                    if ((permissaoEscrita > 0) && (!ehRead))
+                    {
+                        
+                            if (row.ast_id == 2)
+                                retorno = '<a href="#" onclick="return OrdemServicoReparoItem_Status(' + data + ', 3)" title="Aguardando Reparo" ><span class="fa fa-square-o"></span></a>' + '  ';
+                            else
+                                retorno = '<a href="#" onclick="return OrdemServicoReparoItem_Status(' + data + ', 2)" title="Reparado" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
+                        }
+                    else
+                        {
+                            if (row.ast_id == 2)
+                                retorno = '<span class="fa fa-square-o"></span>' + '  ';
+                            else
+                                retorno = '<span class="glyphicon glyphicon-ok text-success"></span>' + '  ';
+                        }
+
+                    return retorno;
+                }
+            }
+        ]
+        , "order": [0, "asc"]
+        , "ordering": false
+        , 'columnDefs': [
+            {
+                targets: [4] // tooltip obj_codigoElemento
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["obj_descricaoElemento"]);
+                }
+            }
+            , {
+                targets: [6] // tooltip atp_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["atp_descricao"]);
+                }
+            }
+            , {
+                targets: [7] // tooltip ian_sigla = leg_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["leg_descricao"]);
+                }
+            }
+            , {
+                targets: [8] // tooltip ale_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["ale_descricao"]);
+                }
+            }
+            , {
+                targets: [9] // tooltip aca_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["aca_descricao"]);
+                }
+            }
+            , {
+                targets: [11] // tooltip rpt_id_sugerido_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["rpt_id_sugerido_descricao"]);
+                }
+            }
+            , {
+                targets: [12] // quantidade sugerida
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR').format(data);
+                }
+            }
+            , {
+                targets: [14] // tooltip rpt_id_adotado_codigo
+                , "createdCell": function (td, cellData, rowData, row, col) {
+                    $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
+                }
+            }
+            , {
+                targets: [15] // quantidade adotada
+                , "render": function (data, type, row) {
+                    return new Intl.NumberFormat('pt-BR').format(data);
+                }
+            }
+        ]
+        , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+        , select: { style: 'single' }
+        , searching: false
+        , "oLanguage": idioma
+        , "pagingType": "input"
+        , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+    });
+
+    return false;
+}
+
+function OrdemServicoReparoItem_Status(ore_id, ast_id) {
+
+    if (ore_id >= 0) {
+        var form = this;
+        //swal({
+        //    title: "Alterar Status do Reparo. Tem certeza?",
+        //    icon: "warning",
+        //    buttons: [
+        //        'Não',
+        //        'Sim'
+        //    ],
+        //    dangerMode: true,
+        //    focusCancel: true
+        //}).then(function (isConfirm) {
+        //    if (isConfirm) {
+                var response = POST("/OrdemServico/OrdemServicoReparoItem_Status",
+                JSON.stringify({
+                    ore_id: ore_id,
+                    ast_id: ast_id
+                }))
+                if (response.status == true) {
+                    //swal({
+                    //    type: 'success',
+                    //    title: 'Sucesso',
+                    //    text: 'Sucesso'
+                    //});
+
+                    $("#tblOrcamentoReparo").DataTable().ajax.reload(null, false);
+                    return false;
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: "Erro ao mudar status"
+                    });
+                return false;
+                }
+                return false;
+        //    }
+        //})
+    }
+
+    return false;
+}
+
+function FichaReparo_Editar()
+{
+    ehEdicaoGridReparo = false;
+    carregaGridReparos(selectedId_ord_id, ehEdicaoGridReparo);
+
+    var btnEditar_FichaReparos = document.getElementById("btnEditar_FichaReparos");
+    var btnSairEdicao_FichaReparo = document.getElementById("btnSairEdicao_FichaReparo");
+    if ((btnEditar_FichaReparos) && (btnSairEdicao_FichaReparo)) {
+        btnEditar_FichaReparos.style.display = 'none';
+        btnSairEdicao_FichaReparo.style.display = 'inline';
+    }
+    
+}
+
+function FichaReparo_SairEdicao()
+{
+    ehEdicaoGridReparo = true;
+    carregaGridReparos(selectedId_ord_id, ehEdicaoGridReparo);
+
+    var btnEditar_FichaReparos = document.getElementById("btnEditar_FichaReparos");
+    var btnSairEdicao_FichaReparo = document.getElementById("btnSairEdicao_FichaReparo");
+    if ((btnEditar_FichaReparos) && (btnSairEdicao_FichaReparo)) {
+        btnEditar_FichaReparos.style.display = 'inline';
+        btnSairEdicao_FichaReparo.style.display = 'none';
+    }
+
+
+}
 
 
 // ********* ABA INDICACAO DE SERVICOS ******************************************
@@ -1860,6 +2152,9 @@ $(document).ready(function () {
     var tblOrdemServicos = $('#tblOrdemServicos').DataTable();
     $('#tblOrdemServicos tbody').on('click', 'tr', function () {
 
+        // reseta o timer
+        resetTimeout();
+
         // expande ou encolhe os filhos
         var temFilhos = parseInt(tblOrdemServicos.row(this).selector.rows.children[1].innerText);
         var expandida = parseInt(tblOrdemServicos.row(this).selector.rows.children[2].innerText);
@@ -1919,7 +2214,6 @@ $(document).ready(function () {
             $("#cmbFiltroStatusOS").val(filtroStatusOS);
             $('#txtfiltroord_data_De').val("");
             $('#txtfiltroord_data_Ate').val("");
-
         }
 
 
@@ -1936,10 +2230,6 @@ $(document).ready(function () {
         }
 
         if (selectedId_ord_id != 0) {
-
-            //  preenche Ficha inspecao cadastral 
-            //preenchetblFicha_Inspecao_Cadastral(selectedId_obj_id, 3, -1);
-
             //  atualiza grid documentos
             document.getElementById('HeaderOS_Documentos').innerText = "Documentos associados à O.S.: " + ord_codigo;
             $('#tblDocumentosAssociados').DataTable().ajax.reload();
@@ -1952,10 +2242,6 @@ $(document).ready(function () {
             $('#tblDocumentosAssociadosOBJ').DataTable().ajax.reload();
 
         }
-     //   else
-       //     accordion_encolher(0);
-
-    //    document.getElementById('subGrids').style.visibility = "visible";
 
         if (!ehEdicao)
             $(window).scrollTop(0); 

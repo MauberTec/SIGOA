@@ -31,11 +31,11 @@ namespace WebApp.Business
         /// <param name="filtro_obj_codigo">Filtro por codigo de Objeto, 0 para todos</param> 
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
-        /// <param name="filtro_tip_id">Filtro por tipo de Objeto, -1 para todos</param> 
+        /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, int? filtro_tip_id = -1)
+        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
-            return new ObjetoDAO().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_id);
+            return new ObjetoDAO().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome);
         }
 
         /// <summary>
@@ -511,8 +511,14 @@ namespace WebApp.Business
 
                 }
             }
+          //  return lstListaCmbTiposObjeto;
 
-            return lstListaCmbTiposObjeto;
+            List<SelectListItem> distinctV = lstListaCmbTiposObjeto
+                                                 .GroupBy(m => new { m.Text })
+                                                 .Select(group => group.First())
+                                                 .OrderBy(o => o.Text)
+                                                 .ToList();
+            return distinctV;
         }
 
         // ----------------------------------------------------------------------
@@ -1052,27 +1058,27 @@ namespace WebApp.Business
         public List<SelectListItem> PreenchecmbFiltroRodovias(string rod_codigo = "")
         {
             List<SelectListItem> lstListacmbFiltroRodovias = new List<SelectListItem>(); // lista de combo
-            List<Rodovia> lstRodovias = new IntegracaoDAO().get_Rodovias(""); // lista de "Rodovias"
-
-            // filtra aqui por aproximacao porque a busca pelo SirGeo é exata
-            rod_codigo = rod_codigo.ToUpper();
-            List<Rodovia> SortedList = StartsWithStringContains(lstRodovias, rod_codigo);
-
-
+            List<Rodovia> lstRodovias = new IntegracaoDAO().get_Rodovias(rod_codigo); // lista de "Rodovias"
             if (lstRodovias[0].rod_id > 0)
             {
+                // filtra aqui por aproximacao porque a busca pelo SirGeo é exata
+                rod_codigo = rod_codigo.ToUpper();
+                List<Rodovia> SortedList = StartsWithStringContains(lstRodovias, rod_codigo);
+
+
+
                 foreach (var temp in SortedList)
                 {
                     if (temp.rod_codigo.Trim() != "")
                     {
-                        string txt = temp.rod_codigo + " (" + temp.rod_descricao + ")";
+                        string txt = temp.rod_codigo; // + " (" + temp.rod_descricao + ")";
                         lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = txt, Value = temp.rod_id.ToString() });
                     }
                 }
             }
             else
             {
-                lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = SortedList[0].rod_codigo, Value = "-1"});
+                lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = lstRodovias[0].rod_descricao, Value = "-1" });
             }
 
             return lstListacmbFiltroRodovias;

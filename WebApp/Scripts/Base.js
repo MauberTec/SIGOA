@@ -630,3 +630,8 @@ function Right(str, n) {
         return String(str).substring(iLen, iLen - n);
     }
 }
+
+function resetTimeout()
+{
+    timeout = 120 * 60 * 1000;
+}

@@ -468,7 +468,8 @@
             ModalTrocaSenha();
         }
 
-        timeout = 120 * 60 * 1000;
+        // a cada refresh, reseta o timer
+        resetTimeout();
     </script>
     <script src="~/Scripts/Shared/Shared.js"></script>
     <link href="~/Content/Base.css" rel="stylesheet" />

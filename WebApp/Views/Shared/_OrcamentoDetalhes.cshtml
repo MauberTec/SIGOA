@@ -251,16 +251,17 @@
             <tr>
                 <td colspan="10">
                     <h4 style="display:inline-table; font-weight:bold; margin-left: -15px;">Serviços Adicionais</h4>
-                    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
-                        <input id="txtServicosAdicionais_valor_total" name="txtServicosAdicionais_valor_total"  style="border:none !important;" Disabled readonly />
-                    </h4>
-
                     <button id="btnServicosAdicionais"
                             title="Inserir Serviços Adicionais"
                             onclick="return btnServicosAdicionais_onclick(this)"
                             style="border:none; box-shadow:none; background-color:transparent; display:none; ">
                         <span class="glyphicon glyphicon-plus text-success contornoBranco"></span>
                     </button>
+
+                    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+                        <input id="txtServicosAdicionais_valor_total" name="txtServicosAdicionais_valor_total" style="border:none !important;" Disabled readonly />
+                    </h4>
+
                 </td>
             </tr>
             <tr>
@@ -361,8 +362,8 @@
 <script src="~/Scripts/datetime-moment.js"></script>
 
 <script>
-    moment.locale('pt-br');         // pt-br
-    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
-    $('#txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
+    //moment.locale('pt-br');         // pt-br
+    //$.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+    //$('#txtorc_data_Validade_Detalhes').datepicker({ dateFormat: 'dd/mm/yy' });
 
 </script>

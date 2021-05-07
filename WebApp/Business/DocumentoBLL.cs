@@ -396,16 +396,16 @@ namespace WebApp.Business
         /// <param name="filtro_obj_codigo">Código ou Parte a se localizar</param>
         /// <param name="filtro_obj_descricao">Descrição ou Parte a se localizar</param>
         /// <param name="filtro_clo_id">Id da Classe a se filtrar</param>
-        /// <param name="filtro_tip_id">Id do Tipo a se filtrar</param>
+        /// <param name="filtro_tip_nome">Tipo a se filtrar</param>
         /// <returns>List(SelectListItem)</returns>
-        public List<SelectListItem> PreencheCmbObjetosLocalizados(int doc_id, string filtro_obj_codigo, string filtro_obj_descricao = "", int? filtro_clo_id = -1, int? filtro_tip_id = -1)
+        public List<SelectListItem> PreencheCmbObjetosLocalizados(int doc_id, string filtro_obj_codigo, string filtro_obj_descricao = "", int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
 
             List<Objeto> lstObjetos;
             if (doc_id >=0)
                 lstObjetos = new DocumentoBLL().Documento_ObjetosNaoAssociados_ListAll(doc_id, filtro_obj_codigo);
             else
-                lstObjetos = new ObjetoDAO().Objeto_ListAll(0, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_id);
+                lstObjetos = new ObjetoDAO().Objeto_ListAll(0, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome);
 
             List<SelectListItem> lstListaCmbObjetosLocalizados = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstObjetos)
