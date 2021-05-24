@@ -26,8 +26,9 @@ namespace WebApp.DAO
         /// <param name="doc_descricao">Filtro por Descrição de Documento, vazio para todos</param>
         /// <param name="tpd_id">Filtro por Tipo de Documento, vazio para todos</param>
         /// <param name="dcl_codigo">Filtro por Classe de Projeto de Documento, vazio para todos</param>
+        /// <param name="usu_id">Id do usuário logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> Documento_ListAll(int? doc_id,  string doc_codigo = "",  string doc_descricao = "",  string tpd_id = "",  string dcl_codigo = "")
+        public List<Documento> Documento_ListAll(int? doc_id,  string doc_codigo = "",  string doc_descricao = "",  string tpd_id = "",  string dcl_codigo = "", int? usu_id = null)
         {
             try
             {
@@ -46,6 +47,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@doc_descricao", doc_descricao);
                     com.Parameters.AddWithValue("@tpd_id", tpd_id);
                     com.Parameters.AddWithValue("@dcl_codigo", dcl_codigo);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -97,8 +99,9 @@ namespace WebApp.DAO
         /// <param name="start">Número do registro inícial da página</param>
         /// <param name="length">Quantidade de registros por página</param>
         /// <param name="Order_BY">Ordenado por</param>
+        /// <param name="usu_id">Id do usuário logado</param>
         /// <returns>List do tipo Documento</returns>
-        public List<Documento> LoadData(int? doc_id,  string doc_codigo = "",  string doc_descricao = "",  string tpd_id = "",  string dcl_codigo = "", int start = 0, int length =10 , string Order_BY= "")
+        public List<Documento> LoadData(int? doc_id,  string doc_codigo = "",  string doc_descricao = "",  string tpd_id = "",  string dcl_codigo = "", int start = 0, int length =10 , string Order_BY= "", int? usu_id = null)
         {
             try
             {
@@ -124,6 +127,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@ordenado_por", Order_BY);
                     com.Parameters.AddWithValue("@qt_por_pagina", length);
 
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -532,8 +536,9 @@ namespace WebApp.DAO
         /// Lista todos os OBJETOS do Documento selecionado
         /// </summary>
         /// <param name="doc_id">Id do Documento Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documento_Objeto</returns>
-        public List<Documento_Objeto> Documento_Objetos_ListAll(int doc_id)
+        public List<Documento_Objeto> Documento_Objetos_ListAll(int doc_id, int? usu_id = null)
         {
 
             try
@@ -546,8 +551,9 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@doc_id", doc_id);
-                    SqlDataReader rdr = com.ExecuteReader();
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
+                    SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
                         lst.Add(new Documento_Objeto
@@ -575,8 +581,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="doc_id">Id do Documento Selecionado</param>
         /// <param name="codObj">Codigo ou parte do Objeto a procurar</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Objetos Nao Associados</returns>
-        public List<Objeto> Documento_ObjetosNaoAssociados_ListAll(int doc_id, string codObj)
+        public List<Objeto> Documento_ObjetosNaoAssociados_ListAll(int doc_id, string codObj, int? usu_id = null)
         {
             try
             {
@@ -590,7 +597,7 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@doc_id", doc_id);
                     com.Parameters.AddWithValue("@obj_codigo", codObj);
-
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {

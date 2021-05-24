@@ -123,9 +123,9 @@ namespace WebApp.DAO
                     {
                         lst.Add(new ParamsEmail
                         {
-                            // De = rdr["email_Nome_Sistema"].ToString() + "<" + rdr["email_De"].ToString() + ">",
+                            De = rdr["email_Nome_Sistema"].ToString().Trim() + "<" + rdr["email_De"].ToString().Trim() + ">",
                             Enviar_Emails = Convert.ToInt32(rdr["email_Enviar_Emails"].ToString()),
-                            De = rdr["email_De"].ToString(),
+                            // De = rdr["email_De"].ToString(),
                             Para = "",
                             Assunto = "",
                             Texto = rdr["email_txtEsqueciSenha"].ToString(),

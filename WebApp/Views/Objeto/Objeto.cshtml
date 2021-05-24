@@ -5,15 +5,15 @@
     //Verifica se o usuário esta logado
     if (Session["Usuario"] == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 130 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 140 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 
     Usuario gUsuario = (Usuario)Session["Usuario"];
     List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
-    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(130)); // id DO MODULO "Objeto/Objeto"
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(140)); // id DO MODULO "Objeto/Objeto"
 
-    UsuarioPermissoes permissoesAssociarDOCUMENTO = lstPermissoes.Find(x => x.mod_id.Equals(150)); // id DO MODULO "Associação de Documentos"
+    UsuarioPermissoes permissoesAssociarDOCUMENTO = lstPermissoes.Find(x => x.mod_id.Equals(710)); // id DO MODULO "Associação de Documentos"
     if (permissoesAssociarDOCUMENTO == null)
     {
         permissoesAssociarDOCUMENTO = new UsuarioPermissoes();
@@ -25,7 +25,7 @@
 
     if (permissoesDesteModulo == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 130 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 140 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 }

@@ -8,6 +8,7 @@ using System.Configuration;
 using WebApp.Models;
 using WebApp.Helpers;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WebApp.DAO
 {
@@ -17,6 +18,7 @@ namespace WebApp.DAO
     public class OrdemServicoDAO : Conexao
     {
         // *************** OrdemServico  *************************************************************
+        CultureInfo culturePTBR = new CultureInfo("pt-BR");
 
         /// <summary>
         ///     Lista de todas as OSs não deletadas
@@ -29,8 +31,9 @@ namespace WebApp.DAO
         /// <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
         /// <param name="filtroord_data_De">Filtro por Data: a de</param>
         /// <param name="filtroord_data_Ate">Filtro por Data: até</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de OrdemServico</returns>
-        public List<OrdemServico> OrdemServico_ListAll(int? ord_id = null, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
+        public List<OrdemServico> OrdemServico_ListAll(int? ord_id = null, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "", int? usu_id = null)
         {
             try
             {
@@ -62,6 +65,8 @@ namespace WebApp.DAO
                             com.Parameters.AddWithValue("@filtroord_data_Ate", filtroord_data_Ate);
                     }
 
+
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -83,7 +88,7 @@ namespace WebApp.DAO
 
                             obj_id = rdr["obj_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["obj_id"]),
                             ord_ativo = rdr["ord_ativo"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ord_ativo"]),
-                            ord_criticidade = rdr["ord_criticidade"] == DBNull.Value ? -1 : Convert.ToDecimal(rdr["ord_criticidade"]),
+                            ord_criticidade = rdr["ord_criticidade"] == DBNull.Value ? -1 : Convert.ToDecimal(rdr["ord_criticidade"], culturePTBR),
 
                             tos_codigo = rdr["tos_codigo"] == DBNull.Value ? string.Empty : rdr["tos_codigo"].ToString(),
                             tos_descricao = rdr["tos_descricao"] == DBNull.Value ? string.Empty : rdr["tos_descricao"].ToString(),
@@ -526,8 +531,9 @@ namespace WebApp.DAO
         /// <param name="ord_id">Id da OrdemServico selecionada</param>
         /// <param name="obj_id">Id do Objeto da OrdemServico selecionada</param>
         /// <param name="somente_referencia">Retornar somente os documentos de referência</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> OrdemServico_Documentos_ListAll(int ord_id, int obj_id, int? somente_referencia = 0)
+        public List<Documento> OrdemServico_Documentos_ListAll(int ord_id, int obj_id, int? somente_referencia = 0, int? usu_id = null)
         {
             try
             {
@@ -541,6 +547,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@ord_id", ord_id);
                     com.Parameters.AddWithValue("@obj_id", obj_id);
                     com.Parameters.AddWithValue("@somente_referencia", somente_referencia);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -583,8 +590,9 @@ namespace WebApp.DAO
         /// Lista de todos os Documentos Associados ao Objeto da Ordem de Servico selecionada
         /// </summary>
         /// <param name="ord_id">Id do OrdemServico selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> OrdemServico_Objeto_Documentos_ListAll(int ord_id)
+        public List<Documento> OrdemServico_Objeto_Documentos_ListAll(int ord_id, int? usu_id = null)
         {
             try
             {
@@ -597,6 +605,7 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     //com.Parameters.AddWithValue("@obj_id", obj_id);
                     com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -640,8 +649,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="ord_id">Id da OrdemServico selecionada</param>
         /// <param name="codDoc">Codigo ou parte do Documento a procurar</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos Nao Associados</returns>
-        public List<Documento> OrdemServico_DocumentosNaoAssociados_ListAll(int ord_id, string codDoc)
+        public List<Documento> OrdemServico_DocumentosNaoAssociados_ListAll(int ord_id, string codDoc, int? usu_id = null)
         {
             try
             {
@@ -655,6 +665,7 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@ord_id", ord_id);
                     com.Parameters.AddWithValue("@doc_codigo", codDoc);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -763,6 +774,39 @@ namespace WebApp.DAO
             }
         }
 
+
+
+        /// <summary>
+        /// Verifica se a O.S. possui apontamentos de serviços e quantitativos
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.</param>
+        /// <returns>decimal</returns>
+        public int OrdemServico_ChecaApontamentoServicos(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_SEL_EMAIL_ITENS_CONSERVA(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    string retorno = (com.ExecuteScalar()).ToString();
+
+                    string strAux = "<tr><td";
+
+                    return (retorno.Length - retorno.Replace(strAux,"").Length) / strAux.Length;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
 
@@ -1486,14 +1530,14 @@ namespace WebApp.DAO
                             aca_id = rdr["aca_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["aca_id"]),
                             aca_codigo = rdr["aca_codigo"] == DBNull.Value ? "" : rdr["aca_codigo"].ToString(),
                             aca_descricao = rdr["aca_descricao"] == DBNull.Value ? "" : rdr["aca_descricao"].ToString(),
-                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade"]),
+                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade"], culturePTBR),
                                                                           
 
                              rpt_id_sugerido = rdr["rpt_id_sugerido"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_sugerido"]),
                             rpt_id_sugerido_codigo = rdr["rpt_id_sugerido_codigo"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_codigo"].ToString(),
                             rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
                             rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
-                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"]),
+                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"], culturePTBR),
 
                             rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
                             rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
@@ -1639,6 +1683,48 @@ namespace WebApp.DAO
         }
 
 
+
+        /// <summary>
+        /// Busca os dados do Email 
+        /// </summary>
+        /// <param name="msg_id">Id da mensagem</param>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>Dados do Email</returns>
+        public List<OSEmail> OSEmail_ID(int ord_id, int msg_id)
+        {
+            try
+            {
+
+                List<OSEmail> lst = new List<OSEmail>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_MENSAGEM_EMAIL", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@msg_id", msg_id);
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        lst.Add(new OSEmail
+                        {
+                            destinatarios = rdr["destinatarios"].ToString(),
+                            assunto = rdr["assunto"].ToString(),
+                            mensagem = rdr["mensagem"].ToString()
+                       });
+                    }
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
 
 
 

@@ -14,6 +14,7 @@ using WebApp.Helpers;
 using Color = DocumentFormat.OpenXml.Spreadsheet.Color;
 using Font = DocumentFormat.OpenXml.Spreadsheet.Font;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace WebApp.Business
 {
@@ -35,7 +36,8 @@ namespace WebApp.Business
         /// <returns>Lista de Objetos</returns>
         public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
-            return new ObjetoDAO().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -124,7 +126,8 @@ namespace WebApp.Business
         /// <returns>Lista de Documentos</returns>
         public List<Documento> Objeto_Documentos_ListAll(int obj_id)
         {
-            return new ObjetoDAO().Objeto_Documentos_ListAll(obj_id);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().Objeto_Documentos_ListAll(obj_id, paramUsuario.usu_id);
 
         }
 
@@ -136,7 +139,8 @@ namespace WebApp.Business
         /// <returns>List(SelectListItem)</returns>
         public List<SelectListItem> PreencheCmbDocumentosLocalizados(int obj_id, string codDoc)
         {
-            List<Documento> lstDocumentos = new ObjetoDAO().Objeto_DocumentosNaoAssociados_ListAll(obj_id, codDoc);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            List<Documento> lstDocumentos = new ObjetoDAO().Objeto_DocumentosNaoAssociados_ListAll(obj_id, codDoc, paramUsuario.usu_id);
             List<SelectListItem> lstListaCmbDocumentosLocalizados = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstDocumentos)
             {
@@ -184,7 +188,9 @@ namespace WebApp.Business
         /// <returns>List(SelectListItem)</returns>
         public List<SelectListItem> PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Grupo)
         {
-            List<Objeto> lstObjetosLocalizacao = new ObjetoDAO().Objeto_Localizacao_ListAll(obj_id_TipoOAE, tip_id_Grupo);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+
+            List<Objeto> lstObjetosLocalizacao = new ObjetoDAO().Objeto_Localizacao_ListAll(obj_id_TipoOAE, tip_id_Grupo, paramUsuario.usu_id);
             List<SelectListItem> lstListaCmbObjetoLocalizacao = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstObjetosLocalizacao)
             {
@@ -257,49 +263,107 @@ namespace WebApp.Business
         /// Busca o valor da VDM na API DER e retorna o valor ati_id do combo na ficha de inspecao
         /// </summary>
         /// <param name="obj_codigo_TipoOAE">Codigo do Objeto TIPO OAE</param>
+        /// <param name="itipo_pista">Valor do Tipo de Pista (17=dupla/16=simples)</param>
         /// <returns>int</returns>
-        public int BuscaValorVDM(string obj_codigo_TipoOAE)
+        public int BuscaValorVDM(string obj_codigo_TipoOAE, int itipo_pista)
         {
             int retorno = -1;
             string[] pedacos = obj_codigo_TipoOAE.Trim().Split('-');
 
             string rodovia = pedacos[0].ToUpper().Replace(" ", "");
-            string quilometragem = pedacos[1];
-            decimal km = Convert.ToDecimal(quilometragem.Replace(",", "."));
+
+            CultureInfo culturePTBR =  new CultureInfo("pt-BR") ;
+
+            string quilometragem = pedacos[1]; //.Replace(",", ".");
+            decimal km = Convert.ToDecimal(quilometragem, culturePTBR);
 
             IntegracaoDAO saida = new IntegracaoDAO();
-            List<vdm> listaVDM = saida.get_VDMs(rodovia, 0 , 1500);
+            List<vdm> listaVDM = saida.get_VDMs(rodovia, 0 , 999);
 
+            if ((listaVDM.Count == 1) && (listaVDM[0].vdm_ano == -1))
+                return -1;
+
+            decimal valorVDM1 = 0;
+            decimal valorVDM2 = 0;
             decimal valorVDM = 0;
+            bool achou = false;
 
             // procura o intervalo correto
             for (int i=0; i < listaVDM.Count; i++)
             {
-                if ((Convert.ToDecimal(listaVDM[i].pcl_kminicial) >= km) && (Convert.ToDecimal(listaVDM[i].pcl_kmfinal) <= km))
+                if ((listaVDM[i].vdm_valor1 == null) || (listaVDM[i].vdm_valor1 == ""))
+                    listaVDM[i].vdm_valor1 = "0";
+
+                if ((listaVDM[i].vdm_valor2 == null) || (listaVDM[i].vdm_valor2 == ""))
+                    listaVDM[i].vdm_valor2 = "0";
+
+               decimal kmIni = Convert.ToDecimal(listaVDM[i].pcl_kminicial.Replace(".", ","), culturePTBR);
+               decimal kmFim = Convert.ToDecimal(listaVDM[i].pcl_kmfinal.Replace(".", ","), culturePTBR);
+               if (( kmIni <= km) && (kmFim >= km))
                 {
-                    valorVDM = Convert.ToDecimal(listaVDM[i].vdm_bidirecional);
-                    if (valorVDM > 20000)
-                        retorno = 143;
-                    else
-                      if ((valorVDM >= 5000) && (valorVDM < 20000))
-                        retorno = 144;
-                    else
-                      if ((valorVDM >= 1000) && (valorVDM < 5000))
-                        retorno = 145;
-                    else
-                        if (valorVDM < 1000)
-                        retorno = 146;
+                    valorVDM1 = Convert.ToDecimal(listaVDM[i].vdm_valor1, culturePTBR);
+                    valorVDM2 = Convert.ToDecimal(listaVDM[i].vdm_valor2, culturePTBR);
+                    achou = true;
+                    break;
                 }
             }
 
-            /* ati_id  atr_id  valor
+            // se nao achou, procura a faixa mais proxima
+            if (!achou)
+            {
+                for (int i = 0; i < listaVDM.Count - 1; i++)
+                {
+                    if ((listaVDM[i].vdm_valor1 == null) || (listaVDM[i].vdm_valor1 == ""))
+                       listaVDM[i].vdm_valor1 = "0";
+
+                    if ((listaVDM[i].vdm_valor2 == null) || (listaVDM[i].vdm_valor2 == ""))
+                        listaVDM[i].vdm_valor2 = "0";
+
+                    decimal kmIni_prox = Convert.ToDecimal(listaVDM[i + 1].pcl_kminicial.Replace(".", ","), culturePTBR);
+                    decimal kmFim = Convert.ToDecimal(listaVDM[i].pcl_kmfinal.Replace(".", ","), culturePTBR);
+
+                    if ((km - kmFim) < (kmIni_prox - km))
+                    {
+                        valorVDM1 = Convert.ToDecimal(listaVDM[i].vdm_valor1, culturePTBR);
+                        valorVDM2 = Convert.ToDecimal(listaVDM[i].vdm_valor2, culturePTBR);
+                        achou = true;
+                        break;
+                    }
+                    else
+                    {
+                        valorVDM1 = Convert.ToDecimal(listaVDM[i + 1].vdm_valor1.Trim() == "" ? "0" : listaVDM[i + 1].vdm_valor1, culturePTBR);
+                        valorVDM2 = Convert.ToDecimal(listaVDM[i + 1].vdm_valor2.Trim() == "" ? "0" : listaVDM[i + 1].vdm_valor2, culturePTBR);
+                    }
+                }
+            }
+
+            /* analisa e retorna
+               ati_id  atr_id  valor
                143     84      ACIMA DE 20.000
                144     84      DE 5.000 A 20.000
                145     84      DE 1.000 A 5.000
                146     84      ATÉ 1.000
            */
+            if (itipo_pista == 16) // pista simples
+                valorVDM = valorVDM1 + valorVDM2;
+            else
+                if (itipo_pista == 17) // pista dupla
+                    valorVDM = valorVDM1 > valorVDM2 ? valorVDM1 : valorVDM2;
 
-            return retorno;
+
+            if (valorVDM > 20000)
+                retorno = 143;
+            else
+                if ((valorVDM >= 5000) && (valorVDM < 20000))
+                retorno = 144;
+            else
+                if ((valorVDM >= 1000) && (valorVDM < 5000))
+                retorno = 145;
+            else
+                if (valorVDM < 1000)
+                retorno = 146;
+
+             return retorno;
 
         }
 
@@ -974,7 +1038,8 @@ namespace WebApp.Business
             // cria lista de Regionais
             string strRegionais = new IntegracaoDAO().str_Regionais();
 
-            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS, strRegionais);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS, strRegionais, paramUsuario.usu_id);
 
         }
 

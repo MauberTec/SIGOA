@@ -177,10 +177,14 @@ namespace WebApp.Helpers
                 if (email_Enviar_Emails == 0)
                     return "Email não enviado. Parâmetro desligado.";
 
+                string[] email_Para = pEmail.Para.Split(";".ToCharArray());
+                System.Net.Mail.MailMessage oEmail = new System.Net.Mail.MailMessage(pEmail.De, email_Para[0], pEmail.Assunto, pEmail.Texto);
 
-                System.Net.Mail.MailMessage oEmail = new System.Net.Mail.MailMessage(pEmail.De, pEmail.Para, pEmail.Assunto, pEmail.Texto);
-                System.Net.Mail.SmtpClient oSmtp = new System.Net.Mail.SmtpClient();
-
+                for (int ii = 1; ii < email_Para.Length; ii++)
+                {
+                    if (email_Para[ii].Trim() != "")
+                        oEmail.To.Add(email_Para[ii]);
+                }
 
                 if (pEmail.Anexo.Trim() != String.Empty)
                     oEmail.Attachments.Add(new System.Net.Mail.Attachment(pEmail.Anexo));
@@ -192,8 +196,11 @@ namespace WebApp.Helpers
                     oEmail.CC.Clear();
                     for (int ii = 0; ii < sCC.Length; ii++)
                     {
-                        MailAddress copy = new MailAddress(sCC[ii]);
-                        oEmail.CC.Add(copy);
+                        if (sCC[ii].Trim() != "")
+                        {
+                            MailAddress copy = new MailAddress(sCC[ii]);
+                            oEmail.CC.Add(copy);
+                        }
                     }
                 }
 
@@ -203,8 +210,11 @@ namespace WebApp.Helpers
                     oEmail.Bcc.Clear();
                     for (int ii = 0; ii < sCCO.Length; ii++)
                     {
-                        MailAddress copy = new MailAddress(sCCO[ii]);
-                        oEmail.Bcc.Add(copy);
+                        if (sCCO[ii].Trim() != "")
+                        {
+                            MailAddress copy = new MailAddress(sCCO[ii]);
+                            oEmail.Bcc.Add(copy);
+                        }
                     }
                 }
 
@@ -224,6 +234,7 @@ namespace WebApp.Helpers
                 oEmail.Body = pEmail.Texto;
 
 
+                System.Net.Mail.SmtpClient oSmtp = new System.Net.Mail.SmtpClient();
                 if (pEmail.PortaSmtp != -1)
                     oSmtp.Port = pEmail.PortaSmtp;
 

@@ -4,8 +4,8 @@ var cabecalho2 =
     ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
     ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
     '    <label class="lblsBold" > XXXXX</label >' +
-    ' </td >' +
-    ' </tr > ';
+    ' </td>' +
+    ' </tr> ';
 
 
 var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
@@ -83,17 +83,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         '    <select class="cmbs" id="cmb_tpu_descricao_itens_GGG_VVV" style="display:none"> ' +
         '          OPCOES_cmb_tpu_descricao_itens ' +
         '    </select> ' +
-        //   '    <input id="txt_servico_GGG_VVV" class="txts  centroH" value="txt_servico_XXXXX" maxlength="255" onkeyup="validaAlfaNumericoAcentosAfins(this, 0, 0)" /> ' +
-        //'    <button id="btn_LocalizarGrupo_INSPECAO_ROTINEIRA_GGG_VVV" ' +
-        //'            type="button" ' +
-        //'            onclick="return Selecionar_TPU(this)" ' +
-        //'            title="Selecionar Serviço" ' +
-        //'            style="border:none; box-shadow:none; background-color:transparent; "> ' +
-        //'        <span class="fa fa-search"></span> ' +
-        //'    </button> ' +
         '  </td> ' +
         '  <td class="borderTop borderRight borderBottomPt  centroH"> ' +
-        //    '    <label class="lblsBold" id="lbl_unidade_GGG_VVV">lbl_unidade_XXXXX</label> ' +
         '    <input id="txt_unidade_GGG_VVV" class="txts  centroH" value="txt_unidade_XXXXX" maxlength="15"  /> ' +
         '  </td> ' +
         '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
@@ -105,12 +96,12 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         '          OPCOES_providencias_cmb ' +
         '    </select> ' +
         '  </td> ' +
-
         ' </tr> ';
 
 
     var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_106", "cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153"
-        //,"txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"
+       , "cmb_atr_id_84", "cmb_atr_id_1084"
+       //,"txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"
     ];
 
     var controlesExcecoes_Salvar = ["cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "cmb_atr_id_148", "cmb_atr_id_150", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153", "txt_atr_id_157"];
@@ -410,6 +401,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
 
                         if (textbox) {
                             textbox.value = result.data[i].atv_valor;
+                            textbox.setAttribute('title', result.data[i].atv_valor);
 
                             // coloca mascara no textbox
                             if (mascara != "") {
@@ -420,6 +412,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                         }
                         if (textbox2) {
                             textbox2.value = result.data[i].atv_valor;
+                            textbox2.setAttribute('title', result.data[i].atv_valor);
 
                             if (mascara != "") {
                                 jQuery(textbox2).mask(mascara);
@@ -461,6 +454,17 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                                 }
                                 combo2.value = result.data[i].atv_valor;
                             }
+
+                            //if (((result.data[i].atv_controle == "cmb_atr_id_84") || (result.data[i].atv_controle == "cmb_atr_id_1084"))
+                            //    && (result.data[i].atv_valor != ""))
+                            //{
+                            //    if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
+                            //    {
+                            //        //carrega e posiciona combo/ nota VDM
+                            //        cmb_pista_onchange($("#"+result.data[i].atv_controle));
+
+                            //    }
+                            //}
 
                         }
                         else
@@ -940,7 +944,8 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                                     linhaAux = linhaAux.replace(/txt_servico_XXXXX/g, result.data[i].tpu_descricao);
                                     linhaAux = linhaAux.replace(/txt_unidade_XXXXX/g, result.data[i].uni_unidade);
                                     //  linhaAux = linhaAux.replace(/lbl_unidade_XXXXX/g, result.data[i].uni_unidade);
-                                    linhaAux = linhaAux.replace(/txt_quantidade_XXXXX/g, result.data[i].ovv_tpu_quantidade);
+                                    var qtt = parseFloat(result.data[i].ovv_tpu_quantidade);
+                                    linhaAux = linhaAux.replace(/txt_quantidade_XXXXX/g, qtt > 0 ? qtt : '');
 
 
                                     linhas = linhas + linhaAux;
@@ -954,7 +959,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                 // coloca mascara no campo quantidade
                 var qts = $('[id^="txt_quantidade_"]');
                 for (var i = 0; i < qts.length; i++) {
-                    jQuery(qts[i]).attr('placeholder', "000.00");
+                   // jQuery(qts[i]).attr('placeholder', "000.00");
                     jQuery(qts[i]).mask("999.99");
                 }
 
@@ -1129,7 +1134,9 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                 var ovv_observacoes_gerais = document.getElementById("txt_obs_" + GGG_VVV).value;
                 var tpu_id = " ";
 
-                var ovv_tpu_quantidade = document.getElementById("txt_quantidade_" + GGG_VVV).value;
+                var qtt = document.getElementById("txt_quantidade_" + GGG_VVV).value;
+                var ovv_tpu_quantidade = isNaN(qtt) ? 0 : qtt;
+
                 var tpu_unidade = document.getElementById("txt_unidade_" + GGG_VVV).value;
 
                 if (ovv_observacoes_gerais.trim() == "")
@@ -1141,7 +1148,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                 if (isNaN(ovv_tpu_quantidade))
                     ovv_tpu_quantidade = 0;
 
-                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + cgv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + '</tr_linha>';
+                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + cgv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + ' </tr_linha>';
 
                 if (parseInt(ati_id_condicao_inspecao) == 0) {
                     linhaOK = false;
@@ -1247,10 +1254,29 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
             }
         }
 
+        var lstCombos1 = tabela.getElementsByTagName('select');
+        var lstCombos = [];
 
-        var lstCombos = tabela.getElementsByTagName('select'); // lista de combos
+        var cmb_atr_id_84 = document.getElementById("cmb_atr_id_84");
+        if (cmb_atr_id_84)
+            lstCombos.push(cmb_atr_id_84);
+
+        var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+        if (cmb_atr_id_1084)
+            lstCombos.push(cmb_atr_id_1084);
+
+        // transforma o Object List em Array
+        for (var i = 0; i < lstCombos1.length; i++) {
+            var cmb_ = document.getElementById(lstCombos1[i].id);
+            if (cmb_)
+                lstCombos.push(cmb_);
+        }
+
         for (var i = 0; i < lstCombos.length; i++) {
-            if (!array_filtrado.includes(lstCombos[i].id))
+            if ((!array_filtrado.includes(lstCombos[i].id))
+                 || (lstCombos[i].id == "cmb_atr_id_84")
+                 || (lstCombos[i].id == "cmb_atr_id_1084"))
+
                 if (lstCombos[i].selectedIndex > -1) {
                     var cmbId = lstCombos[i].id;
 
@@ -1609,7 +1635,7 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
 
             var grupo_Prefixo = codigoTipoOAE + "-" + Ficha2_cmbSubdivisao1;
 
-            if (iFicha2_cmbSubdivisao1 != 14) {
+            //if (iFicha2_cmbSubdivisao1 != 14) {
                 var Ficha2_divSubdivisao2 = document.getElementById("Ficha2_divSubdivisao2");
                 if (Ficha2_divSubdivisao2.style.display != 'none') {
                     var grupo_Prefixo = grupo_Prefixo + "-" + getTipoCodigo($("#Ficha2_cmbSubdivisao2").val());
@@ -1629,9 +1655,9 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
                         grupos_codigos = grupos_codigos + ";" + grupo_Prefixo + "-" + getTipoCodigo(selchks[i]);
 
                 grupos_codigos = grupos_codigos + ";"; // acrescenta um delimitador no final da string
-            }
-            else
-                grupos_codigos = grupo_Prefixo; // codigo encontros + delimitador no final da string
+            //}
+            //else
+            //    grupos_codigos = grupo_Prefixo; // codigo encontros + delimitador no final da string
 
 
             var listaGrupos = {
@@ -1830,3 +1856,60 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         Ficha2_Calcula_Nota_Parametro_Funcional();
     }
 
+
+    function cmb_pista_onchange(quem)
+    {
+        var valor = $('#' + quem.id).val();
+
+        if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
+        {
+            $.ajax({
+                url: "/Objeto/BuscaValorVDM",
+                data: JSON.stringify({ 'obj_codigo_TipoOAE': selected_obj_codigo, 'itipo_pista': valor }),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    // selectedId_tos_id cadastral = 7; rotineira = 8; especial = 9
+                    var retorno = parseInt(result);
+
+                    if (retorno == -1) {
+                        swal({
+                            type: 'error',
+                            title: 'Erro',
+                            text: "Erro ao sincronizar VDM"
+                        }).then(
+                                 function () {
+                                     return false;
+                                 });
+                    }
+                    else {                        
+                        $("#cmb_atr_id_84").val(retorno);
+                        $("#cmb_atr_id_1084").val(retorno);
+
+                        var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+                        var cmb_atr_id_135 = document.getElementById("cmb_atr_id_135");
+                        if ((cmb_atr_id_135) && (cmb_atr_id_1084))
+                            if (cmb_atr_id_135.selectedIndex > 0)
+                                cmb_atr_id_135.selectedIndex = cmb_atr_id_1084.selectedIndex;
+
+                    }
+                    return false;
+                },
+                error: function (errormessage) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: errormessage.responseText
+                    }).then(
+                            function () {
+                                return false;
+                            });
+
+                }
+            });
+
+        }
+
+    }

@@ -8,6 +8,7 @@ using System.Configuration;
 using WebApp.Models;
 using WebApp.Helpers;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WebApp.DAO
 {
@@ -16,6 +17,8 @@ namespace WebApp.DAO
     /// </summary>
     public class OrcamentoDAO : Conexao
     {
+        CultureInfo culturePTBR = new CultureInfo("pt-BR");
+
         /// <summary>
         ///     Lista de todos os Orcamentos não deletados
         /// </summary>
@@ -26,9 +29,10 @@ namespace WebApp.DAO
         /// <param name="orc_ativo">Filtro por Ativo/Inativo</param>
         /// <param name="FiltroidRodovias">Filtro por id de Rodovias</param>
         /// <param name="FiltroidObjetos">Filtro por id de Objetos</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de  de Orcamento</returns>
         public List<Orcamento> Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1 ,int? orc_ativo = 2
-            ,string FiltroidRodovias = "", string FiltroidObjetos = "" )
+            ,string FiltroidRodovias = "", string FiltroidObjetos = "", int? usu_id = null)
 
         {
             try
@@ -47,6 +51,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@orc_ativo", orc_ativo);
                     com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
                     com.Parameters.AddWithValue("@FiltroidObjetos", FiltroidObjetos);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -61,7 +66,7 @@ namespace WebApp.DAO
                             ocs_id = Convert.ToInt16(rdr["ocs_id"]),
                             ocs_codigo = rdr["ocs_codigo"].ToString(),
                             ocs_descricao = rdr["ocs_descricao"].ToString(),
-                            orc_valor_total = Convert.ToDecimal(rdr["orc_valor_total"]),
+                            orc_valor_total = Convert.ToDecimal(rdr["orc_valor_total"], culturePTBR),
                             orc_data_criacao = rdr["orc_data_criacao"].ToString(),
                             orc_data_validade = rdr["orc_data_validade"].ToString(),
 
@@ -330,7 +335,7 @@ namespace WebApp.DAO
                             orc_descricao = rdr["orc_descricao"].ToString(),
                             orc_versao = rdr["orc_versao"].ToString(),
                             orc_data_validade = rdr["orc_data_validade"].ToString(),
-                            orc_valor_total = Convert.ToDecimal(rdr["orc_valor_total"]),
+                            orc_valor_total = Convert.ToDecimal(rdr["orc_valor_total"], culturePTBR),
                             orc_id_pai = Convert.ToInt32(rdr["orc_id_pai"]),
                             orc_ativo = Convert.ToInt32(rdr["orc_ativo"]),
 
@@ -347,6 +352,7 @@ namespace WebApp.DAO
                             obj_descricaoOAE = obj_id_oae_atual != obj_id_oae_anterior ? rdr["obj_descricaoOAE"].ToString() : "",
 
                             ore_ativo = Convert.ToInt16(rdr["ore_ativo"]),
+                            ian_ativo = Convert.ToInt16(rdr["ian_ativo"]),
 
                             obj_idElemento = obj_idElemento_atual,
                             obj_codigoElemento = obj_idElemento_atual != obj_idElemento_anterior ? rdr["obj_codigoElemento"].ToString() : "",
@@ -373,23 +379,27 @@ namespace WebApp.DAO
                             aca_id = rdr["aca_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["aca_id"]),
                             aca_codigo = rdr["aca_codigo"] == DBNull.Value ? "" : rdr["aca_codigo"].ToString(),
                             aca_descricao = rdr["aca_descricao"] == DBNull.Value ? "" : rdr["aca_descricao"].ToString(),
-                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade"]),
+                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade"], culturePTBR),
 
                             rpt_id_sugerido = rdr["rpt_id_sugerido"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_sugerido"]),
                             rpt_id_sugerido_codigo = rdr["rpt_id_sugerido_codigo"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_codigo"].ToString(),
                             rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
                             rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
-                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"]),
-                            rtu_preco_unitario_sugerido = rdr["rtu_preco_unitario_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_sugerido"]),
-                            rtu_valor_total_sugerido = rdr["rtu_valor_total_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_sugerido"]),
+                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"], culturePTBR),
+                            rtu_preco_unitario_sugerido = rdr["rtu_preco_unitario_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_sugerido"], culturePTBR),
+                            rtu_valor_total_linha_sugerido = rdr["rtu_valor_total_linha_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_linha_sugerido"], culturePTBR),
+
+                            valor_total_sugerido = rdr["valor_total_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_sugerido"], culturePTBR),
+                            valor_total_adotado = rdr["valor_total_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_adotado"], culturePTBR),
+
 
                             rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
                             rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
                             rpt_id_adotado_descricao = rdr["rpt_id_adotado_descricao"] == DBNull.Value ? "" : rdr["rpt_id_adotado_descricao"].ToString(),
                             rpt_id_adotado_unidade = rdr["rpt_id_adotado_unidade"] == DBNull.Value ? "" : rdr["rpt_id_adotado_unidade"].ToString(),
-                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"]),
-                            rtu_preco_unitario_adotado = rdr["rtu_preco_unitario_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_adotado"]),
-                            rtu_valor_total_adotado = rdr["rtu_valor_total_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_adotado"]),
+                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"], culturePTBR),
+                            rtu_preco_unitario_adotado = rdr["rtu_preco_unitario_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_adotado"], culturePTBR),
+                            rtu_valor_total_linha_adotado = rdr["rtu_valor_total_linha_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_linha_adotado"], culturePTBR),
 
                             orc_objetos_associados = rdr["orc_objetos_associados"] == DBNull.Value ? "" : rdr["orc_objetos_associados"].ToString(),
                             orc_obj_ids_associados = rdr["orc_obj_ids_associados"] == DBNull.Value ? "" : rdr["orc_obj_ids_associados"].ToString(),
@@ -481,14 +491,16 @@ namespace WebApp.DAO
                             obj_codigo = obj_codigo_atual != obj_codigo_anterior ? obj_codigo_atual : "",
                             obj_descricao = obj_codigo_atual != obj_codigo_anterior ?  rdr["obj_descricao"].ToString() : "",
                             tpt_id = rdr["tpt_id"].ToString(),
-                            ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"]),
+                            ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"], culturePTBR),
                             DataTpu = rdr["DataTpu"].ToString(),
                             ose_fase = rdr["ose_fase"].ToString(),
                             CodSubItem = rdr["CodSubItem"].ToString(),
                             NomeSubItem = rdr["NomeSubItem"].ToString(),
                             UnidMed = rdr["UnidMed"].ToString(),
                             PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
-                            ValorTotal = Convert.ToDecimal(rdr["PrecoUnitario"]) * Convert.ToDecimal(rdr["ose_quantidade"]),
+                            valor_total_linha = Convert.ToDecimal(rdr["valor_total_linha"], culturePTBR),
+                            valor_total = Convert.ToDecimal(rdr["valor_total"], culturePTBR),
+
                             Desonerado = rdr["Desonerado"].ToString(),
 
                             tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()
@@ -618,8 +630,9 @@ namespace WebApp.DAO
                             CodSubItem = rdr["CodSubItem"].ToString(),
                             NomeSubItem = rdr["NomeSubItem"].ToString(),
                             UnidMed = rdr["UnidMed"].ToString(),
-                            PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
-                            ValorTotal = Convert.ToDecimal(rdr["PrecoUnitario"]) * Convert.ToDecimal(rdr["ose_quantidade"]),
+                            PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"], culturePTBR),
+                            //valor_total_linha = Convert.ToDecimal(rdr["valor_total_linha"]) ,
+                            //valor_total = Convert.ToDecimal(rdr["valor_total"]) ,
                             Desonerado = rdr["Desonerado"].ToString(),
                             tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()
                         });
@@ -696,7 +709,7 @@ namespace WebApp.DAO
                     SqlCommand com = new SqlCommand("SELECT dbo.fn_TotalOrcamento(" + orc_id.ToString() + ")", con);
                     com.Parameters.Clear();
 
-                     decimal retorno =  Convert.ToDecimal( com.ExecuteScalar());
+                     decimal retorno =  Convert.ToDecimal( com.ExecuteScalar(), culturePTBR);
                     return retorno;
                 }
             }

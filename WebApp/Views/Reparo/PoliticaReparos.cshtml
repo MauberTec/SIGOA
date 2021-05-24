@@ -15,7 +15,7 @@
     UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(320)); // id DO MODULO "Politica de Reparos"
     if (permissoesDesteModulo == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 540 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 }

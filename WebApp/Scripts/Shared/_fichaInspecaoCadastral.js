@@ -1,7 +1,7 @@
 ﻿
 // ***** SCRIPT FICHA 1 - CADASTRAL ***********************
 
-var controlesReadOnly = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos"];
+var controlesReadOnly_Cadastral = ["txtord_codigo", "txtobj_codigo_Novo2", "btnAbrirLocalizarObjetos", "cmb_atr_id_84", "cmb_atr_id_1084"];
 
 function setaReadWrite_FichaInspecaoCadastral(tabela, ehRead) {
 
@@ -17,19 +17,19 @@ function setaReadWrite_FichaInspecaoCadastral(tabela, ehRead) {
     if ((moduloCorrente == 'Objetos') // se estiver em Cadastro de Objetos,
         || ((moduloCorrente == 'OrdemServico') && (cmb_atr_id_98.selectedIndex > 0)) // se estiver em OrdemServico e já houver tipo de OAE selecionada
     ) {
-        controlesReadOnly.push("cmb_atr_id_98"); // combo Tipo OAE
-        //controlesReadOnly.push("txt_atr_id_105"); // descricao Tipo OAE
+        controlesReadOnly_Cadastral.push("cmb_atr_id_98"); // combo Tipo OAE
+        //controlesReadOnly_Cadastral.push("txt_atr_id_105"); // descricao Tipo OAE
     }
     for (var i = 0; i < lstTxtBoxes.length; i++)
-        if (!controlesReadOnly.includes(lstTxtBoxes[i].id))
+        if (!controlesReadOnly_Cadastral.includes(lstTxtBoxes[i].id))
             lstTxtBoxes[i].disabled = ehRead;
 
     for (var i = 0; i < lstTextareas.length; i++)
-        if (!controlesReadOnly.includes(lstTextareas[i].id))
+        if (!controlesReadOnly_Cadastral.includes(lstTextareas[i].id))
             lstTextareas[i].disabled = ehRead;
 
     for (var i = 0; i < lstCombos.length; i++)
-        if (!controlesReadOnly.includes(lstCombos[i].id))
+        if (!controlesReadOnly_Cadastral.includes(lstCombos[i].id))
             lstCombos[i].disabled = ehRead;
         else
             lstCombos[i].disabled = true;
@@ -415,6 +415,7 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
 
                     if (textbox) {
                         textbox.value = result.data[i].atv_valor;
+                        textbox.setAttribute('title', result.data[i].atv_valor);
 
                         // coloca mascara no textbox
                         if (mascara != "") {
@@ -425,6 +426,7 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
                     }
                     if (textbox2) {
                         textbox2.value = result.data[i].atv_valor;
+                        textbox2.setAttribute('title', result.data[i].atv_valor);
 
                         if (mascara != "") {
                             jQuery(textbox2).mask(mascara);
@@ -469,8 +471,6 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
                             }
                             combo2.value = result.data[i].atv_valor;
                         }
-
-
                     }
                     else
                         if (result.data[i].atr_apresentacao_itens == 'checkbox') {
@@ -509,7 +509,10 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
 
             }
 
-            travaBotoes();
+            // chama funcao se existir 
+            if (typeof travaBotoes === "function") {
+                travaBotoes();
+            }
         }
     });
 
@@ -715,25 +718,35 @@ function SalvarDados_FichaInspecaoCadastral(tabela) {
     var atv_valor = -1;
     var saida = '';
 
-    //var abas_abertas = '';
-    //if ($('#div_Ficha_DOCUMENTOS').hasClass('collapse in')) abas_abertas = abas_abertas + ";2";
-    //if ($('#div_Ficha_ATRIBUTOS_FUNCIONAIS').hasClass('collapse in')) abas_abertas = abas_abertas + ";3";
-    //if ($('#div_Ficha_ATRIBUTOS_FIXOS').hasClass('collapse in')) abas_abertas = abas_abertas + ";4";
-    //if ($('#div_Ficha_SUPERESTRUTURA').hasClass('collapse in')) abas_abertas = abas_abertas + ";5";
-    //if ($('#div_Ficha_MESOESTRUTURA').hasClass('collapse in')) abas_abertas = abas_abertas + ";6";
-    //if ($('#div_Ficha_INFRAESTRUTURA').hasClass('collapse in')) abas_abertas = abas_abertas + ";7";
-    //if ($('#div_Ficha_ENCONTROS').hasClass('collapse in')) abas_abertas = abas_abertas + ";8";
-    //if ($('#div_Ficha_HISTORICO_INTERVENCOES').hasClass('collapse in')) abas_abertas = abas_abertas + ";9";
-
     var lstTextareas = tabela.getElementsByTagName('textarea');
     for (var i = 0; i < lstTextareas.length; i++) {
-        if (!controlesReadOnly.includes(lstTextareas[i].id))
+        if (!controlesReadOnly_Cadastral.includes(lstTextareas[i].id))
             saida = saida + ";" + lstTextareas[i].id + ":" + lstTextareas[i].value;
     }
 
     var lstCombos = tabela.getElementsByTagName('select');
+    var lstCombos1 = tabela.getElementsByTagName('select');
+    var lstCombos = [];
+
+    var cmb_atr_id_84 = document.getElementById("cmb_atr_id_84");
+    if (cmb_atr_id_84)
+        lstCombos.push(cmb_atr_id_84);
+
+    var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+    if (cmb_atr_id_1084)
+        lstCombos.push(cmb_atr_id_1084);
+
+    // transforma o Object List em Array
+    for (var i = 0; i < lstCombos1.length; i++) {
+        var cmb_ = document.getElementById(lstCombos1[i].id);
+        if (cmb_)
+            lstCombos.push(cmb_);
+    }
+
     for (var i = 0; i < lstCombos.length; i++) {
-        if (!controlesReadOnly.includes(lstCombos[i].id))
+        if ((!controlesReadOnly_Cadastral.includes(lstCombos[i].id))
+             || (lstCombos[i].id == "cmb_atr_id_84")
+             || (lstCombos[i].id == "cmb_atr_id_1084"))
             if (lstCombos[i].selectedIndex > -1)
                 saida = saida + ";" + lstCombos[i].id + ":" + lstCombos[i].options[lstCombos[i].selectedIndex].value;
     }
@@ -741,7 +754,7 @@ function SalvarDados_FichaInspecaoCadastral(tabela) {
 
     var lstInputs = tabela.getElementsByTagName('input'); // lista de textbox + checkbox
     for (var i = 0; i < lstInputs.length; i++) {
-        if (!controlesReadOnly.includes(lstInputs[i].id)) {
+        if (!controlesReadOnly_Cadastral.includes(lstInputs[i].id)) {
             if (lstInputs[i].type == "checkbox") {
                 // verifica se tem um texbox correspondente (para o caso de checkbox+textbox)
                 var txt = document.getElementById(lstInputs[i].id.replace("chk", "txt"));

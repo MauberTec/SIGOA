@@ -249,7 +249,16 @@ namespace WebApp.Controllers
             return Json(new ObjetoBLL().ObjAtributoValor_Salvar(ObjAtributoValor), JsonRequestBehavior.AllowGet);
         }
 
-
+        /// <summary>
+        /// Busca o valor da VDM na API DER e retorna o valor ati_id do combo na ficha de inspecao
+        /// </summary>
+        /// <param name="obj_codigo_TipoOAE">Codigo do Objeto TIPO OAE</param>
+        /// <param name="itipo_pista">Valor do Tipo de Pista (dupla/simples)</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult BuscaValorVDM(string obj_codigo_TipoOAE = "", int itipo_pista = -1)
+        {
+            return Json(new ObjetoBLL().BuscaValorVDM(obj_codigo_TipoOAE, itipo_pista), JsonRequestBehavior.AllowGet);
+        }
 
         // *************** CLASSES DE Objeto  *************************************************************
 

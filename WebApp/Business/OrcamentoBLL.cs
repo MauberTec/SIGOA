@@ -27,8 +27,9 @@ namespace WebApp.Business
         public List<Orcamento> Orcamento_ListAll(int? orc_id = null, string filtroRodovia = "", string filtroObjetos = "", int? filtroStatus = -1, int? orc_ativo = 2,
            string FiltroidRodovias = "", string FiltroidObjetos = "")
         {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
             return new OrcamentoDAO().Orcamento_ListAll(orc_id, filtroRodovia, filtroObjetos, filtroStatus, orc_ativo
-                , FiltroidRodovias, FiltroidObjetos);
+                , FiltroidRodovias, FiltroidObjetos, paramUsuario.usu_id);
         }
 
 

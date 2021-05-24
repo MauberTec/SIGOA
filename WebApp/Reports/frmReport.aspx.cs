@@ -59,7 +59,9 @@ namespace WebApp
                                                                     Request["Filtro_tipo_data"],
                                                                     Request["Filtro_data_De"],
                                                                     Request["Filtro_data_Ate"],
-                                                                    strRegionais);
+                                                                    strRegionais,
+                                                                    gUsuario.usu_id);
+
                             ReportViewer1.LocalReport.DataSources.Clear();
                             rds1 = new ReportDataSource("dtOS", ds.Tables[0]);
                             ReportViewer1.LocalReport.DataSources.Add(rds1);
@@ -72,7 +74,8 @@ namespace WebApp
                                                                     Request["FiltroObj_codigo"],
                                                                     Request["Filtro_data_De"],
                                                                     Request["Filtro_data_Ate"],
-                                                                    strRegionais);
+                                                                    strRegionais,
+                                                                    gUsuario.usu_id);
 
                             ReportViewer1.LocalReport.DataSources.Clear();
                             rds1 = new ReportDataSource("dtOAEs", ds.Tables[0]);
@@ -81,7 +84,7 @@ namespace WebApp
                             break;
 
                         case "rptRelatorio_Priorizacao":
-                            ds = new RelatoriosDAO().ObjPriorizacao_Ds("", Request["FiltroRodovias"], Request["FiltroRegionais"], "", "", "", 0, strRegionais);
+                            ds = new RelatoriosDAO().ObjPriorizacao_Ds("", Request["FiltroRodovias"], Request["FiltroRegionais"], "", "", "", 0, strRegionais,gUsuario.usu_id);
 
                             ReportViewer1.LocalReport.DataSources.Clear();
                             rds1 = new ReportDataSource("dtPriorizacao", ds.Tables[0]);
@@ -97,7 +100,8 @@ namespace WebApp
                                                                     Request["Filtro_data_De"],
                                                                     Request["Filtro_data_Ate"],
                                                                     0,
-                                                                    strRegionais);
+                                                                    strRegionais,
+                                                                    gUsuario.usu_id);
 
                             // ***** manda para o relatorio *************************************************
                             ReportViewer1.LocalReport.DataSources.Clear();

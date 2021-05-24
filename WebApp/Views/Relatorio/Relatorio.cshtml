@@ -4,29 +4,31 @@
 @model List<WebApp.Models.Usuario>
 @using WebApp.Models
 @{
-    //Verifica se o usuário esta logado
-    if (Session["Usuario"] == null)
-    {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 930 });
-        Response.Redirect("~/AcessoNegado/AcessoNegado");
-    }
-
-    Usuario gUsuario = (Usuario)Session["Usuario"];
-    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
-    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(930));
-
-    if (permissoesDesteModulo == null)
-    {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 930 });
-        Response.Redirect("~/AcessoNegado/AcessoNegado");
-    }
-
     var ultimoPedaco = Request.RequestContext.HttpContext.Request.RawUrl.Split('/').Last();
     int qualModuloId = -3000;
     if (int.TryParse(ultimoPedaco, out qualModuloId))
     {
         qualModuloId = Convert.ToInt32(ultimoPedaco);
+    }    
+    
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = qualModuloId });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(qualModuloId));
+
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = qualModuloId });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+
 }
 
 <h2></h2>

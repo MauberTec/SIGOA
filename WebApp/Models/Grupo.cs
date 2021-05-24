@@ -86,5 +86,36 @@ namespace WebApp.Models
     }
 
 
+    /// <summary>
+    /// Modelo de Objeto do Grupo selecionado 
+    /// </summary>
+    public class GrupoObjeto
+    {
+        /// <summary>
+        /// Id do Grupo selecionado
+        /// </summary>
+        public int gru_id { get; set; }
+
+        /// <summary>
+        /// Id do GrupoObjeto selecionado
+        /// </summary>
+        public int gro_id { get; set; }
+
+        /// <summary>
+        /// Id do Objeto associado ao Grupo selecionado
+        /// </summary>
+        public int obj_id { get; set; }
+
+        /// <summary>
+        /// Código do Objeto associado ao Grupo selecionado
+        /// </summary>
+        public string obj_codigo { get; set; }
+
+        /// <summary>
+        /// Descrição do Objeto associado ao Grupo selecionado
+        /// </summary>
+        public string obj_descricao { get; set; }
+    }
+
 
 }

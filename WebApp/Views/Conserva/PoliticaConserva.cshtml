@@ -1,25 +1,21 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "::.. PoliticaConserva ..::";
 }
-
 @using WebApp.Models
-
-
 @{
     //Verifica se o usuário esta logado
     if (Session["Usuario"] == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 540 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 370 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 
     Usuario gUsuario = (Usuario)Session["Usuario"];
     List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
-    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(540)); // id DO MODULO "O.S."
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(370)); // id DO MODULO "Politica Conserva"
     if (permissoesDesteModulo == null)
     {
-        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 540 });
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 370 });
         Response.Redirect("~/AcessoNegado/AcessoNegado");
     }
 }

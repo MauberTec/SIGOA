@@ -23,10 +23,12 @@
 }
 
 <h2></h2>
+
+<link href="~/Content/Base.css" rel="stylesheet" />
 <style>
-    .Centralizado {
-        text-align: center;
-    }
+    .cellRed { color: red }
+
+    .alignRight { text-align:right; padding-right:2px;}
 
     .AdicionarTPUIcone {
         text-align: left !important;
@@ -93,11 +95,7 @@
         background-color: #3c8dbc;
     }
 
-    .visibilityHidden {
-        visibility: hidden !important;
-    }
-
-    .scroll {
+     .scroll {
         width: auto;
         overflow-x: auto;
         white-space: nowrap;
@@ -113,22 +111,6 @@
         -ms-transform: rotate(-90deg);
         -o-transform: rotate(-90deg);
         transform: rotate(-90deg);
-    }
-
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
     }
 
     .lblsNormal {
@@ -163,6 +145,27 @@
         border-right: solid 1px white !important;
         border-bottom: solid 1px black !important;
     }
+    .lblTitulos {
+        height: 25px;
+        color: #FFFFFF;
+        background-color: gray;
+        font-weight: bold;
+        /*border: solid 1px black;*/
+        padding-left: 5px;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+    .lblsBold {
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        margin-left: 5px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-top: 0 !important;
+        text-align: left;
+    }
 
     .btnHeader1 {
         width: 100%;
@@ -173,11 +176,6 @@
         margin: 0;
         text-align: left;
         font-size: 12pt;
-    }
-
-
-    .altura50 {
-        height: 50px;
     }
 
     #divTudo input:disabled,
@@ -209,10 +207,6 @@
         text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     }
 
-    .altura30 {
-        height: 30px;
-    }
-
     .backgrdTransparent {
         background-color: transparent !important;
     }
@@ -238,81 +232,6 @@
         pointer-events: none;
     }
 
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
-
-    .lblsBold {
-        font-weight: bold;
-        height: 25px;
-        margin: 0 !important;
-        margin-left: 5px !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        margin-top: 0 !important;
-        text-align: left;
-    }
-
-    .lblsNormal {
-        font-weight: normal;
-        height: 25px;
-        margin: 5px !important;
-        padding: 5px !important;
-        border: none;
-    }
-
-    input.txts, .txts {
-        border: solid 1px lightgray !important;
-        width: 75%;
-        height: 95%;
-        margin: 0 !important;
-        margin-left: 3px !important;
-        margin-top: 5px !important;
-        display: inline-block;
-        color: blue;
-        font-weight: normal;
-        resize: none;
-    }
-
-    .lblTitulos {
-        height: 25px;
-        color: #FFFFFF;
-        background-color: gray;
-        font-weight: bold;
-        /*border: solid 1px black;*/
-        padding-left: 5px;
-        border-left: solid 1px black;
-        border-right: solid 1px black;
-        border-bottom: solid 1px black;
-    }
-
-    .btnHeader1 {
-        width: 100%;
-        height: 35px;
-        background-color: transparent;
-        border: none;
-        padding: 5px;
-        margin: 0;
-        text-align: left;
-        font-size: 12pt;
-    }
-
-
-    .altura50 {
-        height: 50px;
-    }
 </style>
 
 
@@ -1137,11 +1056,6 @@
 <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="~/Content/plugins/sweetalert2.min.js"></script>
 
-@*<script src="~/Scripts/jquery-ui.js"></script>
-    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
-    <script src="~/Scripts/moment.min.js"></script>
-    <script src="~/Scripts/datetime-moment.js"></script>*@
-
 
 @section Scripts{
     <script>
@@ -1159,11 +1073,6 @@
 
 <script src="~/Content/plugins/jquery.mask.min.js"></script>
 <script src="~/Content/plugins/jquery.mask.js"></script>
-@*<script src="~/Scripts/jquery-ui.js"></script>
-    <link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
-    <script src="~/Scripts/moment.min.js"></script>
-    <script src="~/Scripts/datetime-moment.js"></script>*@
-
 
 <script>
     //var selectedId_orc_id = -1;
@@ -1171,7 +1080,8 @@
     var filtroObjetos = '';
     var filtroStatus = -1;
 
-    var totalParcial_Reparos = 0;
+    var totalParcial_Reparos_Adotado = 0;
+    var totalParcial_Reparos_Sugerido = 0;
     var totalParcial_ServicosAdicionados = 0;
 
     var ehNovoOrcamento_orc_id = -1;
@@ -2346,7 +2256,7 @@
         }
 
         // CARREGA OS DADOS DO GRID MAIS DA TABELA HEADER COM OS DADOS DA 1A LINHA
-        totalParcial_Reparos = 0;
+        totalParcial_Reparos_Sugerido = 0;
         if ($.fn.dataTable.isDataTable(tabela)) {
             $(tabela).DataTable().destroy();
         }
@@ -2384,16 +2294,119 @@
                 { data: "aca_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
                 { data: "ian_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
                 { data: "rpt_id_sugerido_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
-
                 { data: "ian_quantidade_sugerida", "className": "Centralizado", "autoWidth": true, "searchable": false },
                 { data: "rpt_id_sugerido_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "rtu_preco_unitario_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "rtu_valor_total_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "rpt_id_adotado_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
-                { data: "ian_quantidade_adotada", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "rpt_id_adotado_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "rtu_preco_unitario_adotado", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "rtu_valor_total_adotado", "className": "Centralizado borderRight", "autoWidth": true, "searchable": false },
+
+              //  { data: "rtu_preco_unitario_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
+              //  { data: "rtu_valor_total_linha_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
+             // { data: "rpt_id_adotado_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+             // { data: "ian_quantidade_adotada", "className": "Centralizado", "autoWidth": true, "searchable": false },
+             // { data: "rpt_id_adotado_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+             // { data: "rtu_preco_unitario_adotado", "className": "Centralizado", "autoWidth": true, "searchable": false },
+             // { data: "rtu_valor_total_adotado", "className": "Centralizado borderRight", "autoWidth": true, "searchable": false },
+                {
+                    data: "rtu_preco_unitario_sugerido", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
+                    "render": function (data, type, row) {
+                            var rtu_preco_unitario_sugerido = parseFloat(row["rtu_preco_unitario_sugerido"]);
+                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_sugerido);
+                    }
+                },
+                {
+                    data: "rtu_valor_total_linha_sugerido", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
+                    "render": function (data, type, row) {
+                        var rtu_valor_total_linha_sugerido = parseFloat(row["rtu_valor_total_linha_sugerido"]);
+                        return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
+                    }
+                },
+                {
+                    data: "rpt_id_adotado_codigo", "searchable": false, "className": "borderLeft Centralizado", "sortable": false, "autoWidth": true,
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                        if (qtAdotadaValor == 0) 
+                            return (row["rpt_id_sugerido_codigo"]);
+                        else
+                            return (row["rpt_id_adotado_codigo"]);
+                    },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ((rowData["rpt_id_adotado_codigo"] != rowData["rpt_id_sugerido_codigo"])
+                            || (parseFloat(rowData["ian_quantidade_adotada"]) == 0))
+                          $(td).addClass('cellRed');
+                    }
+                },
+                {
+                    data: "ian_quantidade_adotada", "searchable": false, "className": "Centralizado", "sortable": false, 
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                        if (qtAdotadaValor == 0) 
+                            return (row["ian_quantidade_sugerida"] + '').replaceAll(".", ",");
+                        else
+                            return (row["ian_quantidade_adotada"] + '').replaceAll(".", ",");
+                    },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ((parseFloat(rowData["ian_quantidade_sugerida"]) != parseFloat(rowData["ian_quantidade_adotada"]))
+                            || (parseFloat(rowData["ian_quantidade_adotada"]) == 0))
+                            $(td).addClass('cellRed');
+                    }
+                },
+                {
+                    data: "rpt_id_adotado_unidade", "searchable": false, "className": "Centralizado", "sortable": false,
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                        if (qtAdotadaValor == 0)
+                            return (row["rpt_id_sugerido_unidade"] + '').replaceAll(".", ",");
+                        else
+                            return (row["rpt_id_adotado_unidade"] + '').replaceAll(".", ",");
+                },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ((rowData["rpt_id_sugerido_unidade"] != rowData["rpt_id_adotado_unidade"])
+                            || (parseFloat(rowData["ian_quantidade_adotada"]) == 0))
+                            $(td).addClass('cellRed');
+                    }
+                },
+                {
+                    data: "rtu_preco_unitario_adotado", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                        if (qtAdotadaValor == 0) {
+                            var rtu_preco_unitario_sugerido = parseFloat(row["rtu_preco_unitario_sugerido"]);
+                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_sugerido);
+                        }
+                        else {
+                            var rtu_preco_unitario_adotado = parseFloat(row["rtu_preco_unitario_adotado"]);
+                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_adotado);
+                        }
+                    },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ((rowData["rtu_preco_unitario_sugerido"] != rowData["rtu_preco_unitario_adotado"])
+                            || (parseFloat(rowData["ian_quantidade_adotada"]) == 0))
+                            $(td).addClass('cellRed');
+                    }
+                },
+                {
+                    data: "rtu_valor_total_linha_adotado", "searchable": false, "className": "alignRight borderRight", "sortable": false, "autoWidth": true,
+                    "render": function (data, type, row) {
+                        var retorno = "";
+                        var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                        if (qtAdotadaValor == 0) {
+                            var rtu_valor_total_linha_sugerido = parseFloat(row["rtu_valor_total_linha_sugerido"]);
+                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
+                        }
+                        else
+                        {
+                            var rtu_valor_total_linha_adotado = parseFloat(row["rtu_valor_total_linha_adotado"]);
+                            return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_adotado);
+                        }
+                    },
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        if ((rowData["rtu_valor_total_linha_sugerido"] != rowData["rtu_valor_total_linha_adotado"])
+                            || (parseFloat(rowData["ian_quantidade_adotada"]) == 0))
+                            $(td).addClass('cellRed');
+                    }
+                },
                 { data: "orc_objetos_associados", "className": "hide_column" },
 
                 { data: "pri_ids_associados", "className": "hide_column" },
@@ -2469,21 +2482,29 @@
                         $(prefixo + '#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
                     }
 
+                    var valor_total_sugerido = parseFloat(data["valor_total_sugerido"]);
+                    var valor_total_adotado = parseFloat(data["valor_total_adotado"]);
+
+                    $(prefixo + "#txtReparos_valor_total_Adotado").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_adotado));
+                    $(prefixo + "#txtReparos_valor_total_Adotado").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_adotado)));
+
+                    $(prefixo + "#txtReparos_valor_total_Sugerido").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_sugerido));
+                    $(prefixo + "#txtReparos_valor_total_Sugerido").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_sugerido)));
 
                 }
 
-                var valorSugerido = parseFloat(data["rtu_valor_total_sugerido"]);
-                var valorAdotado = parseFloat(data["rtu_valor_total_adotado"]);
+                //var valorSugerido = parseFloat(data["rtu_valor_total_linha_sugerido"]);
+                //var valorAdotado = parseFloat(data["rtu_valor_total_linha_adotado"]);
 
-                if (data["ore_ativo"] == 1)
-                    totalParcial_Reparos = totalParcial_Reparos + parseFloat(valorAdotado > 0 ? valorAdotado : valorSugerido);
+                //if (data["ore_ativo"] == 1)
+                //    totalParcial_Reparos_Sugerido = totalParcial_Reparos_Sugerido + parseFloat(valorSugerido);
 
-                $(prefixo + "#txtReparos_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos));
-                $(prefixo + "#txtReparos_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos)));
+                //$(prefixo + "#txtReparos_valor_total_Sugerido").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos_Sugerido));
+                //$(prefixo + "#txtReparos_valor_total_Sugerido").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos_Sugerido)));
 
-                //var Reparos_vtotal = parseFloat($(prefixo + "#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
-                var ServicosAdicionais_vtotal = parseFloat($(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
-                $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos + ServicosAdicionais_vtotal));
+                ////var Reparos_vtotal = parseFloat($(prefixo + "#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+                //var ServicosAdicionais_vtotal = parseFloat($(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+                //$(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos_Sugerido + ServicosAdicionais_vtotal));
 
                 $("#btn_Toggle_ORCAMENTO_DETALHES_" + aba).html("Orçamento " + $(prefixo + "#txtorc_codigo_Detalhes").val() + " Versão " + $(prefixo + "#txtorc_versaoDetalhes").val());
             }
@@ -2623,8 +2644,8 @@
                 { data: "NomeSubItem", "className": "Centralizado", "autoWidth": true, "searchable": false },
                 { data: "DataTpu", "className": "hide_column" },
                 { data: "ose_fase", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "PrecoUnit", "className": "Centralizado", "autoWidth": true, "searchable": false },
-                { data: "ValorTotal", "className": "Centralizado", "autoWidth": true, "searchable": false },
+                { data: "PrecoUnit", "className": "alignRight", "autoWidth": true, "searchable": false },
+                { data: "valor_total_linha", "className": "alignRight", "autoWidth": true, "searchable": false },
                 {
                     data: "ose_id",
                     "className": "Centralizado",
@@ -2659,7 +2680,6 @@
 
                     }
                 }
-
                 , {
                     targets: [8] // PrecoUnit
                     , "render": function (data, type, row) {
@@ -2673,7 +2693,7 @@
                     }
                 }
                 , {
-                    targets: [9] // ValorTotal
+                    targets: [9] // valor_total_linha
                     , "render": function (data, type, row) {
                         if (!isNaN(data)) {
                             var dado = parseFloat(data);
@@ -2709,14 +2729,18 @@
                    $("#lblDataBase").text((row.childNodes[6].innerText));
                 }
 
-                totalParcial_ServicosAdicionados = totalParcial_ServicosAdicionados + parseFloat(data["ValorTotal"]);
-                $(prefixo + "#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados));
-                $(prefixo + "#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados)));
+                if (dataIndex == 0)
+                {
+                    var ServicosAdicionais_vtotal = parseFloat(data["valor_total"]);
+                    $(prefixo + "#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(ServicosAdicionais_vtotal));
+                    $(prefixo + "#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(ServicosAdicionais_vtotal)));
 
-                var Reparos_vtotal = parseFloat($(prefixo + "#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
-                var ServicosAdicionais_Aux = $(prefixo + "#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", ".");
-                var ServicosAdicionais_vtotal=  isNaN(ServicosAdicionais_Aux) ? 0 :   parseFloat(ServicosAdicionais_Aux) ;
-                $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_vtotal + ServicosAdicionais_vtotal));
+                    var Reparos_valor_total_Sugerido = parseFloat($(prefixo + "#txtReparos_valor_total_Sugerido").val().replaceAll(".", "").replace(",", "."));
+                    var Reparos_valor_total_Adotado = parseFloat($(prefixo + "#txtReparos_valor_total_Adotado").val().replaceAll(".", "").replace(",", "."));
+ 
+                    $(prefixo + "#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_valor_total_Sugerido + Reparos_valor_total_Adotado + ServicosAdicionais_vtotal));
+                }
+
 
             }
         });
@@ -2800,14 +2824,14 @@
                 if (isConfirm) {
                     var url = "/Orcamento/OrcamentoDetalhes_AtivarDesativar";
                     var response = POST(url, JSON.stringify({ ore_id: ore_id }))
-                    if (response.erroId == 1) {
+                    if (response.status == true) {
                         swal({
                             type: 'success',
                             title: 'Sucesso',
                             text: ativar == 1 ? msgAtivacaoOK : msgDesativacaoOK
                         });
 
-                        totalParcial_Reparos = 0;
+                        totalParcial_Reparos_Sugerido = 0;
                         $(tabela).DataTable().ajax.reload();
                         calculaTotal(aba, orc_id);
                     }
@@ -2881,7 +2905,11 @@
                         totalParcial_ServicosAdicionados = 0;
                        $(prefixo + '#tblServicosAdicionados').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
                        $('#tblSelecionarTPUs').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
-                        calculaTotal(aba, orc_id);
+                       calculaTotal(aba, orc_id);
+
+                        // atualiza o grid principal
+                       $('#tblOrcamento').DataTable().ajax.reload(null, false);
+
                         return false;
                     }
 

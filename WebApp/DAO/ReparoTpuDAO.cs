@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using WebApp.Helpers;
@@ -15,6 +16,7 @@ namespace WebApp.DAO
     /// </summary>
     public class ReparoTpuDAO: Conexao
     {
+        CultureInfo culturePTBR = new CultureInfo("pt-BR");
 
         /// <summary>
         /// Busca lista de Reparos associados a TPU
@@ -39,7 +41,7 @@ namespace WebApp.DAO
                             fon_nome = reader["fon_nome"] == DBNull.Value ? string.Empty : reader["fon_nome"].ToString(),
                             rtu_data_base = reader["rtu_data_base"] == DBNull.Value ? "" : reader["rtu_data_base"].ToString(),
                             rpt_descricao = reader["rpt_descricao"] == DBNull.Value ? string.Empty : reader["rpt_descricao"].ToString(),
-                            rtu_preco_unitario = reader["rtu_preco_unitario"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["rtu_preco_unitario"].ToString()),
+                            rtu_preco_unitario = reader["rtu_preco_unitario"] == DBNull.Value ? 0 : Convert.ToDecimal(reader["rtu_preco_unitario"].ToString(), culturePTBR),
                             rtu_codigo_tpu = reader["rtu_codigo_tpu"] == DBNull.Value ? string.Empty : reader["rtu_codigo_tpu"].ToString(),
                             rtu_id = reader["rtu_id"] == DBNull.Value ? 0 : Convert.ToInt32(reader["rtu_id"].ToString()),
                             rtu_fonte_txt = reader["rtu_fonte_txt"] == DBNull.Value ? string.Empty : reader["rtu_fonte_txt"].ToString(),

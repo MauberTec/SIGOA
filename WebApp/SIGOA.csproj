@@ -1138,6 +1138,7 @@
     <Content Include="Scripts\report.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
+    <Content Include="Scripts\Shared\_fichaRequalificacaoOAE.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
@@ -1268,6 +1269,7 @@
     <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll" />
     <Content Include="SqlServerTypes\x86\msvcr120.dll" />
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll" />
+    <Content Include="temp\1.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste1.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste2.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste3.png" />
@@ -1349,12 +1351,12 @@
     <Content Include="Views\Reparo\PoliticaReparos.cshtml" />
     <Content Include="Views\Reparo\ReparoTpu.cshtml" />
     <Content Include="Views\Ajuda\Index.cshtml" />
+    <Content Include="Views\Shared\_fichaRequalificacaoOAE.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
     <Folder Include="img\" />
-    <Folder Include="temp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1268,7 +1268,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!lblatr_id_99.Value</Value>
+                              <Value>Estrutural</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -1413,7 +1413,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!lblatr_id_100.Value</Value>
+                              <Value>Durabilidade</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -3791,7 +3791,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!lblatr_id_99.Value</Value>
+                              <Value>Funcional</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -3837,7 +3837,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!txt_atr_id_99.Value</Value>
+                              <Value>=Fields!txt_atr_id_145.Value</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                               </Style>
@@ -4472,7 +4472,7 @@
         <DataSetName>dtFicha</DataSetName>
         <Top>80.85466cm</Top>
         <Height>19.18449cm</Height>
-        <Width>20.51154cm</Width>
+        <Width>20.51151cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -17327,7 +17327,7 @@
         </TablixRowHierarchy>
         <Top>52.96288cm</Top>
         <Height>27.28546cm</Height>
-        <Width>20.51154cm</Width>
+        <Width>20.51157cm</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -26721,7 +26721,7 @@
         <DataSetName>dtFicha</DataSetName>
         <Top>21.12594cm</Top>
         <Height>22.91602cm</Height>
-        <Width>20.51154cm</Width>
+        <Width>20.51153cm</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>

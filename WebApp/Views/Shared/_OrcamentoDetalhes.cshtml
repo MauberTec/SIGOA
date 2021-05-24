@@ -24,21 +24,6 @@
 
 
 <style>
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
 
     .lblsBold {
         font-weight: bold;
@@ -60,7 +45,7 @@
     }
 
     input.txts, .txts {
-        border: solid 1px lightgray !important;
+        /*border: solid 1px lightgray !important;*/
         width: 75%;
         height: 95%;
         margin: 0 !important;
@@ -96,9 +81,6 @@
     }
 
 
-    .altura50 {
-        height: 50px;
-    }
 </style>
 
 <br />
@@ -230,21 +212,20 @@
             </td>
         </tr>
 
-        <tr>
-            <td>
-                <h4>
-                     <input class="lblsBold" style="border:none !important;" Disabled readonly value="Valor Total" />
-                </h4>
-            </td>
-            <td>
-                <h4>
-                    <input id="txtorc_valor_total" name="txtorc_valor_total"  style="border:none !important;" class="lblsBold" Disabled readonly />
-                </h4>
-            </td>
-        </tr>
-
     </table>
 
+    <br />
+    <br />
+
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">Valor Total</h4>
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+        <input id="txtorc_valor_total" name="txtorc_valor_total" style="border:none !important;" class="lblsBold" Disabled readonly />
+    </h4>
+    <br />
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">Valor Serviços Adicionais</h4>
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+        <input id="txtServicosAdicionais_valor_total" name="txtServicosAdicionais_valor_total" style="border:none !important;" Disabled readonly />
+    </h4>
 
     <table id="tblServicosAdicionados">
         <thead>
@@ -257,11 +238,6 @@
                             style="border:none; box-shadow:none; background-color:transparent; display:none; ">
                         <span class="glyphicon glyphicon-plus text-success contornoBranco"></span>
                     </button>
-
-                    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
-                        <input id="txtServicosAdicionais_valor_total" name="txtServicosAdicionais_valor_total" style="border:none !important;" Disabled readonly />
-                    </h4>
-
                 </td>
             </tr>
             <tr>
@@ -273,22 +249,30 @@
                 <th>Nome</th>
                 <th>Data Base</th>
                 <th>Fase</th>
-                <th>Preço Unitário</th>
-                <th>Valor Total</th>
+                <th class="alignRight">Preço Unitário</th>
+                <th class="alignRight">Valor Total</th>
                 <th></th>
             </tr>
         </thead>
     </table>
 
 
+    <br /><br />
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">Valor Reparos Adotados</h4>
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+        <input id="txtReparos_valor_total_Adotado" name="txtReparos_valor_total_Adotado" style="border:none !important;" Disabled readonly />
+    </h4>
+    <br />
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">Valor Reparos Indicados pelo Sistema</h4>
+    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
+        <input id="txtReparos_valor_total_Sugerido" name="txtReparos_valor_total_Sugerido" style="border:none !important;" Disabled readonly />
+    </h4>
+
     <table id="tblOrcamentoDetalhes">
         <thead>
             <tr>
                 <td colspan="19">
                     <h4 style="display:inline-table; font-weight:bold; margin-left: -15px;">Reparos</h4>
-                    <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">
-                        <input id="txtReparos_valor_total" name="txtReparos_valor_total"  style="border:none !important;" Disabled readonly />
-                    </h4>
                 </td>
             </tr>
             <tr>
@@ -323,13 +307,13 @@
                 <th>Reparo</th>
                 <th>Qtde</th>
                 <th>Unid</th>
-                <th>Val Unit</th>
-                <th>Val Total</th>
+                <th class="alignRight">Val Unit</th>
+                <th class="alignRight">Val Total</th>
                 <th>Reparo</th>
                 <th>Qtde</th>
                 <th>Unid</th>
-                <th>Val Unit</th>
-                <th>Val Total</th>
+                <th class="alignRight">Val Unit</th>
+                <th class="alignRight">Val Total</th>
 
                 <th>orc_objetos_associados</th>
                 <th>pri_ids_associados</th>

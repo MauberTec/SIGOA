@@ -177,12 +177,14 @@ document.getElementById("btn_Editar_NOTIFICACAO_OCORRENCIA").style.display = 'bl
 
 function bntEnviarEmailNotificacao_onclick()
     {
-        var TextoEmail = $("#txtEmailTexto").val();
+    var TextoEmail = $("#txtEmailTexto").val();
+    var lstDestinatarios = "";
+    /*
     var lstDestinatarios = ($("#cmbEmailRegionais").val() + ';').replaceAll(",", ";");
 
     // formata os enderecos de email
     lstDestinatarios = lstDestinatarios.replaceAll(";", ";'");
-        lstDestinatarios = lstDestinatarios.replaceAll("<", "'<");
+     lstDestinatarios = lstDestinatarios.replaceAll("<", "'<");
     lstDestinatarios = "'" + lstDestinatarios;
     lstDestinatarios = lstDestinatarios.slice(0, -2);
 
@@ -196,55 +198,54 @@ function bntEnviarEmailNotificacao_onclick()
         });
     return false;
 }
-
-        if (TextoEmail.trim() == "") {
+    */
+    if (TextoEmail.trim() == "") {
         swal({
             position: 'top',
             type: 'error',
             text: 'O texto do Email está vazio',
             title: 'Aviso'
         });
-    return false;
-}
-else
-        {
-             var reg = /<(.|\n)*?>/g;
-            if (reg.test(TextoEmail) == true) {
-        swal({
-            position: 'top',
-            type: 'error',
-            text: "Uso de Tags '<>' não é permitido.",
-            title: 'Aviso'
-        });
-    return false;
-}
-}
+        return false;
+    }
+    else {
+        var reg = /<(.|\n)*?>/g;
+        if (reg.test(TextoEmail) == true) {
+            swal({
+                position: 'top',
+                type: 'error',
+                text: "Uso de Tags '<>' não é permitido.",
+                title: 'Aviso'
+            });
+            return false;
+        }
+    }
 
-        var response = POST("/OrdemServico/FichaNotificacao_EnviarEmail", JSON.stringify({lstDestinatarios: lstDestinatarios, TextoEmail: TextoEmail }))
-            if (response.status) {
+    var response = POST("/OrdemServico/FichaNotificacao_EnviarEmail", JSON.stringify({ lstDestinatarios: lstDestinatarios, TextoEmail: TextoEmail, ord_id: selectedId_ord_id }))
+    if (response.status) {
         swal({
             type: 'success',
             title: 'Sucesso',
             text: 'Email(s) enviado(s) com Sucesso'
         });
 
-    // limpa os campos 
-    $("#cmbEmailRegionais").multiselect("clearSelection");
-    $("#txtEmailTexto").val("");
+        // limpa os campos 
+        $("#cmbEmailRegionais").multiselect("clearSelection");
+        $("#txtEmailTexto").val("");
 
-    $("#modalEnviarEmail").modal('hide');
-    return false;
-}
-            else {
+        $("#modalEnviarEmail").modal('hide');
+        return false;
+    }
+    else {
         swal({
             type: 'error',
             title: 'Aviso',
             text: response.erroId
         });
 
-    //$("#modalEnviarEmail").modal('hide');
-    return false;
-}
+        //$("#modalEnviarEmail").modal('hide');
+        return false;
+    }
 
 
 }

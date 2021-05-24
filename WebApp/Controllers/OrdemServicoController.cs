@@ -34,6 +34,8 @@ namespace WebApp.Controllers
                 case 6: ficha = "~/Views/Shared/_fichaNotificacaoOcorrencia.cshtml";  break;
                 case 7: ficha = "~/Views/Shared/_fichaInspecaoEspecialProvidencias.cshtml";  break;
                 case 8: ficha = "~/Views/Shared/_fichaInspecaoRotineiraProvidencias.cshtml";  break;
+                case 14: ficha = "~/Views/Shared/_fichaRequalificacaoOAE.cshtml";  break;
+                case 23: ficha = "~/Views/Shared/_fichaRequalificacaoOAE.cshtml";  break;
             }
 
                 return PartialView(ficha);
@@ -465,9 +467,9 @@ namespace WebApp.Controllers
         /// <param name="TextoEmail">Texto do Email</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail)
+        public JsonResult FichaNotificacao_EnviarEmail(string lstDestinatarios="", string TextoEmail = "", int ord_id = 0)
         {
-            string retorno = new OrdemServicoBLL().FichaNotificacao_EnviarEmail(lstDestinatarios, TextoEmail);
+            string retorno = new OrdemServicoBLL().FichaNotificacao_EnviarEmail(lstDestinatarios, TextoEmail, ord_id);
             bool valid = retorno.Trim() == "" ? true : false;
 
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);

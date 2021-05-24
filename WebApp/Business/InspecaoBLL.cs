@@ -8,6 +8,7 @@ using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using WebApp.Helpers;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace WebApp.Business
 {
@@ -33,7 +34,8 @@ namespace WebApp.Business
         /// <returns>Lista de Inspecao</returns>
         public List<Inspecao> Inspecao_ListAll(int ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
         {
-            return new InspecaoDAO().Inspecao_ListAll(ins_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS, filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new InspecaoDAO().Inspecao_ListAll(ins_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS, filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -237,11 +239,11 @@ namespace WebApp.Business
                     // ======= PREENCHE OS DADOS ===============================================
                     if (lstDADOS.Count > 0)
                     {
-                         for (int li = 0; li < lstDADOS.Count; li++)
+                        for (int li = 0; li < lstDADOS.Count; li++)
                         //   for (int li = 0; li < 4; li++)
                         {
 
-                            for (int col = 65; col <= 82; col++) // VARRE as COLUNAS A até R
+                            for (int col = 65; col < 82; col++) // VARRE as COLUNAS A até R
                             {
 
 
@@ -251,7 +253,7 @@ namespace WebApp.Business
                                 switch (col)
                                 {
                                     case 65: valor = lstDADOS[li].item; break;
-                              //      case 66: valor = lstDADOS[li].col_Localizacao; break;
+                                    //      case 66: valor = lstDADOS[li].col_Localizacao; break;
                                     case 66: valor = lstDADOS[li].obj_descricao; break;
                                 }
 
@@ -273,8 +275,8 @@ namespace WebApp.Business
                                         case 78: valor = lstDADOS[li].aca_codigo; break;
                                         case 79: valor = lstDADOS[li].ian_fotografia.ToString(); break;
                                         case 80: valor = lstDADOS[li].ian_croqui.ToString(); break;
-                                        case 81: valor = lstDADOS[li].ian_desenho; break;
-                                        case 82: valor = lstDADOS[li].ian_observacoes; break;
+                                        //case 81: valor = lstDADOS[li].ian_desenho; break;
+                                        case 81: valor = lstDADOS[li].ian_observacoes; break;
                                     }
                                 }
 
@@ -286,12 +288,12 @@ namespace WebApp.Business
                                     cell.StyleIndex = cell_Modelo1.StyleIndex;
                                 else
                                     if ((lstDADOS[li].clo_id == 7) || (lstDADOS[li].clo_id == 8))
-                                        cell.StyleIndex = cell_Modelo2.StyleIndex;
-                                    else
+                                    cell.StyleIndex = cell_Modelo2.StyleIndex;
+                                else
                                         if (lstDADOS[li].clo_id == 9)
-                                            cell.StyleIndex = cell_Modelo3.StyleIndex;
-                                        else
-                                            cell.StyleIndex = cell_Modelo4.StyleIndex;
+                                    cell.StyleIndex = cell_Modelo3.StyleIndex;
+                                else
+                                    cell.StyleIndex = cell_Modelo4.StyleIndex;
 
                             } // for col
                         } // for li
@@ -300,11 +302,11 @@ namespace WebApp.Business
 
                         // ============ coloca o rodape ================================================
 
-                        uint LinhaDestino = (uint)lstDADOS.Count+8;
+                        uint LinhaDestino = (uint)lstDADOS.Count + 8;
 
                         for (int li = 1; li <= 3; li++)
                         {
-                            for (int col = 65; col <= 82; col++) // VARRE as COLUNAS A até Q
+                            for (int col = 65; col < 82; col++) // VARRE as COLUNAS A até Q
                             {
                                 // copia o Quadro A da planilha "Rodape" para o rodape dos dados
                                 Cell cellOrigem = ger.InsertCellInWorksheet(((char)col).ToString(), Convert.ToUInt32(li), worksheetRodape);
@@ -320,7 +322,6 @@ namespace WebApp.Business
                                 ger.MergeCells(worksheet, "F" + (li + LinhaDestino).ToString(), "Q" + (li + LinhaDestino).ToString());
                             }
                         }
-
 
                         // preenche os valores
                         Cell cell2 = ger.InsertCellInWorksheet("B", 2, worksheet);
@@ -338,12 +339,30 @@ namespace WebApp.Business
                         cell2 = ger.InsertCellInWorksheet("F", (LinhaDestino + 2), worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].ins_anom_quadroA_1);
-                      //  cell2.StyleIndex = cell_Modelo4.StyleIndex;
+                        //  cell2.StyleIndex = cell_Modelo4.StyleIndex;
 
                         cell2 = ger.InsertCellInWorksheet("F", (LinhaDestino + 3), worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].ins_anom_quadroA_2);
-                       // cell2.StyleIndex = cell_Modelo4.StyleIndex;
+                        // cell2.StyleIndex = cell_Modelo4.StyleIndex;
+
+
+
+                        // ============ coloca o rodape Observacoes ================================================
+
+                        int li2 = 4;
+                        for (int col = 65; col < 82; col++) // VARRE as COLUNAS A até Q
+                        {
+                            // copia Obs da planilha "Rodape" para o rodape dos dados
+                            Cell cellOrigem = ger.InsertCellInWorksheet(((char)col).ToString(), Convert.ToUInt32(li2), worksheetRodape);
+                            ger.copyCell(doc, worksheet, cellOrigem, ((char)col).ToString(), Convert.ToUInt32(li2 + LinhaDestino));
+                        }
+
+                        // mescla as celulas
+                        ger.MergeCells(worksheet, "A" + (li2 + LinhaDestino).ToString(), "Q" + (li2 + LinhaDestino + 6).ToString());
+
+                        // ajusta a altura da linha
+                        Row linhaObs = ger.GetRow(worksheet, 4 + LinhaDestino);
 
                     }
 

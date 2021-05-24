@@ -255,6 +255,11 @@ namespace WebApp.Models
         public int ian_id { get; set; }
 
         /// <summary>
+        /// Ativo?
+        /// </summary>
+        public int ian_ativo { get; set; }
+
+        /// <summary>
         /// Número da Anomalia 
         /// </summary>
         public string ian_numero { get; set; }
@@ -394,8 +399,21 @@ namespace WebApp.Models
         /// <summary>
         /// Valor total da TPU do reparo sugerido
         /// </summary>
-        public decimal rtu_valor_total_sugerido { get; set; }
+        public decimal rtu_valor_total_linha_sugerido { get; set; }
+
+        /// <summary>
+        /// Valor total do reparo sugerido
+        /// </summary>
+        public decimal valor_total_sugerido { get; set; }
+
+
+        /// <summary>
+        /// Valor total do reparo adotado
+        /// </summary>
+        public decimal valor_total_adotado { get; set; }
             
+
+
         /// <summary>
         /// Preço unitário da TPU para valor adotado
         /// </summary>
@@ -404,7 +422,7 @@ namespace WebApp.Models
         /// <summary>
         /// Valor total da TPU do reparo adotado
         /// </summary>
-        public decimal rtu_valor_total_adotado { get; set; }
+        public decimal rtu_valor_total_linha_adotado { get; set; }
 
         /// <summary>
         /// Ids dos Objetos associados às Ordens de Serviços associadas ao Orçamento
@@ -522,9 +540,14 @@ namespace WebApp.Models
 
 
         /// <summary>
+        /// Valor Total Parcial
+        /// </summary>
+        public Decimal valor_total_linha { get; set; }
+
+        /// <summary>
         /// Valor Total 
         /// </summary>
-        public Decimal ValorTotal { get; set; }
+        public Decimal valor_total { get; set; }
 
         /// <summary>
         /// Desonerado?

@@ -309,6 +309,120 @@ namespace WebApp.DAO
 
 
 
+        // *************** Objetos Permitidos do Grupo   *************************************************************
+        /// <summary>
+        /// Lista todos os Objetos Permitidos do Grupo selecionado
+        /// </summary>
+        /// <param name="gru_id">Id do Grupo Selecionado</param>
+        /// <returns>Lista de GrupoObjeto</returns>
+        public List<GrupoObjeto> GrupoObjetos_ListAll(int gru_id)
+        {
+
+            try
+            {
+                List<GrupoObjeto> lst = new List<GrupoObjeto>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_GRUPO_OBJETOS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@gru_id", gru_id);
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        lst.Add(new GrupoObjeto
+                        {
+                            gru_id = gru_id,
+                            gro_id = Convert.ToInt32(rdr["gro_id"]),
+                            obj_id = Convert.ToInt32(rdr["obj_id"]),
+                            obj_codigo = rdr["obj_codigo"].ToString(),
+                            obj_descricao = rdr["obj_descricao"].ToString()
+                        });
+                    }
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///   Exclui Objeto da lista de Permissões do Grupo selecionado
+        /// </summary>
+        /// <param name="gro_id">Id do GrupoObjeto Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int GrupoObjeto_Excluir(int gro_id, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_DEL_GRUPO_OBJETO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@gro_id", gro_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///   Acrescenta Objetos ao Grupo selecionado
+        /// </summary>
+        /// <param name="gru_id">Id do Grupo Selecionado</param>
+        /// <param name="obj_ids">Ids dos Objetos a serem salvos</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        public int GrupoObjeto_Incluir(int gru_id, string obj_ids, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_INS_GRUPO_OBJETO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@gru_id", gru_id);
+                    com.Parameters.AddWithValue("@obj_ids", obj_ids);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    i = com.ExecuteNonQuery();
+                }
+                return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 
 }

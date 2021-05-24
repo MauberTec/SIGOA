@@ -5043,3 +5043,64 @@ table.text-center, table.text-center td, table.text-center th {
 .dataTables_filter {
     display: none !important;
 }
+
+.borderBottom {
+    border-bottom: solid 1px black;
+}
+
+.borderTop {
+    border-top: solid 1px black;
+}
+
+.borderLeft {
+    border-left: solid 1px black;
+}
+
+.borderRight {
+    border-right: solid 1px black;
+}
+
+.Centralizado {
+    text-align: center;
+}
+
+.visibilityHidden {
+    visibility: hidden !important;
+}
+
+.altura50 {
+    height: 50px;
+}
+.altura30 {
+    height: 30px;
+}
+
+
+.borderBottomPt {
+    border-bottom: dotted 1px black;
+}
+
+.borderTopPt {
+    border-top: dotted 1px black;
+}
+
+.borderLeftPt {
+    border-left: dotted 1px black;
+}
+
+.borderRightPt {
+    border-right: dotted 1px black;
+}
+
+.borderNone {
+    border: none
+}
+
+.borderAll {
+    border: solid 1px black;
+}
+
+.backgrdTransparent {
+    background-color: transparent !important;
+}
+

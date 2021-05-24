@@ -32,7 +32,8 @@ namespace WebApp.Business
         /// <returns>Lista de OrdemServico</returns>
         public List<OrdemServico> OrdemServico_ListAll(int? ord_id = null, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
         {
-            return new OrdemServicoDAO().OrdemServico_ListAll(ord_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS,  filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().OrdemServico_ListAll(ord_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS,  filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -42,7 +43,8 @@ namespace WebApp.Business
         /// <returns>OSTipo</returns>
         public OrdemServico OrdemServico_GetbyID(int ID)
         {
-            return new OrdemServicoDAO().OrdemServico_ListAll(ID).FirstOrDefault();
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().OrdemServico_ListAll(ID, null, null,-1,-1,"", "", "", paramUsuario.usu_id).FirstOrDefault();
         }
 
         /// <summary>
@@ -55,41 +57,124 @@ namespace WebApp.Business
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
             int retorno = new OrdemServicoDAO().OrdemServico_Salvar(ord, paramUsuario.usu_id, paramUsuario.usu_ip);
 
-            // TODO
             // se retorno > 0 entao verifica se tem que mandar email
             if (retorno > 0) // salvou com sucesso
             {
-                if ((ord.sos_codigo == "E") || (ord.sos_id == 14)) // encerrada
+                 ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
+                 List<OSEmail> email = null;
+                 AlternateView av1 = null;
+                 string retornoEmail = "";
+
+                // "E" = 14 = encerrada
+                if ((ord.sos_codigo == "E") || (ord.sos_id == 14)) 
                 {
-                    if ((ord.tos_id == 7) || (ord.tos_id == 8)) //cadastral(7), rotineira(8)
+                    //cadastral(7), rotineira(8)
+                    if ((ord.tos_id == 7) || (ord.tos_id == 8)) 
                     {
-                        // Sistema notifica a Regional 
-                        // os itens de conserva, 
-                        // seus quantitativos estimados 
-                        // e o prazo de ação sugerido pela política estabelecida
+                        // verifica se tem apontamentos de serviços e quantitativos na OS
+                        int qt = new OrdemServicoDAO().OrdemServico_ChecaApontamentoServicos(ord.ord_id);
+
+                        // se tem, entao manda o email
+                        if (qt > 0)
+                        {
+                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 1); // id da mensagem = 1
+
+                            // envia o email
+                            pEmail.Para = email[0].destinatarios;
+                            pEmail.Assunto = email[0].assunto;
+                            pEmail.Texto = email[0].mensagem;
+
+                            AlternateView av2 = null;
+                            if (pEmail.IsBodyHtml)
+                                av2 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                            retornoEmail = new Gerais().MandaEmail(av2, pEmail);
+                        }
                     }
 
-                    if ((ord.tos_id == 7) || (ord.tos_id == 8) || (ord.tos_id == 9)) //cadastral(7), rotineira(8), especial(9)
+                    //cadastral(7), rotineira(8), especial(9)
+                    if ((ord.tos_id == 7) || (ord.tos_id == 8) || (ord.tos_id == 9))
                     {
-                        // Sistema notifica a Seção de OAE da Sede  
-                        // o encerramento da OS
+                        // Sistema notifica a Seção de OAE da Sede  o encerramento da OS
+                        email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 2); // id da mensagem = 2
+                    }
+                    else
+                    {
+                        //   5,10,11,13,16,17,22,24
+                        //  Inspeção Extraordinária, Monitoramento, Orçamento, Projeto de Reforço, Ensaios, Levantamento Cadastral, Conserva,Projeto de OAE
+                        if ((ord.tos_id == 5) || (ord.tos_id == 10) || (ord.tos_id == 11) || (ord.tos_id == 13)
+                            || (ord.tos_id == 16) || (ord.tos_id == 17) || (ord.tos_id == 22) || (ord.tos_id == 24))
+                        {
+                            // Sistema notifica a Seção de OAE da Sede o encerramento da OS 
+                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 3); // id da mensagem = 3
+                        }
+                        else
+                        {
+                            if (ord.tos_id == 18)  // ocorrencia (18)
+                            {
+                                // enviar e-mail para a seção de OAE e para a Regional
+                                email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 5); // id da mensagem = 5
+                            }
+                        }
                     }
 
-                    if ((ord.tos_id == 5) || (ord.tos_id == 10) || (ord.tos_id == 13)
-                        || (ord.tos_id == 14) || (ord.tos_id == 16) || (ord.tos_id == 17)
-                          || (ord.tos_id == 18) || (ord.tos_id == 22) || (ord.tos_id == 23)
-                             || (ord.tos_id == 24)
-                        ) // ocorrencia(18), extraordinaria(5), reparo(14), reforco(13), monitoramento(10), ensaios(16), levantamento cadastral(17), conserva(22), projeto de oae(24), execucao de obra(23)
+                    // envia o email
+                    if (email.Count > 0)
                     {
-                        //Sistema notifica a Seção de OAE da Sede  
-                        // e a Regional
-                        // o encerramento da OS
-                    }
+                        pEmail.Para = email[0].destinatarios;
+                        pEmail.Assunto = email[0].assunto;
+                        pEmail.Texto = email[0].mensagem;
 
-                    if (ord.tos_id == 18)  // ocorrencia (18)
+                        if (pEmail.IsBodyHtml)
+                            av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                        retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                    }
+                }
+                else
+                {
+                    // "EXEC = 11 = executada
+                    if ((ord.sos_codigo == "EXEC") || (ord.sos_id == 11))
                     {
-                        // Sistema notifica a Seção de OAE da Sede
-                        // para verificar a ocorrência
+                        //Recuperação / Reparo(14), Execução de Obras(23)
+                        if ((ord.tos_id == 14) || (ord.tos_id == 23))
+                        {
+                            //Enviar e-mail para a seção de OAE
+                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 6);
+
+                            pEmail.Para = email[0].destinatarios;
+                            pEmail.Assunto = email[0].assunto;
+                            pEmail.Texto = email[0].mensagem;
+
+                            // envia o email
+                            if (pEmail.IsBodyHtml)
+                                av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                            retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                        }
+
+                    }
+                    else
+                    {
+                        if ((ord.sos_codigo == "CORR") || (ord.sos_id == 13))  // Reaberta para Correção
+                        {
+                            if (ord.tos_id == 9) // Inspeção Especial
+                            {
+
+                                //Enviar e-mail para a seção de OAE
+                                email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 7);
+
+                                pEmail.Para = email[0].destinatarios;
+                                pEmail.Assunto = email[0].assunto;
+                                pEmail.Texto = email[0].mensagem;
+
+                                // envia o email
+                                if (pEmail.IsBodyHtml)
+                                    av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                                retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                            }
+                        }
                     }
                 }
             }
@@ -181,7 +266,8 @@ namespace WebApp.Business
         /// <returns>Lista de Documentos</returns>
         public List<Documento> OrdemServico_Documentos_ListAll(int ord_id, int obj_id, int? somente_referencia = 0)
         {
-            return new OrdemServicoDAO().OrdemServico_Documentos_ListAll(ord_id, obj_id, somente_referencia);
+           Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+           return new OrdemServicoDAO().OrdemServico_Documentos_ListAll(ord_id, obj_id, somente_referencia, paramUsuario.usu_id);
 
         }
 
@@ -193,8 +279,8 @@ namespace WebApp.Business
         /// <returns>Lista de Documentos</returns>
         public List<Documento> OrdemServico_Objeto_Documentos_ListAll(int ord_id)
         {
-            return new OrdemServicoDAO().OrdemServico_Objeto_Documentos_ListAll(ord_id);
-
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().OrdemServico_Objeto_Documentos_ListAll(ord_id, paramUsuario.usu_id);
         }
 
 
@@ -207,7 +293,10 @@ namespace WebApp.Business
         /// <returns>List(SelectListItem)</returns>
         public List<SelectListItem> PreencheCmbDocumentosLocalizados(int ord_id, string codDoc)
         {
-            List<Documento> lstDocumentos = new OrdemServicoDAO().OrdemServico_DocumentosNaoAssociados_ListAll(ord_id, codDoc);
+
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            List<Documento> lstDocumentos = new OrdemServicoDAO().OrdemServico_DocumentosNaoAssociados_ListAll(ord_id, codDoc, paramUsuario.usu_id);
+
             List<SelectListItem> lstListaCmbDocumentosLocalizados = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstDocumentos)
             {
@@ -571,17 +660,16 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="lstDestinatarios">Lista de Destinatarios separada por ponto e virgula</param>
         /// <param name="TextoEmail">Texto do Email</param>
+        /// <param name="ord_id">Id da O.S.</param>
         /// <returns>string</returns>
-        public string FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail)
+        public string FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail, int ord_id)
         {
                 ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
+                List<OSEmail> email = new OrdemServicoDAO().OSEmail_ID(ord_id, 4);
 
-                pEmail.Para = lstDestinatarios;
-                pEmail.Assunto = "Notificação de Ocorrência";
-
-
-                // substitui parametros
-                pEmail.Texto = TextoEmail;
+                pEmail.Para = email[0].destinatarios;
+                pEmail.Assunto = email[0].assunto;
+                pEmail.Texto = email[0].mensagem.Replace("<<TEXTO_ADICIONAL>>", TextoEmail);
 
 
                 // envia o email

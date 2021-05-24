@@ -111,6 +111,7 @@
 
 <script>
     var selectedId_ins_id = 0;
+    var selectedId_sos_id = 0;
 
     function LimparFiltro() {
 
@@ -158,6 +159,63 @@
         carregaGridInspecoes(selectedId_ins_id);
 
     }
+
+
+    function travaBotoes() {
+        var controle_none = ["btnSalvar_Detalhes", "btnCancelar_Detalhes",
+                                "btn_Editar_NOTIFICACAO_OCORRENCIA", "btn_Editar_DADOS_GERAIS2", "btn_Editar_HISTORICO_INSPECOES", "btn_Editar_INSPECAO_ROTINEIRA",
+                                "btn_Editar_CRITERIO_DE_CLASSIFICACAO", "btn_Editar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Editar_POLITICA_ACOES_A_IMPLEMENTAR",
+                                "btn_Editar_INSPECAO_ESPECIAL_CAMPO", "btn_Editar_DADOS_GERAIS", "btn_Editar_HISTORICO_INSPECOES",
+                                "btn_Editar_ATRIBUTOS_FUNCIONAIS", "btn_Editar_ATRIBUTOS_FIXOS", "btn_Editar_SUPERESTRUTURA", "btn_Editar_MESOESTRUTURA",
+                                "btn_Editar_INFRAESTRUTURA", "btn_Editar_ENCONTROS", "btn_Editar_CRITERIO_DE_CLASSIFICACAO", "btn_Editar_NOTA_OAE_PARAMETRO_FUNCIONAL",
+                                "btn_Editar_POLITICA_ACOES_A_IMPLEMENTAR", "btn_Editar_DADOS_GERAIS", "btn_Editar_ATRIBUTOS_FUNCIONAIS", "btn_Editar_ATRIBUTOS_FIXOS",
+                                "btn_Editar_SUPERESTRUTURA", "btn_Editar_MESOESTRUTURA", "btn_Editar_INFRAESTRUTURA", "btn_Editar_ENCONTROS", "btn_Editar_HISTORICO_INTERVENCOES",
+                                "btnAssociarDocumentoOS", "btnEditar_IndicacaoServicos",
+                                "btn_Cancelar_NOTIFICACAO_OCORRENCIA", "btn_Cancelar_DADOS_GERAIS2", "btn_Cancelar_HISTORICO_INSPECOES", "btn_Cancelar_INSPECAO_ROTINEIRA",
+                                "btn_Cancelar_CRITERIO_DE_CLASSIFICACAO", "btn_Cancelar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Cancelar_POLITICA_ACOES_A_IMPLEMENTAR",
+                                "btn_Cancelar_INSPECAO_ESPECIAL_CAMPO", "btn_Cancelar_INSPECAO_ESPECIAL_CAMPO", "btn_Cancelar_DADOS_GERAIS", "btn_Cancelar_HISTORICO_INSPECOES",
+                                "btn_Cancelar_ATRIBUTOS_FUNCIONAIS", "btn_Cancelar_ATRIBUTOS_FIXOS", "btn_Cancelar_SUPERESTRUTURA", "btn_Cancelar_MESOESTRUTURA",
+                                "btn_Cancelar_INFRAESTRUTURA", "btn_Cancelar_ENCONTROS", "btn_Cancelar_CRITERIO_DE_CLASSIFICACAO", "btn_Cancelar_NOTA_OAE_PARAMETRO_FUNCIONAL",
+                                "btn_Cancelar_POLITICA_ACOES_A_IMPLEMENTAR", "btn_Cancelar_DADOS_GERAIS", "btn_Cancelar_ATRIBUTOS_FUNCIONAIS", "btn_Cancelar_ATRIBUTOS_FIXOS",
+                                "btn_Cancelar_SUPERESTRUTURA", "btn_Cancelar_MESOESTRUTURA", "btn_Cancelar_INFRAESTRUTURA", "btn_Cancelar_ENCONTROS", "btn_Cancelar_HISTORICO_INTERVENCOES",
+                                "btn_Salvar_NOTIFICACAO_OCORRENCIA", "btn_Salvar_DADOS_GERAIS2", "btn_Salvar_HISTORICO_INSPECOES", "btn_Salvar_INSPECAO_ROTINEIRA",
+                                "btn_Salvar_CRITERIO_DE_CLASSIFICACAO", "btn_Salvar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Salvar_POLITICA_ACOES_A_IMPLEMENTAR",
+                                "btn_Salvar_INSPECAO_ESPECIAL_CAMPO", "btn_Salvar_INSPECAO_ESPECIAL_CAMPO", "btn_Salvar_DADOS_GERAIS", "btn_Salvar_HISTORICO_INSPECOES",
+                                "btn_Salvar_ATRIBUTOS_FUNCIONAIS", "btn_Salvar_ATRIBUTOS_FIXOS", "btn_Salvar_SUPERESTRUTURA", "btn_Salvar_MESOESTRUTURA", "btn_Salvar_INFRAESTRUTURA",
+                                "btn_Salvar_ENCONTROS", "btn_Salvar_CRITERIO_DE_CLASSIFICACAO", "btn_Salvar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Salvar_POLITICA_ACOES_A_IMPLEMENTAR",
+                                "btn_Salvar_DADOS_GERAIS", "btn_Salvar_ATRIBUTOS_FUNCIONAIS", "btn_Salvar_ATRIBUTOS_FIXOS", "btn_Salvar_SUPERESTRUTURA", "btn_Salvar_MESOESTRUTURA",
+                                "btn_Salvar_INFRAESTRUTURA", "btn_Salvar_ENCONTROS", "btn_Salvar_HISTORICO_INTERVENCOES", "btnSalvar_IndicacaoServicos", "btnCancelar_IndicacaoServicos",
+                                "btn_Salvar_DADOS_GERAIS", "btn_Cancelar_DADOS_GERAIS", "btn_Editar_DADOS_GERAIS", "btn_Salvar_HISTORICO_INSPECOES", "btn_Cancelar_HISTORICO_INSPECOES",
+                                "btn_Editar_HISTORICO_INSPECOES", "btn_Salvar_ATRIBUTOS_FUNCIONAIS", "btn_Cancelar_ATRIBUTOS_FUNCIONAIS", "btn_Editar_ATRIBUTOS_FUNCIONAIS",
+                                "btn_Salvar_ATRIBUTOS_FIXOS", "btn_Cancelar_ATRIBUTOS_FIXOS", "btn_Editar_ATRIBUTOS_FIXOS", "btn_Salvar_SUPERESTRUTURA", "btn_Cancelar_SUPERESTRUTURA",
+                                "btn_Editar_SUPERESTRUTURA", "btn_Salvar_MESOESTRUTURA", "btn_Cancelar_MESOESTRUTURA", "btn_Editar_MESOESTRUTURA", "btn_Salvar_INFRAESTRUTURA",
+                                "btn_Cancelar_INFRAESTRUTURA", "btn_Editar_INFRAESTRUTURA", "btn_Salvar_ENCONTROS", "btn_Cancelar_ENCONTROS", "btn_Editar_ENCONTROS", "btn_Salvar_CRITERIO_DE_CLASSIFICACAO",
+                                "btn_Cancelar_CRITERIO_DE_CLASSIFICACAO", "btn_Editar_CRITERIO_DE_CLASSIFICACAO", "btn_Salvar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Cancelar_NOTA_OAE_PARAMETRO_FUNCIONAL",
+                                "btn_Editar_NOTA_OAE_PARAMETRO_FUNCIONAL", "btn_Salvar_POLITICA_ACOES_A_IMPLEMENTAR", "btn_Cancelar_POLITICA_ACOES_A_IMPLEMENTAR", "btn_Editar_POLITICA_ACOES_A_IMPLEMENTAR"
+        ];
+
+        var controles_block = ["btnEditar_Detalhes"];
+
+        if (selectedId_sos_id == 14) // encerrada
+        {
+            // oculta os botoes 
+            for (var i = 0; i < controle_none.length; i++) {
+                var btn = document.getElementById(controle_none[i]);
+                if (btn)
+                    btn.style.display = 'none';
+            }
+
+            // mostra os botoes permitidos 
+            for (var i = 0; i < controles_block.length; i++) {
+                var btn = document.getElementById(controles_block[i]);
+                if (btn)
+                    btn.style.display = 'block';
+            }
+        }
+
+
+    }
+
 
 
     // ***************************************************
@@ -265,6 +323,7 @@
             selectedId_tos_id = parseInt(tblInspecoes.row(this).selector.rows.children[3].innerText);
             selectedId_ord_id = parseInt(tblInspecoes.row(this).selector.rows.children[1].innerText);
             selectedId_ins_id = parseInt(tblInspecoes.row(this).selector.rows.children[0].innerText);
+            selectedId_sos_id = parseInt(tblInspecoes.row(this).selector.rows.children[2].innerText);
 
             switch (selectedId_tos_id) {
                 case 5: break; // extraordinaria
@@ -489,6 +548,9 @@
                 liFichaInspecaoEspecialAnomaliasProvidencias.style.display = "unset";
                 if (bool_posicionar)
                     $('[href="#tabFichaInspecaoEspecialProvidencias"]').tab('show');
+
+
+                travaBotoes();
                 break;
 
         }

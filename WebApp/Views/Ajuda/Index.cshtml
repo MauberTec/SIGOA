@@ -3,6 +3,29 @@
     ViewBag.Title = "Index";
 }
 
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 100000 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(100000)); // id DO MODULO Ajuda
+
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 100000});
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+
 <link rel="stylesheet" href="~/imagens/base.min.css" />
 <link rel="stylesheet" href="~/imagens/fancy.min.css" />
 <link rel="stylesheet" href="~/imagens/main.css" />
@@ -237,4 +260,4 @@
     <div id="pfdd" class="pf w0 h0" data-page-no="dd"><div class="pc pcdd w0 h0"><img class="bi x0 y953 w5 h132" alt="" src="/imagens/bgdd.png" /><div class="c x9 yc w6 ha"><div class="t m1 xa hb yd ff2 fs3 fc3 sc0 ls0 ws0">SIGOA – SISTEMA DE GERENCIAMENTO DE OBRAS DE ARTE </div></div><div class="c xb yc w7 ha"><div class="t m1 xa hb yd ff2 fs3 fc3 sc0 ls0 ws0">Versão: 1.0</div></div><div class="c x9 ye w6 hc"><div class="t m1 xa hb yf ff2 fs3 fc3 sc0 ls0 ws0">Manual do Usuário</div></div><div class="c xb ye w7 hc"><div class="t m1 xa hb yf ff2 fs3 fc3 sc0 ls0 ws0">Data: 02/03/2021</div></div><div class="c x0 y10 w0 hd"><div class="t m1 x5c hb y11 ff2 fs3 fc3 sc0 ls0 ws0">Página <span class="ff1">220</span> de 222</div></div><div class="t m0 x18 h3 y12 ff1 fs0 fc0 sc0 ls0 ws0">1<span class="_ _0"></span>8<span class="_ _0"></span>.<span class="_ _0"></span>4<span class="_ _0"></span>.<span class="_ _a"></span>M<span class="_ _0"></span>a<span class="_ _0"></span>n<span class="_ _0"></span>u<span class="_ _0"></span>a<span class="_ _0"></span>l<span class="_ _0"></span> <span class="_ _0"></span>d<span class="_ _0"></span>e<span class="_ _0"></span> <span class="_ _0"></span>I<span class="_ _0"></span>n<span class="_ _0"></span>s<span class="_ _0"></span>p<span class="_ _0"></span>e<span class="_ _0"></span>ç<span class="_ _0"></span>ã<span class="_ _0"></span>o</div><div class="t m1 x13 hb y91e ff2 fs3 fc7 sc0 ls0 ws0">Apresenta <span class="_ _a"> </span>o  documento <span class="_ _d"> </span>&quot;<span class="ffb fc3">  MANUAIS  TÉCNICOS  REVISADOS  DO  SIGOA  –  MANUAL  DE </span></div><div class="t m1 x13 hb y954 ffb fs3 fc3 sc0 ls0 ws0">INSPEÇÃO &quot; (<span class="ff1 fc7">RT-CT0205072-000.000-000-C09/018)<span class="ff2"> em sua última revisão.</span></span></div><div class="t m0 x18 h3 y955 ff1 fs0 fc0 sc0 ls0 ws0">1<span class="_ _0"></span>8<span class="_ _0"></span>.<span class="_ _0"></span>5<span class="_ _0"></span>.<span class="_ _a"></span>M<span class="_ _0"></span>a<span class="_ _0"></span>n<span class="_ _0"></span>u<span class="_ _0"></span>a<span class="_ _0"></span>l<span class="_ _0"></span> <span class="_ _0"></span>d<span class="_ _0"></span>e<span class="_ _0"></span> <span class="_ _0"></span>P<span class="_ _0"></span>r<span class="_ _0"></span>o<span class="_ _0"></span>c<span class="_ _0"></span>e<span class="_ _0"></span>d<span class="_ _0"></span>i<span class="_ _0"></span>m<span class="_ _0"></span>e<span class="_ _0"></span>n<span class="_ _0"></span>t<span class="_ _0"></span>o<span class="_ _0"></span>s<span class="_ _0"></span> <span class="_ _0"></span>d<span class="_ _0"></span>e<span class="_ _0"></span> <span class="_ _0"></span>R<span class="_ _0"></span>e<span class="_ _0"></span>p<span class="_ _0"></span>a<span class="_ _0"></span>r<span class="_ _0"></span>o</div><div class="t m1 x13 hb y956 ff2 fs3 fc7 sc0 ls0 ws0">Apresenta  o <span class="_ _1d"> </span>documento <span class="_ _1d"> </span>&quot;<span class="ffb fc3">MANUAIS <span class="_ _1d"> </span>TÉCNICOS <span class="_ _51"> </span>REVISADOS <span class="_ _1d"> </span>DO <span class="_ _1d"> </span>SIGOA <span class="_ _51"> </span>– <span class="_ _1d"> </span>MANUAL <span class="_ _1d"> </span>DE </span></div><div class="t m1 x13 hb y957 ffb fs3 fc3 sc0 ls0 ws0">PROCEDIMENTOS <span class="_ _6"></span>BÁSICOS <span class="_ _6"></span>DE REPAROS&quot; <span class="_ _6"></span>(<span class="ff1 fc7">RT-CT0205072-000.000-000-C09/020)<span class="ff2"> <span class="_ _6"></span>em </span></span></div><div class="t m1 x13 hb y958 ff2 fs3 fc7 sc0 ls0 ws0">sua última revisão.</div></div><div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div></div>
     <div id="pfde" class="pf w0 h0" data-page-no="de"><div class="pc pcde w0 h0"><img class="bi x0 y959 w5 h133" alt="" src="/imagens/bgde.png" /><div class="c x9 yc w6 ha"><div class="t m1 xa hb yd ff2 fs3 fc3 sc0 ls0 ws0">SIGOA – SISTEMA DE GERENCIAMENTO DE OBRAS DE ARTE </div></div><div class="c xb yc w7 ha"><div class="t m1 xa hb yd ff2 fs3 fc3 sc0 ls0 ws0">Versão: 1.0</div></div><div class="c x9 ye w6 hc"><div class="t m1 xa hb yf ff2 fs3 fc3 sc0 ls0 ws0">Manual do Usuário</div></div><div class="c xb ye w7 hc"><div class="t m1 xa hb yf ff2 fs3 fc3 sc0 ls0 ws0">Data: 02/03/2021</div></div><div class="c x0 y10 w0 hd"><div class="t m1 x5c hb y11 ff2 fs3 fc3 sc0 ls0 ws0">Página <span class="ff1">221</span> de 222</div></div><div class="t m0 x18 h3 y12 ff1 fs0 fc0 sc0 ls0 ws0">1<span class="_ _0"></span>8<span class="_ _0"></span>.<span class="_ _0"></span>6<span class="_ _0"></span>.<span class="_ _a"></span>M<span class="_ _0"></span>a<span class="_ _0"></span>n<span class="_ _0"></span>u<span class="_ _0"></span>a<span class="_ _0"></span>l<span class="_ _0"></span> <span class="_ _0"></span>d<span class="_ _0"></span>o<span class="_ _0"></span> <span class="_ _0"></span>U<span class="_ _0"></span>s<span class="_ _0"></span>u<span class="_ _0"></span>á<span class="_ _0"></span>r<span class="_ _0"></span>i<span class="_ _0"></span>o<span class="_ _0"></span> <span class="_ _0"></span>-<span class="_ _0"></span> <span class="_ _0"></span>S<span class="_ _0"></span>I<span class="_ _0"></span>G<span class="_ _0"></span>O<span class="_ _0"></span>A</div><div class="t m1 x13 hb y91e ff2 fs3 fc7 sc0 ls0 ws0">Apresenta <span class="_ _13"> </span>este <span class="_ _26"> </span>documento <span class="_ _13"> </span>&quot;<span class="ffb fc3">MANUAL <span class="_ _26"> </span>DO <span class="_ _13"> </span>USUSÁRIO&quot; <span class="_ _13"> </span>(</span><span class="ff1">RT-CT0205072-000.000-000-</span></div><div class="t m1 x13 hb y954 ff1 fs3 fc7 sc0 ls0 ws0">C09/031)<span class="ff2"> em sua última revisão.</span></div></div><div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div></div>
 </div>
-<div class="loading-indicator">
+<div class="loading-indicator"></div>

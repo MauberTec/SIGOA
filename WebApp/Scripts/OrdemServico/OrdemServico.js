@@ -303,6 +303,8 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     var liDocumentosAssociadosOS = document.getElementById("liDocumentosAssociadosOS");
 
     var liFichaReparo = document.getElementById("liFichaReparo");
+    var liRequalificacaoOAE = document.getElementById("liRequalificacaoOAE");
+
 
     //if (liDetalhesOS)
     //    $('[href="#tabDetalhesOS"]').tab('show');
@@ -340,6 +342,8 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
     if (liFichaReparo)
         liFichaReparo.style.display = "none";
 
+    if (liRequalificacaoOAE)
+        liRequalificacaoOAE.style.display = "none";
 
     switch (parseInt(selectedId_tos_id)) {
         case 7:
@@ -389,20 +393,27 @@ function mostraAba(selectedId_tos_id, bool_posicionar) {
             break;
 
         case 14: // reparo
-
             liFichaReparo.style.display = "unset";
+            liRequalificacaoOAE.style.display = "unset";
+
+            $("#tabRequalificacaoOAEheader").text("Requalificação da OAE");
+            $("#lblModalHeader_RequalificacaoOAE").text("REQUALIFICAÇÃO DA OAE");
+
             if (bool_posicionar)
                 $('[href="#tabFichaReparo"]').tab('show');
-
-
             break;
-
 
         case 18:
             liFichaNotificacaoOcorrencia.style.display = "unset";
             liIndicacaoServicos.style.display = "unset";
              if (bool_posicionar)
                  $('[href="#tabFichaNotificacaoOcorrencia"]').tab('show');
+            break;
+
+        case 23:
+            liRequalificacaoOAE.style.display = "unset";
+            $("#tabRequalificacaoOAEheader").text("Qualificação/Requalificação da OAE");
+            $("#lblModalHeader_RequalificacaoOAE").text("QUALIFICAÇÃO/REQUALIFICAÇÃO DA OAE");
             break;
 
         case 24: // projeto obra nova

@@ -7,6 +7,7 @@ using WebApp.Helpers;
 using System.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WebApp.DAO
 {
@@ -15,6 +16,8 @@ namespace WebApp.DAO
     /// </summary>
     public class IntegracaoDAO : Conexao
     {
+        CultureInfo culturePTBR = new CultureInfo("pt-BR");
+
         /// <summary>
         /// Sincroniza os dados lidos do Sirgeo nas tabelas offline do Sigoa
         /// </summary>
@@ -52,7 +55,7 @@ namespace WebApp.DAO
                     con.Open();
                     SqlCommand com = new SqlCommand();
 
-                    com.CommandText = "STP_UPD_SIRGEO_RODOVIAS";
+                    com.CommandText = "Sirgeo.STP_UPD_SIRGEO_RODOVIAS";
 
                     com.Connection = con;
                     com.CommandType = CommandType.StoredProcedure;
@@ -314,7 +317,7 @@ namespace WebApp.DAO
                     con.Open();
                     SqlCommand com = new SqlCommand();
 
-                    com.CommandText = "STP_UPD_SIRGEO_OAEs";
+                    com.CommandText = "Sirgeo.STP_UPD_SIRGEO_OAEs";
 
                     com.Connection = con;
                     com.CommandType = CommandType.StoredProcedure;
@@ -578,7 +581,7 @@ namespace WebApp.DAO
                     con.Open();
                     SqlCommand com = new SqlCommand();
 
-                    com.CommandText = "STP_UPD_SIRGEO_REGIONAIS";
+                    com.CommandText = "Sirgeo.STP_UPD_SIRGEO_REGIONAIS";
 
                     com.Connection = con;
                     com.CommandType = CommandType.StoredProcedure;
@@ -1479,7 +1482,7 @@ namespace WebApp.DAO
                             CodSubItem = rdr["CodSubItem"].ToString(),
                             NomeSubItem = rdr["NomeSubItem"].ToString(),
                             UnidMed = rdr["UnidMed"].ToString(),
-                            PrecoUnitario = Convert.ToDecimal(rdr["PrecoUnitario"]),
+                            PrecoUnitario = Convert.ToDecimal(rdr["PrecoUnitario"], culturePTBR),
                             Onerado = rdr["Onerado"].ToString(),
                             Fase = Convert.ToInt16(rdr["Fase"]),
                             tpu_data_atualizacao = rdr["tpu_data_atualizacao"] == DBNull.Value ? "" : rdr["tpu_data_atualizacao"].ToString()

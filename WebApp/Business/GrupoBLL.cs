@@ -116,6 +116,41 @@ namespace WebApp.Business
         }
 
 
+        // *************** Objetos Permitidos DO GRUPO *************************************************************
+        /// <summary>
+        /// Lista dos Objetos Permitidos do Grupo selecionado
+        /// </summary>
+        /// <param name="gru_id">Id do Grupo Selecionado</param>
+        /// <returns>Lista de GrupoObjeto</returns>
+        public List<GrupoObjeto> GrupoObjetos_ListAll(int gru_id)
+        {
+            return new GrupoDAO().GrupoObjetos_ListAll(gru_id);
+        }
+
+        /// <summary>
+        ///   Exclui Objeto da lista de Permissões do Grupo selecionado
+        /// </summary>
+        /// <param name="gro_id">Id do GrupoObjeto Selecionado</param>
+        /// <returns>int</returns>
+        public int GrupoObjeto_Excluir(int gro_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new GrupoDAO().GrupoObjeto_Excluir(gro_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
+        /// <summary>
+        ///   Acrescenta Objetos ao Grupo selecionado
+        /// </summary>
+        /// <param name="gru_id">Id do Grupo Selecionado</param>
+        /// <param name="obj_ids">Ids dos Objetos a serem salvos</param>
+        public int GrupoObjeto_Incluir(int gru_id, string obj_ids)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new GrupoDAO().GrupoObjeto_Incluir(gru_id, obj_ids, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
 
     }
 }

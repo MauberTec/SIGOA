@@ -22,15 +22,12 @@
     }
 }
 
+<link href="~/Content/Base.css" rel="stylesheet" />
 <style>
-    .Centralizado {
-        text-align: center;
-    }
-
     #divOrcamentoDetalhes input:disabled,
     #divOrcamentoDetalhes textarea:disabled,
     #divOrcamentoDetalhes select:disabled {
-        background:none !important;
+        background: none !important;
         background-color: white;
         border: none !important;
         margin: 3px !important;
@@ -73,6 +70,22 @@
 
     input[type="text"]:disabled, .form-control[disabled] {
         background: #eee !important;
+    }
+
+    .txtdoc_codigoHeader {
+        color: red;
+        font-weight: bold;
+        font-size: 18pt;
+        margin: 0px;
+        border: none !important;
+    }
+
+    .chklst {
+        /*font-family: 'Lucida Console';*/
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+        font-weight: normal;
     }
 </style>
 <h2></h2>
@@ -206,31 +219,6 @@
     </div>
 </section>
 
-<style>
-    .altura30 {
-        height: 30px;
-    }
-
-    .backgrdTransparent {
-        background-color: transparent !important;
-    }
-
-    .txtdoc_codigoHeader {
-        color: red;
-        font-weight: bold;
-        font-size: 18pt;
-        margin: 0px;
-        border: none !important;
-    }
-
-    .chklst {
-        /*font-family: 'Lucida Console';*/
-        font-size: 14px;
-        padding-top: 0px;
-        margin-bottom: 0px;
-        font-weight: normal;
-    }
-</style>
 
 @***** SCRIPT FICHA todas as fichas ***********************@
 <script src="~/Scripts/Shared/_fichasInspecao.js"></script>
@@ -249,18 +237,21 @@
         $('#partialFicha6').empty();
         $('#partialFicha7').empty();
         $('#partialFicha8').empty();
+        $('#partialFicha14').empty();
+
 
         qualFicha = qualFicha1;
         if (qualFicha == 11) {    // Orcamento
             carregaGridOrcamentoDetalhes(selectedId_orc_id, 11);
         }
         else
-            if (qualFicha == 14) {    // Reparo
+            if (qualFicha == -14) {    // Reparo
                 ehEdicaoGridReparo = true;
                 carregaGridReparos(selectedId_ord_id, ehEdicaoGridReparo);
             }
 
-            else {
+            else
+            {
                 $.ajax({
                     type: 'GET',
                     "data": { qualFicha: qualFicha },
@@ -278,13 +269,20 @@
                             case 6: preenchetblFicha6(selectedId_obj_id, 3, -1); break; // notificacao ocorrencia
                             case 7: preenchetblFicha4_PROVIDENCIAS(); break; // inspecao especial campo - Providencias
                             case 8: Ficha2_PROVIDENCIAS_CriarTabelaGrupos(); break; // inspecao ROTINEIRA - Providencias
+
+                            case 14: preenchetblFichaRequalificacaoOAE();// Requalificacao da OEA - O.S. Reparo
+
+                                break;
+
+                            case 23: preenchetblFichaRequalificacaoOAE();// Requalificacao da OEA -  projeto de obra
+                                break;
+
                         }
 
                         colocaDatePickers();
 
                     }
                 });
-
             }
 
     }
@@ -322,9 +320,13 @@
 @***** SCRIPT FICHA 6 - NOTIFICACAO OCORRENCIA ***********************@
 <script src="~/Scripts/Shared/_fichaNotificacaoOcorrencia.js"></script>
 
+
+
 @***** SCRIPT FICHA 11 - ORCAMENTO ***********************@
 
 
+@***** SCRIPT FICHA 13 - REQUALIFICACAO OAE ***********************@
+<script src="~/Scripts/Shared/_fichaRequalificacaoOAE.js"></script>
 
 @***** INICIO DAS ABAS ***********************@
 
@@ -369,8 +371,13 @@
                     </li>
 
                     <li style="display:none" id="liFichaReparo">
-                        <a id="tabFichaReparoheader" data-toggle="tab" href="#tabFichaReparo" onclick="abreFicha(14);">Recuperação / Reparo</a>
+                        <a id="tabFichaReparoheader" data-toggle="tab" href="#tabFichaReparo" onclick="abreFicha(-14);">Recuperação / Reparo</a>
                     </li>
+
+                    <li style="display:none" id="liRequalificacaoOAE">
+                        <a id="tabRequalificacaoOAEheader" data-toggle="tab" href="#tabRequalificacaoOAE" onclick="abreFicha(14);">Requalificação da OAE</a>
+                    </li>
+
 
                     <li style="display:none" id="liFichaNotificacaoOcorrencia">
                         <a id="tabFichaNotificacaoOcorrenciaheader" data-toggle="tab" href="#tabFichaNotificacaoOcorrencia" onclick="abreFicha(6);">Ficha de Notificação de Ocorrência</a>
@@ -875,43 +882,64 @@
 
                         <br /><br /><br />
 
-                                    <div id="partialFicha14">
-                                        <table id="tblOrcamentoReparo">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="7" class="borderBottom "></th>
-                                                    <th colspan="3" class="borderLeft borderBottom Centralizado">Indicado</th>
-                                                    <th colspan="3" class="borderLeft borderBottom Centralizado">Adotado</th>
-                                                    <th class="borderLeft borderBottom Centralizado"></th>
-                                                </tr>
-                                                <tr>
-                                                    <th>ian_ordem_apresentacao</th>
-                                                    <th>ore_id</th>
-                                                    <th>orc_id</th>
-                                                    <th>orc_id</th>
-                                                    <th>Elemento</th>
-                                                    <th>Núm</th>
-                                                    <th>Tipo</th>
-                                                    <th>Sigla</th>
-                                                    <th>Alerta</th>
-                                                    <th>Causa</th>
-                                                    <th>Qtde</th>
+                        <div id="partialFicha14a">
+                            <table id="tblOrcamentoReparo">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="borderBottom "></th>
+                                        <th colspan="3" class="borderLeft borderBottom Centralizado">Indicado</th>
+                                        <th colspan="3" class="borderLeft borderBottom Centralizado">Adotado</th>
+                                        <th class="borderLeft borderBottom Centralizado"></th>
+                                    </tr>
+                                    <tr>
+                                        <th>ian_ordem_apresentacao</th>
+                                        <th>ore_id</th>
+                                        <th>orc_id</th>
+                                        <th>orc_id</th>
+                                        <th>Elemento</th>
+                                        <th>Núm</th>
+                                        <th>Tipo</th>
+                                        <th>Sigla</th>
+                                        <th>Alerta</th>
+                                        <th>Causa</th>
+                                        <th>Qtde</th>
 
-                                                    <th>Reparo</th>
-                                                    <th>Qtde</th>
-                                                    <th>Unid</th>
+                                        <th>Reparo</th>
+                                        <th>Qtde</th>
+                                        <th>Unid</th>
 
-                                                    <th>Reparo</th>
-                                                    <th>Qtde</th>
-                                                    <th>Unid</th>
-                                                    <th class="borderLeft borderBottom Centralizado">Reparado</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-
-
-                                    </div>
+                                        <th>Reparo</th>
+                                        <th>Qtde</th>
+                                        <th>Unid</th>
+                                        <th class="borderLeft borderBottom Centralizado">Reparado</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
+
+
+                    <div class="tab-pane fade" id="tabRequalificacaoOAE" role="tabpanel" aria-labelledby="tabRequalificacaoOAE">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    @*<button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira&tos_id=2&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
+                                        <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
+                                        <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>*@
+                                </div>
+                                <div class="col-sm-7">
+                                    <h3 class="modal-title"><label id="lblModalHeader_RequalificacaoOAE" class="titulosAbas">Requalificação da OAE</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br /><br />
+                        <div id="partialFicha14">
+                            @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
+                        </div>
+                    </div>
+
 
 
                     <div class="tab-pane fade" id="tabFichaNotificacaoOcorrencia" role="tabpanel" aria-labelledby="tabFichaNotificacaoOcorrencia">
@@ -1260,8 +1288,8 @@
                 <div class="modal-body form-group">
                     <div class="col-sm-12">
                         <div class="col-sm-12">
-                            <label class="control-label">Para</label>
-                            @Html.DropDownList("cmbEmailRegionais", null, null, new { @class = "form-control", @multiple = "multiple", @style = "width:350px !important;" })
+                            <label class="control-label">Para: Seção de OAE</label>
+                            @*@Html.DropDownList("cmbEmailRegionais", null, null, new { @class = "form-control", @multiple = "multiple", @style = "width:350px !important;" })*@
                         </div>
 
                         <div class="col-sm-12">
@@ -1283,11 +1311,6 @@
 </div>
 
 
-
-@*<script src="~/Scripts/jquery-ui.js"></script>
-<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
-<script src="~/Scripts/moment.min.js"></script>
-<script src="~/Scripts/datetime-moment.js"></script>*@
 
 <script src="~/Scripts/OrdemServico/OrdemServico.js"></script>
 

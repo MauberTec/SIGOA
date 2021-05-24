@@ -1,7 +1,7 @@
-﻿    var linhaCabecalhos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
+﻿    var linhaCabecalhos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ"  class="change_on_over" > ' +
         ' <td class="qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
         ' <td class="borderLeft qualClasse"><label class="lblsBold" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label></td> ' +
-        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ">lbl_Localizacao_VVV</label></td> ' +
+        ' <td class="borderLeft qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ">lbl_Localizacao_VVV</label></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
         ' <td class="borderLeft " ></td> ' +
@@ -25,7 +25,7 @@
         ' <td class="borderLeft borderRight" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' </tr>';
 
-    var linhaObjetos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ" > ' +
+    var linhaObjetos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ"  class="change_on_over" > ' +
         ' <td class=" qualClasse" id="tdFICHA4_CodObjeto_ian_id_ZZZ" style="display:EhOrdemServico" > <label class="lblsBold" id="lbl_ObjCodigo_ian_id_ZZZ">lbl_ObjCodigo_VVV</label></td > ' +
         ' <td class="borderLeft qualClasse"> ' +
         '          <button id="btn_InserirAnomalia_ian_id_ZZZ" ' +
@@ -50,15 +50,15 @@
 
         '           <label class="lblsBold" style="vertical-align: middle; display:inline" id="lbl_Item_ian_id_ZZZ">lbl_Item_VVV</label> ' +
         ' </td > ' +
-        ' <td class="borderLeft centroH qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
-        ' <td class="borderLeft centroH qualClasse" > <input disabled id="txt_Localizacao_Especifica_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Localizacao_Especifica_VVV"  /></td> ' +
+        ' <td class="borderLeft qualClasse" title="lbl_Localizacao_tooltip" ><label class="lblsBold" id="lbl_Localizacao_ian_id_ZZZ" >lbl_Localizacao_VVV</label></td> ' +
+        ' <td class="borderLeft qualClasse" > <input disabled id="txt_Localizacao_Especifica_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Localizacao_Especifica_VVV"  /></td> ' +
         ' <td class="borderLeft centroH qualClasse" ><input disabled id="txt_Numero_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Numero_VVV" onkeyup="txt_Numero_onchange(this)"  /></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Sigla_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Sigla" onchange="cmb_Sigla_onchange(this)" >OPCOES_cmb_Sigla</select></td > ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Cod_ian_id_ZZZ" class="cmbs_anom"  title="TOOLTIP_cmb_Cod"  onchange="cmb_Codigo_onchange(this)"  >OPCOES_cmb_Cod</select></td> ' +
         ' <td class="borderLeft centroH qualClasse" > <select disabled id="cmb_Alerta_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_Alerta"  onchange="cmb_Alerta_onchange(this)" >OPCOES_cmb_Alerta</select></td > ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Quantidade_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Quantidade_VVV"  onkeyup="txt_Quantidade_onKeyUP(this);" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_EspacamentoMedio_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_EspacamentoMedio_VVV" /></td> ' +
-        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Largura_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Largura_VVV" /></td> ' +
+        ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Largura_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Largura_VVV"  onkeyup="txt_Largura_onKeyUP(this); "/></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_Comprimento_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_Comprimento_VVV" onkeyup="txt_Comprimento_onKeyUP(this);" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_AberturaMinima_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_AberturaMinima_VVV" /></td> ' +
         ' <td class="borderLeft centroH qualClasse"><input disabled id="txt_AberturaMaxima_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_AberturaMaxima_VVV" /></td> ' +
@@ -102,6 +102,10 @@ function txt_Obs_onKeyDown(quem) {
 }
 
 
+
+function txt_Largura_onKeyUP(quem) {
+    quem.style.backgroundColor = corBranca;
+}
 
 
 function txt_Comprimento_onKeyUP(quem) {
@@ -422,8 +426,10 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                     var linhaMontada = '';
                     linhaMontada = '<tr_linha>'
                         + ian_id + '<quebra>'
-                        + ian_numero + '<quebra>' + leg_codigo + '<quebra>'
-                        + atp_codigo + '<quebra>' + ale_codigo + '<quebra>'
+                        + ian_numero + '<quebra>'
+                        + leg_codigo + '<quebra>'
+                        + atp_codigo + '<quebra>'
+                        + ale_codigo + '<quebra>'
                         + ian_quantidade.replace(',', '.') + '<quebra>' + ian_espacamento.replace(',', '.') + '<quebra>'
                         + ian_largura.replace(',', '.') + '<quebra>' + ian_comprimento.replace(',', '.') + '<quebra>'
                         + ian_abertura_minima.replace(',', '.') + '<quebra>' + ian_abertura_maxima.replace(',', '.') + '<quebra>'
@@ -645,7 +651,8 @@ function preenchetblFicha4_CAMPO(ehRead) {
                     if (parseInt(result.data[i].clo_id) >= 10) {
                         linhaAux = linhaAux.replace(/txt_Localizacao_Especifica_VVV/g, result.data[i].ian_localizacao_especifica);
                         linhaAux = linhaAux.replace(/txt_Numero_VVV/g, result.data[i].ian_numero);
-                        linhaAux = linhaAux.replace(/txt_Quantidade_VVV/g, result.data[i].ian_quantidade);
+                        var qtt = parseFloat(result.data[i].ian_quantidade);
+                        linhaAux = linhaAux.replace(/txt_Quantidade_VVV/g, qtt == 0 ? '' : qtt);
                         linhaAux = linhaAux.replace(/txt_EspacamentoMedio_VVV/g, result.data[i].ian_espacamento);
                         linhaAux = linhaAux.replace(/txt_Largura_VVV/g, result.data[i].ian_largura);
                         linhaAux = linhaAux.replace(/txt_Comprimento_VVV/g, result.data[i].ian_comprimento);
@@ -666,18 +673,37 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
                         linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
 
-                        if (!isNaN((result.data[i].ian_quantidade_adotada)))
-                            linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
-                        else
+                        if (!isNaN((result.data[i].ian_quantidade_adotada))) {
+                            var qts = parseFloat(result.data[i].ian_quantidade_sugerida);
+                            if (qts > 0) {
+                                linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
+                                linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
+                            }
+                            else {
+                                linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, '');
+                                linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, '');
+                            }
+                            //  linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
+                        }
+                        else {
                             linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, '');
-
-                        linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
+                            linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, '');
+                        }
 
                         // linhaAux = linhaAux.replace(/txt_ReparoAdotado_VVV/g, result.data[i].rownum);
-                        if (!isNaN((result.data[i].ian_quantidade_adotada)))
-                            linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, (((result.data[i].ian_quantidade_adotada.toFixed(2)) + " ").replace(".", ",").trim()));
-                        else
+                        var qta = -1;
+                        if (!isNaN((result.data[i].ian_quantidade_adotada))) {
+                            var qta = parseFloat(result.data[i].ian_quantidade_adotada);
+                            if (qta > 0) {
+                                linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, (((result.data[i].ian_quantidade_adotada.toFixed(2)) + " ").replace(".", ",").trim()));
+                            }
+                            else {
+                                linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, '');
+                            }
+                        }
+                        else {
                             linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, '');
+                        }
 
                         // substitui o valor -1 por vazio
                         linhaAux = linhaAux.replace(/-1/g, '');
@@ -694,7 +720,8 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
                         linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
 
-                        linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
+                        if (qta > 0)
+                            linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
                     }
 
 
@@ -717,8 +744,8 @@ function preenchetblFicha4_CAMPO(ehRead) {
                 for (var i = 0; i < qts.length; i++) {
                     if (!ehRead)
                         jQuery(qts[i]).attr('placeholder', "000,00");
-                    else
-                        jQuery(qts[i]).attr('placeholder', "");
+                    //else
+                    //    jQuery(qts[i]).attr('placeholder', "");
 
                     jQuery(qts[i]).mask("999,99");
                 }
@@ -762,7 +789,9 @@ function preenchetblFicha4_CAMPO(ehRead) {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001f").style.display = '';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000g").style.display = '';
+
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001g").style.display = '';
+
                 }
                 else
                     if (paginaPai == "OrdemServico") {
@@ -812,6 +841,7 @@ function preenchetblFicha4_CAMPO(ehRead) {
                 if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
                     Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
 
+                travaBotoes();
             }
         }
         ,"error": function (errormessage) {
@@ -876,6 +906,8 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
     if (Number.isNaN(f_Largura))
         f_Largura = 0;
 
+
+
     // txt_Comprimento_ian_id_
     var txt_Comprimento_ian_id =  "txt_Comprimento" + sufixo;
     var txt_Comprimento = document.getElementById(txt_Comprimento_ian_id);
@@ -901,6 +933,14 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
 
             if (result.data.length > 0) {
                 if (result.data[0].rpt_codigo != "") {
+
+                    //// metro linear para reparo rpt_id in (1, 26, 27, 28, 30, 31) 2021/fev/15 --> se for diferente, entao largura tem que ser maior que zero
+                    //if ((rpt_id != 1) && (rpt_id != 26) && (rpt_id != 27) && (rpt_id != 28) && (rpt_id != 30) && (rpt_id != 31) && (f_Comprimento > 0) && (f_Largura == 0))
+                    //{
+                    //    var corVermelho = "rgb(228, 88, 71)";
+                    //    $("#" + txt_Largura_ian_id).css("background-color", corVermelho);
+                    //    return false;
+                    //}
 
                     lbl_ReparoIndicado.innerHTML = result.data[0].rpt_id;
                     lbl_ReparoIndicado.title = result.data[0].rpt_descricao;

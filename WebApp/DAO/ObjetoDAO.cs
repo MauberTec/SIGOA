@@ -26,8 +26,9 @@ namespace WebApp.DAO
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
         /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "")
+        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "", int usu_id = 0)
         {
             try
             {
@@ -47,9 +48,7 @@ namespace WebApp.DAO
                     if (filtro_tip_nome != "")
                     com.Parameters.AddWithValue("@filtro_tip_nome", filtro_tip_nome);
 
-
-
-
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -416,8 +415,9 @@ namespace WebApp.DAO
         /// Lista de todos os Documentos Associados ao Objeto selecionado
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> Objeto_Documentos_ListAll(int obj_id)
+        public List<Documento> Objeto_Documentos_ListAll(int obj_id, int? usu_id = null)
         {
             try
             {
@@ -429,6 +429,7 @@ namespace WebApp.DAO
                     SqlCommand com = new SqlCommand("STP_SEL_OBJETO_DOCUMENTOS", con);
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@obj_id", obj_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -471,8 +472,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="obj_id">Id do Objeto Selecionado</param>
         /// <param name="codDoc">Codigo ou parte do Documento a procurar</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos Nao Associados</returns>
-        public List<Documento> Objeto_DocumentosNaoAssociados_ListAll(int obj_id, string codDoc)
+        public List<Documento> Objeto_DocumentosNaoAssociados_ListAll(int obj_id, string codDoc, int? usu_id = null)
         {
             try
             {
@@ -486,6 +488,7 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@obj_id", obj_id);
                     com.Parameters.AddWithValue("@doc_codigo", codDoc);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -519,8 +522,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do Objeto do Tipo OAE</param> 
         /// <param name="tip_id_Grupo">Id do tipo do Grupo de Objeto</param> 
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_Localizacao_ListAll(int obj_id_TipoOAE, int tip_id_Grupo)
+        public List<Objeto> Objeto_Localizacao_ListAll(int obj_id_TipoOAE, int tip_id_Grupo, int? usu_id = null)
         {
             try
             {
@@ -533,6 +537,7 @@ namespace WebApp.DAO
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@obj_id_TipoOAE", obj_id_TipoOAE);
                     com.Parameters.AddWithValue("@tip_id_Grupo", tip_id_Grupo);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -1382,11 +1387,11 @@ namespace WebApp.DAO
                     if (ObjAtributoValor.ati_id != "-1" )
                         com.Parameters.AddWithValue("@ati_id", ObjAtributoValor.ati_id);
 
-                        com.Parameters.AddWithValue("@nome_aba", ObjAtributoValor.nome_aba);
-                        com.Parameters.AddWithValue("@atv_valores", ObjAtributoValor.atv_valores);
+                    com.Parameters.AddWithValue("@nome_aba", ObjAtributoValor.nome_aba);
+                    com.Parameters.AddWithValue("@atv_valores", ObjAtributoValor.atv_valores);
 
-                        com.Parameters.AddWithValue("@codigoOAE", codigoOAE);
-                        com.Parameters.AddWithValue("@selidTipoOAE", selidTipoOAE);
+                    com.Parameters.AddWithValue("@codigoOAE", codigoOAE);
+                    com.Parameters.AddWithValue("@selidTipoOAE", selidTipoOAE);
 
                     if (ord_id > 0 )
                         com.Parameters.AddWithValue("@ord_id", ord_id);
@@ -1737,11 +1742,13 @@ namespace WebApp.DAO
         /// <param name="Filtro_data_Ate">Filtro por Data final</param>
         /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
         /// <param name="LstRegionais">Lista de Regionais obtidas no SirGeo</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Objetos</returns>
         public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, 
                                                             string FiltroidRodovias, string FiltroidRegionais, string FiltroidObjetos, string Filtro_data_De, string Filtro_data_Ate, 
                                                             int? somenteINSP_ESPECIAIS = 0,
-                                                            string LstRegionais = "")
+                                                            string LstRegionais = "",
+                                                            int? usu_id = null)
         {
             try
             {
@@ -1759,8 +1766,9 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@Filtro_data_De", Filtro_data_De);
                     com.Parameters.AddWithValue("@Filtro_data_Ate", Filtro_data_Ate);
                     com.Parameters.AddWithValue("@somenteINSP_ESPECIAIS", somenteINSP_ESPECIAIS);
-                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais); 
+                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais);
 
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {

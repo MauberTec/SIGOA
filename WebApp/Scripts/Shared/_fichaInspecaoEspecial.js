@@ -7,7 +7,8 @@
 //"cmb_atr_id_1020", "cmb_atr_id_1084", "cmb_atr_id_1085", "cmb_atr_id_1087", "cmb_atr_id_1088", "cmb_atr_id_1089", "cmb_atr_id_1091", "cmb_atr_id_1092", "cmb_atr_id_1093", "cmb_atr_id_1094",
 var controlesReadOnlyFicha4 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_106", "cmb_atr_id_130", "cmb_atr_id_131",
     "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153",
-    , "txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"];
+    , "txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"
+    , "cmb_atr_id_84", "cmb_atr_id_1084"];
 
 //var controlesExcecoes_Salvar = ["cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "cmb_atr_id_148", "cmb_atr_id_150", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153", "txt_atr_id_157"];
 
@@ -299,10 +300,9 @@ function preenchetblFicha4(obj_id, classe, tipo) {
                         var textbox2 = document.getElementById((nome_segundo_cabecalho4(result.data[i].atv_controle.replace("lbl", "txt_"))).replace("lbl", "txt_"));
                         var mascara = result.data[i].atr_mascara_texto;
 
-
-
                         if (textbox) {
                             textbox.value = result.data[i].atv_valor;
+                            textbox.setAttribute('title', result.data[i].atv_valor);
 
                             // coloca mascara no textbox
                             if (mascara != "") {
@@ -313,6 +313,7 @@ function preenchetblFicha4(obj_id, classe, tipo) {
                         }
                         if (textbox2) {
                             textbox2.value = result.data[i].atv_valor;
+                            textbox2.setAttribute('title', result.data[i].atv_valor);
 
                             if (mascara != "") {
                                 jQuery(textbox2).mask(mascara);
@@ -433,11 +434,11 @@ function Ficha4_setaReadWrite(tabela, ehRead) {
     var display1 = 'block';
     var display2 = 'none';
 
-    //if (ehRead) {
-    //    display1 = 'none';
-    //    display2 = 'block';
-    //    document.getElementById("btnEsquemaUpload").style.display = 'none';
-    //}
+    if (ehRead) {
+        display1 = 'none';
+        display2 = 'block';
+        //document.getElementById("btnEsquemaUpload").style.display = 'none';
+    }
     //else
     //    document.getElementById("btnEsquemaUpload").style.display = 'unset';
 
@@ -578,12 +579,34 @@ function SalvarDados_Ficha4(tabela) {
             saida = saida + ";" + lstTextareas[i].id + ":" + lstTextareas[i].value;
     }
 
-    var lstCombos = tabela.getElementsByTagName('select');
+
+    var lstCombos1 = tabela.getElementsByTagName('select');
+    var lstCombos = [];
+
+    var cmb_atr_id_84 = document.getElementById("cmb_atr_id_84");
+    if (cmb_atr_id_84)
+        lstCombos.push(cmb_atr_id_84);
+
+    var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+  //  if (cmb_atr_id_1084)
+  //      lstCombos.push(cmb_atr_id_1084);
+
+    // transforma o Object List em Array
+    for (var i = 0; i < lstCombos1.length; i++) {
+        var cmb_ = document.getElementById(lstCombos1[i].id);
+        if (cmb_)
+            lstCombos.push(cmb_);
+    }
+
     for (var i = 0; i < lstCombos.length; i++) {
-        if (!controlesReadOnlyFicha4.includes(lstCombos[i].id))
+        if ((!controlesReadOnlyFicha4.includes(lstCombos[i].id))
+             || (lstCombos[i].id == "cmb_atr_id_84")
+            // || (lstCombos[i].id == "cmb_atr_id_1084")
+            )
             if (lstCombos[i].selectedIndex > -1)
                 saida = saida + ";" + lstCombos[i].id + ":" + lstCombos[i].options[lstCombos[i].selectedIndex].value;
     }
+
 
 
     var lstInputs = tabela.getElementsByTagName('input'); // lista de textbox + checkbox
@@ -628,7 +651,8 @@ function SalvarDados_Ficha4(tabela) {
         atr_id: -2,
         ati_id: -2,
         atv_valores: saida,
-        nome_aba: tabela.id //.replace("tblFicha4_", "")
+      nome_aba: tabela.id //.replace("tblFicha4_", "")
+         // nome_aba: tabela.id.replace("tblFicha4_", "")
     };
 
 
@@ -662,6 +686,10 @@ function SalvarDados_Ficha4(tabela) {
                 $('#tblOrdemServicos').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
 
             preenchetblFicha4(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+
+            // alterna os campos para leitura
+            Ficha4_setaReadWrite(tabela, true);
+
             return false;
         },
         error: function (errormessage) {
@@ -671,8 +699,6 @@ function SalvarDados_Ficha4(tabela) {
     });
 
 
-    // alterna os campos para leitura
-    Ficha4_setaReadWrite(tabela, true);
 }
 
 function SalvarDados_Ficha4_aux(tabela) {
@@ -1289,4 +1315,61 @@ function Ficha4_Calcula_Notas_Tudo() {
     Ficha4_Calcula_Nota_Parametro_Funcional();
 }
 
+
+
+function cmb_pista_onchange(quem) {
+    var valor = $('#' + quem.id).val();
+
+    if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
+    {
+        $.ajax({
+            url: "/Objeto/BuscaValorVDM",
+            data: JSON.stringify({ 'obj_codigo_TipoOAE': selected_obj_codigo, 'itipo_pista': valor }),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                // selectedId_tos_id cadastral = 7; rotineira = 8; especial = 9
+                var retorno = parseInt(result);
+
+                if (retorno == -1) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: "Erro ao sincronizar VDM"
+                    }).then(
+                             function () {
+                                 return false;
+                             });
+                }
+                else {
+                    $("#cmb_atr_id_84").val(retorno);
+                    $("#cmb_atr_id_1084").val(retorno);
+
+                    var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+                    var cmb_atr_id_135 = document.getElementById("cmb_atr_id_135");
+                    if ((cmb_atr_id_135) && (cmb_atr_id_1084))
+                        if (cmb_atr_id_135.selectedIndex > 0)
+                            cmb_atr_id_135.selectedIndex = cmb_atr_id_1084.selectedIndex;
+
+                }
+                return false;
+            },
+            error: function (errormessage) {
+                swal({
+                    type: 'error',
+                    title: 'Erro',
+                    text: errormessage.responseText
+                }).then(
+                        function () {
+                            return false;
+                        });
+
+            }
+        });
+
+    }
+
+}
 

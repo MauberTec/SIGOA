@@ -8,6 +8,7 @@ using System.Configuration;
 using WebApp.Models;
 using WebApp.Helpers;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WebApp.DAO
 {
@@ -31,8 +32,9 @@ namespace WebApp.DAO
         /// <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
         /// <param name="filtroord_data_De">Filtro por Data: a de</param>
         /// <param name="filtroord_data_Ate">Filtro por Data: até</param>
+        /// <param name="ip">IP do Usuário Logado</param>
         /// <returns>Lista de Inspecao</returns>
-        public List<Inspecao> Inspecao_ListAll(int? ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
+        public List<Inspecao> Inspecao_ListAll(int? ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "", int? usu_id = null)
         {
             try
             {
@@ -64,6 +66,7 @@ namespace WebApp.DAO
                             com.Parameters.AddWithValue("@filtroord_data_Ate", filtroord_data_Ate);
                     }
 
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -110,8 +113,9 @@ namespace WebApp.DAO
         /// <param name="start">Número do registro inícial da página</param>
         /// <param name="length">Quantidade de registros por página</param>
         /// <param name="Order_BY">Ordenado por</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>List do tipo O.S.</returns>
-        public List<Inspecao> Inspecao_ListAll(int? ord_id, string ord_codigo = "", string ord_descricao = "", string ipt_id = "", string dcl_codigo = "", int start = 0, int length = 10, string Order_BY = "")
+        public List<Inspecao> Inspecao_ListAll(int? ord_id, string ord_codigo = "", string ord_descricao = "", string ipt_id = "", string dcl_codigo = "", int start = 0, int length = 10, string Order_BY = "", int? usu_id = null)
         {
             try
             {
@@ -133,6 +137,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@ordenado_por", Order_BY);
                     com.Parameters.AddWithValue("@qt_por_pagina", length);
 
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -313,6 +318,7 @@ namespace WebApp.DAO
                 int obj_id_atual = -1;
                 int clo_id_atual = -1;
                 int tip_id_atual = -1;
+                CultureInfo culturePTBR = new CultureInfo("pt-BR");
 
                 string obj_descricao_atual = "";
 
@@ -357,12 +363,12 @@ namespace WebApp.DAO
 
                             rownum = Convert.ToInt32(rdr["rownum"]),
                             obj_id = obj_id_atual,
-                            obj_pai = Convert.ToInt32(rdr["obj_pai"]),
-                            obj_codigo = rdr["obj_codigo"].ToString(),
+                            //obj_pai = Convert.ToInt32(rdr["obj_pai"]),
+                            obj_codigo =  rdr["obj_codigo"].ToString(),
                             obj_descricao = obj_descricao_atual,
 
-                            level = Convert.ToInt32(rdr["level"]),
-                            item = rdr["item"].ToString(),
+                            //level = Convert.ToInt32(rdr["level"]),
+                            item =  obj_descricao_atual != "" ? rdr["item"].ToString() : "",
                             //path = rdr["path"].ToString(),
                             clo_id = clo_id_atual,
                             clo_nome = rdr["clo_nome"].ToString(),
@@ -412,13 +418,13 @@ namespace WebApp.DAO
                             rpt_id_sugerido_codigo = rdr["rpt_id_sugerido_codigo"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_codigo"].ToString(),
                             rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
                             rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
-                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"]),
+                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"], culturePTBR),
 
                             rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
                             rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
                             rpt_id_adotado_descricao = rdr["rpt_id_adotado_descricao"] == DBNull.Value ? "" : rdr["rpt_id_adotado_descricao"].ToString(),
                             rpt_id_adotado_unidade = rdr["rpt_id_adotado_unidade"] == DBNull.Value ? "" : rdr["rpt_id_adotado_unidade"].ToString(),
-                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"]),
+                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"], culturePTBR),
 
                            apt_id = rdr["apt_id"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["apt_id"]),
                            apt_descricao = rdr["apt_descricao"] == DBNull.Value ? "" : rdr["apt_descricao"].ToString(),

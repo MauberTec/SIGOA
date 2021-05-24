@@ -134,6 +134,44 @@ namespace WebApp.Controllers
         }
 
 
+        // *************** Objetos Permitidos DO GRUPO *************************************************************
+        /// <summary>
+        /// Lista dos Objetos Permitidos do Grupo selecionado
+        /// </summary>
+        /// <param name="ID">Id do Grupo Selecionado</param>
+        /// <returns>JsonResult Lista de GrupoUsuario</returns>
+        public JsonResult GrupoObjetos_ListAll(int ID)
+        {
+            return Json(new { data = new GrupoBLL().GrupoObjetos_ListAll(ID) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///   Exclui Objeto da lista de Permissões do Grupo selecionado
+        /// </summary>
+        /// <param name="gro_id">Id do GrupoObjeto Selecionado</param>
+        /// <returns>int</returns>
+        [HttpPost]
+        public JsonResult GrupoObjeto_Excluir(int gro_id)
+        {
+            int retorno = new GrupoBLL().GrupoObjeto_Excluir(gro_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        ///   Acrescenta Objetos ao Grupo selecionado
+        /// </summary>
+        /// <param name="gru_id">Id do Grupo Selecionado</param>
+        /// <param name="obj_ids">Ids dos Objetos a serem salvos</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult GrupoObjeto_Incluir(int gru_id=0, string obj_ids="")
+        {
+            int retorno = new GrupoBLL().GrupoObjeto_Incluir(gru_id, obj_ids);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
 
 
     }

@@ -15,7 +15,7 @@
         }
 
     .centroH {
-        text-align: center;
+        text-align: center !important;
     }
 
     .contornoBranco {
@@ -213,46 +213,7 @@
         height: 1px;
     }
 
-    .altura50 {
-        height: 50px;
-    }
-
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
-
-    .borderBottomPt {
-        border-bottom: dotted 1px black;
-    }
-
-    .borderTopPt {
-        border-top: dotted 1px black;
-    }
-
-    .borderLeftPt {
-        border-left: dotted 1px black;
-    }
-
-    .borderRightPt {
-        border-right: dotted 1px black;
-    }
-
-    .borderNone {
-        border: none
-    }
-
+ 
     #divFicha4 input:disabled,
     #divFicha4 textarea:disabled,
     #divFicha4 select:disabled {
@@ -365,7 +326,7 @@
             </td>
             <td class="borderLeft borderRight" colspan="3">
                 <label class="lblsBold" id="lblatr_id_16">Pista</label>
-                <select disabled id="cmb_atr_id_15" class="cmbs"></select>
+                <select disabled id="cmb_atr_id_15" class="cmbs" onchange="cmb_pista_onchange(this)"></select>
                 <select disabled id="cmb_atr_id_16" class="cmbs"></select>
             </td>
         </tr>
@@ -584,7 +545,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs" readonly ></select></td>
                             <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_85">Principal Utilização do Trecho</label><select disabled id="cmb_atr_id_85" class="cmbs"></select></td>
                         </tr>
 
@@ -1736,7 +1697,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_99">Funcional</label></td>
+                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_aaa">Funcional</label></td>
                             <td class="borderLeftPt borderBottomPt centroH"><select disabled id="cmb_atr_id_145" class="cmbs" style="width:40px" onchange="Ficha4_Calcula_Nota_Parametro_Funcional()"></select></td>
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="7">
                                 <label class="lblsNormal" id="lblcmb_146" style="padding:2px"></label>

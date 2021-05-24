@@ -405,6 +405,36 @@ namespace WebApp.Models
 
 
 
+
+    // ************* EMAILS DA ORDEM DE SERVICO ***************************************
+    /// <summary>
+    /// EMAIL
+    /// </summary>
+    public class OSEmail
+    {
+
+        /// <summary>
+        /// Destinatarios do email separados por ponto e virgula
+        /// </summary>
+        public string destinatarios { get; set; }
+
+        /// <summary>
+        /// Assunto do Email
+        /// </summary>
+        public string assunto { get; set; }
+
+
+        /// <summary>
+        /// Texto do Email
+        /// </summary>
+        public string mensagem { get; set; }
+
+    }
+
+
+
+
+
 // ************* STATUS DE ORDEM DE SERVICO ***************************************
     /// <summary>
     /// Status de OS

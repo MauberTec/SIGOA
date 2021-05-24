@@ -201,7 +201,8 @@ namespace WebApp.Business
         /// <returns>Lista de Documentos</returns>
         public List<Documento> Documento_ListAll(int? doc_id, string doc_codigo = "", string doc_descricao = "", string tpd_id = "", string dcl_codigo = "")
         {
-            return new DocumentoDAO().Documento_ListAll(doc_id, doc_codigo, doc_descricao, tpd_id, dcl_codigo);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new DocumentoDAO().Documento_ListAll(doc_id, doc_codigo, doc_descricao, tpd_id, dcl_codigo, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -218,7 +219,8 @@ namespace WebApp.Business
         /// <returns>List do tipo Documento</returns>
         public List<Documento> LoadData(int? doc_id, string doc_codigo = "", string doc_descricao = "", string tpd_id = "", string dcl_codigo = "", int start = 0, int length = 10,string Order_BY = "")
         {
-            return new DocumentoDAO().LoadData(doc_id, doc_codigo, doc_descricao, tpd_id, dcl_codigo, start, length, Order_BY);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new DocumentoDAO().LoadData(doc_id, doc_codigo, doc_descricao, tpd_id, dcl_codigo, start, length, Order_BY, paramUsuario.usu_id);
         }
 
 
@@ -386,7 +388,8 @@ namespace WebApp.Business
         /// <returns>Lista de Documento_Objeto</returns>
         public List<Documento_Objeto> Documento_Objetos_ListAll(int doc_id)
         {
-            return new DocumentoDAO().Documento_Objetos_ListAll(doc_id);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new DocumentoDAO().Documento_Objetos_ListAll(doc_id, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -400,12 +403,13 @@ namespace WebApp.Business
         /// <returns>List(SelectListItem)</returns>
         public List<SelectListItem> PreencheCmbObjetosLocalizados(int doc_id, string filtro_obj_codigo, string filtro_obj_descricao = "", int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
 
             List<Objeto> lstObjetos;
             if (doc_id >=0)
                 lstObjetos = new DocumentoBLL().Documento_ObjetosNaoAssociados_ListAll(doc_id, filtro_obj_codigo);
             else
-                lstObjetos = new ObjetoDAO().Objeto_ListAll(0, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome);
+                lstObjetos = new ObjetoDAO().Objeto_ListAll(0, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome, paramUsuario.usu_id);
 
             List<SelectListItem> lstListaCmbObjetosLocalizados = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstObjetos)
@@ -426,7 +430,8 @@ namespace WebApp.Business
         /// <returns>Lista de Objetos Nao Associados</returns>
         public List<Objeto> Documento_ObjetosNaoAssociados_ListAll(int doc_id, string codObj)
         {
-            return new DocumentoDAO().Documento_ObjetosNaoAssociados_ListAll(doc_id, codObj);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new DocumentoDAO().Documento_ObjetosNaoAssociados_ListAll(doc_id, codObj, paramUsuario.usu_id);
         }
 
 

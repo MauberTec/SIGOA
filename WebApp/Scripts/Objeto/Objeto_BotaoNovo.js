@@ -295,6 +295,17 @@ function bntSalvarNovo_click() {
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function (result) {
+
+                if (result.length > 40) // 'Usuário sem permissão para criar objeto'
+                {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: result
+                    });
+                    return false;
+                }
+
                 // fecha o modal
                 $("#modalNovoRegistro").modal('hide');
                 ehInsercao = 0;
@@ -328,8 +339,15 @@ function bntSalvarNovo_click() {
                 return false;
             },
             error: function (errormessage) {
-                alert(errormessage.responseText);
                 ehInsercao = 0;
+
+                var dom_nodes = $($.parseHTML(errormessage.responseText));
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: dom_nodes.filter('title').text()
+                });
+
                 return false;
             }
         });
@@ -514,7 +532,7 @@ function cmbGrupoObjetos_onchange() {
 
     if (lstExcecoes.includes(valor)) {
         document.getElementById("divNumeroObjeto").style.display = 'none';
-
+        LimparCampos(9);
     }
     else
     {

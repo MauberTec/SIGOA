@@ -18,7 +18,7 @@
         }
 
     .centroH {
-        text-align: center;
+        text-align: center !important;
     }
 
     .contornoBranco {
@@ -202,45 +202,6 @@
         height: 1px;
     }
 
-    .altura50 {
-        height: 50px;
-    }
-
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
-
-    .borderBottomPt {
-        border-bottom: dotted 1px black;
-    }
-
-    .borderTopPt {
-        border-top: dotted 1px black;
-    }
-
-    .borderLeftPt {
-        border-left: dotted 1px black;
-    }
-
-    .borderRightPt {
-        border-right: dotted 1px black;
-    }
-
-    .borderNone {
-        border: none
-    }
 
     #divFicha1 input:disabled,
     #divFicha1 textarea:disabled,
@@ -355,7 +316,7 @@
             </td>
             <td class="borderLeft borderRight" colspan="3">
                 <label class="lblsBold" id="lblatr_id_16">Pista</label>
-                <select disabled id="cmb_atr_id_15" class="cmbs"></select>
+                <select disabled id="cmb_atr_id_15" class="cmbs" onchange="cmb_pista_onchange(this)"></select>
                 <select disabled id="cmb_atr_id_16" class="cmbs"></select>
             </td>
         </tr>
@@ -491,7 +452,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs" readonly ></select></td>
                             <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_85">Principal Utilização do Trecho</label><select disabled id="cmb_atr_id_85" class="cmbs"></select></td>
                         </tr>
 
@@ -1493,21 +1454,5 @@
         document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
     else
         document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
-
-    //moment.locale('pt-br');         // pt-br
-    //$.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
-
-    //jQuery(function ($) {
-    //    $.datepicker.regional['pt-BR'] = datepicker_regional;
-    //    $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
-    //});
-
-    //$('#txt_atr_id_103').datepicker({
-    //    dateFormat: 'dd/mm/yy'
-    //});
-
-    //$('#txt_atr_id_104').datepicker({
-    //    dateFormat: 'dd/mm/yy'
-    //});
 
 </script>
