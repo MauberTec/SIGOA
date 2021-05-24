@@ -52,6 +52,91 @@ namespace WebApp.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// Objetos
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Objetos()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Menu Lateral
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MenuLateral()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Ordens de Serviço
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult OrdensServico()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Inspeções
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Inspecao()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Integração
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Integracao()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Manuais Sigoa
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ManuaisSigoa()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Orçamentos
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Orcamentos()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Relatório
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Relatorio()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Segurança
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Seguranca()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Tela de Login
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult TelaLogin()
+        {
+            return View();
+        }
 
     }
 }

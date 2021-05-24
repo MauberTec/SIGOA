@@ -1,9 +1,0 @@
-﻿@{
-    ViewBag.Title = "teste";
-}
-
-@*@Html.Action("GetHtmlPage", "Ajuda", new { path = "~/img/Manual_do_Usuario A2.htm" })*@
-
-@*<object type="text/html" data="~/img/Manual_do_Usuario A2.htm" style="width:100%; height:100%" ></object>*@
-
-@Html.Raw(File.ReadAllText(Server.MapPath("~/img/Manual_do_Usuario A2.htm")))
