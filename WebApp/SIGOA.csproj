@@ -1164,6 +1164,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\Ficha_Cadastramento_Anomalias.xlsx" />
+    <Content Include="Reports\Modelo_Orcamento.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -1352,6 +1353,20 @@
     <Content Include="Views\Reparo\ReparoTpu.cshtml" />
     <Content Include="Views\Ajuda\Index.cshtml" />
     <Content Include="Views\Shared\_fichaRequalificacaoOAE.cshtml" />
+    <Content Include="Views\Ajuda\Anomalias.cshtml" />
+    <Content Include="Views\Ajuda\Conservas.cshtml" />
+    <Content Include="Views\Ajuda\Documentos.cshtml" />
+    <Content Include="Views\Ajuda\Inspecao.cshtml" />
+    <Content Include="Views\Ajuda\Integracao.cshtml" />
+    <Content Include="Views\Ajuda\ManuaisSigoa.cshtml" />
+    <Content Include="Views\Ajuda\MenuLateral.cshtml" />
+    <Content Include="Views\Ajuda\Objetos.cshtml" />
+    <Content Include="Views\Ajuda\Orcamentos.cshtml" />
+    <Content Include="Views\Ajuda\OrdensServico.cshtml" />
+    <Content Include="Views\Ajuda\Relatorio.cshtml" />
+    <Content Include="Views\Ajuda\Reparos.cshtml" />
+    <Content Include="Views\Ajuda\Seguranca.cshtml" />
+    <Content Include="Views\Ajuda\TelaLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

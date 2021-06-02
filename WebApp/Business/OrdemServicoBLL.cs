@@ -68,7 +68,7 @@ namespace WebApp.Business
                 // "E" = 14 = encerrada
                 if ((ord.sos_codigo == "E") || (ord.sos_id == 14)) 
                 {
-                    //cadastral(7), rotineira(8)
+                    //cadastral(7), rotineira(8) : email para Regional id mensagem #1
                     if ((ord.tos_id == 7) || (ord.tos_id == 8)) 
                     {
                         // verifica se tem apontamentos de serviços e quantitativos na OS
@@ -99,10 +99,10 @@ namespace WebApp.Business
                         email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 2); // id da mensagem = 2
                     }
                     else
-                    {
-                        //   5,10,11,13,16,17,22,24
-                        //  Inspeção Extraordinária, Monitoramento, Orçamento, Projeto de Reforço, Ensaios, Levantamento Cadastral, Conserva,Projeto de OAE
-                        if ((ord.tos_id == 5) || (ord.tos_id == 10) || (ord.tos_id == 11) || (ord.tos_id == 13)
+                    {  // (24/mai/2021)Com exceção das OSs de Recuperação/Reparo(14) e de Projeto de Reforço(13), os e-mails serão enviados sempre que a OS for encerrada 
+                        //   5,10,11,16,17,22,24
+                        //  Inspeção Extraordinária, Monitoramento, Orçamento, Ensaios, Levantamento Cadastral, Conserva,Projeto de OAE
+                        if ((ord.tos_id == 5) || (ord.tos_id == 10) || (ord.tos_id == 11) 
                             || (ord.tos_id == 16) || (ord.tos_id == 17) || (ord.tos_id == 22) || (ord.tos_id == 24))
                         {
                             // Sistema notifica a Seção de OAE da Sede o encerramento da OS 

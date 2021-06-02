@@ -761,7 +761,7 @@ namespace WebApp.Business
         /// <summary>
         /// Limpa arquivos da pasta temp, com data anterior à vespera do dia corrente
         /// </summary>
-        private void limpaArquivosAntigos()
+        public void limpaArquivosAntigos()
         {
             string caminho = System.Web.HttpContext.Current.Server.MapPath("~/temp");
 

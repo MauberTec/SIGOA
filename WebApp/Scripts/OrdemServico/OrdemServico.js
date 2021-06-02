@@ -1145,6 +1145,7 @@ function calculaTotal(orc_id)
 function carregaGridOrcamentoDetalhes(orc_id, tos_id)
 {
     totalParcial_Reparos = 0;
+    var prefixo = '';
 
     orc_valor_total = 0;
 
@@ -1162,54 +1163,376 @@ function carregaGridOrcamentoDetalhes(orc_id, tos_id)
         $("#tblOrcamentoDetalhes").DataTable().destroy();
     }
 
+    //$("#tblOrcamentoDetalhes").DataTable({
+    //    "ajax": {
+    //        "url": "/Orcamento/OrcamentoDetalhes_ListAll",
+    //        "type": "GET",
+    //        "datatype": "json",
+    //        "data": function (d) {
+    //            d.orc_id = orc_id;
+    //            d.ore_ativo = 1;
+    //        }
+    //    }
+    //    , "columns": [
+    //        { data: "ian_ordem_apresentacao", "className": "hide_column" },
+    //        { data: "ore_id", "className": "hide_column" },
+    //        { data: "orc_id", "className": "hide_column" },
+    //        { data: "orc_cod_orcamento", "className": "hide_column" },
+    //        { data: "orc_descricao", "className": "hide_column" },
+    //        { data: "orc_versao", "className": "hide_column" },
+    //        { data: "ocs_id", "className": "hide_column" },
+    //        { data: "ocs_codigo", "className": "hide_column" },
+    //        { data: "ocs_descricao", "className": "hide_column" },
+    //        { data: "orc_data_validade", "className": "hide_column" },
+    //        { data: "orc_valor_total", "className": "hide_column" },
+
+    //        { data: "orc_id_pai", "className": "hide_column" },
+    //        { data: "obj_codigoOAE", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "obj_codigoElemento", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "ian_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "atp_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "leg_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "ale_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "aca_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "ian_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rpt_id_sugerido_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+
+    //        { data: "ian_quantidade_sugerida", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rpt_id_sugerido_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rtu_preco_unitario_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rtu_valor_total_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rpt_id_adotado_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "ian_quantidade_adotada", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rpt_id_adotado_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rtu_preco_unitario_adotado", "className": "Centralizado", "autoWidth": true, "searchable": false },
+    //        { data: "rtu_valor_total_adotado", "className": "Centralizado borderRight", "autoWidth": true, "searchable": false },
+    //        { data: "orc_objetos_associados", "className": "hide_column" },
+
+    //        { data: "pri_ids_associados", "className": "hide_column" },
+    //        { data: "orc_ativo", "className": "hide_column" },
+    //        { data: "orc_obj_ids_associados", "className": "hide_column" },
+    //        {
+    //            data: "ore_id", "searchable": false, "className": "Centralizado", "sortable": false,
+    //            title: tos_id != 11 ? "Reparado?" : "",
+    //            "render": function (data, type, row) {
+    //                var retorno = "";
+    //                if (tos_id != 11) {
+    //                    if (permissaoEscrita > 0) {
+    //                        //  if (permissaoEscrita > 0) {
+    //                        if (row.ore_ativo == 1)
+    //                            retorno = '<a href="#" onclick="return OrcamentoDetalhes_AtivarDesativar(' + orc_id + ',' + data + ', 0)" title="Ativo" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
+    //                        else
+    //                            retorno = '<a href="#" onclick="return OrcamentoDetalhes_AtivarDesativar(' + orc_id + ',' + data + ', 1)" title="Desativado" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
+    //                    }
+    //                    else
+    //                        retorno = '<span class="glyphicon glyphicon-ok text-success desabilitado" ></span>' + '  ';
+    //                }
+
+    //                return retorno;
+    //            }
+    //        },
+    //        { data: "orc_data_base", "className": "hide_column" },
+    //        { data: "tpt_id", "className": "hide_column" },
+    //        { data: "tpt_descricao", "className": "hide_column" },
+    //        { data: "lstStatusOrcamento", "className": "hide_column" }
+    //    ]
+    //         , "createdRow": function (row, data, dataIndex) {
+
+    //             if ((data["obj_codigoOAE"] != "") && (dataIndex > 1)) {
+    //                 for (var i = 12; i <= 37; i++)
+    //                     $(row.childNodes[i]).addClass("borderTop");
+    //             }
+
+    //             // TABELA HEADER COM OS DADOS DA 1A LINHA
+    //             if ((data["obj_codigoOAE"] != "") && (dataIndex == 0)) {
+    //                 $("#txtorc_codigo_Detalhes").val((row.childNodes[3].innerText));
+    //                 $("#txtorc_versaoDetalhes").val((row.childNodes[5].innerText.trim()));
+    //                 $("#txtorc_descricao_Detalhes").val((row.childNodes[4].innerText));
+    //                 $("#txtobj_codigoDetalhes").val((row.childNodes[30].innerText));
+    //                 $("#txtobj_ids_Detalhes").val((row.childNodes[33].innerText));
+    //                 $("#txtorc_id_Detalhes").val((row.childNodes[2].innerText));
+    //                 $("#txtorc_data_Validade_Detalhes").val((row.childNodes[9].innerText));
+    //                 $('#chkorc_ativoDetalhes').prop('checked', (row.childNodes[32].innerText == '1' ? true : false));
+
+    //                 $("#txtpri_ids_associados").val(row.childNodes[31].innerText);
+
+    //                 $('#lblDataBase').text(row.childNodes[35].innerText);
+    //                 //$('#lblDesonerado').text(row.childNodes[37].innerText); // "D" ou "O"
+
+    //                 var quem = $("#cmbAno");
+    //                 preenchecmbAno(quem);
+
+    //                 var auxd = row.childNodes[35].innerText.split('/'); // 30/06/2020
+    //                 $('#cmbMes').val(auxd[1]);
+    //                 $('#cmbAno').val(auxd[2]);
+    //                 $('#cmbDesonerado').val(row.childNodes[36].innerText); // "D" ou "O"
+
+    //                 // preenche o combo de Status
+    //                 var cmbStatusOrcamentoDetalhes = $("#cmbStatusOrcamentoDetalhes")[0]; //document.getElementById("cmbStatusOrcamentoDetalhes");
+    //                 if (cmbStatusOrcamentoDetalhes) {
+    //                     $("#cmbStatusOrcamentoDetalhes").html(""); // limpa os itens existentes
+
+    //                     var lst_proximos_status = row.childNodes[38].innerText.split(";");
+    //                     for (var j = 0; j < lst_proximos_status.length; j++) {
+    //                         var pedacos = lst_proximos_status[j].split(":");
+    //                         $("#cmbStatusOrcamentoDetalhes").append($('<option></option>').val(parseInt(pedacos[0])).html(pedacos[1]));
+    //                     }
+
+    //                     $('#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
+    //                 }
+
+
+    //             }
+
+    //             var valorSugerido = parseFloat(data["rtu_valor_total_sugerido"]);
+    //             var valorAdotado = parseFloat(data["rtu_valor_total_adotado"]);
+
+    //             if (data["ore_ativo"] == 1)
+    //                 totalParcial_Reparos = totalParcial_Reparos + parseFloat(valorAdotado > 0 ? valorAdotado : valorSugerido);
+
+    //             $("#txtReparos_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos));
+    //             $("#txtReparos_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos)));
+
+    //             //var Reparos_vtotal = parseFloat($("#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+    //             var ServicosAdicionais_vtotal = parseFloat($("#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+    //             $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos + ServicosAdicionais_vtotal));
+    //        }
+
+    //    , "order": [2, "asc"]
+    //    , "ordering": false
+    //    , 'columnDefs': [
+    //        {
+    //            targets: [12] // tooltip obj_codigoOAE
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["obj_descricaoOAE"]);
+
+    //            }
+    //        }
+    //        , {
+    //            targets: [13] // tooltip obj_codigoElemento
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["obj_descricaoElemento"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [15] // tooltip atp_codigo
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["atp_descricao"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [16] // tooltip ian_sigla = leg_codigo
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["leg_descricao"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [17] // tooltip ale_codigo
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["ale_descricao"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [18] // tooltip aca_codigo
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["aca_descricao"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [20] // tooltip rpt_id_sugerido_codigo
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["rpt_id_sugerido_descricao"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [21] // quantidade sugerida
+    //            , "render": function (data, type, row) {
+    //                return new Intl.NumberFormat('pt-BR').format(data);
+    //            }
+    //        }
+    //        , {
+    //            targets: [23] // valor unitario sugerido
+    //            , "render": function (data, type, row) {
+    //                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+    //            }
+    //        }
+    //        , {
+    //            targets: [24] // valor total sugerido
+    //            , "render": function (data, type, row) {
+    //                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+    //            }
+    //        }
+    //        , {
+    //            targets: [25] // tooltip rpt_id_adotado_codigo
+    //            , "createdCell": function (td, cellData, rowData, row, col) {
+    //                $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
+    //            }
+    //        }
+    //        , {
+    //            targets: [26] // quantidade adotada
+    //            , "render": function (data, type, row) {
+    //                return new Intl.NumberFormat('pt-BR').format(data);
+    //            }
+    //        }
+    //        , {
+    //            targets: [28] // valor unitario adotado
+    //            , "render": function (data, type, row) {
+    //                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+    //            }
+    //        }
+    //        , {
+    //            targets: [29] // valor total adotado
+    //            , "render": function (data, type, row) {
+    //                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+    //            }
+    //        }
+
+    //    ]
+    //    , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+    //    , select: { style: 'single' }
+    //    , searching: false
+    //    , "oLanguage": idioma
+    //    , "pagingType": "input"
+    //    , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+    //});
+
     $("#tblOrcamentoDetalhes").DataTable({
         "ajax": {
             "url": "/Orcamento/OrcamentoDetalhes_ListAll",
             "type": "GET",
             "datatype": "json",
             "data": function (d) {
-                d.orc_id = orc_id;
-                d.ore_ativo = 1;
+                    d.orc_id = orc_id;
+                    d.ore_ativo = 1;
             }
         }
-        , "columns": [
-            { data: "ian_ordem_apresentacao", "className": "hide_column" },
-            { data: "ore_id", "className": "hide_column" },
-            { data: "orc_id", "className": "hide_column" },
-            { data: "orc_cod_orcamento", "className": "hide_column" },
-            { data: "orc_descricao", "className": "hide_column" },
-            { data: "orc_versao", "className": "hide_column" },
-            { data: "ocs_id", "className": "hide_column" },
-            { data: "ocs_codigo", "className": "hide_column" },
-            { data: "ocs_descricao", "className": "hide_column" },
-            { data: "orc_data_validade", "className": "hide_column" },
-            { data: "orc_valor_total", "className": "hide_column" },
+    , "columns": [
+        { data: "ian_ordem_apresentacao", "className": "hide_column" },
+        { data: "ore_id", "className": "hide_column" },
+        { data: "orc_id", "className": "hide_column" },
+        { data: "orc_cod_orcamento", "className": "hide_column" },
+        { data: "orc_descricao", "className": "hide_column" },
+        { data: "orc_versao", "className": "hide_column" },
+        { data: "ocs_id", "className": "hide_column" },
+        { data: "ocs_codigo", "className": "hide_column" },
+        { data: "ocs_descricao", "className": "hide_column" },
+        { data: "orc_data_validade", "className": "hide_column" },
+        { data: "orc_valor_total", "className": "hide_column" },
 
-            { data: "orc_id_pai", "className": "hide_column" },
-            { data: "obj_codigoOAE", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "obj_codigoElemento", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "ian_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "atp_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "leg_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "ale_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "aca_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "ian_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rpt_id_sugerido_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+        { data: "orc_id_pai", "className": "hide_column" },
+        { data: "obj_codigoOAE", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "obj_codigoElemento", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "ian_numero", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "atp_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "leg_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "ale_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "aca_codigo", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "ian_quantidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "rpt_id_sugerido_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
+        { data: "ian_quantidade_sugerida", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        { data: "rpt_id_sugerido_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
+        {
+            data: "rtu_preco_unitario_sugerido", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
+            "render": function (data, type, row) {
+                var rtu_preco_unitario_sugerido = parseFloat(row["rtu_preco_unitario_sugerido"]);
+                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_sugerido);
+            }
+        },
+        {
+            data: "rtu_valor_total_linha_sugerido", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
+            "render": function (data, type, row) {
+                var rtu_valor_total_linha_sugerido = parseFloat(row["rtu_valor_total_linha_sugerido"]);
+                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
+            }
+        },
+        {
+            data: "rpt_id_adotado_codigo", "searchable": false, "className": "borderLeft Centralizado", "sortable": false, "autoWidth": true,
+            "render": function (data, type, row) {
+                var retorno = "";
+                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                if (qtAdotadaValor == 0)
+                    return (row["rpt_id_sugerido_codigo"]);
+                else
+                    return (row["rpt_id_adotado_codigo"]);
+            },
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData["rpt_id_adotado_codigo"] != rowData["rpt_id_sugerido_codigo"])
+                    $(td).addClass('cellRed');
+            }
+        },
+        {
+            data: "ian_quantidade_adotada", "searchable": false, "className": "Centralizado", "sortable": false,
+            "render": function (data, type, row) {
+                var retorno = "";
+                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                if (qtAdotadaValor == 0)
+                    return (row["ian_quantidade_sugerida"] + '').replaceAll(".", ",");
+                else
+                    return (row["ian_quantidade_adotada"] + '').replaceAll(".", ",");
+            },
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (parseFloat(rowData["ian_quantidade_sugerida"]) != parseFloat(rowData["ian_quantidade_adotada"]))
+                    $(td).addClass('cellRed');
+            }
+        },
+        {
+            data: "rpt_id_adotado_unidade", "searchable": false, "className": "Centralizado", "sortable": false,
+            "render": function (data, type, row) {
+                var retorno = "";
+                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                if (qtAdotadaValor == 0)
+                    return (row["rpt_id_sugerido_unidade"] + '').replaceAll(".", ",");
+                else
+                    return (row["rpt_id_adotado_unidade"] + '').replaceAll(".", ",");
+            },
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData["rpt_id_sugerido_unidade"] != rowData["rpt_id_adotado_unidade"])
+                    $(td).addClass('cellRed');
+            }
+        },
+        {
+            data: "rtu_preco_unitario_adotado", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
+            "render": function (data, type, row) {
+                var retorno = "";
+                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                if (qtAdotadaValor == 0) {
+                    var rtu_preco_unitario_sugerido = parseFloat(row["rtu_preco_unitario_sugerido"]);
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_sugerido);
+                }
+                else {
+                    var rtu_preco_unitario_adotado = parseFloat(row["rtu_preco_unitario_adotado"]);
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_adotado);
+                }
+            },
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData["rtu_preco_unitario_sugerido"] != rowData["rtu_preco_unitario_adotado"])
+                    $(td).addClass('cellRed');
+            }
+        },
+        {
+            data: "rtu_valor_total_linha_adotado", "searchable": false, "className": "alignRight borderRight", "sortable": false, "autoWidth": true,
+            "render": function (data, type, row) {
+                var retorno = "";
+                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
+                if (qtAdotadaValor == 0) {
+                    var rtu_valor_total_linha_sugerido = parseFloat(row["rtu_valor_total_linha_sugerido"]);
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
+                }
+                else {
+                    var rtu_valor_total_linha_adotado = parseFloat(row["rtu_valor_total_linha_adotado"]);
+                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_adotado);
+                }
+            },
+            createdCell: function (td, cellData, rowData, row, col) {
+                if (rowData["rtu_valor_total_linha_sugerido"] != rowData["rtu_valor_total_linha_adotado"])
+                    $(td).addClass('cellRed');
+            }
+        },
+        { data: "orc_objetos_associados", "className": "hide_column" },
 
-            { data: "ian_quantidade_sugerida", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rpt_id_sugerido_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rtu_preco_unitario_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rtu_valor_total_sugerido", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rpt_id_adotado_codigo", "className": "borderLeft Centralizado", "autoWidth": true, "searchable": false },
-            { data: "ian_quantidade_adotada", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rpt_id_adotado_unidade", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rtu_preco_unitario_adotado", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "rtu_valor_total_adotado", "className": "Centralizado borderRight", "autoWidth": true, "searchable": false },
-            { data: "orc_objetos_associados", "className": "hide_column" },
-
-            { data: "pri_ids_associados", "className": "hide_column" },
-            { data: "orc_ativo", "className": "hide_column" },
-            { data: "orc_obj_ids_associados", "className": "hide_column" },
+        { data: "pri_ids_associados", "className": "hide_column" },
+        { data: "orc_ativo", "className": "hide_column" },
+        { data: "orc_obj_ids_associados", "className": "hide_column" },
             {
                 data: "ore_id", "searchable": false, "className": "Centralizado", "sortable": false,
                 title: tos_id != 11 ? "Reparado?" : "",
@@ -1230,171 +1553,168 @@ function carregaGridOrcamentoDetalhes(orc_id, tos_id)
                     return retorno;
                 }
             },
-            { data: "orc_data_base", "className": "hide_column" },
-            { data: "tpt_id", "className": "hide_column" },
-            { data: "tpt_descricao", "className": "hide_column" },
-            { data: "lstStatusOrcamento", "className": "hide_column" }
-        ]
-             , "createdRow": function (row, data, dataIndex) {
+        { data: "orc_data_base", "className": "hide_column" },
+        { data: "tpt_id", "className": "hide_column" },
+        { data: "tpt_descricao", "className": "hide_column" },
+        { data: "lstStatusOrcamento", "className": "hide_column" }
+    ]
+    , "createdRow": function (row, data, dataIndex) {
 
-                 if ((data["obj_codigoOAE"] != "") && (dataIndex > 1)) {
-                     for (var i = 12; i <= 37; i++)
-                         $(row.childNodes[i]).addClass("borderTop");
-                 }
+        if ((data["obj_codigoOAE"] != "") && (dataIndex > 1)) {
+            for (var i = 12; i <= 37; i++)
+                $(row.childNodes[i]).addClass("borderTop");
+        }
 
-                 // TABELA HEADER COM OS DADOS DA 1A LINHA
-                 if ((data["obj_codigoOAE"] != "") && (dataIndex == 0)) {
-                     $("#txtorc_codigo_Detalhes").val((row.childNodes[3].innerText));
-                     $("#txtorc_versaoDetalhes").val((row.childNodes[5].innerText.trim()));
-                     $("#txtorc_descricao_Detalhes").val((row.childNodes[4].innerText));
-                     $("#txtobj_codigoDetalhes").val((row.childNodes[30].innerText));
-                     $("#txtobj_ids_Detalhes").val((row.childNodes[33].innerText));
-                     $("#txtorc_id_Detalhes").val((row.childNodes[2].innerText));
-                     $("#txtorc_data_Validade_Detalhes").val((row.childNodes[9].innerText));
-                     $('#chkorc_ativoDetalhes').prop('checked', (row.childNodes[32].innerText == '1' ? true : false));
+        // TABELA HEADER COM OS DADOS DA 1A LINHA
+        if ((data["obj_codigoOAE"] != "") && (dataIndex == 0)) {
+            $(prefixo + "#txtorc_codigo_Detalhes").val((row.childNodes[3].innerText));
+            $(prefixo + "#txtorc_versaoDetalhes").val((row.childNodes[5].innerText.trim()));
+            $(prefixo + "#txtorc_descricao_Detalhes").val((row.childNodes[4].innerText));
+            $(prefixo + "#txtobj_codigoDetalhes").val((row.childNodes[30].innerText));
+            $(prefixo + "#txtobj_ids_Detalhes").val((row.childNodes[33].innerText));
+            $(prefixo + "#txtorc_id_Detalhes").val((row.childNodes[2].innerText));
+            $(prefixo + "#txtorc_data_Validade_Detalhes").val((row.childNodes[9].innerText));
+            $(prefixo + '#chkorc_ativoDetalhes').prop('checked', (row.childNodes[32].innerText == '1' ? true : false));
 
-                     $("#txtpri_ids_associados").val(row.childNodes[31].innerText);
+            $(prefixo + "#txtpri_ids_associados").val(row.childNodes[31].innerText);
 
-                     $('#lblDataBase').text(row.childNodes[35].innerText);
-                     //$('#lblDesonerado').text(row.childNodes[37].innerText); // "D" ou "O"
+            $(prefixo + '#lblDataBase').text(row.childNodes[35].innerText);
+            //$(prefixo + '#lblDesonerado').text(row.childNodes[37].innerText); // "D" ou "O"
 
-                     var quem = $("#cmbAno");
-                     preenchecmbAno(quem);
+            var quem = $(prefixo + "#cmbAno");
+            preenchecmbAno(quem);
 
-                     var auxd = row.childNodes[35].innerText.split('/'); // 30/06/2020
-                     $('#cmbMes').val(auxd[1]);
-                     $('#cmbAno').val(auxd[2]);
-                     $('#cmbDesonerado').val(row.childNodes[36].innerText); // "D" ou "O"
+            var auxd = row.childNodes[35].innerText.split('/'); // 30/06/2020
+            $(prefixo + '#cmbMes').val(auxd[1]);
+            $(prefixo + '#cmbAno').val(auxd[2]);
+            $(prefixo + '#cmbDesonerado').val(row.childNodes[36].innerText); // "D" ou "O"
 
-                     // preenche o combo de Status
-                     var cmbStatusOrcamentoDetalhes = $("#cmbStatusOrcamentoDetalhes")[0]; //document.getElementById("cmbStatusOrcamentoDetalhes");
-                     if (cmbStatusOrcamentoDetalhes) {
-                         $("#cmbStatusOrcamentoDetalhes").html(""); // limpa os itens existentes
+            // preenche o combo de Status
+            var cmbStatusOrcamentoDetalhes = $(prefixo + "#cmbStatusOrcamentoDetalhes")[0]; //document.getElementById("cmbStatusOrcamentoDetalhes");
+            if (cmbStatusOrcamentoDetalhes) {
+                $(prefixo + "#cmbStatusOrcamentoDetalhes").html(""); // limpa os itens existentes
 
-                         var lst_proximos_status = row.childNodes[38].innerText.split(";");
-                         for (var j = 0; j < lst_proximos_status.length; j++) {
-                             var pedacos = lst_proximos_status[j].split(":");
-                             $("#cmbStatusOrcamentoDetalhes").append($('<option></option>').val(parseInt(pedacos[0])).html(pedacos[1]));
-                         }
-
-                         $('#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
-                     }
-
-
-                 }
-
-                 var valorSugerido = parseFloat(data["rtu_valor_total_sugerido"]);
-                 var valorAdotado = parseFloat(data["rtu_valor_total_adotado"]);
-
-                 if (data["ore_ativo"] == 1)
-                     totalParcial_Reparos = totalParcial_Reparos + parseFloat(valorAdotado > 0 ? valorAdotado : valorSugerido);
-
-                 $("#txtReparos_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos));
-                 $("#txtReparos_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos)));
-
-                 //var Reparos_vtotal = parseFloat($("#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
-                 var ServicosAdicionais_vtotal = parseFloat($("#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
-                 $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_Reparos + ServicosAdicionais_vtotal));
-            }
-
-        , "order": [2, "asc"]
-        , "ordering": false
-        , 'columnDefs': [
-            {
-                targets: [12] // tooltip obj_codigoOAE
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["obj_descricaoOAE"]);
+                var lst_proximos_status = row.childNodes[38].innerText.split(";");
+                for (var j = 0; j < lst_proximos_status.length; j++) {
+                    var pedacos = lst_proximos_status[j].split(":");
+                    $(prefixo + "#cmbStatusOrcamentoDetalhes").append($('<option></option>').val(parseInt(pedacos[0])).html(pedacos[1]));
+                    if (parseInt(row.childNodes[6].innerText) == parseInt(pedacos[0]))
+                        $(prefixo + '#cmbStatusOrcamentoDetalhes').attr('title', pedacos[1]);
 
                 }
-            }
-            , {
-                targets: [13] // tooltip obj_codigoElemento
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["obj_descricaoElemento"]);
-                }
-            }
-            , {
-                targets: [15] // tooltip atp_codigo
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["atp_descricao"]);
-                }
-            }
-            , {
-                targets: [16] // tooltip ian_sigla = leg_codigo
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["leg_descricao"]);
-                }
-            }
-            , {
-                targets: [17] // tooltip ale_codigo
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["ale_descricao"]);
-                }
-            }
-            , {
-                targets: [18] // tooltip aca_codigo
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["aca_descricao"]);
-                }
-            }
-            , {
-                targets: [20] // tooltip rpt_id_sugerido_codigo
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["rpt_id_sugerido_descricao"]);
-                }
-            }
-            , {
-                targets: [21] // quantidade sugerida
-                , "render": function (data, type, row) {
-                    return new Intl.NumberFormat('pt-BR').format(data);
-                }
-            }
-            , {
-                targets: [23] // valor unitario sugerido
-                , "render": function (data, type, row) {
-                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
-                }
-            }
-            , {
-                targets: [24] // valor total sugerido
-                , "render": function (data, type, row) {
-                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
-                }
-            }
-            , {
-                targets: [25] // tooltip rpt_id_adotado_codigo
-                , "createdCell": function (td, cellData, rowData, row, col) {
-                    $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
-                }
-            }
-            , {
-                targets: [26] // quantidade adotada
-                , "render": function (data, type, row) {
-                    return new Intl.NumberFormat('pt-BR').format(data);
-                }
-            }
-            , {
-                targets: [28] // valor unitario adotado
-                , "render": function (data, type, row) {
-                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
-                }
-            }
-            , {
-                targets: [29] // valor total adotado
-                , "render": function (data, type, row) {
-                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
-                }
+
+                $(prefixo + '#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
             }
 
-        ]
-        , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
-        , select: { style: 'single' }
-        , searching: false
-        , "oLanguage": idioma
-        , "pagingType": "input"
-        , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+            var valor_total_sugerido = parseFloat(data["valor_total_sugerido"]);
+            var valor_total_adotado = parseFloat(data["valor_total_adotado"]);
+
+            $(prefixo + "#txtReparos_valor_total_Adotado").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_adotado));
+            $(prefixo + "#txtReparos_valor_total_Adotado").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_adotado)));
+
+            $(prefixo + "#txtReparos_valor_total_Sugerido").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_sugerido));
+            $(prefixo + "#txtReparos_valor_total_Sugerido").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(valor_total_sugerido)));
+
+        }
+
+    }
+    , "order": [2, "asc"]
+    , "ordering": false
+    , 'columnDefs': [
+        {
+            targets: [12] // tooltip obj_codigoOAE
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["obj_descricaoOAE"]);
+
+            }
+        }
+        , {
+            targets: [13] // tooltip obj_codigoElemento
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["obj_descricaoElemento"]);
+            }
+        }
+        , {
+            targets: [15] // tooltip atp_codigo
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["atp_descricao"]);
+            }
+        }
+        , {
+            targets: [16] // tooltip ian_sigla = leg_codigo
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["leg_descricao"]);
+            }
+        }
+        , {
+            targets: [17] // tooltip ale_codigo
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["ale_descricao"]);
+            }
+        }
+        , {
+            targets: [18] // tooltip aca_codigo
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["aca_descricao"]);
+            }
+        }
+        , {
+            targets: [20] // tooltip rpt_id_sugerido_codigo
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["rpt_id_sugerido_descricao"]);
+            }
+        }
+        , {
+            targets: [21] // quantidade sugerida
+            , "render": function (data, type, row) {
+                return new Intl.NumberFormat('pt-BR').format(data);
+            }
+        }
+        , {
+            targets: [23] // valor unitario sugerido
+            , "render": function (data, type, row) {
+                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+            }
+        }
+        , {
+            targets: [24] // valor total sugerido
+            , "render": function (data, type, row) {
+                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+            }
+        }
+        , {
+            targets: [25] // tooltip rpt_id_adotado_codigo
+            , "createdCell": function (td, cellData, rowData, row, col) {
+                $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
+            }
+        }
+        , {
+            targets: [26] // quantidade adotada
+            , "render": function (data, type, row) {
+                return new Intl.NumberFormat('pt-BR').format(data);
+            }
+        }
+        , {
+            targets: [28] // valor unitario adotado
+            , "render": function (data, type, row) {
+                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+            }
+        }
+        , {
+            targets: [29] // valor total adotado
+            , "render": function (data, type, row) {
+                return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
+            }
+        }
+
+    ]
+    , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+    , select: { style: 'single' }
+    , searching: false
+    , "oLanguage": idioma
+    , "pagingType": "input"
+    , "sDom": '<"top">rt<"bottom"pfli><"clear">'
     });
-
     var  ehRead = true;
     orc_servicos_valor_total = 0;
 
@@ -1425,7 +1745,7 @@ function carregaGridOrcamentoDetalhes(orc_id, tos_id)
             { data: "DataTpu", "className": "hide_column" },
             { data: "ose_fase", "className": "Centralizado", "autoWidth": true, "searchable": false },
             { data: "PrecoUnit", "className": "Centralizado", "autoWidth": true, "searchable": false },
-            { data: "ValorTotal", "className": "Centralizado", "autoWidth": true, "searchable": false },
+            { data: "valor_total_linha", "className": "Centralizado", "autoWidth": true, "searchable": false },
             {
                 data: "ose_id",
                 "className": "Centralizado",
@@ -1475,7 +1795,7 @@ function carregaGridOrcamentoDetalhes(orc_id, tos_id)
                 }
             }
             , {
-                targets: [9] // ValorTotal
+                targets: [9] // valor_total_linha
                 , "render": function (data, type, row) {
                     if (!isNaN(data)) {
                         var dado = parseFloat(data);
@@ -1511,13 +1831,22 @@ function carregaGridOrcamentoDetalhes(orc_id, tos_id)
                 $("#lblDataBase").text((row.childNodes[6].innerText));
             }
 
-            totalParcial_ServicosAdicionados = totalParcial_ServicosAdicionados + parseFloat(data["ValorTotal"]);
-            $("#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados));
-            $("#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados)));
+            var ServicosAdicionais_vtotal = parseFloat(data["valor_total"]);
+            $("#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(ServicosAdicionais_vtotal));
+            $("#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(ServicosAdicionais_vtotal)));
 
-            var Reparos_vtotal = parseFloat($("#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
-            var ServicosAdicionais_vtotal = parseFloat($("#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
-            $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_vtotal + ServicosAdicionais_vtotal));
+            var Reparos_valor_total_Sugerido = parseFloat($("#txtReparos_valor_total_Sugerido").val().replaceAll(".", "").replace(",", "."));
+            var Reparos_valor_total_Adotado =  parseFloat($("#txtReparos_valor_total_Adotado").val().replaceAll(".", "").replace(",", "."));
+
+            $("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_valor_total_Adotado + ServicosAdicionais_vtotal));
+
+            //totalParcial_ServicosAdicionados = totalParcial_ServicosAdicionados + parseFloat(data["ValorTotal"]);
+            //$("#txtServicosAdicionais_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados));
+            //$("#txtServicosAdicionais_valor_total").attr('title', (new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(totalParcial_ServicosAdicionados)));
+
+            //var Reparos_vtotal = parseFloat($("#txtReparos_valor_total").val().replaceAll(".", "").replace(",", "."));
+            //var ServicosAdicionais_vtotal = parseFloat($("#txtServicosAdicionais_valor_total").val().replaceAll(".", "").replace(",", "."));
+            //$("#txtorc_valor_total").val(new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(Reparos_vtotal + ServicosAdicionais_vtotal));
 
         }
     });

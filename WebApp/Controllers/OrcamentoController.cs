@@ -30,6 +30,7 @@ namespace WebApp.Controllers
 
             return View();
         }
+
         /// <summary>
         /// Busca os Proximos Status de Orcamento
         /// </summary>
@@ -137,6 +138,18 @@ namespace WebApp.Controllers
         }
 
 
+        // *************** Exportar XLS  *************************************************************
+        /// <summary>
+        ///    Exporta para XLS
+        /// </summary>
+        /// <param name="orc_id">Id do Orçamento</param>
+        /// <returns>JsonResult caminho do arquivo</returns>
+        public JsonResult Orcamento_ExportarXLS(int orc_id)
+        {
+            return Json(new { data = new OrcamentoBLL().Orcamento_ExportarXLS(orc_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         // *************** ORCAMENTO_DETALHES  *************************************************************
 
@@ -185,10 +198,13 @@ namespace WebApp.Controllers
         /// <param name="orc_id">Id do orçamento</param>
         /// <param name="obj_id">Id do objeto do orcamento</param>
         /// <param name="ose_fase">Fase da TPU</param>
+        /// <param name="mes">Mês</param>
+        /// <param name="ano">Ano</param>
+        /// <param name="desonerado">Desonerado</param>
         /// <returns>JsonResult</returns>
-        public JsonResult OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id, int ose_fase)
+        public JsonResult OrcamentoServicosAdicionadosTPUs_ListAll(int orc_id, int obj_id, int ose_fase, int mes, int ano, string desonerado)
         {
-            return Json(new { data = new OrcamentoBLL().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id, ose_fase) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new OrcamentoBLL().OrcamentoServicosAdicionadosTPUs_ListAll(orc_id, obj_id, ose_fase, mes, ano, desonerado) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
