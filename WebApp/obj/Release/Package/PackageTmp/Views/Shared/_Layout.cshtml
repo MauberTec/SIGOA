@@ -258,65 +258,85 @@
                 <ul id="menu" class="sidebar-menu tree" data-widget="tree">
                     <li class="header" style="padding:0px"></li>
                     <li>
-                        <a href="/Home/Index">
+                        <a href="/Objeto/ObjPriorizacao/160">
                             <i class="fa fa-home active"></i> <span>Home</span>
                         </a>
                     </li>
 
                     @{ // montagem do menu lateral segundo os privilegios de cada usuario
+                        try
+                        {
+                            int i = 0;
+                            while (i < gUsuario.lstMenus.Count)
+                            {
 
-                        int i = 0;
-                        while (i < gUsuario.lstMenus.Count)
+                                if ((i < gUsuario.lstMenus.Count - 1) && (gUsuario.lstMenus[i + 1].men_pai_id > 0) && (gUsuario.lstMenus[i].men_pai_id <= 0)
+                                    )
+                                {
+                                    <li class="treeview">
+                                        @{string sMenuPai = @gUsuario.lstMenus[i].LinkText;}
+
+                                        <a href="#" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
+                                            <i class="@gUsuario.lstMenus[i].men_icone"></i> <span>@gUsuario.lstMenus[i].LinkText</span>
+                                            <span class="pull-right-container">
+                                                <i class="fa fa-angle-left pull-right"></i>
+                                            </span>
+                                        </a>
+
+                                        <ul class="treeview-menu">
+                                            @{
+                                                i++;
+
+                                                while ((i < gUsuario.lstMenus.Count) && (gUsuario.lstMenus[i].men_pai_id >= 0))
+                                                {
+                                                    if (@gUsuario.lstMenus[i].ActionName.IndexOf("/Manuais/") < 0)
+                                                    {
+                                                        <li class="tabulacao">
+                                                            <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="@sMenuPai">
+                                                                <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                                <span>@gUsuario.lstMenus[i].LinkText </span>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li class="tabulacao">
+                                                            <a href = "#" title = "@gUsuario.lstMenus[i].men_descricao" alt = "" onclick="javascript:window.open('@gUsuario.lstMenus[i].ActionName'); return false;" >
+                                                                <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                                <span>@gUsuario.lstMenus[i].LinkText </span>
+                                                            </a>
+                                                         </li>
+                                                   }
+                                                   i++;
+                                                }
+                                           }
+                                        </ul>
+                                    </li>
+                                    i--;
+                                }
+
+                                if (((i == gUsuario.lstMenus.Count - 1) && (gUsuario.lstMenus[i].men_pai_id < 0))
+                                        || ((i <= gUsuario.lstMenus.Count - 2) && (gUsuario.lstMenus[i + 1].men_pai_id < 0) && (gUsuario.lstMenus[i].men_pai_id < 0))
+                                    )
+                                {
+
+                                        <li>
+                                            <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
+                                                <i class="@gUsuario.lstMenus[i].men_icone"></i>
+                                                <span>@gUsuario.lstMenus[i].LinkText </span>
+                                            </a>
+                                        </li>
+                                }
+                                i++;
+                                if (i >= gUsuario.lstMenus.Count) { break; };
+
+                            } // while
+                        }
+                        catch (Exception)
                         {
 
-                            if ((i < gUsuario.lstMenus.Count - 1) && (gUsuario.lstMenus[i + 1].men_pai_id > 0) && (gUsuario.lstMenus[i].men_pai_id <= 0)
-                                )
-                            {
-                                <li class="treeview">
-                                    @{string sMenuPai = @gUsuario.lstMenus[i].LinkText;}
+                        }
 
-                                    <a href="#" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
-                                        <i class="@gUsuario.lstMenus[i].men_icone"></i> <span>@gUsuario.lstMenus[i].LinkText</span>
-                                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i>
-                                        </span>
-                                    </a>
-
-                                    <ul class="treeview-menu">
-                                        @{
-                                            i++;
-
-                                            while ((i < gUsuario.lstMenus.Count) && (gUsuario.lstMenus[i].men_pai_id >= 0))
-                                            {
-                                                <li class="tabulacao">
-                                                    <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="@sMenuPai">
-                                                        <i class="@gUsuario.lstMenus[i].men_icone"></i>
-                                                        <span>@gUsuario.lstMenus[i].LinkText </span>
-                                                    </a>
-                                                </li>
-                                                i++;
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                                i--;
-                            }
-
-                            if (((i == gUsuario.lstMenus.Count - 1) && (gUsuario.lstMenus[i].men_pai_id < 0))
-                                    || ((i <= gUsuario.lstMenus.Count - 2) && (gUsuario.lstMenus[i + 1].men_pai_id < 0) && (gUsuario.lstMenus[i].men_pai_id < 0))
-                                )
-                            {
-                                <li>
-                                    <a href="@gUsuario.lstMenus[i].ActionName" title=" @gUsuario.lstMenus[i].men_descricao " alt="">
-                                        <i class="@gUsuario.lstMenus[i].men_icone"></i>
-                                        <span>@gUsuario.lstMenus[i].LinkText </span>
-                                    </a>
-                                </li>
-                            }
-                            i++;
-                            if (i >= gUsuario.lstMenus.Count) { break; };
-
-                        } // while
                     }
 
                 </ul>
@@ -348,7 +368,9 @@
 
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
-                Versão: 1.0.0
+                @*Versão: 1.9.0*@
+                <label>Desenvolvimento</label>
+                <img src="~/images/logo_maubertec.png" style="vertical-align:text-bottom !important" />
             </div>
             <strong>Copyright &copy; 2020 <a href="#">DER</a>. Todos os direitos reservados</strong>
             <label class="col-md-offset-3">
@@ -448,6 +470,8 @@
             ModalTrocaSenha();
         }
 
+        // a cada refresh, reseta o timer
+        resetTimeout();
     </script>
     <script src="~/Scripts/Shared/Shared.js"></script>
     <link href="~/Content/Base.css" rel="stylesheet" />

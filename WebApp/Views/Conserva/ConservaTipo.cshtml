@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "::.. Tipos de Conserva ..::";
+}
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 360 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(360)); // id DO MODULO "TIPO DE O.S."
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 360 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-body">
+
+                    <table id="tblConservaTipos">
+                        <thead>
+                            <tr>
+                                <th>cot_id</th>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    @{
+                        if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                        {
+                            <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="ConservaTipo_Inserir();">Novo Tipo de Conserva</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<input type="hidden" id="hddnSelectedcot_id" name="hddnSelectedcot_id" value="-1" />
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Scripts/Conserva/ConservaTipo.js"></script>
+}
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:550px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Editar Tipo de Conserva</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group" style="display:none">
+                        <label class="control-label col-sm-2" for="cot_id">cot_id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtcot_id" placeholder="ID" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Código<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10">
+                            <input id="txtcot_codigo" name="txtcot_codigo" class="form-control"
+                                   placeholder="000" data-val="true" required
+                                   style="text-transform: uppercase;"
+                                   minlength="1" maxlength="10" pattern=".{1,3}" title="1 a 3 caracteres"
+                                   autocomplete="off"
+                                   onkeyup="validaAlfaNumericoSemAcentosNemEspaco(this,0)"
+                                   onblur="ChecaRepetido(this)" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Descrição<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10">
+                            <input id="txtcot_descricao" name="txtcot_descricao" class="form-control"
+                                   placeholder="Descrição" data-val="true" required
+                                   maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                   autocomplete="off"
+                                   onkeyup="validaAlfaNumericoAcentosAfins(this,0,0)" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="cot_ativo">Ativo </label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="chkcot_ativo" style="margin-top: 10px;">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar" onclick="return ConservaTipo_Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

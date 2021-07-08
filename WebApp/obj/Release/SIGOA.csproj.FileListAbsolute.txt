@@ -69,10 +69,6 @@ C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\WebApp.pdb
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Antlr3.Runtime.dll
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.Azure.AppService.ApiApps.Service.dll
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.ReportViewer.Common.dll
-C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.ReportViewer.DataVisualization.dll
-C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.ReportViewer.ProcessingObjectModel.dll
-C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.ReportViewer.WebForms.dll
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.Web.Infrastructure.dll
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Newtonsoft.Json.dll
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Swashbuckle.Core.dll
@@ -103,7 +99,6 @@ C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\System.Web.WebPages.xml
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\System.Web.WebPages.Deployment.xml
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\System.Web.WebPages.Razor.xml
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Newtonsoft.Json.xml
-C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\obj\Release\SIGOA.csprojAssemblyReference.cache
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\obj\Release\RdlCompile.cache
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\obj\Release\RdlCompile.compiled
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\obj\Release\SIGOA.csproj.CoreCompileInputs.cache
@@ -113,3 +108,18 @@ C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\obj\Release\WebApp.pdb
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\DocumentFormat.OpenXml.dll
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\DocumentFormat.OpenXml.xml
 C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Reports\Modelo_Folha_A1_Insp_Rotineira.dwt
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\EntityFramework.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\EntityFramework.SqlServer.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\EntityFramework.xml
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\EntityFramework.SqlServer.xml
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\obj\Release\SIGOA.csprojAssemblyReference.cache
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.SqlServer.Types.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\EnvDTE.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.VisualStudio.Shell.Interop.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.VisualStudio.Shell.Interop.8.0.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\EnvDTE80.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\stdole.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.VisualStudio.OLE.Interop.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.VisualStudio.TextManager.Interop.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.VisualStudio.TextManager.Interop.8.0.dll
+C:\SIGOA\_FONTE_REPORTVIEWER\WebApp\bin\Microsoft.MSXML.dll

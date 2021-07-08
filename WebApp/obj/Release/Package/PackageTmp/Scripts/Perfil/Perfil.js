@@ -38,17 +38,30 @@ function Perfil_Salvar() {
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function (result) {
-                $("#modalSalvarRegistro").modal('hide');
-                $('#tblPerfis').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
+                if (parseInt(result) > 0) {
+                    selectedId = parseInt(result);
+                    $('#hddnSelectedper_id').val(selectedId);
 
-                var textoHeaderModulosdoPerfil = "Módulos do Perfil: " + $('#txtper_descricao').val();
-                document.getElementById('HeaderModulosdoPerfil').innerText = textoHeaderModulosdoPerfil;
+                    $('#tblPerfis').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
 
-                var textoHeaderGruposdoPerfil = "Grupos do Perfil: " + $('#txtper_descricao').val();
-                document.getElementById('HeaderGruposdoPerfil').innerText = textoHeaderGruposdoPerfil;
 
-                var textoHeaderUsuariosdoPerfil = "Usuários do Perfil: " + $('#txtper_descricao').val();
-                document.getElementById('HeaderUsuariosdoPerfil').innerText = textoHeaderUsuariosdoPerfil;
+                    var textoHeaderModulosdoPerfil = "Módulos do Perfil: " + $('#txtper_descricao').val();
+                    document.getElementById('HeaderModulosdoPerfil').innerText = textoHeaderModulosdoPerfil;
+
+                    var textoHeaderGruposdoPerfil = "Grupos do Perfil: " + $('#txtper_descricao').val();
+                    document.getElementById('HeaderGruposdoPerfil').innerText = textoHeaderGruposdoPerfil;
+
+                    var textoHeaderUsuariosdoPerfil = "Usuários do Perfil: " + $('#txtper_descricao').val();
+                    document.getElementById('HeaderUsuariosdoPerfil').innerText = textoHeaderUsuariosdoPerfil;
+
+                    $('#tblModulosDoPerfil').DataTable().ajax.reload();
+                    $('#tblGruposDoPerfil').DataTable().ajax.reload();
+                    $('#tblUsuariosDoPerfil').DataTable().ajax.reload();
+
+                    document.getElementById('subGrids').style.visibility = "visible";
+
+                    $("#modalSalvarRegistro").modal('hide');
+                }
 
                 return false;
             },

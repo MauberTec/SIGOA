@@ -43,11 +43,11 @@ namespace WebApp.Controllers
         /// <param name="filtro_obj_codigo">Filtro por codigo de Objeto, 0 para todos</param> 
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
-        /// <param name="filtro_tip_id">Filtro por tipo de Objeto, -1 para todos</param> 
+        /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
         /// <returns>JsonResult Lista de Objetos</returns>
-        public JsonResult Objeto_ListAll(int obj_id, string filtro_obj_codigo, string filtro_obj_descricao, int filtro_clo_id, int filtro_tip_id)
+        public JsonResult Objeto_ListAll(int obj_id, string filtro_obj_codigo, string filtro_obj_descricao, int filtro_clo_id, string filtro_tip_nome)
         {
-            return Json(new { data = new ObjetoBLL().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new ObjetoBLL().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -100,14 +100,15 @@ namespace WebApp.Controllers
         }
 
         /// <summary>
-        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// Exclui Objeto do tipo Subdivisao3 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
-        /// <param name="obj_id">Id do objeto a ser deletado</param>
+        /// <param name="tip_id">Id Tipo do Objeto Selecionado</param>
+        /// <param name="obj_id_tipoOAE">Id Objeto Selecionado</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
+        public JsonResult Objeto_Subdivisao3_Excluir(int tip_id, int obj_id_tipoOAE)
         {
-            string retorno = new ObjetoBLL().Objeto_Subdivisao2_Excluir(tip_id, obj_id_tipoOAE);
+            string retorno = new ObjetoBLL().Objeto_Subdivisao3_Excluir(tip_id, obj_id_tipoOAE);
             bool valid = retorno.Trim() == "";
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
@@ -183,11 +184,11 @@ namespace WebApp.Controllers
         ///  Preenchimento do combo LocalizacaoObjeto
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do objeto selecionado</param>
-        /// <param name="tip_id_Subdivisao1">Tipo do Objeto Selecionado</param>
+        /// <param name="tip_id_Grupo">Tipo do Grupo do Objeto Selecionado</param>
         /// <returns>JsonResult</returns>
-        public JsonResult PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Subdivisao1)
+        public JsonResult PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Grupo)
         {
-            return Json(new ObjetoBLL().PreencheCmbObjetoLocalizacao(obj_id_TipoOAE, tip_id_Subdivisao1), JsonRequestBehavior.AllowGet);
+            return Json(new ObjetoBLL().PreencheCmbObjetoLocalizacao(obj_id_TipoOAE, tip_id_Grupo), JsonRequestBehavior.AllowGet);
         }
 
 
@@ -248,7 +249,16 @@ namespace WebApp.Controllers
             return Json(new ObjetoBLL().ObjAtributoValor_Salvar(ObjAtributoValor), JsonRequestBehavior.AllowGet);
         }
 
-
+        /// <summary>
+        /// Busca o valor da VDM na API DER e retorna o valor ati_id do combo na ficha de inspecao
+        /// </summary>
+        /// <param name="obj_codigo_TipoOAE">Codigo do Objeto TIPO OAE</param>
+        /// <param name="itipo_pista">Valor do Tipo de Pista (dupla/simples)</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult BuscaValorVDM(string obj_codigo_TipoOAE = "", int itipo_pista = -1)
+        {
+            return Json(new ObjetoBLL().BuscaValorVDM(obj_codigo_TipoOAE, itipo_pista), JsonRequestBehavior.AllowGet);
+        }
 
         // *************** CLASSES DE Objeto  *************************************************************
 
@@ -331,6 +341,17 @@ namespace WebApp.Controllers
             return Json(new { data = new ObjetoBLL().ObjTipo_ListAll(clo_id, null) }, JsonRequestBehavior.AllowGet);
         }
 
+
+        /// <summary>
+        /// lista concatenada dos pais de tipos de objeto por classe
+        /// </summary>
+        /// <param name="clo_id">Classe do Objeto selecionado</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult lstTipos_da_Classe(int clo_id)
+        {
+            return Json(new { data = new ObjetoBLL().lstTipos_da_Classe(clo_id) }, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// Dados do Tipo selecionado
         /// </summary>
@@ -392,8 +413,6 @@ namespace WebApp.Controllers
             List<SelectListItem> lstListacmbClassesObjeto = new ObjetoBLL().PreenchecmbClassesObjeto();
             ViewBag.cmbClassesObjeto = lstListacmbClassesObjeto;
             ViewBag.cmbFiltroClassesObjeto = lstListacmbClassesObjeto;
-
-            ViewBag.cmbUnidade_Tipo = new UnidadeBLL().PreenchecmbUnidade_Tipo();
 
             return View();
         }
@@ -544,10 +563,14 @@ namespace WebApp.Controllers
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>JsonResult Lista de GruposVariaveisValores</returns>
-        public JsonResult GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public JsonResult GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id) }, JsonRequestBehavior.AllowGet);
+            var jsonResult =  Json(new { data = new ObjetoBLL().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id) }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         /// <summary>
@@ -612,6 +635,99 @@ namespace WebApp.Controllers
             return Json(new { data = new ObjetoBLL().ObjFichaInspecaoRotineira_ExportarXLS(obj_id, ord_id) }, JsonRequestBehavior.AllowGet);
         }
 
+
+
+        // *************** Objetos  *************************************************************
+        /// <summary>
+        /// Inicio
+        /// </summary>
+        /// <returns>View</returns>
+        public ActionResult ObjPriorizacao()
+        {
+            Usuario paramUsuario = (Usuario)Session["Usuario"];
+            ListaMenus_Lateral(ref paramUsuario);
+            // preenche o combos
+            List<SelectListItem> lstListacmbFiltroRegionais = new ObjetoBLL().PreenchecmbFiltroRegionais();
+            ViewBag.cmbFiltroRegionais = lstListacmbFiltroRegionais;
+
+            return View();
+        }
+        /// <summary>
+        /// Montagem do Menu Lateral segundo os privilégios do Usuário logado
+        /// </summary>
+        /// <param name="paramUsuario">Usuario</param>
+        public void ListaMenus_Lateral(ref Usuario paramUsuario)
+        {  // preenche paramUsuario.lstMenus
+             new HomeController().ListaMenus_Lateral(ref paramUsuario);
+        }
+        /// <summary>
+        /// Todos os controles do menu apontam para este metodo ("../Home/Menu_Click?caminho=") pois o evento pode vir de origens diferentes, e chama a View 
+        /// </summary>
+        /// <param name="caminho">caminho do Controlador/Valor extraido do valor enviado pelo click do menu</param>
+        /// <param name="id">idModulo extraido do valor enviado pelo click do menu</param>
+        /// <returns>ActionResult</returns>
+        public ActionResult Menu_Click(string caminho, string id)
+        {
+            // loga o acesso da pagina
+            if (System.Web.HttpContext.Current.Session["Usuario"] != null)
+            {
+                Usuario paramUsuario = (Usuario)Session["Usuario"];
+                int retorno = new LogSistemaBLL().LogSistema_Inserir(3, // 3 = select
+                                                     paramUsuario.usu_id.ToString(),
+                                                     Convert.ToInt32(id), // idModulo
+                                                     "",
+                                                     paramUsuario.usu_ip);
+
+                // vai para a pagina requisitada 
+                return AbreMenu(caminho + "&id=" + id);
+            }
+            else
+            {
+                //loga a saida
+                string usu_ip = System.Web.HttpContext.Current.Request.UserHostAddress;
+                int retorno = new LogSistemaBLL().LogSistema_Inserir(12, // 12 = timeout
+                                            "-1",
+                                            Convert.ToInt32(id),
+                                            "Session Timeout",
+                                            usu_ip);
+
+                return AbreMenu("/Login/Sair");
+            }
+        }
+
+        /// <summary>
+        /// Redireciona a View corrente para o novo caminho
+        /// </summary>
+        /// <param name="caminho">caminho do Controlador/Valor a ser redirecionado</param>
+        /// <returns>ActionResult</returns>
+        private ActionResult AbreMenu(string caminho)
+        {
+            caminho = caminho.Replace("&id=", "/");
+            string[] partes = caminho.Split("/".ToCharArray());
+            if (partes.Length > 3)
+                return RedirectToAction(partes[2], partes[1], new { @id = partes[3] }); // RedirectToAction(ActionName,  ControllerName)
+            else
+                return RedirectToAction(partes[2], partes[1]);
+
+        }
+
+        /// <summary>
+        /// Lista de Objetos Priorizados
+        /// </summary>
+        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
+        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
+        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
+        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult ObjPriorizacao_ListAll(string CodRodovia,
+            string FiltroidRodovias = "", string FiltroidRegionais = "", string FiltroidObjetos = "", string Filtro_data_De = "", string Filtro_data_Ate = "",
+            int? somenteINSP_ESPECIAIS = 0)
+        {
+            return Json(new { data = new ObjetoBLL().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS) }, JsonRequestBehavior.AllowGet);
+        }
 
 
     }

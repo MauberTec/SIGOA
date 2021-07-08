@@ -232,7 +232,6 @@ namespace WebApp.Models
     /// </summary>
     public class InspecaoAnomalia
     {
-                                  //   
 
         /// <summary>
         /// Número da linha, para manter a ordenação 
@@ -321,6 +320,13 @@ namespace WebApp.Models
 
 
         /// <summary>
+        /// Valor da Coluna Localizacao especifica 
+        /// </summary>
+        public string ian_localizacao_especifica { get; set; }
+
+
+
+        /// <summary>
         /// Id do nivel de alerta 
         /// </summary>
         public int ale_id { get; set; }
@@ -328,32 +334,32 @@ namespace WebApp.Models
         /// <summary>
         /// Quantidade de anomalia 
         /// </summary>
-        public int ian_quantidade { get; set; }
+        public string ian_quantidade { get; set; }
 
         /// <summary>
         /// Espaçamento entre anomalia em cm
         /// </summary>
-        public int ian_espacamento { get; set; }
+        public string ian_espacamento { get; set; }
 
         /// <summary>
         /// Largura de anomalia em cm
         /// </summary>
-        public int ian_largura { get; set; }
+        public string ian_largura { get; set; }
 
         /// <summary>
         /// Comprimento de anomalia em cm
         /// </summary>
-        public int ian_comprimento { get; set; }
+        public string ian_comprimento { get; set; }
 
         /// <summary>
         /// Abertura mímima da anomalia em mm
         /// </summary>
-        public int ian_abertura_minima { get; set; }
+        public string ian_abertura_minima { get; set; }
 
         /// <summary>
         /// Abertura máxima da anomalia em mm
         /// </summary>
-        public int ian_abertura_maxima { get; set; }
+        public string ian_abertura_maxima { get; set; }
 
         /// <summary>
         /// Id de causa provável
@@ -420,7 +426,8 @@ namespace WebApp.Models
         /// <summary>
         /// Id do reparo adotado
         /// </summary>
-        public int rpt_id_adotado { get; set; }
+        public string rpt_id_adotado { get; set; }
+     //   public int rpt_id_adotado { get; set; }
 
         /// <summary>
         /// Codigo do reparo adotado
@@ -442,6 +449,21 @@ namespace WebApp.Models
         /// </summary>
         public decimal ian_quantidade_adotada { get; set; }
 
+
+        /// <summary>
+        /// Id da providencia sugerida
+        /// </summary>
+        public int apt_id { get; set; }
+
+        /// <summary>
+        /// Descrição da providencia sugerida
+        /// </summary>
+        public string apt_descricao { get; set; }
+
+        /// <summary>
+        /// Flag indicador de Reparo Sugerido ou Providencia sugerida
+        /// </summary>
+        public int ehReparoSugerido { get; set; }
 
 
         /// <summary>
@@ -536,7 +558,10 @@ namespace WebApp.Models
         /// </summary>
         public string ins_anom_quadroA_2 { get; set; }
 
-
+        /// <summary>
+        /// Texto de cabecalho se houver
+        /// </summary>
+        public string ehCabecalho { get; set; }
 
 
     }

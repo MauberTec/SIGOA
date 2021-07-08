@@ -14,11 +14,14 @@ var selectedId_tip_id = -1;
 var selectedId_atr_id = -1;
 var selectedId_afn_id = -1;
 
+var selectedPageLen = 15;
+var selectedPage = 0;
+
 var selectedGrid = -1;
 var filtro_obj_codigo = '';
 var filtro_obj_descricao = '';
 var filtro_clo_id = -1;
-var filtro_tip_id = -1;
+var filtro_tip_nome = "";
 
 var ehInsercao = 0;
 var lstExcecoes_Tipos = [45, 46, 53, 104, 105, 111, 126];
@@ -110,26 +113,24 @@ function proximo_clo_id() {
             if ((selectedId_tip_id == 11) || ((selectedId_tip_id == 14)))
                 retorno = 7;
             else
-                retorno = 9;
+                retorno = 9; 
             break;
         case 7: // 7 = subdivisao 2
-            if ((selectedId_tip_id == 22) || ((selectedId_tip_id == 23)))
-                retorno = 8;
+            if ((selectedId_tip_id == 12) || ((selectedId_tip_id == 13)))
+                retorno = 10;
             else
-                retorno = 9;
+              retorno = 9;
             break;
-        case 8: // 8 = subdivisao 3
-                retorno = 9;
-            break;
+         break;
 
         case 9: // 9 = grupo de Objetos
-            if (lstExcecoes_Tipos.includes(selectedId_tip_id))
-                retorno = 11;
-            else
+        //    if (lstExcecoes_Tipos.includes(selectedId_tip_id))
+        //        retorno = 11;
+        //    else
                 retorno = 10;
             break;
 
-        case 10: // 10 = numero do objeto
+        case 10: // 10 =  objeto especifico
             retorno = 11;
             break;
     }
@@ -218,51 +219,13 @@ function cmbOBJClassesObjeto_onchange(quem) {
                     case "10": // numero do objeto = textbox
                         tdTxtCodigo.style.display = 'block';
                         var mascara = '00';
+
+
                         jQuery("#txtcodigo").mask(mascara, options2);
                         jQuery("#txtcodigo").attr('placeholder', mascara);
 
                         jQuery("#txtCodigoAte").mask(mascara, options);
                         jQuery("#txtCodigoAte").attr('placeholder', mascara);
-                        lblAte.style.display = 'block';
-                        txtCodigoAte.style.display = 'block';
-
-                        $("#txtcodigo").focus();
-                        break;
-
-
-                    case "11": // Localizacao = textbox
-                        tdTxtCodigo.style.display = 'block';
-                        var lblPrefixo = document.getElementById("lblPrefixo").innerText;
-                        var cmbAEVCVG = document.getElementById("cmbAEVCVG");
-
-                        $("#cmbAEVCVG").html(""); // limpa os itens existentes
-
-                        if (lblPrefixo.includes("-SE-FS"))
-                            $("#cmbAEVCVG").append($('<option selected disabled></option>').val("V").html("V"));
-                        else
-                            if (lblPrefixo.includes("-SE-FI"))
-                            {
-                                $("#cmbAEVCVG").append($('<option selected></option>').val("V").html("V"));
-                                $("#cmbAEVCVG").append($('<option></option>').val("VC").html("VC"));
-                                $("#cmbAEVCVG").append($('<option></option>').val("VG").html("VG"));
-                            }
-                            else {
-                                if (lblPrefixo.includes("-ENC-"))
-                                    $("#cmbAEVCVG").append($('<option selected disabled></option>').val("E").html("E"));
-
-                                else
-                                    if ((lblPrefixo.includes("-ME-")) || (lblPrefixo.includes("-IE-")))
-                                        $("#cmbAEVCVG").append($('<option selected disabled></option>').val("A").html("A"));
-                            }
-
-                        var mascara = '00';
-                        jQuery("#txtcodigo").mask(mascara, options);
-                        jQuery("#txtcodigo").attr('placeholder', mascara);
-
-                        jQuery("#txtCodigoAte").mask(mascara, options);
-                        jQuery("#txtCodigoAte").attr('placeholder', mascara);
-
-                        cmbAEVCVG.style.display = 'block';
                         lblAte.style.display = 'block';
                         txtCodigoAte.style.display = 'block';
 
@@ -282,11 +245,29 @@ function cmbOBJClassesObjeto_onchange(quem) {
 
 function preencheDescricao(vindo_de) {
 
+
+
     var lblPrefixo = document.getElementById("lblPrefixo");
     var obj_codigo = selectedobj_codigo;
 
     if (ehInsercao == 0)
         obj_codigo = selectedobj_codigo.substring(0, selectedobj_codigo.lastIndexOf("-")); //lblPrefixo.innerText.substring(0, lblPrefixo.innerText.length-1);
+
+    if ((vindo_de == 'txtcodigo') && (parseInt(selectedId_clo_id) == 11) && (ehInsercao == 0))
+    {
+        var txtcodval = $('#txtcodigo').val();
+        if ((txtcodval == "") || ((!isNaN(txtcodval)) && (parseInt(txtcodval) == 0)))
+            if ($('#lblPrefixo').text().includes("-SE-FS-PR-")) 
+                $('#txtcodigo').val("000");
+        else
+                $('#txtcodigo').val("00");
+
+        var descvall = $('#txtdescricao').val();
+        var descr = descvall.substring(0, descvall.lastIndexOf("#")) + "#" + $('#txtcodigo').val(); ;
+        $('#txtdescricao').val(descr);
+
+        return;
+    }
 
     // limpa os campos
     if (vindo_de != 'txtcodigo')  $('#txtcodigo').val("");
@@ -344,53 +325,9 @@ function preencheDescricao(vindo_de) {
 
         if (parseInt(selectedId_clo_id) >= 9) // grupo de objetos ==> entao a descricao fica tipo do grupo + numero / tipo do grupo + numero + tipo da localizacao
         {
-
-           // var tipoGrupoTexto = cmbTiposObjeto.options[cmbTiposObjeto.selectedIndex].text;
             if ((parseInt(selectedId_clo_id) == 9) || (parseInt(selectedId_clo_id) == 10))
                 $('#txtdescricao').val(nomeGrupo + " #" + $('#txtcodigo').val() + " (" + obj_codigo + "-" + $('#txtcodigo').val() + ")");
-            else
-                if (parseInt(selectedId_clo_id) == 11)
-            {
-                var cmbAEVCVG = document.getElementById("cmbAEVCVG");
-                var localizacaoNome = "";
-                var localizacaoCodigo = obj_codigo + "-" + (cmbAEVCVG.selectedIndex > -1 ? cmbAEVCVG.options[cmbAEVCVG.selectedIndex].value : "") + $('#txtcodigo').val();
-                switch (cmbAEVCVG.options[cmbAEVCVG.selectedIndex].value) {
-                    case "A": localizacaoNome = "Apoio";break;
-                    case "E": localizacaoNome = "Encontro"; break;
-                    case "V": localizacaoNome = "Vão"; break;
-                    case "VC": localizacaoNome = "Vão Caixão Perdido"; break;
-                    case "VG": localizacaoNome = "Vão em Grelha"; break;
-                }
-
-               // // procura o codigo do grupo no cmbFiltroTiposObjeto
-               // var pedacosCodigo = obj_codigo.split("-");
-               // var codGrupo = pedacosCodigo[pedacosCodigo.length - 1];
-               // var nomeGrupo = "______";
-               // var idGrupo = 0;
-               // for (j = 0; j < cmbFiltroTiposObjeto.options.length - 1; j++)
-               // {
-               //     var cc = cmbFiltroTiposObjeto.options[j].value;
-               //     var dd = cc.substring(cc.indexOf(":") + 1, 8);
-               //     if (dd.trim() == codGrupo.trim())
-               //     {
-               //         idGrupo = parseInt(cc.substring(0, cc.indexOf(":")));
-               //         nomeGrupo = cmbFiltroTiposObjeto.options[j].text;
-               //         break;
-               //     }
-               //}
-
-                var masculinos = [14,15,16,24,25, 32, 33, 34, 36, 37, 38, 39, 40, 44, 45, 46, 47, 49, 50, 52, 57, 72, 73, 76, 77, 78, 80, 81, 82, 84, 87, 90, 93, 104, 105, 106, 107, 108, 110];
-                var plural = [33, 39, 40, 43, 47, 56, 95, 98, 101, 106, 114];
-                var ss = plural.includes(idGrupo) ? "s" : "";
-
-                // coloca a descricao
-            //    $('#txtdescricao').val(localizacaoNome + " #" + $('#txtcodigo').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + " #" + pedacosCodigo[pedacosCodigo.length - 1]);
-                    $('#txtdescricao').val(localizacaoNome + " #" + $('#txtcodigo').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + (lstExcecoes_Tipos.includes(obj_tipoGrupo_id) ? " " : " #" + pedacosCodigo[pedacosCodigo.length - 1]) );
-            }
-
         }
-        else
-            $('#txtdescricao').val(selectedText + " " + obj_codigo + "-" + $('#txtcodigo').val());
 
         lblPrefixo.innerText = obj_codigo + "-";
     }
@@ -423,7 +360,12 @@ function Inserir(obj_id, clo_id, tip_id, obj_codigo) {
     $('#txt_id').val("");
     $('#txtcodigo').val("");
     // $('#txtCodigoAte').val("00");
-    document.getElementById('txtCodigoAte').value = "00";
+
+    if (tip_id == 46)
+        document.getElementById('txtCodigoAte').value = "000";
+    else
+        document.getElementById('txtCodigoAte').value = "00";
+
     $('#txtdescricao').val("");
     $('#chkativo').prop('checked', true);
     $('#chkativo').css('border-color', 'lightgrey');
@@ -462,6 +404,8 @@ function Inserir(obj_id, clo_id, tip_id, obj_codigo) {
                 cmbOBJClassesObjeto_onchange(cmbClassesObjeto);
 
                 cmbClassesObjeto.selectedIndex = 0;
+
+
             }
 
             break;
@@ -485,13 +429,23 @@ function Inserir(obj_id, clo_id, tip_id, obj_codigo) {
     var cmbTiposObjeto = document.getElementById("cmbTiposObjeto");
     cmbTiposObjeto.style.display = 'block';
 
+    var mascara = '00';
+    if (selectedId_tip_id == 46)   // se for pavimento rigido, entao tem 3 digitos
+        mascara = '000';
+
+    jQuery("#txtcodigo").mask(mascara, options);
+    jQuery("#txtcodigo").attr('placeholder', mascara);
+
+    jQuery("#txtCodigoAte").mask(mascara, options);
+    jQuery("#txtCodigoAte").attr('placeholder', mascara);
 
     selectedId_obj_pai = selectedId_obj_id;
     ehInsercao = 1;
 }
 
 function SalvarObjeto() {
-    var cmbAEVCVG = document.getElementById("cmbAEVCVG");
+
+   var cmbAEVCVG = document.getElementById("cmbAEVCVG");
 
     var param;
     var obj_codigo = "";
@@ -500,9 +454,27 @@ function SalvarObjeto() {
         case "2": obj_codigo = $('#lblPrefixo').text() + $('#txtcodigo').val(); break; // OAE
         case "3": obj_codigo = $('#lblPrefixo').text() ; break; // TIPO OAE
         case "10": obj_codigo = $('#lblPrefixo').text() + $('#txtcodigo').val(); break; // Numero Objeto
-        case "11": obj_codigo = $('#lblPrefixo').text() + cmbAEVCVG.options[cmbAEVCVG.selectedIndex].value +  $('#txtcodigo').val(); break; // Localizacao
         default:
             obj_codigo = $('#lblPrefixo').text();
+    }
+
+    if ((selectedId_clo_id + "") == "11") {
+        var lblPrefixoval = $('#lblPrefixo').text();
+        if (lblPrefixoval.includes("-SE-FS-PR-")) // se for pavimento rigido, os numeros possuem 3 digitos
+        {
+            var txtcodval = Right(("000" + $('#txtcodigo').val()), 3);
+            $('#txtcodigo').val(txtcodval);
+
+            var txtCodigoAte = Right(("000" + $('#txtCodigoAte').val()), 3);
+            $('#txtCodigoAte').val(txtCodigoAte);
+        }
+        else {
+            var txtcodval = Right(("00" + $('#txtcodigo').val()), 2);
+            $('#txtcodigo').val(txtcodval);
+
+            var txtCodigoAte = Right(("00" + $('#txtCodigoAte').val()), 2);
+            $('#txtCodigoAte').val(txtCodigoAte);
+        }
     }
 
     var txtNumeroObjetoAte = "-1";
@@ -515,13 +487,14 @@ function SalvarObjeto() {
         txtCodigoAteValue = $('#txtCodigoAte').val();
 
 
+
+
     if (ehInsercao == 1) {
         url = "/Objeto/Objeto_Inserir";
         param = {
             obj_codigo: obj_codigo,
             obj_descricao: $('#txtdescricao').val().trim(),
-            obj_NumeroObjetoAte: txtNumeroObjetoAte,
-            obj_localizacaoAte: txtCodigoAteValue
+            obj_NumeroObjetoAte: txtNumeroObjetoAte
         };
 
         var selectedClasseVal = $('#cmbClassesObjeto').val();
@@ -609,50 +582,61 @@ function SalvarObjeto() {
             tip_id: tipoId
         };
     }
-        $.ajax({
-            url: url,
-            data: JSON.stringify(param),
-            type: "POST",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                // fecha o modal
-                $("#modalSalvarRegistro").modal('hide');
-                ehInsercao = 0;
-
-                var objid = result.substring(0, result.indexOf(";"));
-                var retornomsg = result.substring(result.indexOf(";")+1, 10000);
-
-                // recarrega o grid
-                selectedId_obj_id = parseInt(objid);
-                carregaGrid(selectedId_obj_id);
 
 
-                if (retornomsg.trim() != "") {
-                    swal({
-                        type: 'error',
-                        title: 'Aviso',
-                        text: retornomsg
-                    });
-                    return false;
-                }
-                else {
-                    swal({
-                        type: 'success',
-                        title: 'Sucesso',
-                        text: 'Objeto(s) Inserido(s) com sucesso'
-                    });
-                }
+    $.ajax({
+        url: url,
+        data: JSON.stringify(param),
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            // fecha o modal
+            $("#modalSalvarRegistro").modal('hide');
+            ehInsercao = 0;
 
 
-                return false;
-            },
-            error: function (errormessage) {
-                alert(errormessage.responseText);
-                ehInsercao = 0;
+            var objid = 0; 
+            var retornomsg = '';
+            var saida = result + '';
+
+            if (saida.includes(";")) {
+                objid = result.substring(0, result.indexOf(";"));
+                retornomsg = result.substring(result.indexOf(";") + 1, 10000);
+            }
+            else
+                objid = result;
+
+            // recarrega o grid
+            selectedId_obj_id = parseInt(objid);
+            carregaGrid(selectedId_obj_id);
+
+
+            if (retornomsg.trim() != "") {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: retornomsg
+                });
                 return false;
             }
-        });
+            else {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Objeto(s) Salvo(s) com sucesso'
+                });
+            }
+
+
+            return false;
+        },
+        error: function (errormessage) {
+            alert(errormessage.responseText);
+            ehInsercao = 0;
+            return false;
+        }
+    });
 
 
     return false;
@@ -898,49 +882,6 @@ function EditarObjeto(obj_id, clo_id, tip_id, obj_codigo, objdesc, clo_nome, tip
             $("#txtcodigo").val(obj_codigo.substring(obj_codigo.lastIndexOf("-") + 1, 50));
             $("#txtcodigo").focus();
             break;
-
-
-        case "11": // Localizacao = textbox
-            tdTxtCodigo.style.display = 'block';
-            var mascara = '';
-            var lblPrefixo = document.getElementById("lblPrefixo").innerText;
-            var cmbAEVCVG = document.getElementById("cmbAEVCVG");
-
-            $("#cmbAEVCVG").html(""); // limpa os itens existentes
-
-
-            if (((lblPrefixo.includes("-SE-FS"))) || ((lblPrefixo.includes("-SE-FI")))) {
-                $("#cmbAEVCVG").append($('<option selected></option>').val("V").html("V"));
-                $("#cmbAEVCVG").append($('<option></option>').val("VC").html("VC"));
-                $("#cmbAEVCVG").append($('<option></option>').val("VG").html("VG"));
-            }
-            else {
-                if (lblPrefixo.includes("-ENC-"))
-                    $("#cmbAEVCVG").append($('<option selected disabled></option>').val("E").html("E"));
-
-                else
-                    if ((lblPrefixo.includes("-ME-")) || (lblPrefixo.includes("-IE-")))
-                        $("#cmbAEVCVG").append($('<option selected disabled></option>').val("A").html("A"));
-            }
-
-            var mascara = '00';
-            jQuery("#txtcodigo").mask(mascara, options);
-            jQuery("#txtcodigo").attr('placeholder', mascara);
-
-            jQuery("#txtCodigoAte").mask(mascara, options);
-            jQuery("#txtCodigoAte").attr('placeholder', mascara);
-
-            jQuery("#lblPrefixo").text(obj_codigo.substring(0, obj_codigo.lastIndexOf("-") + 1));
-            //$("#txtcodigo").val(obj_codigo.substring(obj_codigo.lastIndexOf("-") + 1, 50));
-            $("#txtcodigo").val(obj_codigo.substr(obj_codigo.length -2));
-
-            cmbAEVCVG.style.display = 'block';
-            ////lblAte.style.display = 'block';
-            ////txtCodigoAte.style.display = 'block';
-
-
-            $("#txtcodigo").focus();
-            break;
     }
 
     $("#modalSalvarRegistro").modal('show');
@@ -1014,7 +955,7 @@ function LimparFiltro() {
     filtro_obj_codigo = '';
     filtro_obj_descricao = '';
     filtro_clo_id = -1;
-    filtro_tip_id = -1;
+    filtro_tip_nome = "";
 
     carregaGrid(0);
 
@@ -1024,6 +965,27 @@ function LimparFiltro() {
 
    $("#cmbClassesObjeto").val(null);
     $("#cmbTiposObjeto").html(""); // apaga os itens existentes
+
+
+    // limpa as tabs
+
+    //  preenche Ficha inspecao cadastral 
+    var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
+    var liDocumentosAssociados = document.getElementById("liDocumentosAssociados");
+
+    if (liDocumentosAssociados)
+        liDocumentosAssociados.style.display = "none";
+
+    if (liFichaInspecaoCadastral)
+        liFichaInspecaoCadastral.style.display = "none";
+
+        $("#liDocumentosAssociados").removeClass("active");
+        $("#tabDocumentosAssociados").removeClass("active in");
+
+        $("#liFichaInspecaoCadastral").removeClass("active");
+        $("#tabFichaInspecaoCadastral").removeClass("active in");
+
+
 
     return false;
 }
@@ -1048,8 +1010,7 @@ function ExecutarFiltro() {
     filtro_obj_descricao = $("#txtFiltroObj_Descricao").val().trim();
     filtro_clo_id = selectedId_clo_id;
 
-    filtro_tip_id = selectedId_tip_id;
-    filtro_tip_id = selectedId_tip_id;
+    filtro_tip_nome = $("#cmbFiltroTiposObjeto option:selected").text();
 
 
     carregaGrid(selectedId_obj_id);
@@ -1065,8 +1026,45 @@ function txtcodigo_onKeyUp() {
     preencheDescricao('txtcodigo');
 }
 
+function txtcodigo_onblur() {
+    if ((selectedId_clo_id + "") == "11") {
+        var lblPrefixoval = $('#lblPrefixo').text();
+        if (lblPrefixoval.includes("-SE-FS-PR-")) // se for pavimento rigido, os numeros possuem 3 digitos
+        {
+            var txtcodval = Right(("000" + $('#txtcodigo').val()), 3);
+            $('#txtcodigo').val(txtcodval);
+
+            var txtCodigoAte = Right(("000" + $('#txtCodigoAte').val()), 3);
+            $('#txtCodigoAte').val(txtCodigoAte);
+        }
+        else {
+            var txtcodval = Right(("00" + $('#txtcodigo').val()), 2);
+            $('#txtcodigo').val(txtcodval);
+
+            var txtCodigoAte = Right(("00" + $('#txtCodigoAte').val()), 2);
+            $('#txtCodigoAte').val(txtCodigoAte);
+        }
+
+     // atualiza descricao
+        preencheDescricao('txtcodigo');
+   }
+}
+
 // ****************************GRID tblObjetos *****************************************************************************
+
+
 function carregaGrid(id) {
+
+    // reseta o timer
+    resetTimeout();
+
+    // guarda os valores da paginacao
+    var tblObjetos = $('#tblObjetos').DataTable();
+    var info = tblObjetos.page.info();
+
+    selectedPageLen = tblObjetos.page.len();
+    selectedPage = info.page;
+
     $('#tblObjetos').DataTable().destroy();
     $('#tblObjetos').DataTable({
         "ajax": {
@@ -1078,7 +1076,7 @@ function carregaGrid(id) {
                 "filtro_obj_codigo" : filtro_obj_codigo,
                 "filtro_obj_descricao": filtro_obj_descricao,
                 "filtro_clo_id": filtro_clo_id,
-                "filtro_tip_id" : filtro_tip_id
+                "filtro_tip_nome": filtro_tip_nome
             }
         }
         , "columns": [
@@ -1138,11 +1136,12 @@ function carregaGrid(id) {
                             || (parseInt(row["tip_id"]) == 11) // Superestrutura
                             || (parseInt(row["tip_id"]) == 14) // Encontro Subdivisao1
                             || (parseInt(row["tip_id"]) == 19) // Encontro Subdivisao2
-                            //|| (parseInt(row["tip_id"]) == 22) // Estruturas_De_Terra_Encontros
-                            //|| (parseInt(row["tip_id"]) == 23) // Estruturas_De_Concreto_Encontros
-                            || (parseInt(row["clo_id"]) == 11) // Localizacao
-                           // || ((parseInt(row["clo_id"]) == 10) && (parseInt(row["temFilhos"]) > 0)) // Numero do Objeto
-                        )
+                            || (parseInt(row["clo_id"]) >= 10)  // 10 = objeto numero
+                            || (parseInt(row["tip_id"]) == 45)  // Pavimento Flexível da Superestrutura
+                            || (parseInt(row["tip_id"]) == 104)  // Pavimento Flexível do Encontro
+                            || ((parseInt(row["tip_id"]) >= 85) && (parseInt(row["tip_id"]) <= 93)) // drenagem, protecao, terreno
+                            || (parseInt(row["tip_id"]) == 97) || (parseInt(row["tip_id"]) == 100)// drenagem, protecao, terreno
+                            ) 
                             retorno = '<span class="glyphicon glyphicon-plus desabilitado visibilityHidden"  ></span>' + '  ';
                         else {
                             var objcod = "'" + row["obj_codigo"] + "'";
@@ -1208,9 +1207,9 @@ function carregaGrid(id) {
                 $(row).addClass('selected');
         }
         , "lengthMenu": [[15, 25, 50, 100], [15, 25, 50, 100]]
-        , select: {
-            style: 'single'
-        }
+        , "displayLength": selectedPageLen
+        , "displayStart": selectedPage * 10
+        , select: { style: 'single' }
         , searching: true
         , "oLanguage": idioma
         , "pagingType": "input"
@@ -1321,10 +1320,50 @@ $(document).ready(function () {
             filtroRow_numeroMax = filtroRow_numeroMin + 1;
        }
 
-        if (selectedId_obj_id != 0) {
+        if (selectedId_obj_id != 0)
+        {
 
             //  preenche Ficha inspecao cadastral 
-            preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+            var liFichaInspecaoCadastral = document.getElementById("liFichaInspecaoCadastral");
+            var liDocumentosAssociados = document.getElementById("liDocumentosAssociados");
+
+            if (liDocumentosAssociados)
+                liDocumentosAssociados.style.display = "none";
+
+            if (liFichaInspecaoCadastral)
+                liFichaInspecaoCadastral.style.display = "none";
+
+            // ajusta as tabs
+            if (selectedId_clo_id >= 3)
+            {
+
+                liDocumentosAssociados.style.display = "unset";
+                liFichaInspecaoCadastral.style.display = "unset";
+
+                $("#liDocumentosAssociados").removeClass("active");
+                $("#tabDocumentosAssociados").removeClass("active in");
+
+                if (!liFichaInspecaoCadastral.classList.contains("active"))
+                {
+                    $("#liFichaInspecaoCadastral").addClass("active");
+                    $("#tabFichaInspecaoCadastral").addClass("active in");
+                }
+
+                preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
+            }
+            else
+            {
+                $("#liFichaInspecaoCadastral").removeClass("active");
+                $("#tabFichaInspecaoCadastral").removeClass("active in");
+
+                if (!liDocumentosAssociados.classList.contains("active"))
+                {
+                    $("#liDocumentosAssociados").addClass("active");
+                    $("#tabDocumentosAssociados").addClass("active in");
+                }
+
+                liDocumentosAssociados.style.display = "unset";
+            }
 
 
             //  atualiza grid documentos
@@ -1344,6 +1383,11 @@ $(document).ready(function () {
         document.getElementById('txt_codigo').value = obj_codigo;
 
     });
+
+
+
+    // preenche combo
+    preencheCombo(1, 'cmbRodovia', '--Selecione--', null);
 
 
 }); // document.ready
@@ -1371,7 +1415,7 @@ function LimparPopup() {
     filtro_obj_codigo = '';
     filtro_obj_descricao = '';
     filtro_clo_id = -1;
-    filtro_tip_id = -1;
+    filtro_tip_nome = "";
 
     carregaGrid(0);
 

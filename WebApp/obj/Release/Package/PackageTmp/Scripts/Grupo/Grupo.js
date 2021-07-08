@@ -97,8 +97,6 @@ function Grupo_Excluir(id) {
         }
     })
 
-
-
     return false;
 }
 
@@ -237,8 +235,31 @@ function ChecaRepetido(txtBox, validarVazio) {
 
 // ********************  GRID PerfisGRUPO *****************************
 function Grupo_AtivarDesativarPerfil(per_id, ativar) {
-    var selgru_id = $('#hddnSelectedgru_id').val();
+    var tblPerfisDoGrupo = $('#tblPerfisDoGrupo').DataTable();
+    var filteredData = tblPerfisDoGrupo
+    .column(1)
+    .data()
+    .filter(function (value, index) {
+        return value == 1 ? true : false;
+    });
 
+    iPerfisDoGrupo = filteredData.count();
+
+    var tblObjetosPermitidos = $('#tblObjetosPermitidos').DataTable();
+    var iObjetosPermitidos = tblObjetosPermitidos.data().count();
+    if ((iObjetosPermitidos >= 1) && (iPerfisDoGrupo == 1) && (ativar == 1))
+    {
+        swal({
+            type: 'error',
+            title: 'Aviso',
+            text: "Para 'Objetos Específicos' é permitido somente 1 perfil"
+        });
+
+        return false;
+    }
+
+
+    var selgru_id = $('#hddnSelectedgru_id').val();
     if ((selgru_id >= 0) && (per_id >= 0)) {
         var response = POST("/Grupo/Grupo_AtivarDesativarPerfil", JSON.stringify({ "gru_id": selgru_id, "per_id": per_id }))
 
@@ -259,6 +280,199 @@ function Grupo_AtivarDesativarUsuario(usu_id, ativar) {
 
     return false;
 }
+
+// ********************  GRID ObjetosPermitidos *****************************
+function GrupoObjeto_Excluir(gro_id) {
+    var form = this;
+    swal({
+        title: "Excluir. Tem certeza?",
+        icon: "warning",
+        buttons: [
+            'Não',
+            'Sim'
+        ],
+        dangerMode: true,
+        focusCancel: true
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            var response = POST("/Grupo/GrupoObjeto_Excluir", JSON.stringify({ "gro_id": gro_id }))
+            if (response.erroId >= 1) {
+                swal({
+                    type: 'success',
+                    title: 'Sucesso',
+                    text: 'Registro excluído com sucesso'
+                });
+
+                $('#tblObjetosPermitidos').DataTable().ajax.reload();
+            }
+            else {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: 'Erro ao excluir Objeto'
+                });
+            }
+            return true;
+        } else {
+            return false;
+        }
+    })
+
+
+
+
+    return false;
+}
+
+
+
+
+// ******** selecao de objetos ***********************
+
+function abrirLocalizarObjetos() {
+
+    var tblPerfisDoGrupo = $('#tblPerfisDoGrupo').DataTable();
+    var filteredData = tblPerfisDoGrupo
+    .column(1)
+    .data()
+    .filter(function (value, index) {
+        return value == 1 ? true : false;
+    });
+
+    iPerfisDoGrupo = filteredData.count();
+
+
+    if (iPerfisDoGrupo > 1) {
+        swal({
+            type: 'error',
+            title: 'Aviso',
+            text: "Para 'Objetos Específicos' é permitido somente 1 perfil"
+        });
+
+        return false;
+    }
+
+
+    // limpa o texbox
+    $('#txtLocalizarObjeto').val("");
+    $('#txtobj_codigo_Novo').css('background-color', corBranca);
+
+    // limpa o listbox
+    var divObjetosLocalizados = document.getElementById("divObjetosLocalizados");
+    if (divObjetosLocalizados)
+        divObjetosLocalizados.innerHTML = "";
+
+    $('#txtLocalizarObjeto').focus();
+
+    $('#modalLocalizarObjeto').modal('show');
+
+
+    return false;
+}
+function LocalizarObjetos() {
+
+    var sel_tos_id = $('#cmbTiposOS_Novo').val();
+    var filtro_clo_id = 3;
+
+    if (parseInt(sel_tos_id) == 7)
+        filtro_clo_id = -13;
+
+    var params = {
+        doc_id: -1,
+        filtro_obj_codigo: $('#txtLocalizarObjeto').val(),
+        filtro_obj_descricao: '',
+        filtro_clo_id: filtro_clo_id, // -13 ===> 2 = OAE = quilometragem; ou 3 = Tipo OAE
+        filtro_tip_id: -1
+    };
+
+    $.ajax({
+        url: '/Documento/PreencheCmbObjetosLocalizados',
+        type: "POST",
+        dataType: "JSON",
+        data: params,
+        success: function (lstObjetos) {
+
+            // limpa o listbox
+            var divObjetosLocalizados = document.getElementById("divObjetosLocalizados");
+            if (divObjetosLocalizados)
+                divObjetosLocalizados.innerHTML = "";
+
+            var i = 0;
+            $.each(lstObjetos, function (i, objeto) {
+                i++;
+                if (i < 50) {
+                    var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+                    tagchk = tagchk.replace("idXXX", "chk" + i);
+                    tagchk = tagchk.replace("nameXXX", "chk" + i);
+                    tagchk = tagchk.replace("valueXXX", objeto.Value);
+
+                    var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
+                    taglbl = taglbl.replace("idXXX", "chk" + i);
+                    taglbl = taglbl.replace("TextoXXX", objeto.Text);
+
+                    $("#divObjetosLocalizados").append(tagchk + taglbl);
+
+                }
+            });
+            return false;
+        }
+    });
+
+
+    return false;
+}
+function Grupo_Objeto_Salvar() {
+
+
+    var divObjetosLocalizados = document.getElementById("divObjetosLocalizados");
+    if (divObjetosLocalizados) {
+
+        // cria lista dos IDs selecionados
+        var selchks = [];
+        $('#divObjetosLocalizados input:checked').each(function () {
+            selchks.push($(this).attr('value'));
+        });
+
+        //se houver grupos selecionados, salva
+        if (selchks.length > 0) {
+
+            var obj_ids = "";
+            for (var i = 0; i < selchks.length; i++)
+                    obj_ids = obj_ids + ";" + selchks[i];
+
+            obj_ids = obj_ids + ";"; // acrescenta um delimitador no final da string
+            obj_ids = obj_ids.substr(1, obj_ids.length);
+
+            $.ajax({
+                url: "/Grupo/GrupoObjeto_Incluir",
+                type: "POST",
+                dataType: "JSON",
+                data: JSON.stringify({ gru_id: selectedgru_id, obj_ids: obj_ids }),
+                contentType: "application/json;charset=utf-8",
+                success: function (result) {
+
+                    $('#tblObjetosPermitidos').DataTable().ajax.reload();
+                }
+                ,error: function (errormessage) {
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: errormessage.responseText
+                });
+                return false;
+            }
+
+            });
+        }
+
+    }
+        $('#modalLocalizarObjeto').modal('hide');
+    return false;
+}
+
+
+
+
 
 
 // montagem do gridview
@@ -347,6 +561,9 @@ $(document).ready(function () {
         $('#tblPerfisDoGrupo').DataTable().ajax.reload();
         $('#tblGrupoUsuarios').DataTable().ajax.reload();
 
+        $('#tblObjetosPermitidos').DataTable().ajax.reload();
+
+
         document.getElementById('subGrids').style.visibility = "visible";
     });
 
@@ -377,9 +594,9 @@ $(document).ready(function () {
 
                     if (permissaoEscrita > 0) {
                         if (row.per_Associado == 1)
-                            retorno += '<a href="#" onclick="return Grupo_AtivarDesativarPerfil(' + row.per_id + ')" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
+                            retorno += '<a href="#" onclick="return Grupo_AtivarDesativarPerfil(' + row.per_id + ',0)" ><span class="glyphicon glyphicon-ok text-success"></span></a>' + '  ';
                         else
-                            retorno += '<a href="#" onclick="return Grupo_AtivarDesativarPerfil(' + row.per_id + ')" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
+                            retorno += '<a href="#" onclick="return Grupo_AtivarDesativarPerfil(' + row.per_id + ',1)" ><span class="glyphicon glyphicon-remove text-danger"></span></a>' + '  ';
                     }
                     else {
                         if (row.per_Associado == 1)
@@ -448,6 +665,48 @@ $(document).ready(function () {
 
         ]
 
+        , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+        , select: {
+            style: 'single'
+        }
+        , searching: false
+        , "oLanguage": idioma
+        , "pagingType": "input"
+        , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+    });
+
+
+    // ****************************GRID tblObjetosPermitidos  *****************************************************************************
+    $('#tblObjetosPermitidos').DataTable({
+        "ajax": {
+            "url": '/grupo/GrupoObjetos_ListAll',
+            "data": function (d) {
+                d.ID = $('#hddnSelectedgru_id').val();
+            },
+            "type": "GET",
+            "datatype": "json"
+        }
+        , "columns": [
+            {
+                data: "gro_id",
+                "width": "30px",
+                "className": "centro-horizontal",
+                "searchable": false,
+                "sortable": false,
+                "render": function (data, type, row) {
+                    var retorno = "";
+                    if (permissaoExclusao > 0)
+                        retorno += '<a href="#" onclick="return GrupoObjeto_Excluir(' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
+                    else
+                        retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
+                    return retorno;
+                }
+            },
+            { data: "obj_codigo", "width": "100px" },
+            { data: "obj_descricao", "autoWidth": true }
+
+        ]
+        ,"order": [[ 1, "asc" ]]
         , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
         , select: {
             style: 'single'

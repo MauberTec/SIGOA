@@ -1,0 +1,305 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 160 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(160)); // 160 = id DO MODULO
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 160 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+}
+
+<h2></h2>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Priorização ..::";
+    }
+</form>
+
+<style>
+    .Centralizado {
+        text-align: center;
+    }
+</style>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="form-group">
+                <div class="col-sm-3">
+                    <label class="control-label">Rodovia</label>
+                    <input type="text" class="form-control" id="txtCodRodovia" maxlength="50" onkeydown="if (event.keyCode == 13) { ExecutarFiltroPriorizacao(); }" >
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Regional</label><br />
+                    @*<input type="text" class="form-control" id="txtCodOAE" maxlength="50" onkeydown="if (event.keyCode == 13) { ExecutarFiltroPriorizacao(); }" >*@
+                    @Html.DropDownList("cmbFiltroRegionais", null, null, new { @class = "form-control", @multiple = "multiple", @style="width:150px !important;"})
+                </div>
+ 
+                <div>
+                    <div class="btn-box-tool pull-right" style="margin-top:10px">
+                        <button type="reset" class="btn btn-info" onclick="LimparFiltroPriorizacao();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroPriorizacao();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <table id="tblPriorizacao">
+                    <thead>
+                        <tr>
+                            <th colspan="22" style="text-align:right">
+                                <button type="button"
+                                        id="btnToggleAtributos"
+                                        onclick="btnToggleAtributos_click()"
+                                        title="Contrair/Expandir outras Notas">
+                                    <i class="fa fa-exchange"></i>
+                                </button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>pri_id</th>
+                            <th>obj_id</th>
+                            <th title="Prioridade">Prio ridade</th>
+                            <th title="OAE">OAE</th>
+                            <th title="Nota Final">Nota Geral</th>
+
+                            <th title="Nota Final">Data Priorização</th>
+                            <th title="Nota Final">Tipo Inspeção</th>
+
+                            <th title="Nota Estrutura">Estrut</th>
+                            <th title="Nota Durabilidade">Durab</th>
+
+                            <th title="Ação">Ação</th>
+                            <th title="Nota Ação">Nota Ação</th>
+                            <th title="Status">Status</th>
+
+                            <th title="Nota Importância na Malha">
+                                Impor tância na Malha
+                            </th>
+
+                            <th title="Nota VDM">VDM </th>
+                            <th title="Nota Principal Utilização">Princ Util</th>
+                            <th title="Nota Facilidade de Desvio">Facili Desvio</th>
+                            <th title="Nota Gabarito Vertical">Gab Vert</th>
+                            <th title="Nota Gabarito Horizontal">Gab Horiz</th>
+                            <th title="Nota Largura da Plataforma">Larg Plataf</th>
+                            <th title="Nota Agressividade Ambiental">Agress Amb</th>
+                            <th title="Nota Trem Tipo">Trem Tipo</th>
+                            <th title="Nota Barreira de Segurança">Barr de Segur</th>
+                            <th title="Nota Restrição de Treminhões">Restr Tremi nhões</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        @*</div>*@
+    </div>
+</section>
+
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+}
+
+<script src="~/Scripts/Base.js"></script>
+
+
+<script>
+
+    var colunasVisiveis = false;
+
+    function LimparFiltroPriorizacao() {
+
+        $('#txtCodRodovia').val("");
+        $('#txtCodOAE').val("");
+        $("#cmbFiltroRegionais").multiselect("clearSelection");
+
+        carregaGridPriorizacao();
+
+        return false;
+    }
+
+    function ExecutarFiltroPriorizacao() {
+
+        carregaGridPriorizacao();
+        return false;
+    }
+
+    function carregaGridPriorizacao() {
+        var FiltroRegionais = ($("#cmbFiltroRegionais").val() + ';').replaceAll(",", ";");
+
+
+        $('#tblPriorizacao').DataTable().destroy();
+        $('#tblPriorizacao').DataTable({
+            "ajax": {
+                "url": "/Objeto/ObjPriorizacao_ListAll",
+                "type": "GET",
+                "datatype": "json",
+                "data": function (d) {
+                    d.CodRodovia = $('#txtCodRodovia').val();
+                    d.Regionais = FiltroRegionais;
+                    d.somenteINSP_ESPECIAIS = 0;
+                }
+            }
+            , "columns": [
+                { data: "pri_id", "className": "hide_column", "searchable": false },
+                { data: "obj_id", "className": "hide_column", "searchable": false },
+                { data: "pri_ordem", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "obj_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+               { data: "pri_data_classificacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+         // mudou de novo 18/abr/2021 :data execucao para data classificacao       { data: "ord_data_termino_execucao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "tos_descricao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+                { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+                { data: "pri_acao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_acao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_status", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+                { data: "pri_nota_importancia_oae_malha", "className": "Centralizado", "autoWidth": true, "searchable": true },
+
+                { data: "pri_nota_vdm", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_principal_utilizacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_facilidade_desvio", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_gabarito_vertical", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_gabarito_horizontal", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_largura_plataforma", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_agressividade_ambiental", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_trem_tipo", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_barreira_seguranca", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_restricao_treminhoes", "className": "Centralizado", "autoWidth": true, "searchable": true }
+            ]
+            , "order": [2, "asc"]
+           // , "ordering": false
+            , 'columnDefs': [
+                {
+                    targets: [3] // obj_codigo
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["obj_descricao"]);
+                    }
+                }
+                , {
+                    targets: [9] // tooltip da pri_acao
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["pri_nota_acao"] + "-" + rowData["pri_acao"] );
+                    }
+                }
+                ,{
+                    targets: [10] // tooltip da pri_nota_acao
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["pri_acao"] + "-" + rowData["pri_acao"]);
+                    }
+                }
+                ,{
+                    targets: [11] // pri_status
+                    , "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', rowData["status_descricao"]);
+                    }
+                }
+                ,{ // desabilita a ordenacao para as seguintes colunas:
+                    "targets": [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20, 21, 22]
+                    , "orderable": false
+                }
+            ]
+
+            , "createdRow": function (row, data, dataIndex) {
+              //  $(row).removeAttr('even');
+               // $(row).removeAttr('odd');
+              //  $(row).css("background-color", data["corFundo"]);
+                if (data["corFundo"] != "transparent")
+                    $(row).attr('style', 'background-color:' + data["corFundo"] + ' !important');
+            }
+            , "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]]
+            , select: {
+                style: 'single'
+            }
+            , searching: false
+            , "oLanguage": idioma
+            , "pagingType": "input"
+            , "sDom": '<"top">rt<"bottom"pfli><"clear">'
+        });
+
+        btnToggleAtributos_click(colunasVisiveis);
+    }
+
+    function btnToggleAtributos_click(estado) {
+
+        var table = $('#tblPriorizacao').DataTable();
+
+        if (estado == null) // foi click do botao
+        {
+            colunasVisiveis = !table.column(13).visible(); // checa visibilidade da coluna vdm
+            estado = colunasVisiveis;
+        }
+
+        table.column(9).visible(!estado); // acao
+        table.column(10).visible(estado); // nota acao
+
+        for (i = 13; i <= 22; i++) {
+            var column = table.column(i);
+            column.visible(estado);
+        }
+        return false;
+    }
+
+    // montagem do gridview
+    $(document).ready(function () {
+
+        carregaGridPriorizacao();
+
+    });
+
+
+    // transforma o combo em multipla escolha
+    $(function () {
+        $('#cmbFiltroRegionais').multiselect({
+            includeSelectAllOption: false,
+            nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
+            delimiterText: '; '
+        });
+    });
+
+</script>
+

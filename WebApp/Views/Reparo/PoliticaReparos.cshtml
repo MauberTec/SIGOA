@@ -1,0 +1,228 @@
+﻿
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(320)); // id DO MODULO "Politica de Reparos"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 320 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<h2></h2>
+
+@section Scripts{
+    <script>
+            var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+            var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+            var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+            var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+}
+
+<style>
+    .Centralizado {
+        text-align: center;
+    }
+
+    .chklst {
+        font-weight: normal;
+    }
+</style>
+
+<form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+    @{
+        ViewBag.Title = "::.. Política de Reparos ..::";
+    }
+</form>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div id="divcontroles" class="row" style="margin:3px">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">Reparo:</label>
+                            @Html.DropDownList("cmbFiltroTiposReparo", null, "-- Selecione --", new { @class = "form-control " })
+                        </div>
+                        <div class="col-sm-3">
+                            <div>
+                                <label class="control-label">Legenda:</label>
+                                @Html.DropDownList("cmbFiltroLegenda", null, "-- Selecione --", new { @class = "form-control ", @onchange = "cmbFiltroLegenda_onchange()" })
+                            </div>
+
+                        </div>
+                        <div class="col-sm-3 ">
+                            <div>
+                                <label class="control-label">Cod. Anomalia:</label>
+                                <select name="cmbFiltroAnomalia" id="cmbFiltroAnomalia" class="form-control" >
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="control-label">Alerta:</label>
+                            @Html.DropDownList("cmbFiltroAlerta", null, "-- Selecione --", new { @class = "form-control " })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group" style="padding-top:20px; margin-top:20px">
+                        <div class="col-sm-3">
+                            <label class="control-label">Causa:</label>
+                            <select name="cmbFiltroCausa" id="cmbFiltroCausa" class="form-control">
+                            </select>
+                        </div>
+
+                        <div class="btn-box-tool pull-right" style="margin-top:20px">
+                            <a class="btn btn-info" id="btnLimparFiltro" onclick="btnLimparFiltro_onclick();" style="margin-right: 10px !important;"><i class="fa fa-eraser margin-r-5"></i>Limpar</a>
+                            <button type="submit" class="btn btn-primary" id="btnExecutarFiltro" onclick="btnExecutarFiltro_onclick();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body" id="DivGrid">
+                <div style="width:100%;text-align:center"><span id="msg" style="font-size:20px;color:blue"> Aguarde...</span></div>
+                <table id="tblSubs2">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Reparo</th>
+                            <th>Legenda</th>
+                            <th>Anomalia</th>
+                            <th>Alerta</th>
+                            <th>Causa</th>
+                            <th>Opções</th>
+                        </tr>
+                    </thead>
+                </table>
+
+
+                @{
+                    if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                    {
+                        <button type="button" class="btn btn-primary botaoInserir" onclick="OpenModalReparo();">Nova Politica de Reparo</button>
+                    }
+                }
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="modalNovo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Nova Politica de Reparo</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+                    <div class="col-sm-12">
+                        <div id="Ficha2_divSubdivisao1" class="form-group">
+                            <label class="control-label col-sm-3">Reparo</label>
+                            <input type="hidden" id="cmbReparoUp" />
+                            <div class="col-sm-8">
+                                @Html.DropDownList("cmbTiposReparo", null, "-- Selecione --", new { @class = "form-control " })
+                            </div>
+                        </div>
+                        <input type="hidden" id="rpp_id_up" />
+                        <hr style="width:100%" />
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Legenda</label>
+                            <input type="hidden" id="cmdLegUp" />
+                            <div class="col-sm-8">
+                                @Html.DropDownList("cmbLegenda", null, "-- Selecione --", new { @class = "form-control ", @onchange = "cmbLegenda_onchange()" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Tipo de Anomalia</label>
+                            <input type="hidden" id="cmdCodAnomaliaUp" />
+                            <div class="col-sm-8">
+                                <div id="divCodAnomaliaUp" class="control-label"
+                                     style="height:100px; overflow-y:auto;
+                                        border:solid 1px lightgray; border-radius:4px !important;
+                                        text-align:left; padding: 6px;">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Alerta</label>
+                            <input type="hidden" id="cmdAlertaUp" />
+                            <div class="col-sm-8">
+                                <div id="divAlertaAdd" class="control-label"
+                                     style="height:50px; overflow-y:auto;
+                                        border:solid 1px lightgray; border-radius:4px !important;
+                                        text-align:left; padding: 6px;">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Causa</label>
+                            <input type="hidden" id="cmdCausaUp" />
+                            <div class="col-sm-8">
+                                <div id="divCausaAdd" class="control-label"
+                                     style="height:70px; overflow-y:auto;
+                                        border:solid 1px lightgray; border-radius:4px !important;
+                                        text-align:left; padding: 6px;">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <a id="bntSalvar" onclick="btnSalvar_onclick();" class="btn btn-primary btn-block btn-flat">Adicionar à lista</a>
+                    </div>
+                </div>
+                <hr />
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+
+<script src="~/Scripts/Base.js"></script>
+<script src="~/Scripts/Reparo/PoliticaReparos.js"></script>

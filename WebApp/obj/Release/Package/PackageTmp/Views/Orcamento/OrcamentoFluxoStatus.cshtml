@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "::.. Fluxo de Status de Orçamento ..::";
+}
+
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 1230 });
+       Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(1230)); // id DO MODULO "fluxo status"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 1230 });
+       Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+
+<h2></h2>
+<div style="width:90%; margin:0 auto;">
+
+    <table id="tblOrcamentoFluxoStatus">
+        <thead>
+            <tr>
+                <th>ocf_id</th>
+                <th>ocs_id_de</th>
+                <th>ocs_id_para</th>
+                <th>De</th>
+                <th></th>
+                <th>Para</th>
+                <th>Descrição Fluxo</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+    </table>
+
+    @{
+        if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+        {
+            <button type="button" class="btn btn-primary  botaoInserir" data-toggle="modal" data-target="#myModal" onclick="OrcamentoFluxoStatus_Inserir();">Novo Fluxo de Status de Orçamento</button>
+        }
+    }
+    <br /><br />
+    <input type="hidden" id="hddnSelectedocf_id" name="hddnSelectedocf_id" value="-1" />
+    <hr />
+
+</div>
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Scripts/Orcamento/OrcamentoFluxoStatus.js"></script>
+
+}
+
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Editar Fluxo de Status</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+
+                    <div class="form-group" style="display:none">
+                        <label class="control-label col-sm-2" for="ocf_id">ocf_id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtocf_id" placeholder="ID" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Status De<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10  ">
+                            @Html.DropDownList("cmbStatusDe", null, null, new { @class = "form-control", @onchange = "cmbStatusDe_onchange(this)" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Status Para<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10  ">
+                            @Html.DropDownList("cmbStatusPara", null, null, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Descrição<span class="text-danger">*</span> </label>
+                        <div class="col-sm-10">
+                            <input id="txtocf_descricao" name="txtocf_descricao" class="form-control"
+                                   placeholder="Descrição" data-val="true"
+                                   required
+                                   maxlength="255" pattern=".{1,255}" title="1 a 255 caracteres"
+                                   autocomplete="off"
+                                   onkeyup="validaAlfaNumerico(this)" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="ocf_ativo">Ativo </label>
+                        <div class="col-sm-10">
+                            <input type="checkbox" id="chkocf_ativo" style="margin-top: 10px;">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <button id="bntSalvar" name="bntSalvar" onclick="return OrcamentoFluxoStatus_Salvar();" class="btn btn-primary btn-block btn-flat">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

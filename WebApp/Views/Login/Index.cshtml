@@ -34,7 +34,7 @@
 
 </head>
 <body class="hold-transition login-page">
-    <form onsubmit="Login()">
+    <form >
         <div class="login-box">
             <div class="login-box-body">
                 <div class="text-center">
@@ -57,7 +57,7 @@
                     <input type="password" id="usu_senha" name="usu_senha" 
                            class="form-control" placeholder="Senha" ToolTip="Digite a Senha"
                            data-val="true" data-val-required="- digite a senha." required
-                           pattern=".{5,240}" 
+                           pattern=".{5,240}"  onkeydown="usu_senha_onkeydown()"
                             maxlength="240" />
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                 </div>
@@ -86,7 +86,8 @@
                             <a href="#" onclick="return EsqueciSenha()">Esqueci a senha</a>
                         </div>
                         <div class="col-xs-6 pull-right">
-                            <button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled><i class="fa fa-sign-in"></i> Entrar</button>
+                            <a id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled onclick="return btnLogin_onclick();"><i class="fa fa-sign-in"></i> Entrar</a>
+                            @*<button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-flat" @disabled><i class="fa fa-sign-in"></i> Entrar</button>*@
 
                             <div id="divDatabaseOFF" style="display: @display;" title="Sem Conexão com Banco de Dados">
                                 <span class="fa-stack fa-stack-2x">
@@ -100,10 +101,13 @@
                     <div class="row">
                         @Html.Hidden("hddnVersao", "build: " + File.GetCreationTime(ViewContext.Controller.GetType().Assembly.Location).ToString())
                         <div class="col-xs-6 pull-left" id="divVersao">
-                            <b>Versão 1.5.0</b>
+                            <b>Versão 1.10.0</b>
+                            @{ 
+                                string qualBanco = new WebApp.DAO.Conexao().QualBD();
+                            }
+                            @Html.Label("lblQualBanco", qualBanco)
                         </div>
                         <div class="col-xs-6 pull-right">
-
                         </div>
                     </div>
                 </div>

@@ -25,9 +25,10 @@ namespace WebApp.DAO
         /// <param name="filtro_obj_codigo">Filtro por codigo de Objeto, null para todos</param> 
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
-        /// <param name="filtro_tip_id">Filtro por tipo de Objeto, -1 para todos</param> 
+        /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, int? filtro_tip_id = -1)
+        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "", int usu_id = 0)
         {
             try
             {
@@ -44,12 +45,10 @@ namespace WebApp.DAO
                     if ((filtro_clo_id >=0) || (filtro_clo_id == -13)) // -13  retorna classe 2 e 3
                         com.Parameters.AddWithValue("@filtro_clo_id", filtro_clo_id);
 
-                    if (filtro_tip_id >= 0)
-                    com.Parameters.AddWithValue("@filtro_tip_id", filtro_tip_id);
+                    if (filtro_tip_nome != "")
+                    com.Parameters.AddWithValue("@filtro_tip_nome", filtro_tip_nome);
 
-
-
-
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -206,21 +205,12 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
 
-                    //System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
-                    //p_return.Direction = System.Data.ParameterDirection.ReturnValue;
-                    //com.Parameters.Add(p_return);
-                    //com.Parameters[0].Size = 32000;
-
                     com.Parameters.AddWithValue("@obj_codigo", obj_codigo);
                     com.Parameters.AddWithValue("@obj_descricao", obj_descricao);
                     com.Parameters.AddWithValue("@obj_NumeroObjetoAte", obj_NumeroObjetoAte);
                     com.Parameters.AddWithValue("@obj_localizacaoAte", obj_localizacaoAte);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
-
-                    //com.ExecuteScalar();
-                    // return Convert.ToInt32(p_return.Value);
-                    // return p_return.Value.ToString();
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -242,13 +232,14 @@ namespace WebApp.DAO
 
 
         /// <summary>
-        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// Exclui Objeto do tipo Subdivisao3 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
-        /// <param name="obj_id">Id do Objeto Selecionado</param>
+        /// <param name="tip_id">Id do tipo do Objeto Selecionado</param>
+        /// <param name="obj_id_tipoOAE">Id do Objeto Selecionado</param>
         /// <param name="usu_id">Id do Usuário Logado</param>
         /// <param name="ip">IP do Usuário Logado</param>
         /// <returns>string</returns>
-        public string Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE, int usu_id, string ip)
+        public string Objeto_Subdivisao3_Excluir(int tip_id, int obj_id_tipoOAE, int usu_id, string ip)
         {
             try
             {
@@ -256,7 +247,7 @@ namespace WebApp.DAO
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand("STP_DEL_OBJETO_SUBDIVISAO2", con);
+                    SqlCommand com = new SqlCommand("STP_DEL_OBJETO_SUBDIVISAO3", con);
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@tip_id", tip_id);
                     com.Parameters.AddWithValue("@obj_id_tipoOAE", obj_id_tipoOAE);
@@ -424,8 +415,9 @@ namespace WebApp.DAO
         /// Lista de todos os Documentos Associados ao Objeto selecionado
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> Objeto_Documentos_ListAll(int obj_id)
+        public List<Documento> Objeto_Documentos_ListAll(int obj_id, int? usu_id = null)
         {
             try
             {
@@ -437,6 +429,7 @@ namespace WebApp.DAO
                     SqlCommand com = new SqlCommand("STP_SEL_OBJETO_DOCUMENTOS", con);
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.AddWithValue("@obj_id", obj_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -479,8 +472,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="obj_id">Id do Objeto Selecionado</param>
         /// <param name="codDoc">Codigo ou parte do Documento a procurar</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos Nao Associados</returns>
-        public List<Documento> Objeto_DocumentosNaoAssociados_ListAll(int obj_id, string codDoc)
+        public List<Documento> Objeto_DocumentosNaoAssociados_ListAll(int obj_id, string codDoc, int? usu_id = null)
         {
             try
             {
@@ -494,6 +488,7 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@obj_id", obj_id);
                     com.Parameters.AddWithValue("@doc_codigo", codDoc);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -526,9 +521,10 @@ namespace WebApp.DAO
         ///     Lista de Objeto Localizacao
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do Objeto do Tipo OAE</param> 
-        /// <param name="tip_id_Subdivisao1">Id do tipo de Objeto, nivel subdivisao1</param> 
+        /// <param name="tip_id_Grupo">Id do tipo do Grupo de Objeto</param> 
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_Localizacao_ListAll(int obj_id_TipoOAE, int tip_id_Subdivisao1 )
+        public List<Objeto> Objeto_Localizacao_ListAll(int obj_id_TipoOAE, int tip_id_Grupo, int? usu_id = null)
         {
             try
             {
@@ -540,7 +536,8 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
                     com.Parameters.AddWithValue("@obj_id_TipoOAE", obj_id_TipoOAE);
-                    com.Parameters.AddWithValue("@tip_id_Subdivisao1", tip_id_Subdivisao1);
+                    com.Parameters.AddWithValue("@tip_id_Grupo", tip_id_Grupo);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -764,6 +761,10 @@ namespace WebApp.DAO
                             tip_codigo = rdr["tip_codigo"].ToString(),
                             tip_nome = rdr["tip_nome"].ToString(),
                             tip_descricao = rdr["tip_descricao"].ToString(),
+                            tip_pai = Convert.ToInt32(rdr["tip_pai"]),
+                            tip_pai_nome = rdr["tip_pai_nome"].ToString(),
+                            lsttip_pai = rdr["lsttip_pai"].ToString(),
+
                            // tip_mascara_codificacao = rdr["tip_mascara_codificacao"].ToString(),
                             tip_ativo = Convert.ToInt16(rdr["tip_ativo"]),
                             tem_var_inspecao = Convert.ToInt16(rdr["tem_var_inspecao"])
@@ -816,6 +817,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@tip_codigo", objTipo.tip_codigo);
                     com.Parameters.AddWithValue("@tip_nome", objTipo.tip_nome);
                     com.Parameters.AddWithValue("@tip_descricao", objTipo.tip_descricao);
+                    com.Parameters.AddWithValue("@tip_pai", objTipo.tip_pai);
                     com.Parameters.AddWithValue("@tip_ativo", objTipo.tip_ativo);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
@@ -899,6 +901,36 @@ namespace WebApp.DAO
         }
 
 
+        /// <summary>
+        /// lista concatenada dos pais de tipos de objeto por classe
+        /// </summary>
+        /// <param name="clo_id">Classe do Objeto selecionado</param>
+        /// <returns>string</returns>
+        public string lstTipos_da_Classe(int clo_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.ConcatenarObjetoTip_pai(@clo_id)", con);
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@clo_id", clo_id);
+
+                    string retorno = com.ExecuteScalar().ToString();
+
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
         // *************** ATRIBUTOS DE OBJETO  *************************************************************
@@ -1355,11 +1387,11 @@ namespace WebApp.DAO
                     if (ObjAtributoValor.ati_id != "-1" )
                         com.Parameters.AddWithValue("@ati_id", ObjAtributoValor.ati_id);
 
-                        com.Parameters.AddWithValue("@nome_aba", ObjAtributoValor.nome_aba);
-                        com.Parameters.AddWithValue("@atv_valores", ObjAtributoValor.atv_valores);
+                    com.Parameters.AddWithValue("@nome_aba", ObjAtributoValor.nome_aba);
+                    com.Parameters.AddWithValue("@atv_valores", ObjAtributoValor.atv_valores);
 
-                        com.Parameters.AddWithValue("@codigoOAE", codigoOAE);
-                        com.Parameters.AddWithValue("@selidTipoOAE", selidTipoOAE);
+                    com.Parameters.AddWithValue("@codigoOAE", codigoOAE);
+                    com.Parameters.AddWithValue("@selidTipoOAE", selidTipoOAE);
 
                     if (ord_id > 0 )
                         com.Parameters.AddWithValue("@ord_id", ord_id);
@@ -1437,20 +1469,35 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>Lista de ObjAtributoValores</returns>
-        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
             try
             {
+                string qualProcedure = "STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES";
+
+                if (ehProvidencia == 1)
+                     qualProcedure = "STP_SEL_INSPECAO_GRUPO_OBJETO_VARIAVEIS_VALORES_PROVIDENCIAS";
+
                 List<GruposVariaveisValores> lst = new List<GruposVariaveisValores>();
                 using (SqlConnection con = new SqlConnection(strConn))
                 {
                     con.Open();
-                    SqlCommand com = new SqlCommand("STP_SEL_OBJETO_GRUPO_OBJETO_VARIAVEIS_VALORES", con);
+
+                    SqlCommand com = new SqlCommand(qualProcedure, con);
+
                     com.CommandType = CommandType.StoredProcedure;
                     com.Parameters.Clear();
-                    com.Parameters.AddWithValue("@obj_id", obj_id);
+                    if (ehProvidencia == 0)
+                        com.Parameters.AddWithValue("@obj_id", obj_id);
+
                     com.Parameters.AddWithValue("@ord_id", ord_id);
+
+                    if (ehProvidencia == 1)
+                        com.Parameters.AddWithValue("@filtro_prt_id", filtro_prt_id);
+
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -1469,7 +1516,7 @@ namespace WebApp.DAO
                             TemFilhos = Convert.ToInt32(rdr["TemFilhos"]),
                             tip_id_grupo = Convert.ToInt32(rdr["tip_id_grupo"]),
                             nome_grupo = rdr["nome_grupo"].ToString(),
-                            ogv_id = (rdr["ogv_id"] == DBNull.Value) ? -1 :  Convert.ToInt32(rdr["ogv_id"]),
+                            cgv_id = (rdr["cgv_id"] == DBNull.Value) ? -1 :  Convert.ToInt32(rdr["cgv_id"]),
                             variavel = (rdr["variavel"] == DBNull.Value) ? "" : rdr["variavel"].ToString(),
                             ogi_id_caracterizacao_situacao = Convert.ToInt32(rdr["ogi_id_caracterizacao_situacao"]),
                             ogi_id_caracterizacao_situacao_item = rdr["ogi_id_caracterizacao_situacao_item"].ToString(),
@@ -1485,7 +1532,11 @@ namespace WebApp.DAO
 
                             ovv_tpu_quantidade = Convert.ToDouble(rdr["ovv_tpu_quantidade"]),
                             caracterizacao_situacao_cmb = rdr["caracterizacao_situacao_cmb"].ToString(),
-                            condicao_inspecao_cmb = rdr["condicao_inspecao_cmb"].ToString()
+                            condicao_inspecao_cmb = rdr["condicao_inspecao_cmb"].ToString(),
+
+                            prt_id = Convert.ToInt32(rdr["prt_id"]),
+                            prt_descricao = rdr["prt_descricao"].ToString(),
+                            providencias_cmb = rdr["providencias_cmb"].ToString()
 
                         });
                     }
@@ -1678,8 +1729,100 @@ namespace WebApp.DAO
             }
         }
 
+        // *************** PRIORIZACAO  *************************************************************
 
+        /// <summary>
+        /// Lista de Objetos Priorizados
+        /// </summary>
+        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
+        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
+        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
+        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
+        /// <param name="LstRegionais">Lista de Regionais obtidas no SirGeo</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <returns>Lista de Objetos</returns>
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia, 
+                                                            string FiltroidRodovias, string FiltroidRegionais, string FiltroidObjetos, string Filtro_data_De, string Filtro_data_Ate, 
+                                                            int? somenteINSP_ESPECIAIS = 0,
+                                                            string LstRegionais = "",
+                                                            int? usu_id = null)
+        {
+            try
+            {
+                List<ObjPriorizacao> lst = new List<ObjPriorizacao>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_OBJETOS_PRIORIZACAO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@CodRodovia", CodRodovia);
+                    com.Parameters.AddWithValue("@FiltroidRodovias", FiltroidRodovias);
+                    com.Parameters.AddWithValue("@FiltroidRegionais", FiltroidRegionais);
+                    com.Parameters.AddWithValue("@FiltroidObjetos", FiltroidObjetos);
+                    com.Parameters.AddWithValue("@Filtro_data_De", Filtro_data_De);
+                    com.Parameters.AddWithValue("@Filtro_data_Ate", Filtro_data_Ate);
+                    com.Parameters.AddWithValue("@somenteINSP_ESPECIAIS", somenteINSP_ESPECIAIS);
+                    com.Parameters.AddWithValue("@lstRegionais", LstRegionais);
 
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    SqlDataReader rdr = com.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        lst.Add(new ObjPriorizacao
+                        {
+                            pri_id = Convert.ToInt32(rdr["pri_id"]),
+                            ord_id = Convert.ToInt32(rdr["ord_id"]),
+                            obj_id = Convert.ToInt32(rdr["obj_id"]),
+                            obj_codigo = rdr["obj_codigo"].ToString(),
+                            obj_descricao = rdr["obj_descricao"].ToString(),
+                            pri_ordem = Convert.ToInt32(rdr["ordem"]),
+                            pri_classificacao = (rdr["pri_classificacao"] == DBNull.Value) ? -1 : Convert.ToInt16(rdr["pri_classificacao"]),
+                            pri_data_classificacao = rdr["pri_data_classificacao"].ToString(),
+                            pri_data_inspecao = rdr["pri_data_inspecao"].ToString(),
+                            pri_nota_final = rdr["pri_nota_final"] == DBNull.Value ? "0.00" :rdr["pri_nota_final"].ToString(),
+                            pri_nota_estrutura = rdr["pri_nota_estrutura"] == DBNull.Value ? "0.00" : rdr["pri_nota_estrutura"].ToString(),
+                            pri_nota_durabilidade = rdr["pri_nota_durabilidade"] == DBNull.Value ? "0.00" : rdr["pri_nota_durabilidade"].ToString(),
+                            pri_nota_acao = rdr["pri_nota_acao"] == DBNull.Value ? "0.00" :rdr["pri_nota_acao"].ToString(),
+                            pri_acao = rdr["pri_acao"].ToString(),
+
+                            prs_id = rdr["prs_id"].ToString(),
+                            pri_status = rdr["pri_status"].ToString(),
+                            status_descricao = rdr["status_descricao"].ToString(),
+                            corFundo = rdr["corFundo"].ToString(),
+
+                            //pri_nota_funcionalidade = (rdr["pri_nota_funcionalidade"] == DBNull.Value) ? 0 : rdr["pri_nota_funcionalidade"]), 2),
+                            pri_nota_importancia_oae_malha = rdr["pri_nota_importancia_oae_malha"] == DBNull.Value ? "0.00" : rdr["pri_nota_importancia_oae_malha"].ToString(),
+                            pri_nota_vdm = rdr["pri_nota_vdm"] == DBNull.Value ? "0.00" : rdr["pri_nota_vdm"].ToString(),
+                            pri_nota_principal_utilizacao = rdr["pri_nota_principal_utilizacao"] == DBNull.Value ? "0.00" : rdr["pri_nota_principal_utilizacao"].ToString(),
+                            pri_nota_facilidade_desvio = rdr["pri_nota_facilidade_desvio"] == DBNull.Value ? "0.00" : rdr["pri_nota_facilidade_desvio"].ToString(),
+                            pri_nota_gabarito_vertical = rdr["pri_nota_gabarito_vertical"] == DBNull.Value ? "0.00" : rdr["pri_nota_gabarito_vertical"].ToString(),
+                            pri_nota_gabarito_horizontal = rdr["pri_nota_gabarito_horizontal"] == DBNull.Value ? "0.00" : rdr["pri_nota_gabarito_horizontal"].ToString(),
+                            pri_nota_largura_plataforma = rdr["pri_nota_largura_plataforma"] == DBNull.Value ? "0.00" : rdr["pri_nota_largura_plataforma"].ToString(),
+                            pri_nota_agressividade_ambiental = rdr["pri_nota_agressividade_ambiental"] == DBNull.Value ? "0.00" : rdr["pri_nota_agressividade_ambiental"].ToString(),
+                            pri_nota_trem_tipo = rdr["pri_nota_trem_tipo"] == DBNull.Value ? "0.00" : rdr["pri_nota_trem_tipo"].ToString(),
+                            pri_nota_barreira_seguranca = rdr["pri_nota_barreira_seguranca"] == DBNull.Value ? "0.00" : rdr["pri_nota_barreira_seguranca"].ToString(),
+                            pri_restricao_treminhoes = rdr["pri_restricao_treminhoes"] == DBNull.Value ? "0.00" : rdr["pri_restricao_treminhoes"].ToString(),
+
+                            ord_data_termino_execucao = ((rdr["ord_data_termino_execucao"] == DBNull.Value) ? "" : rdr["ord_data_termino_execucao"]).ToString(),
+                            tos_descricao = ((rdr["tos_descricao"] == DBNull.Value) ? "" :rdr["tos_descricao"]).ToString()
+
+                        });
+                    }
+                    return lst;
+                }
+                 
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
 
     }
 }

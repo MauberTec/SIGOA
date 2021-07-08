@@ -1,0 +1,645 @@
+﻿
+
+<style type="text/css">
+
+    .fundoSilver {
+      background-color: #d9d9d9;
+    }
+
+    #divFichaRequalificacaoOAE option:first-child {
+        color: black !important;
+    }
+
+    #divFichaRequalificacaoOAE option {
+        color: black !important;
+    }
+
+        #divFichaRequalificacaoOAE option::selection {
+            color: blue !important;
+        }
+
+    .centroH {
+        text-align: center !important;
+    }
+
+    .contornoBranco {
+        text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+
+    .btnHeader1 {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: left
+    }
+
+    .btnHeader2 {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        padding: 5px;
+        margin: 0;
+        text-align: center;
+    }
+
+    #divFichaRequalificacaoOAE button:focus {
+        outline: none;
+    }
+
+    #divFichaRequalificacaoOAE button[aria-expanded="true"] > .pull-right-container > .fa-angle-left {
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .rotate {
+        -webkit-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    .lblTitulos {
+        height: 25px;
+        color: #FFFFFF;
+        background-color: gray;
+        font-weight: bold;
+        /*border: solid 1px black;*/
+        padding-left: 5px;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos2 {
+        height: 25px;
+        background-color: #CCCCCC;
+        font-weight: bold;
+        text-align: center;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        border-bottom: solid 1px black;
+    }
+
+    .lblTitulos3 {
+        height: 25px;
+        background-color: #FFFFFF;
+        font-weight: bold;
+        text-align: left;
+        border-left: solid 1px black;
+        border-right: solid 1px black;
+        padding-left: 5px;
+    }
+
+    .lblsBold {
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px !important;
+    }
+
+    .lblsNormal {
+        font-weight: normal;
+        height: 25px;
+        margin: 0 !important;
+        margin-top: 5px !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        margin-top: 5px;
+    }
+
+    .lblsRed {
+        color: red;
+        font-size: 11.5pt;
+        font-weight: bold;
+        height: 25px;
+        margin: 0 !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        padding-top: 2px !important;
+    }
+
+    input.txts, .txts {
+        border: solid 1px lightgray;
+        width: 75%;
+        height: 95%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        resize: none;
+    }
+
+    input.txts90, .txts90 {
+        border: solid 1px lightgray;
+        width: 98%;
+        height: 95%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        resize: none;
+    }
+
+    input.txts50, .txts50 {
+        border: solid 1px lightgray;
+        width: 50%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    input.txts25, .txts25 {
+        border: solid 1px lightgray;
+        width: 25%;
+        margin: 0 !important;
+        margin-left: 3px !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+    }
+
+    .cmbs {
+        border: solid 1px lightgray;
+        /*width: 50%;*/
+        margin: 0 !important;
+        margin-left: 3px;
+        margin-bottom: 0 !important;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .cmbsNoWidth {
+        border: solid 1px lightgray;
+        /*width: 10%;*/
+        margin-left: 3px;
+        margin-top: 5px !important;
+        display: inline-block;
+        font-weight: normal;
+        color: blue !important;
+    }
+
+    #divFichaRequalificacaoOAE .cmbs option:checked,
+    #divFichaRequalificacaoOAE .cmbsNoWidth option:checked {
+        border: solid 1px lightgray;
+        margin-left: 3px;
+        display: inline-block;
+        font-weight: normal;
+        color: blue;
+    }
+
+    .txtsNoWidth {
+        border: solid 1px lightgray;
+        width: 10%;
+        margin-left: 3px;
+        display: inline-block;
+        color: blue;
+        font-weight: normal;
+        margin-top: 5px !important;
+    }
+
+    .larguraPadrao {
+        width: 16.66%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    .larguraPadrao2 {
+        width: 11.11%;
+        font-size: 1px;
+        height: 1px;
+    }
+
+    #divFichaRequalificacaoOAE input:disabled,
+    #divFichaRequalificacaoOAE textarea:disabled,
+    #divFichaRequalificacaoOAE select:disabled {
+        background-color: transparent;
+        border: none !important;
+    }
+
+    #divFichaRequalificacaoOAE input:enabled,
+    #divFichaRequalificacaoOAE textarea:enabled,
+    #divFichaRequalificacaoOAE select:enabled {
+        background-color: white;
+        border: solid 1px black;
+        margin: 3px !important;
+    }
+
+    #divFichaRequalificacaoOAE select:disabled {
+        background-color: transparent;
+        border: none !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .paddingLeft5 {
+        padding-left: 5px !important
+    }
+
+
+    .subdivisao1_fundo {
+        background-color: #bfbfbf;
+        height: 25px;
+        border-bottom: solid 1px black;
+    }
+
+    .subdivisao2_fundo {
+        background-color: #d9d9d9;
+        height: 25px;
+        margin-bottom: 3px;
+        border-bottom: solid 1px black;
+    }
+
+    .subdivisao3_fundo {
+        background-color: #f2f2f2;
+        height: 25px;
+        margin-bottom: 3px;
+        border-bottom: solid 1px black;
+    }
+
+    #cmb_atr_id_147, 
+    #cmb_atr_id_149,
+    #tblFicha_311 select {
+        width: 400px;
+        text-align-last: center;
+    }
+
+</style>
+
+<div id="divFichaRequalificacaoOAE" style="font-family:Calibri; font-size:10.5pt; ">
+
+    <table id="tblFichaRequalificacaoOAE_CRITERIO_DE_CLASSIFICACAO" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_CRITERIO_DE_CLASSIFICACAO"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_CRITERIO_DE_CLASSIFICACAO"
+                                    onclick="FichaRequalificacaoOAE_header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                NOTA GERAL DE AVALIAÇÃO E CLASSIFICAÇÃO DA OBRA DE ARTE (1º Requisito + 2º Requisito)
+                            </button>
+                        </td>
+                        <td style="width:95px; ">
+                            <label id="lbl_NOTA_GERAL_AVALIACAO_CLASSIFICACAO_OAE" style="width:98%; font-size:12pt; color:white;margin-bottom: 0px; text-align:right">Nota:</label>
+                        </td>
+                        <td style="width:45px;">
+                            <input id="txt_atr_id_157" class="centroH" style="width:98%; font-size:12pt; color:white;margin-bottom: 0px; border:none; background-color:transparent" readonly />
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_CRITERIO_DE_CLASSIFICACAO"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaRequalificacaoOAE_CRITERIO_DE_CLASSIFICACAO()"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_CRITERIO_DE_CLASSIFICACAO"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaRequalificacaoOAE(tblFichaRequalificacaoOAE_CRITERIO_DE_CLASSIFICACAO)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_CRITERIO_DE_CLASSIFICACAO"
+                                    type="button"
+                                    onclick="return EditarDados_FichaRequalificacaoOAE(tblFichaRequalificacaoOAE_CRITERIO_DE_CLASSIFICACAO)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_CRITERIO_DE_CLASSIFICACAO"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_Inspecao_CRITERIO_DE_CLASSIFICACAO" class="collapse">
+                    <table id="tblFicha_3" cellpadding="0" cellspacing="1" style="width: 100%;">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="lblTitulos2" colspan="9" style="text-align:left; padding-left:5px;">
+                                1 º REQUISITO - NOTAS DE CLASSIFICAÇÃO DA OBRA DE ARTE PARA OS PARÂMETROS ESTRUTURAIS E DE DURABILIDADE (NBR 9452:2019)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom lblsBold altura50">Parâmetro</td>
+                            <td class="borderLeft borderBottom lblsBold altura50 centroH">Nota</td>
+                            <td class="borderLeft borderBottom lblsBold altura50 centroH borderRight" colspan="7">Descrição do Motivo Atribuído à Nota</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_99">Estrutural</label></td>
+                            <td class="borderLeftPt borderBottomPt centroH"><select disabled id="cmb_atr_id_99" class="cmbs" style="width:40px" onchange="FichaRequalificacaoOAE_Calcula_Notas_1_Requisito()"></select></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="7">
+                                <label class="lblsNormal" id="lblcmb_130" style="padding:2px"></label>
+                                <select disabled id="cmb_atr_id_130" class="cmbs" style="width: 99%; display:none;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_100">Durabilidade</label></td>
+                            <td class="borderLeftPt borderBottomPt centroH"><select disabled id="cmb_atr_id_100" class="cmbs" style="width:40px" onchange="FichaRequalificacaoOAE_Calcula_Notas_1_Requisito()"></select></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="7">
+                                <label class="lblsNormal" id="lblcmb_131" style="padding:2px"></label>
+                                <select disabled id="cmb_atr_id_131" class="cmbs" style="width: 99%; display:none;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom  lblsBold lblsRed" colspan="8">Nota do 1º Requisito (Parâmetro Estrutural + Parâmetro Durabilidade)</td>
+                            <td class="borderBottom borderRight"><input id="txt_atr_id_151" class="centroH lblsRed" style="width:98%; border:none" readonly /></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom borderRight" colspan="9" style="height:10px"></td>
+                        </tr>
+                    </table>
+
+                    <table id="tblFicha_311" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr>
+                            <td class="lblTitulos2" colspan="9" style="text-align:left; padding-left:5px;">
+                                2 º REQUISITO - NOTAS DOS ATRIBUTOS DE IMPORTÂNCIA DA OAE DENTRO DA MALHA VIÁRIA (PARÂMETRO SIGOA)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom lblsBold altura50" colspan="6">Descrição do Atributo de Importância da Obra de Arte dentro da Malha Viária</td>
+                            <td class="borderLeft borderBottom lblsBold altura50 centroH " colspan="2">Caracterização</td>
+                            <td class="borderLeft borderBottom borderRight lblsBold centroH altura50">Nota</td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_84a">Volume Diário Médio</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2">
+                                <select disabled id="cmb_atr_id_84" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select>
+                                <select disabled id="cmb_atr_id_15" style="display:none"></select>
+                            </td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_135" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_85a">Utilização do Trecho</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_85" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_136" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_91">Facilidade de Execução de Desvio</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_91" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_137" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_87a">Gabarito Vertical / N.A. Máximo</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_87" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_138" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_88">Gabarito Horizontal / Vazão do curso d'água</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_88" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_139" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_89">Largura da Plataforma</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_89" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_140" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_93">Agressividade Atmosférica</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_93" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_141" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_20a">Trem Tipo</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_20" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_142" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="6"><label class="lblsBold" id="lblatr_id_92">Barreira de Segurança</label></td>
+                            <td class="borderLeft borderBottomPt centroH " colspan="2"><select disabled id="cmb_atr_id_92" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottomPt borderRight centroH "><select disabled id="cmb_atr_id_143" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="6"><label class="lblsBold" id="lblatr_id_94">Restrições ao Tráfego de Treminhões</label></td>
+                            <td class="borderLeft borderBottom centroH " colspan="2"><select disabled id="cmb_atr_id_94" class="cmbs" onchange="FichaRequalificacaoOAE_Calcula_Notas_2_Requisito()"></select></td>
+                            <td class="borderLeft borderBottom borderRight centroH "><select disabled id="cmb_atr_id_144" class="cmbs" /></td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom  lblsBold lblsRed" colspan="8">Nota do 2º Requisito (Atributo de Importância Funcional Dentro da Malha Viária)</td>
+                            <td class="borderBottom borderRight"><input id="txt_atr_id_152" class="centroH lblsRed" style="width:98%; border:none;" readonly /></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <table id="tblFichaRequalificacaoOAE_NOTA_OAE_PARAMETRO_FUNCIONAL" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_NOTA_OAE_PARAMETRO_FUNCIONAL"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_NOTA_OAE_PARAMETRO_FUNCIONAL"
+                                    onclick="FichaRequalificacaoOAE_header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                NOTA DA OBRA DE ARTE PARA O PARÂMETRO FUNCIONAL (NBR 9452:2019) - Conforto e Segurança do Usuário
+                            </button>
+                        </td>
+                        <td style="width:25px !important; ">
+                            <button id="btn_Salvar_NOTA_OAE_PARAMETRO_FUNCIONAL"
+                                    type="button"
+                                    onclick="return SalvarDados_FichaRequalificacaoOAE_NOTA_OAE_PARAMETRO_FUNCIONAL()"
+                                    title="Salvar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
+                            </button>
+                        </td>
+
+                        <td style="width:25px !important; ">
+                            <button id="btn_Cancelar_NOTA_OAE_PARAMETRO_FUNCIONAL"
+                                    type="button"
+                                    onclick="return CancelarDados_FichaRequalificacaoOAE(tblFichaRequalificacaoOAE_NOTA_OAE_PARAMETRO_FUNCIONAL)"
+                                    title="Cancelar Edição"
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
+                            </button>
+
+                            <button id="btn_Editar_NOTA_OAE_PARAMETRO_FUNCIONAL"
+                                    type="button"
+                                    onclick="return EditarDados_FichaRequalificacaoOAE(tblFichaRequalificacaoOAE_NOTA_OAE_PARAMETRO_FUNCIONAL)"
+                                    title="Editar"
+                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_NOTA_OAE_PARAMETRO_FUNCIONAL"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_Inspecao_NOTA_OAE_PARAMETRO_FUNCIONAL" class="collapse">
+                    <table id="tblFicha_3B" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom lblsBold altura50">Parâmetro</td>
+                            <td class="borderLeft borderBottom lblsBold altura50 centroH">Nota</td>
+                            <td class="borderLeft borderBottom lblsBold altura50 centroH borderRight" colspan="7">Descrição do Motivo Atribuído à Nota</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_99">Funcional</label></td>
+                            <td class="borderLeftPt borderBottomPt centroH"><select disabled id="cmb_atr_id_145" class="cmbs" style="width:40px" onchange="FichaRequalificacaoOAE_Calcula_Nota_Parametro_Funcional()"></select></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="7">
+                                <label class="lblsNormal" id="lblcmb_146" style="padding:2px"></label>
+                                <select disabled id="cmb_atr_id_146" class="cmbs" style="width: 99%; display:none;" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderLeft borderBottom  lblsBold lblsRed" colspan="8">Nota do Parâmetro Funcionalidade - Norma NBR (9452:2019)</td>
+                            <td class="borderBottom borderRight"><input id="txt_atr_id_153" class="centroH lblsRed" style="width:98%; border:none;" readonly /></td>
+                            @*<td class="borderBottom borderRight"><label id="txt_atr_id_153" class="centroH lblsRed" style="width:98%;" /></td>*@
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom borderRight" colspan="9" style="height:10px"></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <table id="tblFichaRequalificacaoOAE_POLITICA_ACOES_A_IMPLEMENTAR" cellpadding="0" cellspacing="1" style="width: 100%;">
+        <tr>
+            <td class="lblTitulos" style="margin:0; padding:0;">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button id="btn_Toggle_POLITICA_ACOES_A_IMPLEMENTAR"
+                                    type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_POLITICA_ACOES_A_IMPLEMENTAR"
+                                    onclick="FichaRequalificacaoOAE_header_click(this)" aria-expanded="false"
+                                    class="btnHeader1">
+                                POLÍTICA DE AÇÕES A SEREM IMPLEMENTADAS EM FUNÇÃO DAS NOTAS
+                            </button>
+                        </td>
+
+                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left" id="iconAngle_POLITICA_ACOES_A_IMPLEMENTAR"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div id="div_Ficha_Inspecao_POLITICA_ACOES_A_IMPLEMENTAR" class="collapse">
+                    <table id="tblFicha_5" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
+                        <tr style="visibility:hidden;">
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                            <td class="larguraPadrao2"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt lblsBold altura50" colspan="4">Parâmetro</td>
+                            <td class="borderLeftPt borderBottomPt lblsBold altura50 centroH">Nota</td>
+                            <td class="borderLeftPt borderBottomPt lblsBold altura50 centroH borderRight" colspan="4">Descrição do Motivo Atribuído à Nota</td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottomPt" colspan="4"><label class="lblsBold" id="lblatr_id_99">Ações em Função das Notas Estruturais e/ou de Durabilidade (NBR 9452:2019) - Serviços de Inspeções e Intervenções na estrutura</label></td>
+                            <td class="borderLeftPt borderBottomPt centroH"><select disabled id="cmb_atr_id_147" class="cmbs" style="width:40px"></select></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="4">
+                                <label class="lblsNormal" id="lblcmb_148" style="padding:2px"></label>
+                                <select disabled id="cmb_atr_id_148" class="cmbs" style="width: 99%; display:none;" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom" colspan="4"><label class="lblsBold" id="lblatr_id_99">Ações em Função da Nota de Funcionalidade (NBR 9452:2019) - Serviços de Conserva</label></td>
+                            <td class="borderLeftPt borderBottom centroH"><select disabled id="cmb_atr_id_149" class="cmbs" style="width:40px"></select></td>
+                            <td class="borderLeftPt borderBottom borderRight" colspan="4">
+                                <label class="lblsNormal" id="lblcmb_150" style="padding:2px"></label>
+                                <select disabled id="cmb_atr_id_150" class="cmbs" style="width: 99%; display:none;" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="borderLeft borderBottom borderRight" colspan="9" style="height:10px"></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+
+

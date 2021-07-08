@@ -59,12 +59,28 @@ namespace WebApp.Models
         /// <summary>
         /// Criticidade
         /// </summary>
-        public int ord_criticidade { get; set; }
+        public decimal ord_criticidade { get; set; }
 
         /// <summary>
         /// Id do Contrato
         /// </summary>
         public int con_id { get; set; }
+
+        /// <summary>
+        /// Data da Última Mudança de Status
+        /// </summary>
+        public string ord_data_atualizacao_status { get; set; }
+
+        /// <summary>
+        /// Data Início Planejada
+        /// </summary>
+        public string ord_data_inicio_planejada { get; set; }
+
+        /// <summary>
+        /// Data Término Planejada
+        /// </summary>
+        public string ord_data_termino_planejada { get; set; }
+
 
         /// <summary>
         /// Data Início Programada
@@ -259,16 +275,6 @@ namespace WebApp.Models
         public string ord_descricao_pai { get; set; }
 
         /// <summary>
-        /// Codigo da TPU
-        /// </summary>
-        public string tpu_codigo_der { get; set; }
-
-        /// <summary>
-        /// Descrição da TPU
-        /// </summary>
-        public string tpu_descricao { get; set; }
-
-        /// <summary>
         /// Codigo do Contrato de Fiscalização
         /// </summary>
         public string con_codigofiscalizacao { get; set; }
@@ -308,6 +314,10 @@ namespace WebApp.Models
         /// </summary>
         public string ord_aberta_por_nome { get; set; }
 
+        /// <summary>
+        /// Codigo do Orçamento de pai
+        /// </summary>
+        public string ord_codigo_orcamento { get; set; }
 
 
         /// <summary>
@@ -335,6 +345,19 @@ namespace WebApp.Models
         /// Lista dos proximos status possiveis
         /// </summary>
         public string lst_proximos_status { get; set; }
+
+
+
+        /// <summary>
+        /// Conteúdo da Aba Indicacao Servico
+        /// </summary>
+        public string ord_indicacao_servico { get; set; }
+
+
+        /// <summary>
+        /// Id do Orçamento, caso seja O.S. de Orçamento
+        /// </summary>
+        public int orc_id { get; set; }
 
     }
 
@@ -397,6 +420,36 @@ namespace WebApp.Models
 
 
 
+
+    // ************* EMAILS DA ORDEM DE SERVICO ***************************************
+    /// <summary>
+    /// EMAIL
+    /// </summary>
+    public class OSEmail
+    {
+
+        /// <summary>
+        /// Destinatarios do email separados por ponto e virgula
+        /// </summary>
+        public string destinatarios { get; set; }
+
+        /// <summary>
+        /// Assunto do Email
+        /// </summary>
+        public string assunto { get; set; }
+
+
+        /// <summary>
+        /// Texto do Email
+        /// </summary>
+        public string mensagem { get; set; }
+
+    }
+
+
+
+
+
 // ************* STATUS DE ORDEM DE SERVICO ***************************************
     /// <summary>
     /// Status de OS
@@ -437,6 +490,11 @@ namespace WebApp.Models
         /// Id do Fluxo de Status da Ordem de Servico
         /// </summary>
         public int fos_id { get; set; }
+        
+        /// <summary>
+        /// Id do Tipo de Ordem de Servico
+        /// </summary>
+        public int tos_id { get; set; }
 
         /// <summary>
         /// Id do Status Origem da Ordem de Servico

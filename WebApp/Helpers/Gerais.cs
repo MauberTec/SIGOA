@@ -2,12 +2,15 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -174,10 +177,14 @@ namespace WebApp.Helpers
                 if (email_Enviar_Emails == 0)
                     return "Email não enviado. Parâmetro desligado.";
 
+                string[] email_Para = pEmail.Para.Split(";".ToCharArray());
+                System.Net.Mail.MailMessage oEmail = new System.Net.Mail.MailMessage(pEmail.De, email_Para[0], pEmail.Assunto, pEmail.Texto);
 
-                System.Net.Mail.MailMessage oEmail = new System.Net.Mail.MailMessage(pEmail.De, pEmail.Para, pEmail.Assunto, pEmail.Texto);
-                System.Net.Mail.SmtpClient oSmtp = new System.Net.Mail.SmtpClient();
-
+                for (int ii = 1; ii < email_Para.Length; ii++)
+                {
+                    if (email_Para[ii].Trim() != "")
+                        oEmail.To.Add(email_Para[ii]);
+                }
 
                 if (pEmail.Anexo.Trim() != String.Empty)
                     oEmail.Attachments.Add(new System.Net.Mail.Attachment(pEmail.Anexo));
@@ -189,8 +196,11 @@ namespace WebApp.Helpers
                     oEmail.CC.Clear();
                     for (int ii = 0; ii < sCC.Length; ii++)
                     {
-                        MailAddress copy = new MailAddress(sCC[ii]);
-                        oEmail.CC.Add(copy);
+                        if (sCC[ii].Trim() != "")
+                        {
+                            MailAddress copy = new MailAddress(sCC[ii]);
+                            oEmail.CC.Add(copy);
+                        }
                     }
                 }
 
@@ -200,8 +210,11 @@ namespace WebApp.Helpers
                     oEmail.Bcc.Clear();
                     for (int ii = 0; ii < sCCO.Length; ii++)
                     {
-                        MailAddress copy = new MailAddress(sCCO[ii]);
-                        oEmail.Bcc.Add(copy);
+                        if (sCCO[ii].Trim() != "")
+                        {
+                            MailAddress copy = new MailAddress(sCCO[ii]);
+                            oEmail.Bcc.Add(copy);
+                        }
                     }
                 }
 
@@ -221,6 +234,7 @@ namespace WebApp.Helpers
                 oEmail.Body = pEmail.Texto;
 
 
+                System.Net.Mail.SmtpClient oSmtp = new System.Net.Mail.SmtpClient();
                 if (pEmail.PortaSmtp != -1)
                     oSmtp.Port = pEmail.PortaSmtp;
 
@@ -656,13 +670,46 @@ namespace WebApp.Helpers
         /// Checa se é numero
         /// </summary>
         /// <param name="s">string a testar</param>
-        /// <returns></returns>
+        /// <returns>true/false</returns>
         public bool IsNumeric(string s)
         {
             float output;
             return float.TryParse(s, out output);
         }
 
+
+        /// <summary>
+        /// Converte Lista para Datatable
+        /// </summary>
+        /// <typeparam name="T">Tipo da Lista</typeparam>
+        /// <param name="items">Lista de entrada</param>
+        /// <returns>Datatable</returns>
+        public  DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Defining type of data column gives proper data table 
+                var type = (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ? Nullable.GetUnderlyingType(prop.PropertyType) : prop.PropertyType);
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name, type);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
 
 
     }

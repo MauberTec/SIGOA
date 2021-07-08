@@ -8,6 +8,7 @@ using System.Configuration;
 using WebApp.Models;
 using WebApp.Helpers;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace WebApp.DAO
 {
@@ -17,6 +18,7 @@ namespace WebApp.DAO
     public class OrdemServicoDAO : Conexao
     {
         // *************** OrdemServico  *************************************************************
+        CultureInfo culturePTBR = new CultureInfo("pt-BR");
 
         /// <summary>
         ///     Lista de todas as OSs não deletadas
@@ -29,8 +31,9 @@ namespace WebApp.DAO
         /// <param name="filtroData">Filtro pelo tipo de Data Selecionado</param>
         /// <param name="filtroord_data_De">Filtro por Data: a de</param>
         /// <param name="filtroord_data_Ate">Filtro por Data: até</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de OrdemServico</returns>
-        public List<OrdemServico> OrdemServico_ListAll(int? ord_id = null, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
+        public List<OrdemServico> OrdemServico_ListAll(int? ord_id = null, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "", int? usu_id = null)
         {
             try
             {
@@ -62,6 +65,8 @@ namespace WebApp.DAO
                             com.Parameters.AddWithValue("@filtroord_data_Ate", filtroord_data_Ate);
                     }
 
+
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -83,7 +88,7 @@ namespace WebApp.DAO
 
                             obj_id = rdr["obj_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["obj_id"]),
                             ord_ativo = rdr["ord_ativo"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ord_ativo"]),
-                            ord_criticidade = rdr["ord_criticidade"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ord_criticidade"]),
+                            ord_criticidade = rdr["ord_criticidade"] == DBNull.Value ? -1 : Convert.ToDecimal(rdr["ord_criticidade"], culturePTBR),
 
                             tos_codigo = rdr["tos_codigo"] == DBNull.Value ? string.Empty : rdr["tos_codigo"].ToString(),
                             tos_descricao = rdr["tos_descricao"] == DBNull.Value ? string.Empty : rdr["tos_descricao"].ToString(),
@@ -96,8 +101,6 @@ namespace WebApp.DAO
 
                             ord_codigo_pai = rdr["ord_codigo_pai"] == DBNull.Value ? string.Empty : rdr["ord_codigo_pai"].ToString(),
                             ord_descricao_pai = rdr["ord_descricao_pai"] == DBNull.Value ? string.Empty : rdr["ord_descricao_pai"].ToString(),
-                            tpu_codigo_der = rdr["tpu_codigo_der"] == DBNull.Value ? string.Empty : rdr["tpu_codigo_der"].ToString(),
-                            tpu_descricao = rdr["tpu_descricao"] == DBNull.Value ? string.Empty : rdr["tpu_descricao"].ToString(),
 
                             con_codigofiscalizacao = rdr["con_codigofiscalizacao"] == DBNull.Value ? string.Empty : rdr["con_codigofiscalizacao"].ToString(),
                             con_descricaofiscalizacao = rdr["con_descricaofiscalizacao"] == DBNull.Value ? string.Empty : rdr["con_descricaofiscalizacao"].ToString(),
@@ -108,10 +111,16 @@ namespace WebApp.DAO
                             con_descricaoorcamento = rdr["con_descricaoorcamento"] == DBNull.Value ? string.Empty : rdr["con_descricaoorcamento"].ToString(),
                             ord_aberta_por_usuario = rdr["ord_aberta_por_usuario"] == DBNull.Value ? string.Empty : rdr["ord_aberta_por_usuario"].ToString(),
                             ord_aberta_por_nome = rdr["ord_aberta_por_nome"] == DBNull.Value ? string.Empty : rdr["ord_aberta_por_nome"].ToString(),
+                            ord_data_atualizacao_status = rdr["ord_data_atualizacao_status"] == DBNull.Value ? string.Empty : rdr["ord_data_atualizacao_status"].ToString(),
 
                             con_id = rdr["con_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id"]),
+
+                            ord_data_inicio_planejada = rdr["ord_data_inicio_planejada"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_planejada"].ToString(),
+                            ord_data_termino_planejada = rdr["ord_data_termino_planejada"] == DBNull.Value ? string.Empty : rdr["ord_data_termino_planejada"].ToString(),
+
                             ord_data_inicio_programada = rdr["ord_data_inicio_programada"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_programada"].ToString(),
                             ord_data_termino_programada = rdr["ord_data_termino_programada"] == DBNull.Value ? string.Empty : rdr["ord_data_termino_programada"].ToString(),
+
                             ord_data_inicio_execucao = rdr["ord_data_inicio_execucao"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_execucao"].ToString(),
                             ord_data_termino_execucao = rdr["ord_data_termino_execucao"] == DBNull.Value ? string.Empty : rdr["ord_data_termino_execucao"].ToString(),
                             ord_quantidade_estimada = rdr["ord_quantidade_estimada"] == DBNull.Value ? -1 : Convert.ToDouble(rdr["ord_quantidade_estimada"]),
@@ -133,11 +142,13 @@ namespace WebApp.DAO
                             ord_data_cancelamento = rdr["ord_data_cancelamento"] == DBNull.Value ? string.Empty : rdr["ord_data_cancelamento"].ToString(),
                             ord_data_reinicio = rdr["ord_data_reinicio"] == DBNull.Value ? string.Empty : rdr["ord_data_reinicio"].ToString(),
                             con_id_orcamento = rdr["con_id_orcamento"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id_orcamento"]),
-                            tpt_id = rdr["tpt_id"] == DBNull.Value ? string.Empty : rdr["tpt_id"].ToString(),
-                            tpu_data_base_der = rdr["tpu_data_base_der"] == DBNull.Value ? string.Empty : rdr["tpu_data_base_der"].ToString(),
-                            tpu_id = rdr["tpu_id"] == DBNull.Value ? string.Empty : rdr["tpu_id"].ToString(),
-                            tpu_preco_unitario = rdr["tpu_preco_unitario"] == DBNull.Value ? -1 : Convert.ToDouble(rdr["tpu_preco_unitario"]),
-                            lst_proximos_status = rdr["lst_proximos_status"] == DBNull.Value ? string.Empty : rdr["lst_proximos_status"].ToString()
+
+                            ord_codigo_orcamento = rdr["ord_codigo_orcamento"] == DBNull.Value ? string.Empty : rdr["ord_codigo_orcamento"].ToString(),
+
+                            orc_id = rdr["orc_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["orc_id"]),
+
+                            lst_proximos_status = rdr["lst_proximos_status"] == DBNull.Value ? string.Empty : rdr["lst_proximos_status"].ToString(),
+                            ord_indicacao_servico = rdr["ord_indicacao_servico"] == DBNull.Value ? string.Empty : rdr["ord_indicacao_servico"].ToString()
 
                         });
                     }
@@ -195,9 +206,10 @@ namespace WebApp.DAO
                     if (ord.con_id > 0)
                         com.Parameters.AddWithValue("@con_id", ord.con_id);
 
+                    com.Parameters.AddWithValue("@ord_data_inicio_planejada", ord.ord_data_inicio_planejada);
+                    com.Parameters.AddWithValue("@ord_data_termino_planejada", ord.ord_data_termino_planejada);
                     com.Parameters.AddWithValue("@ord_data_inicio_programada", ord.ord_data_inicio_programada);
                     com.Parameters.AddWithValue("@ord_data_termino_programada", ord.ord_data_termino_programada);
-
                     com.Parameters.AddWithValue("@ord_data_inicio_execucao", ord.ord_data_inicio_execucao);
                     com.Parameters.AddWithValue("@ord_data_termino_execucao", ord.ord_data_termino_execucao);
 
@@ -284,7 +296,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@tos_id", ord.tos_id);
                     com.Parameters.AddWithValue("@obj_id", ord.obj_id);
                     com.Parameters.AddWithValue("@ord_ativo", ord.ord_ativo);
-                    com.Parameters.AddWithValue("@ord_data_inicio_programada", ord.ord_data_inicio_programada);
+                    com.Parameters.AddWithValue("@ord_data_inicio_planejada", ord.ord_data_inicio_planejada);
                     com.Parameters.AddWithValue("@ord_aberta_por", ord.ord_aberta_por);
                     com.Parameters.AddWithValue("@ord_data_abertura", ord.ord_data_abertura);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
@@ -528,8 +540,9 @@ namespace WebApp.DAO
         /// <param name="ord_id">Id da OrdemServico selecionada</param>
         /// <param name="obj_id">Id do Objeto da OrdemServico selecionada</param>
         /// <param name="somente_referencia">Retornar somente os documentos de referência</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> OrdemServico_Documentos_ListAll(int ord_id, int obj_id, int? somente_referencia = 0)
+        public List<Documento> OrdemServico_Documentos_ListAll(int ord_id, int obj_id, int? somente_referencia = 0, int? usu_id = null)
         {
             try
             {
@@ -543,6 +556,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@ord_id", ord_id);
                     com.Parameters.AddWithValue("@obj_id", obj_id);
                     com.Parameters.AddWithValue("@somente_referencia", somente_referencia);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -585,8 +599,9 @@ namespace WebApp.DAO
         /// Lista de todos os Documentos Associados ao Objeto da Ordem de Servico selecionada
         /// </summary>
         /// <param name="ord_id">Id do OrdemServico selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos</returns>
-        public List<Documento> OrdemServico_Objeto_Documentos_ListAll(int ord_id)
+        public List<Documento> OrdemServico_Objeto_Documentos_ListAll(int ord_id, int? usu_id = null)
         {
             try
             {
@@ -599,6 +614,7 @@ namespace WebApp.DAO
                     com.CommandType = CommandType.StoredProcedure;
                     //com.Parameters.AddWithValue("@obj_id", obj_id);
                     com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -642,8 +658,9 @@ namespace WebApp.DAO
         /// </summary>
         /// <param name="ord_id">Id da OrdemServico selecionada</param>
         /// <param name="codDoc">Codigo ou parte do Documento a procurar</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
         /// <returns>Lista de Documentos Nao Associados</returns>
-        public List<Documento> OrdemServico_DocumentosNaoAssociados_ListAll(int ord_id, string codDoc)
+        public List<Documento> OrdemServico_DocumentosNaoAssociados_ListAll(int ord_id, string codDoc, int? usu_id = null)
         {
             try
             {
@@ -657,6 +674,7 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@ord_id", ord_id);
                     com.Parameters.AddWithValue("@doc_codigo", codDoc);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
 
                     SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
@@ -687,6 +705,117 @@ namespace WebApp.DAO
 
 
 
+        /// <summary>
+        ///    Busca o valor do campo ord_indicacao_servico
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>string</returns>
+        public string OrdemServico_Indicacao_Servico_ListAll(int ord_id)
+        {
+            try
+            {
+                List<OrdemServico> lst = new List<OrdemServico>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_OS_INDICACAO_SERVICO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+
+                    SqlDataReader rdr = com.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        return rdr["ord_indicacao_servico"] == DBNull.Value ? string.Empty : rdr["ord_indicacao_servico"].ToString();
+                    }
+
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///    Altera os dados da Aba Indicacao de Servico no Banco
+        /// </summary>
+        /// <param name="ord_id">Id da OrdemServico selecionada</param>
+        /// <param name="ord_indicacao_servico">Texto do campo Indicaçao de serviço</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int OrdemServico_Indicacao_Servico_Salvar(int ord_id, string ord_indicacao_servico, int usu_id, string ip)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand();
+                    com.CommandText = "STP_UPD_OS_INDICACAO_SERVICO";
+                    com.Connection = con;
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@ord_indicacao_servico", ord_indicacao_servico);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+                    return Convert.ToInt32(p_return.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Verifica se a O.S. possui apontamentos de serviços e quantitativos
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.</param>
+        /// <returns>decimal</returns>
+        public int OrdemServico_ChecaApontamentoServicos(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_SEL_EMAIL_ITENS_CONSERVA(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    string retorno = (com.ExecuteScalar()).ToString();
+
+                    string strAux = "<tr><td";
+
+                    return (retorno.Length - retorno.Replace(strAux,"").Length) / strAux.Length;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
 
@@ -1179,8 +1308,9 @@ namespace WebApp.DAO
         ///     Lista de Fluxo de Status de OS não deletados / null para todos
         /// </summary>
         /// <param name="fos_id">Id do Fluxo de Status de Ordem de Servico / vazio para todos </param>
+        /// <param name="tos_id">Id do Tipo de Ordem de Servico</param>
         /// <returns>Lista de OrdemServico</returns>
-        public List<OSFluxoStatus> OSFluxoStatus_ListAll(int? fos_id = null)
+        public List<OSFluxoStatus> OSFluxoStatus_ListAll(int? fos_id = null, int? tos_id = null)
         {
             try
             {
@@ -1196,12 +1326,15 @@ namespace WebApp.DAO
                     if (fos_id != null)
                         com.Parameters.AddWithValue("@fos_id", fos_id);
 
-                    SqlDataReader rdr = com.ExecuteReader();
+                   com.Parameters.AddWithValue("@tos_id", tos_id);
+
+                   SqlDataReader rdr = com.ExecuteReader();
                     while (rdr.Read())
                     {
                         lst.Add(new OSFluxoStatus
                         {
                             fos_id = Convert.ToInt16(rdr["fos_id"]),
+                            tos_id = Convert.ToInt16(rdr["tos_id"]),
                             fos_descricao = rdr["fos_descricao"].ToString(),
                             fos_ativo = Convert.ToInt16(rdr["fos_ativo"]),
 
@@ -1258,6 +1391,7 @@ namespace WebApp.DAO
                     if (fos.fos_id > 0)
                         com.Parameters.AddWithValue("@fos_id", fos.fos_id);
 
+                    com.Parameters.AddWithValue("@tos_id", fos.tos_id);
                     com.Parameters.AddWithValue("@sos_id_de", fos.sos_id_de);
                     com.Parameters.AddWithValue("@sos_id_para", fos.sos_id_para);
                     com.Parameters.AddWithValue("@fos_descricao", fos.fos_descricao);
@@ -1335,6 +1469,397 @@ namespace WebApp.DAO
                     i = com.ExecuteNonQuery();
                 }
                 return i;
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        // *************** OrdemServico DE REPARO *************************************************************
+
+
+        /// <summary>
+        /// Lista dos Itens da Ordens de Servico de Reparo selecionada
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico a se filtrar</param>
+        /// <returns>Lista de OrcamentoDetalhes</returns>
+        public List<OrcamentoDetalhes> OrdemServicoReparo_ListAll(int ord_id)
+        {
+            try
+            {
+                int obj_idElemento_atual = -1;
+                int obj_idElemento_anterior = -1;
+
+                List<OrcamentoDetalhes> lst = new List<OrcamentoDetalhes>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_OS_REPARO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        obj_idElemento_atual = Convert.ToInt16(rdr["obj_idElemento"]);
+
+                        lst.Add(new OrcamentoDetalhes
+                        {
+
+                            ore_id = Convert.ToInt32(rdr["ore_id"]),
+                            orc_id_pai = Convert.ToInt32(rdr["orc_id_pai"]),
+
+                            obj_idElemento = obj_idElemento_atual,
+                            obj_codigoElemento = obj_idElemento_atual != obj_idElemento_anterior ? rdr["obj_codigoElemento"].ToString() : "",
+                            obj_descricaoElemento = obj_idElemento_atual != obj_idElemento_anterior ? rdr["obj_descricaoElemento"].ToString() : "",
+
+                            ian_id = rdr["ian_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ian_id"]),
+                            ian_numero = ((rdr["ian_numero"] == DBNull.Value) || (Convert.ToInt32(rdr["ian_numero"]) == 0)) ? "" : rdr["ian_numero"].ToString(),
+
+                            ian_ordem_apresentacao = Convert.ToInt16(rdr["ian_ordem_apresentacao"]),
+
+                            atp_id = rdr["atp_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["atp_id"]),
+                            atp_codigo = rdr["atp_codigo"] == DBNull.Value ? "" : rdr["atp_codigo"].ToString(),
+                            atp_descricao = rdr["atp_descricao"] == DBNull.Value ? "" : rdr["atp_descricao"].ToString(),
+
+                            ian_sigla = rdr["ian_sigla"] == DBNull.Value ? "" : rdr["ian_sigla"].ToString(),
+                            leg_id = rdr["leg_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["leg_id"]),
+                            leg_codigo = rdr["leg_codigo"] == DBNull.Value ? "" : rdr["leg_codigo"].ToString(),
+                            leg_descricao = rdr["leg_descricao"] == DBNull.Value ? "" : rdr["leg_descricao"].ToString(),
+
+                            ale_id = rdr["ale_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ale_id"]),
+                            ale_codigo = rdr["ale_codigo"] == DBNull.Value ? "" : rdr["ale_codigo"].ToString(),
+                            ale_descricao = rdr["ale_descricao"] == DBNull.Value ? "" : rdr["ale_descricao"].ToString(),
+
+                            aca_id = rdr["aca_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["aca_id"]),
+                            aca_codigo = rdr["aca_codigo"] == DBNull.Value ? "" : rdr["aca_codigo"].ToString(),
+                            aca_descricao = rdr["aca_descricao"] == DBNull.Value ? "" : rdr["aca_descricao"].ToString(),
+                            ian_quantidade = rdr["ian_quantidade"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade"], culturePTBR),
+                                                                          
+
+                             rpt_id_sugerido = rdr["rpt_id_sugerido"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_sugerido"]),
+                            rpt_id_sugerido_codigo = rdr["rpt_id_sugerido_codigo"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_codigo"].ToString(),
+                            rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
+                            rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
+                            ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"], culturePTBR),
+                            rtu_preco_unitario_sugerido = rdr["rtu_preco_unitario_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_sugerido"], culturePTBR),
+                            rtu_valor_total_linha_sugerido = rdr["rtu_valor_total_linha_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_linha_sugerido"], culturePTBR),
+
+                            valor_total_sugerido = rdr["valor_total_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_sugerido"], culturePTBR),
+                            valor_total_adotado = rdr["valor_total_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_adotado"], culturePTBR),
+
+                            vtotal_reparos = rdr["vtotal_reparos"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vtotal_reparos"], culturePTBR),
+                            vtotal_reparos_executado = rdr["vtotal_reparos_executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vtotal_reparos_executado"], culturePTBR),
+
+                            vTotalOrcamento = rdr["vTotalOrcamento"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vTotalOrcamento"], culturePTBR),
+                            vTotalOrcamento_Executado = rdr["vTotalOrcamento_Executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vTotalOrcamento_Executado"], culturePTBR),
+
+
+                            rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
+                            rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
+                            rpt_id_adotado_descricao = rdr["rpt_id_adotado_descricao"] == DBNull.Value ? "" : rdr["rpt_id_adotado_descricao"].ToString(),
+                            rpt_id_adotado_unidade = rdr["rpt_id_adotado_unidade"] == DBNull.Value ? "" : rdr["rpt_id_adotado_unidade"].ToString(),
+                            ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"]),
+                            rtu_preco_unitario_adotado = rdr["rtu_preco_unitario_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_adotado"], culturePTBR),
+                            rtu_valor_total_linha_adotado = rdr["rtu_valor_total_linha_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_linha_adotado"], culturePTBR),
+
+                            ast_id = rdr["ast_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ast_id"]),
+                            ast_codigo = rdr["ast_codigo"] == DBNull.Value ? "" : rdr["ast_codigo"].ToString(),
+                            ast_descricao = rdr["ast_descricao"] == DBNull.Value ? "" : rdr["ast_descricao"].ToString()
+                       });
+
+                        obj_idElemento_anterior = obj_idElemento_atual;
+                    }
+
+
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Busca as O.Ss de Reparo criadas a partir da O.S. de Orçamento
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. de Orçamento</param>
+        /// <returns>string</returns>
+        public string ConcatenaOSReparo(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("SELECT dbo.ConcatenaOSReparo(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    return com.ExecuteScalar().ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+        /// <summary>
+        ///  Altera Status de Item de Reparo  Ordem de Servico
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int OrdemServicoReparoItem_Status(int ore_id, int ord_id, int ast_id, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_OS_REPARO_ITEM_STATUS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ore_id", ore_id);
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@ast_id", ast_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///  Altera Status dos Itens Nao Reparados da Ordem de Servico
+        /// </summary>
+        /// <param name="ord_id">Id do Reparo Selecionado</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int OrdemServicoReparo_Atualiza_Itens_NaoReparados(int ord_id, int usu_id, string ip)
+        {
+            try
+            {
+                int i;
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_OS_REPARO_ITEM_NAO_REPARADOS", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+        /// <summary>
+        ///  Checa se a Inspecao já tem Versao de Orcamento aberta
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <returns>int</returns>
+        public int OrdemServico_Checa_Tem_Versao_Orcamento(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("OrdemServico_Checa_Tem_Versao_Orcamento", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///  Salva a Quantidade Executada do Servico selecionado
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ose_id">Id do Servico Selecionado</param>
+        /// <param name="qtValor">Valor do Servico</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int ServicosQtExecutado_Salvar(int ord_id, int ose_id, string qtValor, int usu_id, string ip)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_OS_SERVICO_EXECUTADO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@ose_id", ose_id);
+                    com.Parameters.AddWithValue("@ose_quantidade_executada", qtValor);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Busca o valor do Status atual da O.S.
+        /// </summary>
+        /// <param name="ord_id">Id da O.S</param>
+        /// <returns>int</returns>
+        public int Orcamento_Total(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_StatusOS(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    int retorno = Convert.ToInt32(com.ExecuteScalar());
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+
+
+        /// <summary>
+        /// Busca os dados do Email 
+        /// </summary>
+        /// <param name="msg_id">Id da mensagem</param>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>Dados do Email</returns>
+        public List<OSEmail> OSEmail_ID(int ord_id, int msg_id)
+        {
+            try
+            {
+
+                List<OSEmail> lst = new List<OSEmail>();
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_SEL_MENSAGEM_EMAIL", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.Clear();
+                    com.Parameters.AddWithValue("@msg_id", msg_id);
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        lst.Add(new OSEmail
+                        {
+                            destinatarios = rdr["destinatarios"].ToString(),
+                            assunto = rdr["assunto"].ToString(),
+                            mensagem = rdr["mensagem"].ToString()
+                       });
+                    }
+                    return lst;
+                }
             }
             catch (Exception ex)
             {

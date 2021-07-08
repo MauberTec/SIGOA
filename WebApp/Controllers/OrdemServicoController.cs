@@ -31,6 +31,11 @@ namespace WebApp.Controllers
                 case 3: ficha = "~/Views/Shared/_fichaInspecaoRotineira.cshtml";break;
                 case 4: ficha = "~/Views/Shared/_fichaInspecaoEspecial.cshtml";  break;
                 case 5: ficha = "~/Views/Shared/_fichaInspecaoEspecialCampo.cshtml";  break;
+                case 6: ficha = "~/Views/Shared/_fichaNotificacaoOcorrencia.cshtml";  break;
+                case 7: ficha = "~/Views/Shared/_fichaInspecaoEspecialProvidencias.cshtml";  break;
+                case 8: ficha = "~/Views/Shared/_fichaInspecaoRotineiraProvidencias.cshtml";  break;
+                case 14: ficha = "~/Views/Shared/_fichaRequalificacaoOAE.cshtml";  break;
+                case 23: ficha = "~/Views/Shared/_fichaRequalificacaoOAE.cshtml";  break;
             }
 
                 return PartialView(ficha);
@@ -54,6 +59,8 @@ namespace WebApp.Controllers
             ViewBag.cmbStatusOS = new OrdemServicoBLL().PreencheCmbStatusOS();
 
             ViewBag.cmbClassesOS = new OrdemServicoBLL().PreencheCmbClassesOS();
+
+            ViewBag.cmbEmailRegionais = new ObjetoBLL().PreenchecmbEmailRegionais();
 
             return View();
         }
@@ -226,6 +233,27 @@ namespace WebApp.Controllers
 
 
 
+        /// <summary>
+        ///    Busca o valor do campo ord_indicacao_servico
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult OrdemServico_Indicacao_Servico_ListAll(int ord_id)
+        {
+            return Json(new { data = new OrdemServicoBLL().OrdemServico_Indicacao_Servico_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///    Altera os dados da Aba Indicacao de Servico no Banco
+        /// </summary>
+        /// <param name="ord_id">Id do OrdemServico Selecionado</param>
+        /// <param name="ord_indicacao_servico">Texto do campo Indicaçao de serviço</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServico_Indicacao_Servico_Salvar(int ord_id, string ord_indicacao_servico)
+        {
+            return Json(new OrdemServicoBLL().OrdemServico_Indicacao_Servico_Salvar(ord_id, ord_indicacao_servico), JsonRequestBehavior.AllowGet);
+        }
 
 
         // *************** TIPO DE Ordem de Servico  *************************************************************
@@ -377,10 +405,11 @@ namespace WebApp.Controllers
         /// <summary>
         /// Lista de todas os Fluxos de Status de Ordens de Servicos não deletados
         /// </summary>
+        /// <param name="tos_id">Id do Tipo de Ordem de Servico</param>
         /// <returns>JsonResult Lista de OSFluxoStatuss</returns>
-        public JsonResult OSFluxoStatus_ListAll()
+        public JsonResult OSFluxoStatus_ListAll(int tos_id)
         {
-            return Json(new { data = new OrdemServicoBLL().OSFluxoStatus_ListAll() }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new OrdemServicoBLL().OSFluxoStatus_ListAll(tos_id) }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -428,6 +457,105 @@ namespace WebApp.Controllers
         {
             return Json(new OrdemServicoBLL().OSFluxoStatus_Salvar(fos), JsonRequestBehavior.AllowGet);
         }
+
+
+
+        /// <summary>
+        ///  Envia Email de Notificacao
+        /// </summary>
+        /// <param name="lstDestinatarios">Lista de Destinatarios separada por ponto e virgula</param>
+        /// <param name="TextoEmail">Texto do Email</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult FichaNotificacao_EnviarEmail(string lstDestinatarios="", string TextoEmail = "", int ord_id = 0)
+        {
+            string retorno = new OrdemServicoBLL().FichaNotificacao_EnviarEmail(lstDestinatarios, TextoEmail, ord_id);
+            bool valid = retorno.Trim() == "" ? true : false;
+
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+        /// <summary>
+        /// Lista dos Itens da Ordens de Servico de Reparo selecionada
+        /// </summary>
+        /// <param name="ord_id">Id da Ordem de Servico a se filtrar</param>
+        /// <returns>JsonResult Lista de OrcamentoDetalhes</returns>
+        public JsonResult OrdemServicoReparo_ListAll(int ord_id)
+        {
+            return Json(new { data = new OrdemServicoBLL().OrdemServicoReparo_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Busca as O.Ss de Reparo criadas a partir da O.S. de Orçamento
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. de Orçamento</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult ConcatenaOSReparo(int ord_id)
+        {
+            return Json(new { data = new OrdemServicoBLL().ConcatenaOSReparo(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Altera Status de Item de Reparo  Ordem de Servico
+        /// </summary>
+        /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServicoReparoItem_Status(int ore_id, int ord_id, int ast_id)
+        {
+            int retorno = new OrdemServicoBLL().OrdemServicoReparoItem_Status(ore_id, ord_id, ast_id);
+            bool valid = retorno >= 0 || retorno == -314159;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Altera Status dos Itens Nao Reparados da Ordem de Servico
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServicoReparo_Atualiza_Itens_NaoReparados(int ord_id)
+        {
+            int retorno = new OrdemServicoBLL().OrdemServicoReparo_Atualiza_Itens_NaoReparados(ord_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        ///  Checa se a Inspecao já tem Versao de Orcamento aberta
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServico_Checa_Tem_Versao_Orcamento(int ord_id)
+        {
+            int retorno = new OrdemServicoBLL().OrdemServico_Checa_Tem_Versao_Orcamento(ord_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        /// <summary>
+        ///  Salva a Quantidade Executada do Servico selecionado
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ose_id">Id do Servico Selecionado</param>
+        /// <param name="qtValor">Valor do Servico</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult ServicosQtExecutado_Salvar(int ord_id, int ose_id, string qtValor)
+        {
+            int retorno = new OrdemServicoBLL().ServicosQtExecutado_Salvar(ord_id, ose_id, qtValor);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

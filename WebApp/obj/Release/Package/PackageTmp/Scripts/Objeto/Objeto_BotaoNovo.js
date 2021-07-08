@@ -17,10 +17,7 @@ var options2 = {
 };
 
 jQuery("#txtNumeroObjeto").mask("00", options2);
-jQuery("#txtLocalizacao").mask("00", options);
-jQuery("#txtLocalizacaoAte_Novo").mask("00", options);
-//jQuery("#txtLocalizacaoAte_Novo").attr('placeholder', "00");
-//jQuery("#txtLocalizacao").attr('placeholder', "00");
+
 
 
 function validaCodigoDigitavel() {
@@ -83,19 +80,6 @@ function validaCodigoDigitavel() {
             }
     }
 
-    // checa SUBDIVISAO3
-    if (document.getElementById("divSubdivisao3").style.display == 'block') {
-        var subdivisao3 = $("#cmbSubdivisao3").val();
-        if ((subdivisao3 == null) || (subdivisao3 < 0)) {
-            campoBuraco = "A Subdivisão 3";
-            vazios += 1;
-        }
-        else
-            if (vazios > 0) {
-                return ("Código com falhas na sequência." + campoBuraco + " não possui seleção e o combo Subdivisão 2 está selecionado");
-                // nao_vazios_apos += 1;
-            }
-    }
 
     // checa GRUPO DE OBJETOS
     var grupoObjetos = $("#cmbGrupoObjetos").val();
@@ -122,18 +106,6 @@ function validaCodigoDigitavel() {
                 //nao_vazios_apos += 1;
             }
     }
-
-    // checa LOCALIZACAO
-    var localizacao = $("#txtLocalizacao").val();
-    if (localizacao == "") {
-        campoBuraco = "A Localização";
-        vazios += 1;
-    }
-    else
-        if (vazios > 0) {
-            return ("Código com falhas na sequência." + campoBuraco + " não possui seleção/valor e a Localização possui");
-            //nao_vazios_apos += 1;
-        }
 
 
     //  return "vazios: " + vazios + " naovazios: " + nao_vazios_apos;
@@ -198,16 +170,6 @@ function PreenchetxtCodigoDigitavel() {
     else
         subdivisao2 = "";
 
-    var cmbSubdivisao3 = document.getElementById("cmbSubdivisao3");
-    if ((cmbSubdivisao3.options.length > 0) && (cmbSubdivisao3.selectedIndex > 0))
-    {
-        subdivisao3 = "-" + getTipoCodigo(cmbSubdivisao3.options[cmbSubdivisao3.selectedIndex].value);
-        item = cmbSubdivisao3.options[cmbSubdivisao3.selectedIndex].text;
-    }
-    else
-        subdivisao3 = "";
-
-
     var cmbGrupoObjetos = document.getElementById("cmbGrupoObjetos");
     if ((cmbGrupoObjetos.options.length > 0) && (cmbGrupoObjetos.selectedIndex > 0))
     {
@@ -223,14 +185,8 @@ function PreenchetxtCodigoDigitavel() {
     if (numeroObjeto != "")
         item = "Número Objeto ";
 
-    var cmbAEVCVG_Novo = document.getElementById("cmbAEVCVG_Novo");
-    var localizacao = $("#txtLocalizacao").val() == "" ? "" : "-" + cmbAEVCVG_Novo.options[cmbAEVCVG_Novo.selectedIndex].value + $("#txtLocalizacao").val();
 
-    txt.val(rodovia.trim() + rodoviaLado.trim() + OAE.trim() + tipoOAE.trim() + subdivisao1.trim() + subdivisao2.trim() + subdivisao3.trim() + grupoObjetos.trim() + numeroObjeto.trim() + localizacao.trim());
-
-    if ((cmbAEVCVG_Novo.options.length >= 0) && (localizacao != "")) // possui valor ==> entao tem localizacao
-        item = "Localização ";
-
+    txt.val(rodovia.trim() + rodoviaLado.trim() + OAE.trim() + tipoOAE.trim() + subdivisao1.trim() + subdivisao2.trim() + grupoObjetos.trim() + numeroObjeto.trim() );
 
     // preenche Descricao
     if (item.includes("OAE Km"))
@@ -244,28 +200,11 @@ function PreenchetxtCodigoDigitavel() {
             var masculinos = [14, 15, 16,24, 25, 32, 33, 34, 36, 37, 38, 39, 40, 44, 45, 46, 47, 50, 52, 57, 72, 73, 76, 77, 78, 80, 81, 82, 84, 87, 90, 93, 104, 105, 106, 108, 110];
             var plural = [33, 39, 40, 43, 47, 56, 95, 98, 101, 106, 114];
             var ss = plural.includes(idGrupo) ? "s" : "";
-            var localizacaoNome = "";
             var pedacosCodigo = txt.val().split("-");
             //var codGrupo = pedacosCodigo[pedacosCodigo.length - 2];
-            //var localizacaoCodigo = obj_codigo + "-" + (cmbAEVCVG.selectedIndex > -1 ? cmbAEVCVG.options[cmbAEVCVG.selectedIndex].value : "") + $('#txtcodigo').val();
             var nomeGrupo = cmbGrupoObjetos.options[cmbGrupoObjetos.selectedIndex].text;
 
-            if ((cmbAEVCVG_Novo.options.length >= 0) && (localizacao != "")) {
-                switch (cmbAEVCVG_Novo.options[cmbAEVCVG_Novo.selectedIndex].value) {
-                    case "A": localizacaoNome = "Apoio"; break;
-                    case "E": localizacaoNome = "Encontro"; break;
-                    case "V": localizacaoNome = "Vão"; break;
-                    case "VC": localizacaoNome = "Vão Caixão Perdido"; break;
-                    case "VG": localizacaoNome = "Vão em Grelha"; break;
-                }
-
-                // coloca a descricao
-                $('#txtNovoDescricao').val(localizacaoNome + " #" + $('#txtLocalizacao').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + (lstExcecoes.includes(obj_tipoGrupo) ? " " : " #" + $("#txtNumeroObjeto").val()) );
-                //  $('#txtNovoDescricao').val(localizacaoNome + " #" + $('#txtLocalizacao').val() + (masculinos.includes(idGrupo) ? " do" + ss : " da" + ss) + " " + nomeGrupo + " #" + $("#txtNumeroObjeto").val() + ' (' + txt.val() + ')' ) ;
-            }
-            else
                 if ($("#txtNumeroObjeto").val() != "") {
-                    // $('#txtNovoDescricao').val(nomeGrupo + " #" + txt.val().replace(localizacao,"") ) ;
                     $('#txtNovoDescricao').val(nomeGrupo + " #" + $('#txtNumeroObjeto').val() + " (" + txt.val() + "-" + $('#txtcodigo').val() + ")");
                 }
                 else
@@ -280,13 +219,11 @@ function PreenchetxtCodigoDigitavel() {
 }
 function LimparCampos(aPartirDe) {
 
-    $("#cmbAEVCVG_Novo").html(""); // limpa 
-    $('#txtLocalizacaoAte_Novo').val("00");
+    if (aPartirDe <= 1) $("#cmbRodovia").val(-1);
 
-    if (aPartirDe <= 1) $("#cmbRodovia").val(null);
     if (aPartirDe <= 2) {
         $('#txtRodovia').val("");
-        $("#txtRodovia").attr('placeholder', "");
+        $("#txtRodovia").attr('placeholder', "Código Rodovia");
         $("#cmbRodoviaED").val(null);
         document.getElementById("tdcmbRodoviaED").style.display = 'none';
     }
@@ -303,32 +240,29 @@ function LimparCampos(aPartirDe) {
         $("#cmbSubdivisao2").html("");
     }
 
-    if (aPartirDe <= 7) $("#cmbSubdivisao3").html(""); // limpa os itens existentes;
     if (aPartirDe <= 8) $("#cmbGrupoObjetos").html(""); // limpa os itens existentes;
-    if (aPartirDe <= 9) $('#txtNumeroObjeto').val("");
-    if (aPartirDe <= 10) $('#txtLocalizacao').val("");
+    if (aPartirDe <= 9) {
+        $('#txtNumeroObjeto').val("");
+        $('#txtNumeroObjetoAte_Novo').val("");
+    }
+
 
     $('#txtNovoDescricao').val("");
 
     jQuery("#txtNumeroObjeto").mask("00", options2);
 
     PreenchetxtCodigoDigitavel();
-}
-
-function bntNovo_click() {
-
-    LimparCampos(0);
-
-    // oculta o divs Subdivisao2 e 3
-    document.getElementById("divSubdivisao2").style.display = 'none';
-    document.getElementById("divSubdivisao3").style.display = 'none';
-
 
     jQuery("#txtOAE").mask("000,000", options);
     jQuery("#txtOAE").attr("placeholder", "000,000 - Quilometragem");
 
-    // preenche combo
-    preencheCombo(1, 'cmbRodovia', '--Selecione--', null);
+    return false;
+}
+
+function bntNovo_click() {
+
+    jQuery("#txtOAE").mask("000,000", options);
+    jQuery("#txtOAE").attr("placeholder", "000,000 - Quilometragem");
 
     $("#modalNovoRegistro").modal('show');
 }
@@ -351,7 +285,7 @@ function bntSalvarNovo_click() {
             obj_codigo: $('#txtCodigoDigitavel').val(),
             obj_descricao: $('#txtNovoDescricao').val(),
             obj_NumeroObjetoAte: $('#txtNumeroObjetoAte_Novo').val(),
-            obj_localizacaoAte: $('#txtLocalizacaoAte_Novo').val()
+            obj_localizacaoAte:""
         };
 
         $.ajax({
@@ -361,6 +295,17 @@ function bntSalvarNovo_click() {
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function (result) {
+
+                if (result.length > 40) // 'Usuário sem permissão para criar objeto'
+                {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: result
+                    });
+                    return false;
+                }
+
                 // fecha o modal
                 $("#modalNovoRegistro").modal('hide');
                 ehInsercao = 0;
@@ -394,8 +339,15 @@ function bntSalvarNovo_click() {
                 return false;
             },
             error: function (errormessage) {
-                alert(errormessage.responseText);
                 ehInsercao = 0;
+
+                var dom_nodes = $($.parseHTML(errormessage.responseText));
+                swal({
+                    type: 'error',
+                    title: 'Aviso',
+                    text: dom_nodes.filter('title').text()
+                });
+
                 return false;
             }
         });
@@ -419,7 +371,6 @@ function preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) {
         dataType: "JSON",
         data: { clo_id: clo_id, tip_pai: tip_pai },
         success: function (lstSubNiveis) {
-            $
 
             $.each(lstSubNiveis, function (i, subNivel) {
                 cmb.append($('<option></option>').val(subNivel.Value.trim()).html(subNivel.Text.trim()));
@@ -443,6 +394,7 @@ function getTipoMascara(aux) {
         case 1: saida = "SP 000"; break; // Rodovia
         case 2: saida = "SPM 000-Y"; break; // Marginal
         case 3: saida = "SPA 000/000"; break; // Acesso
+        case 136: saida = "SPC 000/000"; break; // Contorno
         case 4: saida = "SPI 000/000"; break; // Interligacao
         case 5: saida = "SPD 000/000"; break; //Dispositivo
         case 6: saida = "SPV 000-000"; break; // vicinal
@@ -513,7 +465,6 @@ function cmbSubdivisao1_onchange() {
 
     // oculta o divs Subdivisao2
     document.getElementById("divSubdivisao2").style.display = 'none';
-    document.getElementById("divSubdivisao3").style.display = 'none';
 
     // superestrutura
     if (ivalor == 11) {
@@ -565,67 +516,12 @@ function cmbSubdivisao1_onchange() {
 
 function cmbSubdivisao2_onchange() {
 
-    // oculta o divs Subdivisao3
-    document.getElementById("divSubdivisao3").style.display = 'none';
-
     // preenche proximo combo
     var valor = document.getElementById("cmbSubdivisao2").value;
     var ivalor = getTipoId(valor);
 
-    if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
         LimparCampos(9);
         preencheCombo(9, 'cmbGrupoObjetos', '--Selecione--', ivalor)
-    }
-    else {
-        LimparCampos(8);
-        document.getElementById("divSubdivisao3").style.display = 'block';
-        preencheCombo(8, 'cmbSubdivisao3', '--Selecione--', ivalor)
-    }
-
-    // preenche o combo localizacao
-    if ((ivalor == 15) || (ivalor == 16)) {// 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior
-        $("#cmbAEVCVG_Novo").html(""); // limpa os itens existentes
-        switch (ivalor) {
-            case 15: $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("V").html("V"));  break;// Tabuleiro Face Superior
-            case 16: 
-                    $("#cmbAEVCVG_Novo").append($('<option selected></option>').val("V").html("V"));
-                    $("#cmbAEVCVG_Novo").append($('<option></option>').val("VC").html("VC"));
-                    $("#cmbAEVCVG_Novo").append($('<option></option>').val("VG").html("VG"));
-                break;// Tabuleiro Face Inferior
-        }
-    }
-
-    // preenche novamente o cmbAEVCVG_Novo
-    valor = document.getElementById("cmbSubdivisao1").value;
-    ivalor = getTipoId(valor);
-
-    if (ivalor == 14)// Encontro
-        $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("E").html("E"));
-    else
-        if ((ivalor == 12) || (ivalor == 13)) // Mesoestrutura, Infraestrutura
-            $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("A").html("A"));
-
-
-}
-function cmbSubdivisao3_onchange() {
-
-    // preenche proximo combo
-    var valor = document.getElementById("cmbSubdivisao3").value;
-    var ivalor = getTipoId(valor);
-
-    LimparCampos(8);
-    preencheCombo(9, 'cmbGrupoObjetos', '--Selecione--', ivalor)
-
-    // preenche novamente o cmbAEVCVG_Novo
-    valor = document.getElementById("cmbSubdivisao1").value;
-    ivalor = getTipoId(valor);
-
-    if (ivalor == 14)// Encontro
-        $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("E").html("E"));
-    else
-        if ((ivalor == 12) || (ivalor == 13)) // Mesoestrutura, Infraestrutura
-            $("#cmbAEVCVG_Novo").append($('<option selected disabled></option>').val("A").html("A"));
-
 
 }
 
@@ -636,19 +532,12 @@ function cmbGrupoObjetos_onchange() {
 
     if (lstExcecoes.includes(valor)) {
         document.getElementById("divNumeroObjeto").style.display = 'none';
+        LimparCampos(9);
     }
     else
     {
         document.getElementById("divNumeroObjeto").style.display = 'block';
     }
-
-    PreenchetxtCodigoDigitavel();
-}
-
-function txtLocalizacao_onkeyup() {
-
-    var txtLocalizacao = $("#txtLocalizacao");
-    txtLocalizacao.val(txtLocalizacao.val().toUpperCase());
 
     PreenchetxtCodigoDigitavel();
 }

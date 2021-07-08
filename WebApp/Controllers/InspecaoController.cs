@@ -98,7 +98,10 @@ namespace WebApp.Controllers
         /// <returns>JsonResult</returns>
         public JsonResult InspecaoAnomalias_Valores_ListAll(int ord_id)
         {
-            return Json(new { data = new InspecaoBLL().InspecaoAnomalias_Valores_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+            var jsonResult = Json(new { data = new InspecaoBLL().InspecaoAnomalias_Valores_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         /// <summary>
@@ -116,6 +119,32 @@ namespace WebApp.Controllers
             return Json(new InspecaoBLL().InspecaoAnomalias_Valores_Salvar(ord_id, ins_anom_Responsavel, ins_anom_data, ins_anom_quadroA_1, ins_anom_quadroA_2, listaConcatenada), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        ///  Excluir (logicamente) a Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult InspecaoAnomalia_Excluir(int id)
+        {
+            int retorno = new InspecaoBLL().InspecaoAnomalia_Excluir(id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+       /// <summary>
+        ///  Nova Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult InspecaoAnomalia_Nova(int id)
+        {
+            int retorno = new InspecaoBLL().InspecaoAnomalia_Nova(id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         /// <summary>
@@ -127,20 +156,6 @@ namespace WebApp.Controllers
         public JsonResult InspecaoAnomaliaObjetos_Salvar(int ord_id, string obj_ids)
         {
             return Json(new InspecaoBLL().InspecaoAnomaliaObjetos_Salvar(ord_id, obj_ids), JsonRequestBehavior.AllowGet);
-        }
-
-
-        /// <summary>
-        ///  Excluir (logicamente) Objeto da inspecao
-        /// </summary>
-        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
-        /// <returns>JsonResult</returns>
-        [HttpPost]
-        public JsonResult InspecaoAnomaliaObjetos_Excluir(int id)
-        {
-            int retorno = new InspecaoBLL().InspecaoAnomaliaObjetos_Excluir(id);
-            bool valid = retorno >= 0;
-            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -166,6 +181,16 @@ namespace WebApp.Controllers
         }
 
 
+        /// <summary>
+        /// lista concatenada dos alertas de anomalia por legenda
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult InspecaoAnomaliaAlertas_by_Legenda(string leg_codigo)
+        {
+            return Json(new { data = new InspecaoBLL().InspecaoAnomaliaAlertas_by_Legenda(leg_codigo) }, JsonRequestBehavior.AllowGet);
+        }
+
 
         /// <summary>
         /// Procura o Reparo Sugerido
@@ -174,10 +199,11 @@ namespace WebApp.Controllers
         /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
         /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
         /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <param name="rpt_area">Área da Anomalia</param>
         /// <returns>JsonResult</returns>
-        public JsonResult InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        public JsonResult InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo, string rpt_area)
         {
-            return Json(new { data = new InspecaoBLL().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new InspecaoBLL().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo, Convert.ToDouble(rpt_area.Replace(".",","))) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -187,10 +213,11 @@ namespace WebApp.Controllers
         ///    Cria Ficha Inspecao Especial Exportada para XLS
         /// </summary>
         /// <param name="ord_id">Id da O.S pertinente ao objeto</param>
+        /// <param name="origem">Tela que chamou o evento</param>
         /// <returns>JsonResult caminho do arquivo</returns>
-        public JsonResult FichaInspecaoEspecialAnomalias_ExportarXLS(int ord_id)
+        public JsonResult FichaInspecaoEspecialAnomalias_ExportarXLS(int ord_id, string origem)
         {
-            return Json(new { data = new InspecaoBLL().FichaInspecaoEspecialAnomalias_ExportarXLS(ord_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new InspecaoBLL().FichaInspecaoEspecialAnomalias_ExportarXLS(ord_id, origem) }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -261,6 +288,18 @@ namespace WebApp.Controllers
             return Json(new InspecaoBLL().InspecaoTipo_Salvar(atp), JsonRequestBehavior.AllowGet);
         }
 
+
+        // *************** PROVIDENCIAS  *************************************************************
+
+        /// <summary>
+        /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.selecionada</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult InspecaoAnomalias_Valores_Providencias_ListAll(int ord_id)
+        {
+            return Json(new { data = new InspecaoBLL().InspecaoAnomalias_Valores_Providencias_ListAll(ord_id) }, JsonRequestBehavior.AllowGet);
+        }
 
 
 

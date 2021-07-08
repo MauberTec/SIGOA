@@ -611,3 +611,27 @@ var corVermelho = "rgb(228, 88, 71)";
 var corBranca = "rgb(255, 255, 255)";
 
 
+function Left(str, n) {
+    if (n <= 0)
+        return "";
+    else if (n > String(str).length)
+        return str;
+    else
+        return String(str).substring(0, n);
+}
+
+function Right(str, n) {
+    if (n <= 0)
+        return "";
+    else if (n > String(str).length)
+        return str;
+    else {
+        var iLen = String(str).length;
+        return String(str).substring(iLen, iLen - n);
+    }
+}
+
+function resetTimeout()
+{
+    timeout = 120 * 60 * 1000;
+}

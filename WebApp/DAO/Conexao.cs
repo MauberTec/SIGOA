@@ -22,8 +22,10 @@ namespace WebApp.DAO
         /// </summary>
         public Conexao()
         {
-            this.strConn = new Gerais().Decrypt(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["CONNECTION_DER"].ConnectionString);
+           this.strConn = new Gerais().Decrypt(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["CONNECTION_DER"].ConnectionString);
+             //  this.strConn = @"Data Source=DESKTOP-2G00LDV\SQLEXPRESS;Database=SIGOA_DESENV;Integrated Security=True;";
         }
+
 
         /// <summary>
         /// Checa se existe conexão com o banco de dados. Timeout padrão 15 segundos
@@ -35,6 +37,7 @@ namespace WebApp.DAO
             {
                 try
                 {
+
                     connection.Open();
                     return true;
                 }
@@ -44,6 +47,28 @@ namespace WebApp.DAO
                 }
             }
         }
+        /// <summary>
+        /// Retorna o nome do banco de dados da connectionstring
+        /// </summary>
+        /// <returns>Nome do Banco Acessado</returns>
+        public string QualBD()
+        {
+            this.strConn = new Gerais().Decrypt(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["CONNECTION_DER"].ConnectionString);
+
+            string [] pedacos = strConn.Split(";".ToCharArray());
+            for (int i=0; i < pedacos.Length; i++)
+            {
+               if (pedacos[i].StartsWith("Initial Catalog"))
+                 {
+                    string[] valores = pedacos[i].Split("=".ToCharArray());
+                    return valores[1].Replace("SIGOA", "").Replace("_", "");
+                }
+            }
+
+            return "";
+        }
+
+
     }
 }
 

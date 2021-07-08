@@ -513,7 +513,10 @@
                             <TextRun>
                               <Value>=Fields!variavel.Value</Value>
                               <Style>
+                                <FontStyle>=iif(replace(Fields!tpu_descricao_itens_cmb.Value,"1:;2:;3:","") &lt;&gt; "" and Fields!temDadosPreenchidos.Value = 0, "Italic", "Normal")</FontStyle>
                                 <FontFamily>Calibri</FontFamily>
+                                <FontWeight>=iif(replace(Fields!tpu_descricao_itens_cmb.Value,"1:;2:;3:","") &lt;&gt; "" and Fields!temDadosPreenchidos.Value = 0, "Bold", "Normal")</FontWeight>
+                                <Color>=iif(replace(Fields!tpu_descricao_itens_cmb.Value,"1:;2:;3:","") &lt;&gt; "" and Fields!temDadosPreenchidos.Value = 0, "Red", "Black")</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -665,7 +668,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -708,7 +710,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ovv_tpu_quantidade.Value</Value>
+                              <Value>=iif(Fields!ovv_tpu_quantidade.Value=0 and Fields!temDadosPreenchidos.Value=0,"",Fields!ovv_tpu_quantidade.Value)</Value>
                               <Style>
                                 <FontFamily>Calibri</FontFamily>
                               </Style>
@@ -914,6 +916,34 @@
         <Field Name="condicao_inspecao_cmb">
           <DataField>condicao_inspecao_cmb</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="cgv_id">
+          <DataField>cgv_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="cov_id">
+          <DataField>cov_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="tpu_descricao_itens_cmb">
+          <DataField>tpu_descricao_itens_cmb</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="prt_id">
+          <DataField>prt_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="prt_descricao">
+          <DataField>prt_descricao</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="providencias_cmb">
+          <DataField>providencias_cmb</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="temDadosPreenchidos">
+          <DataField>temDadosPreenchidos</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
       <rd:DataSetInfo>

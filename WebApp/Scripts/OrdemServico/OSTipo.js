@@ -29,7 +29,7 @@ function OSTipo_Salvar() {
     txttos_descricao.value = txttos_descricao.value.trim();
 
     if (validaAlfaNumericoSemAcentosNemEspaco(txttos_codigo) && (ChecaRepetido(txttos_codigo))
-        && validaAlfaNumerico(txttos_descricao)) {
+        && validaAlfaNumericoAcentosAfins(txttos_descricao)) {
 
         var OSTipo = {
             tos_id: $('#txttos_id').val(),

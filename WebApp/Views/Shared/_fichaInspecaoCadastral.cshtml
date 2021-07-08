@@ -3,6 +3,7 @@
 
 <script src="~/Scripts/Shared/_fichaInspecaoCadastral.js"></script>
 
+
 <style type="text/css">
     #divFicha1 option:first-child {
         color: black !important;
@@ -17,7 +18,7 @@
         }
 
     .centroH {
-        text-align: center;
+        text-align: center !important;
     }
 
     .contornoBranco {
@@ -158,6 +159,7 @@
         display: inline-block;
         font-weight: normal;
         color: blue;
+        padding-left: 5px;
     }
 
     .cmbsNoWidth {
@@ -201,45 +203,6 @@
         height: 1px;
     }
 
-    .altura50 {
-        height: 50px;
-    }
-
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
-
-    .borderBottomPt {
-        border-bottom: dotted 1px black;
-    }
-
-    .borderTopPt {
-        border-top: dotted 1px black;
-    }
-
-    .borderLeftPt {
-        border-left: dotted 1px black;
-    }
-
-    .borderRightPt {
-        border-right: dotted 1px black;
-    }
-
-    .borderNone {
-        border: none
-    }
 
     #divFicha1 input:disabled,
     #divFicha1 textarea:disabled,
@@ -354,7 +317,7 @@
             </td>
             <td class="borderLeft borderRight" colspan="3">
                 <label class="lblsBold" id="lblatr_id_16">Pista</label>
-                <select disabled id="cmb_atr_id_15" class="cmbs"></select>
+                <select disabled id="cmb_atr_id_15" class="cmbs" onchange="cmb_pista_onchange(this)"></select>
                 <select disabled id="cmb_atr_id_16" class="cmbs"></select>
             </td>
         </tr>
@@ -420,7 +383,6 @@
                 </div>
             </td>
         </tr>
-
     </table>
 
 
@@ -491,7 +453,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs" readonly ></select></td>
                             <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_85">Principal Utilização do Trecho</label><select disabled id="cmb_atr_id_85" class="cmbs"></select></td>
                         </tr>
 
@@ -1289,7 +1251,7 @@
                         </tr>
 
                         <tr>
-                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações</td>
+                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações<input disabled id="txt_atr_id_74"  maxlength="255" class="txts" /></td>
                         </tr>
                         <tr>
                             <td class="lblsBold borderBottom borderLeft" rowspan="2">Profundidade da Fundação</td>
@@ -1475,39 +1437,23 @@
 
                         <tr>
                             <td class="borderBottom altura50 borderRight borderLeft" colspan="6">
-                                <input disabled id="txt_atr_id_174" class="txts" />
+                                <input disabled id="txt_atr_id_174" class="txts" style="width:99%; height:60px; overflow-y:scroll" />
+                                @*  <textarea disabled id="txt_atr_id_174" class="txts" rows="5" cols="80" maxlength="255" style="width:99%; height:60px; overflow-y:scroll" />*@
                             </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
+                            </tr>
+                        </table>
+                      </div>
+                </td>
+            </tr>
+        </table>
 
-    </table>
-
-</div>
+           </div>
 
 
-<script>
-    if (paginaPai == "Objeto")
-        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
-    else
-        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
+           <script>
+               if (paginaPai == "Objeto")
+                   document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
+               else
+                   document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
 
-    //moment.locale('pt-br');         // pt-br
-    //$.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
-
-    //jQuery(function ($) {
-    //    $.datepicker.regional['pt-BR'] = datepicker_regional;
-    //    $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
-    //});
-
-    //$('#txt_atr_id_103').datepicker({
-    //    dateFormat: 'dd/mm/yy'
-    //});
-
-    //$('#txt_atr_id_104').datepicker({
-    //    dateFormat: 'dd/mm/yy'
-    //});
-
-</script>
+           </script>

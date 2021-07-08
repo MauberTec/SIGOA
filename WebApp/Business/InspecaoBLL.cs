@@ -8,6 +8,8 @@ using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using WebApp.Helpers;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Text.RegularExpressions;
 
 namespace WebApp.Business
 {
@@ -33,7 +35,8 @@ namespace WebApp.Business
         /// <returns>Lista de Inspecao</returns>
         public List<Inspecao> Inspecao_ListAll(int ins_id, string filtroOrdemServico_codigo = null, string filtroObj_codigo = null, int? filtroTiposOS = -1, int? filtroStatusOS = -1, string filtroData = "", string filtroord_data_De = "", string filtroord_data_Ate = "")
         {
-            return new InspecaoDAO().Inspecao_ListAll(ins_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS, filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new InspecaoDAO().Inspecao_ListAll(ins_id, filtroOrdemServico_codigo, filtroObj_codigo, filtroTiposOS, filtroStatusOS, filtroData, filtroord_data_De, filtroord_data_Ate, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -61,9 +64,6 @@ namespace WebApp.Business
         }
 
 
-
-
-
         //********************************************************************************************************
 
 
@@ -76,6 +76,29 @@ namespace WebApp.Business
         {
             return new InspecaoDAO().InspecaoAnomalias_Valores_ListAll(ord_id);
         }
+
+        /// <summary>
+        ///  Excluir (logicamente) Anomalia
+        /// </summary>
+        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
+        /// <returns>int</returns>
+        public int InspecaoAnomalia_Excluir(int id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new InspecaoDAO().InspecaoAnomalia_Excluir(id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+        /// <summary>
+        ///  Nova Anomalia
+        /// </summary>
+        /// <param name="ian_id">Id da linha da tabela inspecao_anomalias a ser inserida</param>
+        /// <returns>int</returns>
+        public int InspecaoAnomalia_Nova(int ian_id)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new InspecaoDAO().InspecaoAnomalia_Nova(ian_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
 
         /// <summary>
         /// Salva os valores das anomalias
@@ -106,17 +129,6 @@ namespace WebApp.Business
         }
 
         /// <summary>
-        ///  Excluir (logicamente) Objeto da inspecao
-        /// </summary>
-        /// <param name="id">Id da linha da tabela inspecao_anomalias</param>
-        /// <returns>int</returns>
-        public int InspecaoAnomaliaObjetos_Excluir(int id)
-        {
-            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
-            return new InspecaoDAO().InspecaoAnomaliaObjetos_Excluir(id, paramUsuario.usu_id, paramUsuario.usu_ip);
-        }
-
-        /// <summary>
         /// lista concatenada dos tipos de anomalia por legenda
         /// </summary>
         /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
@@ -136,6 +148,16 @@ namespace WebApp.Business
             return new InspecaoDAO().InspecaoAnomaliaCausas_by_Legenda(leg_codigo);
         }
 
+        /// <summary>
+        /// lista concatenada dos Alertas de anomalia por legenda
+        /// </summary>
+        /// <param name="leg_codigo">Código da Legenda de Anomalia</param>
+        /// <returns>string</returns>
+        public string InspecaoAnomaliaAlertas_by_Legenda(string leg_codigo)
+        {
+            return new InspecaoDAO().InspecaoAnomaliaAlertas_by_Legenda(leg_codigo);
+        }
+
 
         /// <summary>
         /// Procura o Reparo Sugerido
@@ -144,10 +166,11 @@ namespace WebApp.Business
         /// <param name="atp_codigo">Código do Tipo de Anomalia</param>
         /// <param name="ale_codigo">Código do Alerta de Anomalia</param>
         /// <param name="aca_codigo">Código da Causa da Anomalia</param>
+        /// <param name="rpt_area">Área da Anomalia</param>
         /// <returns>List ReparoTipo</returns>
-        public List<ReparoTipo> InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo)
+        public List<ReparoTipo> InspecaoAnomalia_ReparoSugerido(string leg_codigo, string atp_codigo, string ale_codigo, string aca_codigo, double rpt_area)
         {
-            return new InspecaoDAO().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo);
+            return new InspecaoDAO().InspecaoAnomalia_ReparoSugerido(leg_codigo, atp_codigo, ale_codigo, aca_codigo, rpt_area);
         }
 
 
@@ -175,13 +198,65 @@ namespace WebApp.Business
             }
         }
 
+        /// <summary>
+        /// Copia o estilo de uma celula modelo
+        /// </summary>
+        /// <param name="clo_id">Id da classe do objeto</param>
+        /// <param name="ehCentralizado">Centralizar?</param>
+        /// <param name="worksheetRodape">Planilha modelo</param>
+        /// <returns></returns>
+        public DocumentFormat.OpenXml.UInt32Value cell_estilo(int clo_id, bool ehCentralizado, ref Worksheet worksheetRodape)
+        {
+            Gerais ger = new Gerais();
+            DocumentFormat.OpenXml.UInt32Value retorno;
+
+            if (!ehCentralizado)
+            {
+                Cell cell_Modelo1 = ger.InsertCellInWorksheet("A", 5, worksheetRodape);
+                Cell cell_Modelo2 = ger.InsertCellInWorksheet("A", 6, worksheetRodape);
+                Cell cell_Modelo3 = ger.InsertCellInWorksheet("A", 7, worksheetRodape);
+                Cell cell_Modelo4 = ger.InsertCellInWorksheet("A", 8, worksheetRodape);
+
+                if (clo_id == 6)
+                    retorno = cell_Modelo1.StyleIndex;
+                else
+                    if ((clo_id == 7) || (clo_id == 8))
+                    retorno = cell_Modelo2.StyleIndex;
+                else
+                        if (clo_id == 9)
+                    retorno = cell_Modelo3.StyleIndex;
+                else
+                    retorno = cell_Modelo4.StyleIndex;
+            }
+            else
+            {
+                Cell cell_Modelo1_centralizado = ger.InsertCellInWorksheet("B", 5, worksheetRodape);
+                Cell cell_Modelo2_centralizado = ger.InsertCellInWorksheet("B", 6, worksheetRodape);
+                Cell cell_Modelo3_centralizado = ger.InsertCellInWorksheet("B", 7, worksheetRodape);
+                Cell cell_Modelo4_centralizado = ger.InsertCellInWorksheet("B", 8, worksheetRodape);
+
+                if (clo_id == 6)
+                    retorno = cell_Modelo1_centralizado.StyleIndex;
+                else
+                    if ((clo_id == 7) || (clo_id == 8))
+                    retorno = cell_Modelo2_centralizado.StyleIndex;
+                else
+                        if (clo_id == 9)
+                    retorno = cell_Modelo3_centralizado.StyleIndex;
+                else
+                    retorno = cell_Modelo4_centralizado.StyleIndex;
+            }
+
+            return retorno;
+        }
 
         /// <summary>
         /// Preenche a Ficha de Inspeção Especial em Excel e disponibiliza para download
         /// </summary>
         /// <param name="ord_id">Id da O.S pertinente ao objeto</param>
+        /// <param name="origem">Tela que chamou o evento</param>
         /// <returns>string</returns>
-        public string FichaInspecaoEspecialAnomalias_ExportarXLS(int ord_id)
+        public string FichaInspecaoEspecialAnomalias_ExportarXLS(int ord_id, string origem)
         {
 
             string arquivo_modelo_caminhoFull = System.Web.HttpContext.Current.Server.MapPath("~/Reports/Ficha_Cadastramento_Anomalias.xlsx");
@@ -207,69 +282,216 @@ namespace WebApp.Business
                 {
                     // LEITURA DA PLANILHA
                     Worksheet worksheet = ger.GetWorksheet(doc, "Ficha_Cadastramento_Anomalias");
-
                     Worksheet worksheetRodape = ger.GetWorksheet(doc, "Rodape");
-                    Cell cell_Modelo1 = ger.InsertCellInWorksheet("A", 5, worksheetRodape);
-                    Cell cell_Modelo2 = ger.InsertCellInWorksheet("A", 6, worksheetRodape);
-                    Cell cell_Modelo3 = ger.InsertCellInWorksheet("A", 7, worksheetRodape);
-                    Cell cell_Modelo4 = ger.InsertCellInWorksheet("A", 8, worksheetRodape);
 
                     // ======= PREENCHE OS DADOS ===============================================
                     if (lstDADOS.Count > 0)
                     {
-                         for (int li = 0; li < lstDADOS.Count; li++)
-                        //   for (int li = 0; li < 4; li++)
+                        if (origem == "OrdemServico") // remove cabecalho e oculta coluna A
+                        {
+                            // remove cabecalhos
+                            Cell cell_A1 = ger.InsertCellInWorksheet("A", 1, worksheet);
+
+                            string letra = "A";
+                            for (int t = 82; t < 88; t++)
+                            {
+                                if (t > 82)
+                                    letra = ((char)t).ToString();
+
+                                for (int m = 5; m <= 7; m++)
+                                {
+                                    ger.copyCell(doc, worksheet, cell_A1, letra, Convert.ToUInt32(m));
+                                }
+                            }
+
+                            DocumentFormat.OpenXml.Spreadsheet.Columns columns = worksheet.Elements<DocumentFormat.OpenXml.Spreadsheet.Columns>().FirstOrDefault();
+                            DocumentFormat.OpenXml.Spreadsheet.Column col = columns.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Column>();
+                            //col.Width = 0;
+                            col.Hidden = DocumentFormat.OpenXml.BooleanValue.FromBoolean(true);
+                        }
+
+
+                        for (int li = 0; li < lstDADOS.Count; li++)
                         {
 
-                            for (int col = 65; col <= 81; col++) // VARRE as COLUNAS A até Q
+                            for (int col = 65; col < 88; col++) // VARRE as COLUNAS A até W
                             {
+
+                                if ((origem == "OrdemServico") && (col >= 83))
+                                    break;
 
 
                                 Cell cell = ger.InsertCellInWorksheet(((char)col).ToString(), Convert.ToUInt32(li + 9), worksheet);
-                                string valor = " ";
+                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                                cell.StyleIndex = cell_estilo(lstDADOS[li].clo_id, false, ref worksheetRodape);
 
                                 switch (col)
                                 {
-                                    case 65: valor = lstDADOS[li].item; break;
-                                    case 66: valor = lstDADOS[li].col_Localizacao; break;
+                                    case 65: if (origem == "Inspecao")
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].obj_codigo));
+                                             else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                        break;
+
+                                    case 66: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].item)); break;
+                                    case 67: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].obj_descricao)); break;
                                 }
 
                                 if (lstDADOS[li].ian_id > 0)
                                 {
+                                    cell.StyleIndex = cell_estilo(lstDADOS[li].clo_id, true, ref worksheetRodape);
+
                                     switch (col)
                                     {
-                                        case 67: valor = lstDADOS[li].ian_numero.ToString(); break;
-                                        case 68: valor = lstDADOS[li].leg_codigo; break;
-                                        case 69: valor = lstDADOS[li].atp_codigo; break;
-                                        case 70: valor = lstDADOS[li].ale_codigo; break;
-                                        case 71: valor = lstDADOS[li].ian_quantidade.ToString(); break;
-                                        case 72: valor = lstDADOS[li].ian_espacamento.ToString(); break;
-                                        case 73: valor = lstDADOS[li].ian_largura.ToString(); break;
-                                        case 74: valor = lstDADOS[li].ian_comprimento.ToString(); break;
-                                        case 75: valor = lstDADOS[li].ian_abertura_minima.ToString(); break;
-                                        case 76: valor = lstDADOS[li].ian_abertura_maxima.ToString(); break;
-                                        case 77: valor = lstDADOS[li].aca_codigo; break;
-                                        case 78: valor = lstDADOS[li].ian_fotografia.ToString(); break;
-                                        case 79: valor = lstDADOS[li].ian_croqui.ToString(); break;
-                                        case 80: valor = lstDADOS[li].ian_desenho; break;
-                                        case 81: valor = lstDADOS[li].ian_observacoes; break;
+                                        case 68: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].ian_localizacao_especifica)); break;
+                                        case 69: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].ian_numero)); break;
+                                        case 70: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].leg_codigo)); break;
+                                        case 71: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].atp_codigo)); break;
+                                        case 72: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].ale_codigo)); break;
+
+                                        case 73:
+                                            if (ger.IsNumeric(lstDADOS[li].ian_quantidade))
+                                            {
+                                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_quantidade)));
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+
+                                           break;
+
+                                        case 74:
+                                            if (ger.IsNumeric(lstDADOS[li].ian_espacamento))
+                                            {
+                                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_espacamento)));
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+
+                                            break;
+
+                                        case 75:
+                                            if (ger.IsNumeric(lstDADOS[li].ian_largura))
+                                            {
+                                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_largura)));
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+
+                                            break;
+
+                                        case 76:
+                                            if (ger.IsNumeric(lstDADOS[li].ian_comprimento))
+                                            {
+                                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_comprimento)));
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+
+                                            break;
+
+                                        case 77:
+                                            if (ger.IsNumeric(lstDADOS[li].ian_abertura_minima))
+                                            {
+                                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_abertura_minima)));
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+
+                                            break;
+
+                                        case 78:
+                                            if (ger.IsNumeric(lstDADOS[li].ian_abertura_maxima))
+                                            {
+                                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_abertura_maxima)));
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            break;
+
+                                        case 79: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].aca_codigo)); break;
+                                        case 80: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].ian_fotografia)); break;
+                                        case 81: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].ian_croqui)); break;
+                                        case 82: cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].ian_observacoes)); break;
+
+
+                                        case 83:
+                                            if (origem == "Inspecao")
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(Convert.ToString(lstDADOS[li].rpt_id_sugerido_codigo));
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            break;                                            
+                                        case 84:
+                                            if (origem == "Inspecao")
+                                            {
+                                                if (lstDADOS[li].ian_quantidade_sugerida > 0)
+                                                {
+                                                    //cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                    //cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_quantidade_sugerida)));
+
+                                                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[li].ian_quantidade_sugerida.ToString() + " " + lstDADOS[li].rpt_id_sugerido_unidade);
+                                                }
+                                                else
+                                                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            break; 
+
+                                        case 85:
+                                            if (origem == "Inspecao")
+                                            {
+                                                if ((ger.IsNumeric(lstDADOS[li].rpt_id_adotado)) && (Convert.ToDecimal(lstDADOS[li].rpt_id_adotado) > 0))
+                                                {
+                                                    cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                    cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].rpt_id_adotado)));
+                                                }
+                                                else
+                                                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            break; 
+
+                                        case 86:
+                                            if (origem == "Inspecao")
+                                            {
+                                                if (lstDADOS[li].ian_quantidade_adotada > 0)
+                                                {
+                                                   // cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                   // cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].ian_quantidade_adotada)));
+                                                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[li].ian_quantidade_adotada.ToString() + " " + lstDADOS[li].rpt_id_adotado_unidade);
+
+                                                }
+                                                else
+                                                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            break;
+
+                                        case 87:
+                                            if (origem == "Inspecao")
+                                            {
+                                                if (lstDADOS[li].apt_id > 0)
+                                                {
+                                                    cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                                                    cell.CellValue = new CellValue(DocumentFormat.OpenXml.DecimalValue.FromDecimal(Convert.ToDecimal(lstDADOS[li].apt_id)));
+                                                }
+                                                else
+                                                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            }
+                                            else
+                                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue("");
+                                            break;
                                     }
                                 }
-
-                                // preenche os valores
-                                cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-                                cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(valor);
-
-                                if (lstDADOS[li].clo_id == 6)
-                                    cell.StyleIndex = cell_Modelo1.StyleIndex;
-                                else
-                                    if ((lstDADOS[li].clo_id == 7) || (lstDADOS[li].clo_id == 8))
-                                        cell.StyleIndex = cell_Modelo2.StyleIndex;
-                                    else
-                                        if (lstDADOS[li].clo_id == 9)
-                                            cell.StyleIndex = cell_Modelo3.StyleIndex;
-                                        else
-                                            cell.StyleIndex = cell_Modelo4.StyleIndex;
 
                             } // for col
                         } // for li
@@ -278,50 +500,67 @@ namespace WebApp.Business
 
                         // ============ coloca o rodape ================================================
 
-                        uint LinhaDestino = (uint)lstDADOS.Count+8;
+                        uint LinhaDestino = (uint)lstDADOS.Count + 8;
 
                         for (int li = 1; li <= 3; li++)
                         {
-                            for (int col = 65; col <= 81; col++) // VARRE as COLUNAS A até Q
+                            for (int col = 65; col < 82; col++) // VARRE as COLUNAS A até Q
                             {
                                 // copia o Quadro A da planilha "Rodape" para o rodape dos dados
                                 Cell cellOrigem = ger.InsertCellInWorksheet(((char)col).ToString(), Convert.ToUInt32(li), worksheetRodape);
-                                ger.copyCell(doc, worksheet, cellOrigem, ((char)col).ToString(), Convert.ToUInt32(li + LinhaDestino));
+                                ger.copyCell(doc, worksheet, cellOrigem, ((char)(col+1)).ToString(), Convert.ToUInt32(li + LinhaDestino));
                             }
 
                             // mescla as celulas
                             if (li == 1)
-                                ger.MergeCells(worksheet, "A" + (li + LinhaDestino).ToString(), "Q" + (li + LinhaDestino).ToString());
+                                ger.MergeCells(worksheet, "B" + (li + LinhaDestino).ToString(), "R" + (li + LinhaDestino).ToString());
                             else
                             {
-                                ger.MergeCells(worksheet, "A" + (li + LinhaDestino).ToString(), "E" + (li + LinhaDestino).ToString());
-                                ger.MergeCells(worksheet, "F" + (li + LinhaDestino).ToString(), "Q" + (li + LinhaDestino).ToString());
+                                ger.MergeCells(worksheet, "B" + (li + LinhaDestino).ToString(), "F" + (li + LinhaDestino).ToString());
+                                ger.MergeCells(worksheet, "G" + (li + LinhaDestino).ToString(), "R" + (li + LinhaDestino).ToString());
                             }
                         }
 
-
                         // preenche os valores
-                        Cell cell2 = ger.InsertCellInWorksheet("B", 2, worksheet);
+                        Cell cell2 = ger.InsertCellInWorksheet("C", 2, worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].obj_codigo_TipoOAE);
 
-                        cell2 = ger.InsertCellInWorksheet("Q", 2, worksheet);
+                        cell2 = ger.InsertCellInWorksheet("R", 2, worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].ins_anom_data);
 
-                        cell2 = ger.InsertCellInWorksheet("B", 3, worksheet);
+                        cell2 = ger.InsertCellInWorksheet("C", 3, worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].ins_anom_Responsavel);
 
-                        cell2 = ger.InsertCellInWorksheet("F", (LinhaDestino + 2), worksheet);
+                        cell2 = ger.InsertCellInWorksheet("G", (LinhaDestino + 2), worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].ins_anom_quadroA_1);
-                      //  cell2.StyleIndex = cell_Modelo4.StyleIndex;
+                        //  cell2.StyleIndex = cell_Modelo4.StyleIndex;
 
-                        cell2 = ger.InsertCellInWorksheet("F", (LinhaDestino + 3), worksheet);
+                        cell2 = ger.InsertCellInWorksheet("G", (LinhaDestino + 3), worksheet);
                         cell2.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell2.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(lstDADOS[0].ins_anom_quadroA_2);
-                       // cell2.StyleIndex = cell_Modelo4.StyleIndex;
+                        // cell2.StyleIndex = cell_Modelo4.StyleIndex;
+
+
+
+                        // ============ coloca o rodape Observacoes ================================================
+
+                        int li2 = 4;
+                        for (int col = 65; col < 82; col++) // VARRE as COLUNAS A até Q
+                        {
+                            // copia Obs da planilha "Rodape" para o rodape dos dados
+                            Cell cellOrigem = ger.InsertCellInWorksheet(((char)col).ToString(), Convert.ToUInt32(li2), worksheetRodape);
+                            ger.copyCell(doc, worksheet, cellOrigem, ((char)(col+1)).ToString(), Convert.ToUInt32(li2 + LinhaDestino));
+                        }
+
+                        // mescla as celulas
+                        ger.MergeCells(worksheet, "B" + (li2 + LinhaDestino).ToString(), "R" + (li2 + LinhaDestino + 6).ToString());
+
+                        // ajusta a altura da linha
+                        Row linhaObs = ger.GetRow(worksheet, 4 + LinhaDestino);
 
                     }
 
@@ -400,6 +639,18 @@ namespace WebApp.Business
             return new InspecaoDAO().InspecaoTipo_Salvar(ipt, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
+
+        // *************** PROVIDENCIAS  *************************************************************
+
+        /// <summary>
+        /// Lista das anomalias encontradas no Objeto da O.S.selecionada, para o preenchimento de ficha de inspecao
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.selecionada</param>
+        /// <returns>List InspecaoAnomalia</returns>
+        public List<InspecaoAnomalia> InspecaoAnomalias_Valores_Providencias_ListAll(int ord_id)
+        {
+            return new InspecaoDAO().InspecaoAnomalias_Valores_Providencias_ListAll(ord_id);
+        }
 
 
 

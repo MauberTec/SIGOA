@@ -1,0 +1,213 @@
+﻿@{
+    ViewBag.Title = "::.. PoliticaConserva ..::";
+}
+@using WebApp.Models
+@{
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 370 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(370)); // id DO MODULO "Politica Conserva"
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = 370 });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+}
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+    <script src="~/Scripts/Base.js"></script>
+    <script src="~/Scripts/Conserva/PoliticaConserva.js"></script>
+
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script>
+        var selectedId_obj_id;
+
+        function btnOSInserir_onclick() {
+
+            $("#modalSalvarRegistro").modal('show');
+
+        }
+
+    </script>
+
+}
+
+<style>
+    .element.style{
+        padding-left: 5px;
+    }
+
+    .chklst {
+        /*font-family: 'Lucida Console';
+        font-size: 14px;
+        padding-top: 0px;
+        margin-bottom: 0px;*/
+        font-weight: normal !important;
+    }
+</style>
+
+<div style="width:100%;" id="divFiltros">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Localizar</h3>
+        </div>
+        <div class="box-body">
+            <div id="divcontroles" class="row" style="margin:3px">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label class="control-label">Conserva:</label>
+                            <select class="form-control" id="ComboConserva" name="ComboConserva"></select>
+
+                        </div>
+                        <div class="col-sm-3" id="cmbSub2Div">
+                            <div>
+                                <label class="control-label">Grupo de Objetos:</label>
+                                <select class="form-control" id="ComboGrupo" name="ComboGrupo"></select>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-3 " id="cmbSub3Div">
+                            <div>
+                                <label class="control-label">Variavel de inspeção:</label>
+                                <select class="form-control" id="ComboVariavel" name="ComboVariavel"></select>
+                            </div>
+
+                        </div>
+                      
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group" style="padding-top:20px; margin-top:20px">                    
+                        <div class="btn-box-tool pull-right" style="margin-top:20px">
+                            <a class="btn btn-info" id="btnLimpar"onclick="btnLimpar_onclick();" style="margin-right: 10px !important;"><i class="fa fa-eraser margin-r-5"></i>Limpar</a>
+                            <button type="submit" class="btn btn-primary" id="btnPesquisar" onclick="btnPesquisar_onclick();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<section class="content" style="min-height: 50px;">
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+                <div id="DivGrid">
+
+                    <table id="tblPoliticaConserva">
+                        <thead>
+                            <tr>
+                                <th>cop_id</th>
+                                <th>ogi_id_caracterizacao_situacao</th>
+                                <th>cot_id</th>
+                                <th>cov_id</th>
+                                <th>Conserva</th>
+                                <th>Grupo de Objetos</th>
+                                <th>Variável</th>
+                                <th>Alerta</th>
+                                <th>Opções</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+                @{
+                    if ((permissoesDesteModulo != null) && (permissoesDesteModulo.mfl_inserir > 0))
+                    {
+                        <button type="button" class="btn btn-primary botaoInserir" onclick="OpenComboModal();">Nova Politica de Conserva</button>
+                    }
+                }
+                <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal fade" id="modalSalvarRegistro" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:850px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Nova Politica de Conserva</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+                    <div class="col-sm-12">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Grupo de Objetos</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownList("ComboGrupo_ad", null, "-- Selecione --", new { @class = "form-control ", @onchange = "ComboGrupo_ad_onchange(this)" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Variavel</label>
+                            <div class="col-sm-8">
+                                <div id="divVariavel2" class="form-control"
+                                     style="height:100px; overflow-y:auto;
+                                        border:solid 1px lightgray; border-radius:4px !important;
+                                        text-align:left; padding: 6px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Alerta</label>
+                            <div class="col-sm-8">
+                                <div id="divAlerta2" class="form-control"
+                                     style="height:100px; overflow-y:auto;
+                                        border:solid 1px lightgray; border-radius:4px !important;
+                                        text-align:left; padding: 6px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="Ficha2_divSubdivisao1" class="form-group">
+                            <label class="control-label col-sm-3">Conserva</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownList("ComboConserva2", null, "-- Selecione --", new { @class = "form-control " })
+                            </div>
+                        </div>
+                        <hr style="width:100%" />
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-3 col-md-offset-4">
+                        <a id="bntSalvar" name="bntSalvar" onclick="return PoliticaConserva_Inserir();" class="btn btn-primary btn-block btn-flat">Salvar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>

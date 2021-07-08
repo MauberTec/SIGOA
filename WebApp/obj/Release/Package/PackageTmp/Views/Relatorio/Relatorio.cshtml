@@ -1,17 +1,818 @@
-﻿
+﻿@{
+    ViewBag.Title = "::.. Relatórios ..::";
+}
+@model List<WebApp.Models.Usuario>
+@using WebApp.Models
 @{
-    Layout = null;
+    var ultimoPedaco = Request.RequestContext.HttpContext.Request.RawUrl.Split('/').Last();
+    int qualModuloId = -3000;
+    if (int.TryParse(ultimoPedaco, out qualModuloId))
+    {
+        qualModuloId = Convert.ToInt32(ultimoPedaco);
+    }    
+    
+    //Verifica se o usuário esta logado
+    if (Session["Usuario"] == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = qualModuloId });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+    Usuario gUsuario = (Usuario)Session["Usuario"];
+    List<UsuarioPermissoes> lstPermissoes = gUsuario.lstUsuarioPermissoes;
+    UsuarioPermissoes permissoesDesteModulo = lstPermissoes.Find(x => x.mod_id.Equals(qualModuloId));
+
+    if (permissoesDesteModulo == null)
+    {
+        Html.Action("LogSistema_Salvar", "LogSistema", new { mod_id = qualModuloId });
+        Response.Redirect("~/AcessoNegado/AcessoNegado");
+    }
+
+
 }
 
-<!DOCTYPE html>
+<h2></h2>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Relatorio</title>
-</head>
-<body>
-    <div> 
+
+<style>
+    .Centralizado {
+        text-align: center;
+    }
+
+    .fundoBranco {
+        background-color: white !important
+    }
+</style>
+
+
+
+<section class="content" style="min-height: 50px;">
+
+
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-body">
+
+                <div class="box-header with-border">
+                    <h3 class="box-title">Filtrar</h3>
+                </div>
+
+                <div class="col-sm-12">
+                    <br />
+                    <div class="form-group">
+                        <label class="control-label col-sm-1">Rodovia</label>
+                        <div class="col-sm-11">
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="width:100%">
+                                        <input id="txtFiltroRodovias" name="txtFiltroRodovias" class="form-control" onclick="return abrirLocalizarRodovias();"
+                                               placeholder="Rodovia" readonly maxlength="40" style="margin-left: 5px !important;"
+                                               autocomplete="off" />
+                                    </td>
+                                    <td>
+                                        <button style="display:inline; width:40px; height:25px; margin-left:10px; border: solid 1px #ccc;" onclick="return abrirLocalizarRodovias();">...</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br /> <br />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-1">Regional</label>
+                        <div class="col-sm-11">
+                            @Html.DropDownList("cmbFiltroRegionais", null, null, new { @class = "form-control fundoBranco", @multiple = "multiple", @style = "width:150px !important;" })
+
+                        </div>
+                        <br /> <br />
+                    </div>
+
+                    <div class="form-group" id="divFiltroOAE" style="display:none">
+                        <label class="control-label col-sm-1">Objetos</label>
+                        <div class="col-sm-11">
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="width:100%">
+                                        <input id="txtFiltroObj_codigo" name="txtFiltroObj_codigo" class="form-control"
+                                               placeholder="Objeto" readonly maxlength="40" onclick="return abrirLocalizarObjetos();"
+                                               autocomplete="off" style="margin-left: 5px !important;" />
+                                    </td>
+                                    <td>
+                                        <button style="display:inline; width:40px; height:25px; margin-left:10px; border: solid 1px #ccc;" onclick="return abrirLocalizarObjetos();">...</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br /> <br />
+                    </div>
+
+                    <div class="form-group" id="divFiltroTipoOS" style="display:none">
+                        <label class="control-label col-sm-1">Tipo O.S.</label>
+                        <div class="col-sm-11">
+                            @Html.DropDownList("cmbFiltroTiposOS", null, null, new { @class = "form-control fundoBranco", @multiple = "multiple" })
+                        </div>
+                        <br /> <br />
+                    </div>
+
+                    <div class="form-group" id="divFiltroStatusOS" style="display:none">
+                        <label class="control-label col-sm-1">Status O.S.</label>
+                        <div class="col-sm-11">
+                            @Html.DropDownList("cmbFiltroStatusOS", null, null, new { @class = "form-control fundoBranco", @multiple = "multiple" })
+                        </div>
+                        <br /><br />
+                    </div>
+
+                    <div class="form-group" id="divFiltroTipoData">
+                        <label class="control-label col-sm-1" id="lblData" style="display:none">Data</label>
+                        <div class="col-sm-11">
+                            <table>
+                                <tr>
+                                    <td id="tdCmbDatas" style="display:none">
+                                        <select name="cmbDatas" id="cmbDatas" class="form-control" onchange="cmbDatas_onchange()" style="margin-left: 5px !important; background-color:#f4f4f4 !important;">
+                                            <option value="">--Selecione--</option>
+                                            <option value="Abertura">Data Abertura</option>
+                                            <option value="Inicio_Programada">Data Início Planejada</option>
+                                            <option value="Termino_Programada">Data Término Planejada</option>
+                                            <option value="Inicio_Execucao">Data Início Execução</option>
+                                            <option value="Termino_Execucao">Data Término Execução</option>
+                                            <option value="Suspensao">Data Suspensão</option>
+                                            <option value="Cancelamento">Data Cancelamento</option>
+                                            <option value="Reinicio">Data Reinício</option>
+                                        </select>
+                                    </td>
+                                    <td id="tdEspaco" style="width:10px; visibility:hidden"></td>
+                                    <td id="tdDatasDeAte" style="visibility:hidden">
+                                        <table id="tblDatasDeAte" style="visibility:hidden">
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label col-sm-1">De</label>
+                                                </td>
+                                                <td>
+                                                    <input id="filtro_data_De" name="filtro_data_De"
+                                                           placeholder="De" maxlength="20" readonly
+                                                           class="form-control" style="background-color:#f4f4f4; width:120px; " />
+                                                </td>
+                                                <td style="width:10px;"></td>
+                                                <td>
+                                                    <label class="control-label col-sm-1">Até</label>
+                                                </td>
+                                                <td>
+                                                    <input id="filtro_data_Ate" name="filtro_data_Ate"
+                                                           placeholder="Até" maxlength="20" readonly
+                                                           class="form-control" style="background-color:#f4f4f4; width:120px" />
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br /> <br />
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-12" style="text-align:center">
+                            <button type="reset" class="btn btn-info" onclick="LimparFiltroRelatorios();"><i class="fa fa-eraser margin-r-5"></i>Limpar</button>
+                            <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroRelatorios();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i>Abrir Relatório</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</section>
+
+<link href="~/Content/Gerais.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="~/Content/plugins/sweetalert2.min.js"></script>
+
+
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/datetime-moment.js"></script>
+
+<link href="~/Content/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+
+@section Scripts{
+    <script>
+        var permissaoLeitura = parseInt(@permissoesDesteModulo.mfl_leitura);
+        var permissaoEscrita = parseInt(@permissoesDesteModulo.mfl_escrita);
+        var permissaoInsercao = parseInt(@permissoesDesteModulo.mfl_inserir);
+        var permissaoExclusao = parseInt(@permissoesDesteModulo.mfl_excluir);
+    </script>
+}
+
+
+<script>
+
+    var idsObjetosSelecionados = '';
+    var idsRodoviasSelecionados = '';
+    var qualModuloId = @qualModuloId;
+
+
+    function cmbDatas_onchange()
+    {
+        var cmbDatas = document.getElementById("cmbDatas");
+        var tblDatasDeAte = document.getElementById("tblDatasDeAte");
+
+        if (cmbDatas.selectedIndex <= 0)
+            tblDatasDeAte.style.visibility = "hidden";
+        else
+            tblDatasDeAte.style.visibility = "visible";
+    }
+
+
+    function limpaCamposAux() {
+
+        $("#divFiltroOAE").css("display", "none");
+        $("#divFiltroTipoOS").css("display", "none");
+        $("#divFiltroStatusOS").css("display", "none");
+
+        $("#lblData").css("display", "none");
+        $("#tdCmbDatas").css("display", "none");
+
+        var tdEspaco = document.getElementById("tdEspaco");
+        var tdDatasDeAte = document.getElementById("tdDatasDeAte");
+        var tblDatasDeAte = document.getElementById("tblDatasDeAte");
+
+        tdEspaco.style.visibility = "hidden";
+        tdDatasDeAte.style.visibility = "hidden";
+        tblDatasDeAte.style.visibility = "hidden";
+
+        switch (qualModuloId) {
+            case 910: $('#divFiltroTipoOS').css("display", "block");
+                $('#divFiltroStatusOS').css("display", "block");
+                $("#lblData").css("display", "block");
+                $("#tdCmbDatas").css("display", "block");
+                break;
+
+            case 920: $('#divFiltroOAE').css("display", "block");
+                $("#lblData").css("display", "block");
+                tdDatasDeAte.style.visibility = "visible";
+                tblDatasDeAte.style.visibility = "visible";
+
+                break;
+            // case 930: ;  break; // nao precisa porque é somente filtro rodovia+regional
+
+            case 940:
+                $('#divFiltroOAE').css("display", "block");
+                $("#lblData").css("display", "block");
+                tdDatasDeAte.style.visibility = "visible";
+                tblDatasDeAte.style.visibility = "visible";
+
+                break;
+        }
+
+        $('#txtFiltroRodovias').val("");
+        $('#txtCodRodovia').val("");
+        $('#txtCodOAE').val("");
+        $('#txtFiltroObj_codigo').val("");
+        $("#cmbDatas").val('');
+        $('#filtro_data_De').val('');
+        $('#filtro_data_Ate').val('');
+
+        idsRodoviasSelecionados = "";
+        idsObjetosSelecionados = "";
+    }
+
+    function LimparFiltroRelatorios()
+    {
+
+        limpaCamposAux();
+
+        $("#cmbFiltroRegionais").multiselect("clearSelection");
+        $("#cmbFiltroTiposOS").multiselect("clearSelection");
+        $("#cmbFiltroStatusOS").multiselect("clearSelection");
+
+        return false;
+
+    }
+
+    function ExecutarFiltroRelatorios()
+    {
+        var relatorio = '';
+        var parametros = '';
+
+        var txtFiltroRodovias = $('#txtFiltroRodovias').val();
+        if (txtFiltroRodovias.trim() != "")
+            parametros = parametros + '&FiltroRodovias=' + idsRodoviasSelecionados;
+        else
+            parametros = parametros + '&FiltroRodovias=';
+
+        var cmbFiltroRegionais = ($("#cmbFiltroRegionais").val() + ';').replaceAll(",", ";");
+        if (cmbFiltroRegionais.trim() != ";")
+            parametros = parametros + '&FiltroRegionais=' + cmbFiltroRegionais;
+        else
+            parametros = parametros + '&FiltroRegionais=';
+
+        if (qualModuloId == 910) // relatorio O.S.
+        {
+            var cmbFiltroTiposOS = ($("#cmbFiltroTiposOS").val() + '').replaceAll(",", ";");
+            if (cmbFiltroTiposOS.trim() != "")
+                parametros = parametros + '&FiltroTiposOS=' + cmbFiltroTiposOS;
+            else
+                parametros = parametros + '&FiltroTiposOS=';
+
+            var cmbFiltroStatusOS = ($("#cmbFiltroStatusOS").val() + '').replaceAll(",", ";");
+            if (cmbFiltroStatusOS.trim() != "")
+                parametros = parametros + '&FiltroStatusOS=' + cmbFiltroStatusOS;
+            else
+                parametros = parametros + '&FiltroStatusOS=';
+
+            var cmbDatas = $('#cmbDatas').val();
+            if (cmbDatas.selectedIndex > 0) {
+                var filtro_data_De = $('#filtro_data_De').val();
+                var Filtro_data_Ate = $('#filtro_data_Ate').val();
+                parametros = parametros + '&Filtro_tipo_data=' + cmbDatas + '&Filtro_data_De=' + filtro_data_De + '&Filtro_data_Ate=' + Filtro_data_Ate;
+            }
+            else
+                parametros = parametros + '&Filtro_tipo_data=&Filtro_data_De=&Filtro_data_Ate=';
+
+        }
+        else
+        if (qualModuloId == 920)  // relatorio OAE
+        {
+            var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
+            if (txtFiltroObj_codigo.trim() != "")
+                parametros = parametros + '&FiltroObj_codigo=' + idsObjetosSelecionados;
+            else
+                parametros = parametros + '&FiltroObj_codigo=';
+
+            var cmbDatas = $('#cmbDatas').val();
+            var filtro_data_De = $('#filtro_data_De').val();
+            if (filtro_data_De !== null)
+            {
+                var Filtro_data_Ate = $('#filtro_data_Ate').val();
+                parametros = parametros + '&Filtro_tipo_data=' + cmbDatas + '&Filtro_data_De=' + filtro_data_De + '&Filtro_data_Ate=' + Filtro_data_Ate;
+            }
+            else
+                parametros = parametros + '&Filtro_tipo_data=&Filtro_data_De=&Filtro_data_Ate=';
+        }
+        else
+            if (qualModuloId == 940)  // relatorio Acoes
+            {
+                var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val();
+                if (txtFiltroObj_codigo.trim() != "")
+                    parametros = parametros + '&FiltroObj_codigo=' + idsObjetosSelecionados;
+                else
+                    parametros = parametros + '&FiltroObj_codigo=';
+
+                var cmbDatas = $('#cmbDatas').val();
+                var filtro_data_De = $('#filtro_data_De').val();
+                if (filtro_data_De !== null) {
+                    var Filtro_data_Ate = $('#filtro_data_Ate').val();
+                    parametros = parametros + '&Filtro_tipo_data=' + cmbDatas + '&Filtro_data_De=' + filtro_data_De + '&Filtro_data_Ate=' + Filtro_data_Ate;
+                }
+                else
+                    parametros = parametros + '&Filtro_tipo_data=&Filtro_data_De=&Filtro_data_Ate=';
+
+            }
+
+
+        switch (qualModuloId) {
+            case 910: relatorio = 'rptRelatorio_OS'; break;
+            case 920: relatorio = 'rptRelatorio_PerformanceOAEs'; break;
+            case 930: relatorio = 'rptRelatorio_Priorizacao'; break;
+            case 940: relatorio = 'rptRelatorio_Acoes'; break;
+        }
+
+
+        window.open('../../Reports/frmReport.aspx?relatorio=' + relatorio + parametros, '_blank');
+        return false;
+    }
+
+
+
+
+    $(document).ready(function () {
+
+        limpaCamposAux();
+
+    }); // document.ready
+
+    // transforma o combo em multipla escolha
+    $(function () {
+        $('#cmbFiltroRegionais').multiselect({
+            includeSelectAllOption: false,
+            nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
+            delimiterText: '; '
+        });
+    });
+    $(function () {
+        $('#cmbFiltroTiposOS').multiselect({
+            includeSelectAllOption: false,
+            nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
+            delimiterText: '; '
+        });
+    });
+    $(function () {
+        $('#cmbFiltroStatusOS').multiselect({
+            includeSelectAllOption: false,
+            nonSelectedText: "-- Selecione --",
+            nSelectedText: 'Selecionados',
+            delimiterText: '; '
+        });
+    });
+
+
+
+
+    // ******** selecao de Rodovias ***********************
+    function abrirLocalizarRodovias() {
+
+        var txtFiltroRodovias = $('#txtFiltroRodovias').val();
+        $('#txtRodoviasSelecionados').val(txtFiltroRodovias);
+
+        //$('#txtRodoviasSelecionados').val("");
+        //   idsRodoviasSelecionados = "";
+
+        // limpa o texbox
+        $('#txtLocalizarRodovia').val("");
+        $('#lblMsgRodovias').text("");
+
+        // limpa o listbox
+        var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
+        lstRodoviasLocalizados.innerHTML = "";
+
+        $('#txtLocalizarRodovia').focus();
+
+        $('#modalLocalizarRodovia').modal('show');
+
+
+        return false;
+    }
+    function LocalizarRodovias() {
+
+        var params = { filtro_rod_codigo: $('#txtLocalizarRodovia').val() };
+
+        $.ajax({
+            url: '/Relatorio/PreencheCmbRodoviasLocalizados',
+            type: "POST",
+            dataType: "JSON",
+            data: params,
+            success: function (lstRodovias) {
+
+                // limpa o listbox
+                var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
+                lstRodoviasLocalizados.innerHTML = "";
+                $('#lblMsgRodovias').text("");
+
+                var i = 0;
+                $.each(lstRodovias, function (i, Rodovia) {
+                    i++;
+                    if (i < 50) {
+                        $('#lstRodoviasLocalizados')
+                            .append($("<option></option>")
+                                .attr("value", Rodovia.Value)
+                                .text(Rodovia.Text));
+                    }
+                    else {
+                        $('#lblMsgRodovias').text("Refinar pesquisa. Mostrando 50 primeiros");
+                        return false;
+                    }
+                });
+                return false;
+            }
+        });
+
+
+        return false;
+    }
+
+    function lstRodoviasLocalizados_dblclick() {
+        var lstRodoviasLocalizados = document.getElementById("lstRodoviasLocalizados");
+        if (lstRodoviasLocalizados.selectedIndex >= 0) {
+
+            var selrod_id = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].value;
+            var sel_txt = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].text;
+            var selrod_codigo = sel_txt; //.substring(0, sel_txt.indexOf("(") - 1);
+
+            var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val() + ";" + selrod_codigo;
+            if (txtRodoviasSelecionadosTxt.startsWith(";"))
+                txtRodoviasSelecionadosTxt = txtRodoviasSelecionadosTxt.substr(1);
+
+            $('#txtRodoviasSelecionados').val(txtRodoviasSelecionadosTxt);
+
+            idsRodoviasSelecionados = idsRodoviasSelecionados + ";" + selrod_id;
+            if (idsRodoviasSelecionados.startsWith(";"))
+                idsRodoviasSelecionados = idsRodoviasSelecionados.substr(1);
+
+        }
+
+        $('#modalLocalizarRodovia').modal('show');
+
+        return false;
+    }
+
+    function bntLimpar_Rodovia_onclick() {
+        $('#txtRodoviasSelecionados').val("");
+        idsRodoviasSelecionados = "";
+
+        $('#txtLocalizarRodovia').val("");
+        lstRodoviasLocalizados.innerHTML = "";
+
+
+        $('#modalLocalizarRodovia').modal('show');
+
+        return false;
+    }
+    function bntOK_Rodovia_onclick() {
+        var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val();
+        if (txtRodoviasSelecionadosTxt.startsWith(";"))
+            txtRodoviasSelecionadosTxt = txtRodoviasSelecionadosTxt.substr(1);
+
+        $('#txtFiltroRodovias').val(txtRodoviasSelecionadosTxt);
+
+        $('#modalLocalizarRodovia').modal('hide');
+        return false;
+    }
+
+
+    // ******** selecao de objetos ***********************
+    function abrirLocalizarObjetos() {
+
+        var txtFiltroObj_codigo = $('#txtFiltroObj_codigo').val() ;
+        $('#txtObjetosSelecionados').val(txtFiltroObj_codigo);
+
+      //  $('#txtObjetosSelecionados').val("");
+     //   idsObjetosSelecionados = "";
+
+        // limpa o texbox
+        $('#txtLocalizarObjeto').val("");
+        $('#lblMsgObjetos').text("");
+        $('#txtobj_codigo_Novo').css('background-color', corBranca);
+
+        // limpa o listbox
+        var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
+        lstObjetosLocalizados.innerHTML = "";
+
+        $('#txtLocalizarObjeto').focus();
+
+        $('#modalLocalizarObjeto').modal('show');
+
+
+        return false;
+    }
+    function LocalizarObjetos() {
+
+        var params = {
+            doc_id: -1,
+            filtro_obj_codigo: $('#txtLocalizarObjeto').val(),
+            filtro_obj_descricao: '',
+            filtro_clo_id: 3, //filtro_clo_id, // -13 ===> 2 = OAE = quilometragem; ou 3 = Tipo OAE
+            filtro_tip_id: -1
+        };
+
+        $.ajax({
+            url: '/Documento/PreencheCmbObjetosLocalizados',
+            type: "POST",
+            dataType: "JSON",
+            data: params,
+            success: function (lstObjetos) {
+
+                // limpa o listbox
+                var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
+                lstObjetosLocalizados.innerHTML = "";
+
+                var i = 0;
+                $.each(lstObjetos, function (i, objeto) {
+                    i++;
+                    if (i < 50) {
+                        $('#lstObjetosLocalizados')
+                            .append($("<option></option>")
+                                .attr("value", objeto.Value)
+                                .text(objeto.Text));
+                    }
+                    else {
+                        $('#lblMsgObjetos').text("Refinar pesquisa. Mostrando 50 primeiros");
+                        return false;
+                    }
+                });
+                return false;
+            }
+        });
+
+
+        return false;
+    }
+
+    function lstObjetosLocalizados_dblclick() {
+        var lstObjetosLocalizados = document.getElementById("lstObjetosLocalizados");
+        if (lstObjetosLocalizados.selectedIndex >= 0) {
+
+            var selObj_id = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].value;
+            var sel_txt = lstObjetosLocalizados.options[lstObjetosLocalizados.selectedIndex].text;
+            var selObj_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
+
+            var txtObjetosSelecionadosTxt = $('#txtObjetosSelecionados').val() + ";" + selObj_codigo;
+            if (txtObjetosSelecionadosTxt.startsWith(";"))
+                txtObjetosSelecionadosTxt = txtObjetosSelecionadosTxt.substr(1);
+
+            $('#txtObjetosSelecionados').val(txtObjetosSelecionadosTxt);
+
+            idsObjetosSelecionados = idsObjetosSelecionados + ";" + selObj_id;
+            if (idsObjetosSelecionados.startsWith(";"))
+                idsObjetosSelecionados = idsObjetosSelecionados.substr(1);
+
+        }
+
+        $('#modalLocalizarObjeto').modal('show');
+
+        return false;
+    }
+
+    function bntLimpar_Objeto_onclick() {
+        $('#txtObjetosSelecionados').val("");
+        idsObjetosSelecionados = "";
+
+        $('#txtLocalizarObjeto').val("");
+        lstObjetosLocalizados.innerHTML = "";
+
+
+        $('#modalLocalizarObjeto').modal('show');
+
+        return false;
+    }
+    function bntOK_Objeto_onclick() {
+        var txtObjetosSelecionadosTxt = $('#txtObjetosSelecionados').val();
+        if (txtObjetosSelecionadosTxt.startsWith(";"))
+            txtObjetosSelecionadosTxt = txtObjetosSelecionadosTxt.substr(1);
+
+        $('#txtFiltroObj_codigo').val(txtObjetosSelecionadosTxt);
+        $('#modalLocalizarObjeto').modal('hide');
+        return false;
+    }
+
+</script>
+
+
+
+<div class="modal fade" id="modalLocalizarRodovia" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Rodovia</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:0px !important">Selecionados</label>
+                        <div class="col-sm-9" style="padding-left:0px !important">
+                            <input id="txtRodoviasSelecionados" name="txtRodoviasSelecionados" class="form-control" readonly style="border:none !important; background-color:white !important; box-shadow: none !important;" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:0px !important">Localizar Rodovia</label>
+                        <div class="col-sm-9" style="padding-left:0px !important">
+
+                            <input id="txtLocalizarRodovia" name="txtLocalizarRodovia" class="form-control"
+                                   placeholder="Digite o Código/Iniciais da Rodovia"
+                                   autocomplete="off" maxlength="20"
+                                   onkeyup="if ((event.keyCode == 13) || (this.value.length > 1) ) { event.preventDefault(); LocalizarRodovias(); return false;} " />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Localizados</label>
+                        <div class="col-sm-9"
+                             style="width:72%; height:100px; padding: 0px !important; border:solid 1px lightgray; border-radius:4px !important;"
+                             id="divRodoviasLocalizados">
+
+                            <select multiple="multiple" size="5" id="lstRodoviasLocalizados" style="margin-right:5px; width:100%; border:none;" ondblclick="lstRodoviasLocalizados_dblclick();"></select>
+                            <label class="control-label col-sm-12" style="padding-top: 15px !important; font-size: 9pt; color: red;text-align: left;padding-left: 0;" id="lblMsgRodovias"></label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div>
+                        <table cellspacing="5" style="margin-left: auto; margin-right: auto;">
+                            <tr>
+                                <td>
+                                    <button id="bntAdicionar_Rodovia" name="bntAdicionar_Rodovia" class="btn btn-primary btn-flat" onclick="return lstRodoviasLocalizados_dblclick()" style="width:110px">Adicionar</button>
+                                </td>
+                                <td s>
+                                    <button id="bntLimpar_Rodovia" name="bntLimpar_Rodovia" class="btn btn-primary btn-flat" onclick="return bntLimpar_Rodovia_onclick()" style="width:110px">Limpar</button>
+                                </td>
+                                <td>
+                                    <button id="bntOK_Rodovia" name="bntOK_Rodovia" class="btn btn-primary btn-flat" onclick=" return bntOK_Rodovia_onclick()" style="width:110px">OK</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalLocalizarObjeto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="margin-left:150px; width:750px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title text-center"><b><label id="lblModalHeader">Localizar Objeto</label></b></h3>
+            </div>
+            <form class="form-horizontal" onkeydown="if (event.keyCode == 13) { event.preventDefault(); return false; }">
+                <br />
+                <div class="modal-body form-group">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:0px !important">Selecionados</label>
+                        <div class="col-sm-9" style="padding-left:0px !important">
+                            <input id="txtObjetosSelecionados" name="txtObjetosSelecionados" class="form-control" readonly style="border:none !important; background-color:white !important; box-shadow: none !important;" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" style="padding-top:0px !important">Localizar Objeto</label>
+                        <div class="col-sm-9" style="padding-left:0px !important">
+
+                            <input id="txtLocalizarObjeto" name="txtLocalizarObjeto" class="form-control"
+                                   placeholder="Digite o Código/Iniciais do Objeto"
+                                   autocomplete="off" maxlength="20"
+                                   onkeyup="if ((event.keyCode == 13) || (this.value.length > 1) ) { event.preventDefault(); LocalizarObjetos(); return false;} " />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Localizados</label>
+                        <div class="col-sm-9"
+                             style="width:72%; height:100px; padding: 0px !important; border:solid 1px lightgray; border-radius:4px !important;"
+                             id="divObjetosLocalizados">
+
+                            <select multiple="multiple" size="5" id="lstObjetosLocalizados" style="margin-right:5px; width:100%; border:none;" ondblclick="lstObjetosLocalizados_dblclick();"></select>
+                            <label class="control-label col-sm-3" style="padding-top: 15px !important; font-size: 9pt; color: red;text-align: left;padding-left: 0;" id="lblMsgObjetos"></label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <div>
+                        <table cellspacing="5" style="margin-left: auto; margin-right: auto;">
+                            <tr>
+                                <td>
+                                    <button id="bntAdicionar_Objeto" name="bntAdicionar_Objeto" class="btn btn-primary btn-flat" onclick="return lstObjetosLocalizados_dblclick()" style="width:110px">Adicionar</button>
+                                </td>
+                                <td s>
+                                    <button id="bntLimpar_Objeto" name="bntLimpar_Objeto" class="btn btn-primary btn-flat" onclick="return bntLimpar_Objeto_onclick()" style="width:110px">Limpar</button>
+                                </td>
+                                <td>
+                                    <button id="bntOK_Objeto" name="bntOK_Objeto" class="btn btn-primary btn-flat" onclick=" return bntOK_Objeto_onclick()" style="width:110px">OK</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    moment.locale('pt-br');         // pt-br
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
+
+    jQuery(function ($) {
+        $.datepicker.regional['pt-BR'] = datepicker_regional;
+        $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+    });
+
+    $('#filtro_data_De').datepicker({
+        dateFormat: 'dd/mm/yy',
+        onSelect: function () {
+            var dt2 = $('#filtro_data_Ate');
+
+            // seta a data inicial do txtdataExecucaoAte
+            var startDate = $(this).datepicker('getDate');
+            startDate.setDate(startDate.getDate() + 1);
+            var minDate = $(this).datepicker('getDate');
+            var dt2Date = dt2.datepicker('getDate');
+
+            dt2.datepicker("setDate", startDate);
+            dt2.datepicker('option', 'minDate', startDate);
+        }
+    });
+
+    $('#filtro_data_Ate').datepicker({ dateFormat: 'dd/mm/yy' });
+
+
+
+</script>

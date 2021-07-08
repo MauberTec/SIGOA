@@ -1,6 +1,33 @@
-﻿    var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
-    var cabecalho2 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
-    var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="9"><label class="lblsBold" >XXXXX</label></td></tr>';
+﻿var cabecalho1 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY"><td class="borderLeft borderBottomPt borderRight subdivisao1_fundo" colspan="10"><label class="lblsBold" >XXXXX</label></td></tr>';
+
+var cabecalho2 =
+    ' <tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
+    ' <td class="borderLeft borderBottomPt borderRight subdivisao2_fundo" colspan = "10" >' +
+    '    <label class="lblsBold" > XXXXX</label >' +
+    ' </td>' +
+    ' </tr> ';
+
+
+var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
+                    '<td class="borderLeft borderBottomPt borderRight subdivisao3_fundo" colspan="10">' +
+                    '     <table style="width:100%"> ' +
+                    '      <tr> ' +
+                    '       <td style="width:30px"> ' +
+                    '            <button id="btn_ExcluirSubDivisao3_INSPECAO_ROTINEIRA_TIPP_IIDD" ' +
+                    '                 type="button" ' +
+                    '                 onclick="return Ficha2_ExcluirSubDivisao3(TIPP_IIDD)" ' +
+                    '                 title="Excluir Subdivisão" ' +
+                    '                 style="margin-left:0; border:none; box-shadow:none; background-color:transparent; display:none"> ' +
+                    '               <span class="glyphicon glyphicon-trash text-success contornoBranco"></span> ' +
+                    '          </button> ' +
+                    '       </td> ' +
+                    '       <td> ' +
+                    '           <label class="lblsBold" >XXXXX</label>' +
+                    '       </td> ' +
+                    '     </tr> ' +
+                    '   </table> ' +                   
+                    '</td>' +
+                 '</tr>';
 
     var MesclarGrupo =
         '   <td class="borderLeft borderTop borderRight borderBottomPt" rowspan=N_ROWSPAN > ' +
@@ -17,6 +44,9 @@
         '        </td> ' +
         '        <td> ' +
         '           <label id="lbl_Elemento_GGG_VVV" class="lblsNormal">lbl_Elemento_XXXXX</label> ' +
+        '       </td> ' +
+        '        <td> ' +
+        '           ' +
         '       </td> ' +
         '     </tr> ' +
         '   </table> ' +
@@ -38,7 +68,7 @@
         '    <label id="lbl_Variaveis_GGG_VVV" class="lblsNormal">lbl_Variaveis_XXXXX</label> ' +
         '  </td> ' +
         '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
-        '    <select class="cmbs" id="cmb_situacao_GGG_VVV" onchange="cmb_situacao_onchange(this)"> ' +
+        '    <select class="cmbs" id="cmb_situacao_GGG_VVV" title="TOOLTIP_cmb_situacao"  onchange="cmb_situacao_onchange(this)"> ' +
         '          OPCOES_cmb_situacao ' +
         '    </select> ' +
         '  </td> ' +
@@ -53,32 +83,39 @@
         '    <select class="cmbs" id="cmb_tpu_descricao_itens_GGG_VVV" style="display:none"> ' +
         '          OPCOES_cmb_tpu_descricao_itens ' +
         '    </select> ' +
-        //   '    <input id="txt_servico_GGG_VVV" class="txts  centroH" value="txt_servico_XXXXX" maxlength="255" onkeyup="validaAlfaNumericoAcentosAfins(this, 0, 0)" /> ' +
-        //'    <button id="btn_LocalizarGrupo_INSPECAO_ROTINEIRA_GGG_VVV" ' +
-        //'            type="button" ' +
-        //'            onclick="return Selecionar_TPU(this)" ' +
-        //'            title="Selecionar Serviço" ' +
-        //'            style="border:none; box-shadow:none; background-color:transparent; "> ' +
-        //'        <span class="fa fa-search"></span> ' +
-        //'    </button> ' +
         '  </td> ' +
         '  <td class="borderTop borderRight borderBottomPt  centroH"> ' +
-        //    '    <label class="lblsBold" id="lbl_unidade_GGG_VVV">lbl_unidade_XXXXX</label> ' +
         '    <input id="txt_unidade_GGG_VVV" class="txts  centroH" value="txt_unidade_XXXXX" maxlength="15"  /> ' +
         '  </td> ' +
         '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
         '    <input id="txt_quantidade_GGG_VVV" class="txts  centroH" value="txt_quantidade_XXXXX" /> ' +
         '  </td> ' +
+        '  <td class="borderTop borderRight borderBottomPt centroH"> ' +
+        '    <label id="lbl_providencias_GGG_VVV" class="txts" style="border:none; width:100%; text-align:center" title="providencias_descricao">prt_id_Valor</label> ' +
+        '    <select class="cmbs" id="cmb_providencias_GGG_VVV" style="display:none"> ' +
+        '          OPCOES_providencias_cmb ' +
+        '    </select> ' +
+        '  </td> ' +
         ' </tr> ';
 
 
-    //  var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_105", "txt_atr_id_106", "txt_atr_id_107", "cmb_atr_id_130", "cmb_atr_id_131",
-        //"cmb_atr_id_1020", "cmb_atr_id_1084", "cmb_atr_id_1085", "cmb_atr_id_1087", "cmb_atr_id_1088", "cmb_atr_id_1089", "cmb_atr_id_1091", "cmb_atr_id_1092", "cmb_atr_id_1093", "cmb_atr_id_1094",
     var controlesReadOnlyFicha2 = ["txt_atr_id_13", "txt_atr_id_102", "txt_atr_id_106", "cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153"
-        //,"txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"
+       , "cmb_atr_id_84", "cmb_atr_id_1084"
+       //,"txt_historico_Pontuacao_Geral_OAE_1", "txt_historico_documento_2", "txt_historico_data_2", "txt_historico_executantes_2", "txt_historico_Pontuacao_Geral_OAE_2", "txt_historico_documento_3", "txt_historico_data_3", "txt_historico_executantes_3", "txt_historico_Pontuacao_Geral_OAE_3"
     ];
 
     var controlesExcecoes_Salvar = ["cmb_atr_id_130", "cmb_atr_id_131", "cmb_atr_id_135", "cmb_atr_id_136", "cmb_atr_id_137", "cmb_atr_id_138", "cmb_atr_id_139", "cmb_atr_id_140", "cmb_atr_id_141", "cmb_atr_id_142", "cmb_atr_id_143", "cmb_atr_id_144", "cmb_atr_id_148", "cmb_atr_id_150", "txt_atr_id_151", "txt_atr_id_152", "txt_atr_id_153", "txt_atr_id_157"];
+
+    $(window).scroll(function () {
+        sessionStorage.scrollTop = $(this).scrollTop();
+    });
+
+    $(document).ready(function () {
+        if (sessionStorage.scrollTop != "undefined") {
+            $(window).scrollTop(sessionStorage.scrollTop);
+        }
+    });
+
 
     function Ficha2_header_click(quem, expandir) {
         if (expandir == null)
@@ -244,6 +281,11 @@
                     }
 
             }
+
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
     }
 
     function nome_segundo_cabecalho2(controleId) {
@@ -290,11 +332,15 @@
             lstCombos[i].innerText = null;
 
     }
-    function preenchetblFicha2(obj_id, classe, tipo) {
+    function preenchetblFicha2(obj_id, classe, tipo)
+    {
         classe = parseInt(classe);
         tipo = parseInt(tipo);
         selectedId_clo_id = classe;
         selectedId_tip_id = tipo;
+
+        // a cada refresh, reseta o timer
+        resetTimeout();
 
 
         // limpa antes de preencher
@@ -308,7 +354,7 @@
         jQuery("#txt_historico_Pontuacao_Geral_OAE_3").mask("99.99");
 
         var ord_id = 0;
-        if (paginaPai == "OrdemServico")
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
             ord_id = selectedId_ord_id;
 
         var url = "/Objeto/ObjAtributoValores_ListAll";
@@ -330,6 +376,7 @@
             "datatype": "json",
             "data": data,
             "success": function (result) {
+
                 for (var i = 0; i < result.data.length; i++) {
 
                     // preenche os LABELS
@@ -357,6 +404,7 @@
 
                         if (textbox) {
                             textbox.value = result.data[i].atv_valor;
+                            textbox.setAttribute('title', result.data[i].atv_valor);
 
                             // coloca mascara no textbox
                             if (mascara != "") {
@@ -367,6 +415,7 @@
                         }
                         if (textbox2) {
                             textbox2.value = result.data[i].atv_valor;
+                            textbox2.setAttribute('title', result.data[i].atv_valor);
 
                             if (mascara != "") {
                                 jQuery(textbox2).mask(mascara);
@@ -408,6 +457,17 @@
                                 }
                                 combo2.value = result.data[i].atv_valor;
                             }
+
+                            //if (((result.data[i].atv_controle == "cmb_atr_id_84") || (result.data[i].atv_controle == "cmb_atr_id_1084"))
+                            //    && (result.data[i].atv_valor != ""))
+                            //{
+                            //    if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
+                            //    {
+                            //        //carrega e posiciona combo/ nota VDM
+                            //        cmb_pista_onchange($("#"+result.data[i].atv_controle));
+
+                            //    }
+                            //}
 
                         }
                         else
@@ -453,7 +513,8 @@
 
 
 
-        if (paginaPai == "OrdemServico") {
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
+        {
             if (qualFicha == 2) {
                 preenchecmbTiposObjeto_FichaInspecaoRotineira();
             }
@@ -505,6 +566,11 @@
             }
         }
 
+
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
     }
 
     function Ficha2_setaReadWrite(tabela, ehRead) {
@@ -638,15 +704,41 @@
         var lbl_id = quem.id.replace("cmb_situacao", "lbl_servico");
         var lbl = document.getElementById(lbl_id);
         lbl.innerText = "";
+        lbl.title = "";
 
         var cmb2_id = quem.id.replace("cmb_situacao", "cmb_tpu_descricao_itens");
         var cmb2 = document.getElementById(cmb2_id);
         if (cmb2) {
             if ((parseInt(valor) <= 3) && (cmb2.options.length >= parseInt(valor))) {
                 cmb2.value = valor;
+                quem.title = quem.options[quem.selectedIndex].title;
                 lbl.innerText = cmb2.options[cmb2.selectedIndex].text;
+                lbl.title = cmb2.options[cmb2.selectedIndex].text;
+
             }
         }
+
+        var lbl3_id = quem.id.replace("cmb_situacao", "lbl_providencias");
+        var lbl3 = document.getElementById(lbl3_id);
+        lbl3.innerText = "";
+        lbl3.title = "";
+        var cmb3_id = quem.id.replace("cmb_situacao", "cmb_providencias");
+        var cmb3 = document.getElementById(cmb3_id);
+        if (cmb3) {
+            for (var v = 0; v < cmb3.options.length; v++)
+            {
+                var aux = cmb3.options[v].value.split(':');
+                if ((parseInt(valor) == parseInt(aux[0]))) 
+                {
+                    cmb3.selectedIndex = v;
+
+                    lbl3.innerText = aux[1];
+                    lbl3.title = cmb3.options[v].text;
+                    break;
+                }
+            }
+        }
+
     }
 
     function Ficha2_CriarTabelaGrupos(ehRead) {
@@ -667,24 +759,33 @@
         var celulaPai = document.getElementById("Ficha2_tr_Cabecalho");
 
         var ord_id = 0;
-        if (paginaPai == "OrdemServico")
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
             ord_id = selectedId_ord_id;
 
         $.ajax({
             "url": "/Objeto/GruposVariaveisValores_ListAll",
             "type": "GET",
             "datatype": "json",
-            "data": { "obj_id": selectedId_obj_id, "ord_id": ord_id },
+            "data": { "obj_id": selectedId_obj_id, "ord_id": ord_id, "ehProvidencia": 0 },
             "success": function (result) {
                 for (var i = 0; i < result.data.length; i++) {
                     if (parseInt(result.data[i].nCabecalhoGrupo) == 1)  // CABECALHO 1
                         linhas = linhas + cabecalho1.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
                     else
                         if (parseInt(result.data[i].nCabecalhoGrupo) == 2) // CABECALHO 2
+                        {
+                            var visibilitySub2 = "hidden";
+                            //if ((parseInt(result.data[i].tip_pai) == 22) || (parseInt(result.data[i].tip_pai) == 23) )
+                            //    visibilitySub2 = "visible";
                             linhas = linhas + cabecalho2.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+
+                        }
                         else
                             if (parseInt(result.data[i].nCabecalhoGrupo) == 3) // CABECALHO 3
+                            {
                                 linhas = linhas + cabecalho3.replace("XXXXX", result.data[i].nome_pai).replace("YYY", i);
+                                linhas = linhas.replace(/TIPP_IIDD/g, result.data[i].tip_pai);
+                            }
                             else
                                 if (parseInt(result.data[i].nCabecalhoGrupo) == 0) // LINHA NORMAL
                                 {
@@ -731,8 +832,8 @@
 
 
                                     // cria os itens do combo cmb_situacao ========================================
-                                    var op0 = ' <option selectedXX value="0" disabled></option> ';
-                                    var op = ' <option selectedXX value="valor">texto</option> ';
+                                    var op0 = ' <option selectedXX value="-1" disabled></option> ';
+                                    var op = ' <option selectedXX value="valor" title="tooltips" >texto</option> ';
                                     var total = op0;
                                     var str = result.data[i].caracterizacao_situacao_cmb;
                                     var selectedValue = result.data[i].ogi_id_caracterizacao_situacao;
@@ -745,17 +846,28 @@
                                     var pedacos = str.split(";");
                                     for (k = 0; k < pedacos.length; k++) {
                                         var aux = pedacos[k].split(":");
+                                        var aux2 = aux[1].split("|");
+
                                         var opt = op;
-                                        opt = opt.replace("valor", aux[0]).replace("texto", aux[1]);
+                                        opt = opt.replace("valor", aux[0]);
+                                        opt = opt.replace("texto", aux2[0]);
+                                        if (aux2.length > 1)
+                                            opt = opt.replace("tooltips", aux2[1]);
+                                        else
+                                            opt = opt.replace("tooltips", "");
 
                                         // checa se é o item selecionado
-                                        if (parseInt(selectedValue) == parseInt(aux[0]))
+                                        if (parseInt(selectedValue) == parseInt(aux[0])) {
                                             opt = opt.replace("selectedXX", "selected");
+                                            if (aux2.length > 1)
+                                                linhaAux = linhaAux.replace("TOOLTIP_cmb_situacao", aux2[1]);
+                                        }
                                         else
                                             opt = opt.replace("selectedXX", "");
 
                                         total = total + opt;
                                     }
+                                    linhaAux = linhaAux.replace("TOOLTIP_cmb_situacao", " ");
                                     linhaAux = linhaAux.replace(/OPCOES_cmb_situacao/g, total);
 
                                     // cria os itens do combo OPCOES_cmb_condicao============================================
@@ -785,6 +897,40 @@
                                     }
                                     linhaAux = linhaAux.replace(/OPCOES_cmb_condicao/g, total);
 
+                                    // ===  cria os itens do combo cmb_providencias_GGG_VVV  ============================================
+                                    var op0 = ' <option selectedXX value="0" disabled></option> ';
+                                    var op = '  <option selectedXX value="valor">texto</option> ';
+                                    total = op0;
+                                    if (parseInt(selectedValue) == 0)
+                                        total = total.replace("selectedXX", "selected");
+                                    else
+                                        total = total.replace("selectedXX", "");
+
+                                    var selectedValue = result.data[i].prt_id;
+                                    var selectedtxt = "";
+
+                                    var str = result.data[i].providencias_cmb;
+                                    var pedacos = str.split(";");
+                                    for (k = 0; k < pedacos.length; k++) {
+                                        var aux = pedacos[k].split(":");
+                                        var opt = op;
+                                        opt = opt.replace("valor", aux[0] + ":" + aux[1]).replace("texto", aux[2]);
+
+                                        // checa se é o item selecionado
+                                        if (parseInt(selectedValue) == parseInt(aux[1])) {
+                                            opt = opt.replace("selectedXX", "selected");
+                                            selectedtxt = aux[2];
+                                        }
+                                        else
+                                            opt = opt.replace("selectedXX", "");
+
+                                        total = total + opt;
+                                    }
+                                    linhaAux = linhaAux.replace(/OPCOES_providencias_cmb/g, total);
+                                    linhaAux = linhaAux.replace(/prt_id_Valor/g, (parseInt(result.data[i].prt_id) > 0 ? result.data[i].prt_id : ""));
+                                    linhaAux = linhaAux.replace(/providencias_descricao/g, (parseInt(result.data[i].prt_id) > 0 ? selectedtxt : ""));
+
+                                    // ============================================================================================
 
                                     if (result.data[i].nomeGrupo.trim() == "") // LIXEIRA
                                         linhaAux = linhaAux.replace(/displayZYZ/g, "hidden");
@@ -797,14 +943,16 @@
                                     // COLOCA OS DADOS
                                     linhaAux = linhaAux.replace(/OOBBJJIIDD/g, result.data[i].obj_id);
                                     linhaAux = linhaAux.replace(/GGG/g, result.data[i].obj_id);
-                                    linhaAux = linhaAux.replace(/VVV/g, result.data[i].ogv_id);
+                                    linhaAux = linhaAux.replace(/VVV/g, result.data[i].cgv_id);
                                     linhaAux = linhaAux.replace(/lbl_Elemento_XXXXX/g, result.data[i].nomeGrupo);
                                     linhaAux = linhaAux.replace(/lbl_Variaveis_XXXXX/g, result.data[i].variavel);
                                     linhaAux = linhaAux.replace(/txt_obs_XXXXX/g, result.data[i].ovv_observacoes_gerais);
                                     linhaAux = linhaAux.replace(/txt_servico_XXXXX/g, result.data[i].tpu_descricao);
                                     linhaAux = linhaAux.replace(/txt_unidade_XXXXX/g, result.data[i].uni_unidade);
                                     //  linhaAux = linhaAux.replace(/lbl_unidade_XXXXX/g, result.data[i].uni_unidade);
-                                    linhaAux = linhaAux.replace(/txt_quantidade_XXXXX/g, result.data[i].ovv_tpu_quantidade);
+                                    var qtt = parseFloat(result.data[i].ovv_tpu_quantidade);
+                                    linhaAux = linhaAux.replace(/txt_quantidade_XXXXX/g, qtt > 0 ? qtt : '');
+
 
                                     linhas = linhas + linhaAux;
                                 }
@@ -817,7 +965,7 @@
                 // coloca mascara no campo quantidade
                 var qts = $('[id^="txt_quantidade_"]');
                 for (var i = 0; i < qts.length; i++) {
-                    jQuery(qts[i]).attr('placeholder', "000.00");
+                   // jQuery(qts[i]).attr('placeholder', "000.00");
                     jQuery(qts[i]).mask("999.99");
                 }
 
@@ -836,6 +984,7 @@
                 ////    jQuery(qts[i]).mask("999.99", optionsObs);
                 ////}
 
+                var tblFicha2_INSPECAO_ROTINEIRA = document.getElementById("tblFicha2_INSPECAO_ROTINEIRA");
                 if (tblFicha2_INSPECAO_ROTINEIRA)
                     Ficha2_setaReadWrite(tblFicha2_INSPECAO_ROTINEIRA, ehRead);
             }
@@ -865,7 +1014,7 @@
                     });
 
                     // atualiza tabela grupos
-                    Ficha2_CriarTabelaGrupos();
+                    Ficha2_CriarTabelaGrupos(false);
                     return false;
                 }
                 else {
@@ -967,18 +1116,19 @@
                 var GGG_VVV = table.rows[i].id.replace("trFICHA2_", "");
                 var aux = GGG_VVV.split("_");
                 var obj_id = aux[1];
-                var ogv_id = aux[2];
+                var cgv_id = aux[2];
 
                 grupoAtual = aux[1];
 
                 if (parseInt(aux[aux.length - 1]) == 0)
                     grupoAnterior = aux[1];
 
-                GGG_VVV = obj_id + "_" + ogv_id;
+                GGG_VVV = obj_id + "_" + cgv_id;
                 var ogi_id_caracterizacao_situacao = document.getElementById("cmb_situacao_" + GGG_VVV).options[document.getElementById("cmb_situacao_" + GGG_VVV).selectedIndex].value;
 
-                if (table.rows[i].cells.length > 6) {
-                    ati_id_condicao_inspecao = document.getElementById("cmb_condicao_" + GGG_VVV).options[document.getElementById("cmb_condicao_" + GGG_VVV).selectedIndex].value;
+                if (table.rows[i].cells.length > 7) {
+                    var cmb_condicao_ = document.getElementById("cmb_condicao_" + GGG_VVV);
+                    ati_id_condicao_inspecao = cmb_condicao_.options[cmb_condicao_.selectedIndex].value;
 
                     // acha o nomeGrupoAtual
                     var elemento = table.rows[i].cells[0].getElementsByTagName("label");
@@ -990,7 +1140,9 @@
                 var ovv_observacoes_gerais = document.getElementById("txt_obs_" + GGG_VVV).value;
                 var tpu_id = " ";
 
-                var ovv_tpu_quantidade = document.getElementById("txt_quantidade_" + GGG_VVV).value;
+                var qtt = document.getElementById("txt_quantidade_" + GGG_VVV).value;
+                var ovv_tpu_quantidade = isNaN(qtt) ? 0 : qtt;
+
                 var tpu_unidade = document.getElementById("txt_unidade_" + GGG_VVV).value;
 
                 if (ovv_observacoes_gerais.trim() == "")
@@ -1002,7 +1154,7 @@
                 if (isNaN(ovv_tpu_quantidade))
                     ovv_tpu_quantidade = 0;
 
-                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + ogv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + '</tr_linha>';
+                var linhaMontada = '<tr_linha>' + obj_id + '<quebra>' + cgv_id + '<quebra>' + ogi_id_caracterizacao_situacao + '<quebra>' + ati_id_condicao_inspecao + '<quebra>' + ovv_observacoes_gerais + '<quebra>' + tpu_id + '<quebra>' + tpu_unidade + '<quebra>' + ovv_tpu_quantidade + ' </tr_linha>';
 
                 if (parseInt(ati_id_condicao_inspecao) == 0) {
                     linhaOK = false;
@@ -1049,7 +1201,7 @@
         //url: "/Objeto/GruposVariaveisValores_Salvar",
 
         var ord_id = 0;
-        if (paginaPai == "OrdemServico")
+        if ((paginaPai == "OrdemServico") || (paginaPai == "Inspecao"))
             ord_id = selectedId_ord_id;
 
         $.ajax({
@@ -1108,10 +1260,29 @@
             }
         }
 
+        var lstCombos1 = tabela.getElementsByTagName('select');
+        var lstCombos = [];
 
-        var lstCombos = tabela.getElementsByTagName('select'); // lista de combos
+        var cmb_atr_id_84 = document.getElementById("cmb_atr_id_84");
+        if (cmb_atr_id_84)
+            lstCombos.push(cmb_atr_id_84);
+
+        var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+        if (cmb_atr_id_1084)
+            lstCombos.push(cmb_atr_id_1084);
+
+        // transforma o Object List em Array
+        for (var i = 0; i < lstCombos1.length; i++) {
+            var cmb_ = document.getElementById(lstCombos1[i].id);
+            if (cmb_)
+                lstCombos.push(cmb_);
+        }
+
         for (var i = 0; i < lstCombos.length; i++) {
-            if (!array_filtrado.includes(lstCombos[i].id))
+            if ((!array_filtrado.includes(lstCombos[i].id))
+                 || (lstCombos[i].id == "cmb_atr_id_84")
+                 || (lstCombos[i].id == "cmb_atr_id_1084"))
+
                 if (lstCombos[i].selectedIndex > -1) {
                     var cmbId = lstCombos[i].id;
 
@@ -1231,6 +1402,46 @@
         preenchetblFicha2(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);
     }
 
+    function Ficha2_ExcluirSubDivisao3(tip_id) {
+        var form = this;
+
+        swal({
+            title: "Excluir. Tem certeza?",
+            icon: "warning",
+            buttons: [
+                'Não',
+                'Sim'
+            ],
+            dangerMode: true,
+            focusCancel: true
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                var response = POST("/Objeto/Objeto_Subdivisao3_Excluir", JSON.stringify({ tip_id: tip_id, obj_id_tipoOAE: selectedId_obj_id }))
+                if (response.erroId.trim() == "") {
+                    swal({
+                        type: 'success',
+                        title: 'Sucesso',
+                        text: 'Registro excluído com sucesso'
+                    });
+
+                    // atualiza tabela grupos
+                    Ficha2_CriarTabelaGrupos();
+                    return false;
+                }
+                else {
+                    swal({
+                        type: 'error',
+                        title: 'Aviso',
+                        text: 'Erro ao excluir registro:' + response.erroId
+                    });
+                }
+                return false;
+            } else {
+                return false;
+            }
+        })
+        return false;
+    }
 
     // popup GRUPOS
     function Ficha2_preencheCombo(clo_id, qualCombo, txtPlaceholder, tip_pai) {
@@ -1248,7 +1459,7 @@
             url: '/Objeto/PreenchecmbTiposObjeto',
             type: "POST",
             dataType: "JSON",
-            data: { clo_id: clo_id, tip_pai: tip_pai, excluir_existentes: excluir_existentes, obj_id: selectedId_obj_id, somente_com_variaveis_inspecao:1 },
+            data: { clo_id: clo_id, tip_pai: tip_pai, excluir_existentes: excluir_existentes, obj_id: selectedId_obj_id, somente_com_variaveis_inspecao:0 },
             success: function (lstSubNiveis) {
 
                 if (clo_id != 9) {
@@ -1261,17 +1472,28 @@
                     $("#divFicha2_GrupoObjetos").empty();
                     $.each(lstSubNiveis, function (i, objeto) {
                         i++;
+                        var podeIr = true;
                         if (i < 50) {
-                            var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
-                            tagchk = tagchk.replace("idXXX", "chk" + i);
-                            tagchk = tagchk.replace("nameXXX", "chk" + i);
-                            tagchk = tagchk.replace("valueXXX", objeto.Value);
+                            if (tip_pai == 23)
+                            {
+                                if ((objeto.Text != "Cortina") && (objeto.Text != "Muro de Ala"))  // se for estrutura de concreto, mostra somente muro de ala e cortina
+                                { 
+                                    podeIr = false;
+                                }
+                            }
 
-                            var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
-                            taglbl = taglbl.replace("idXXX", "chk" + i);
-                            taglbl = taglbl.replace("TextoXXX", objeto.Text);
+                            if (podeIr) {
+                                var tagchk = '<input type="checkbox" id="idXXX" nome="nameXXX" value="valueXXX" style="margin-right:5px">';
+                                tagchk = tagchk.replace("idXXX", "chk" + i);
+                                tagchk = tagchk.replace("nameXXX", "chk" + i);
+                                tagchk = tagchk.replace("valueXXX", objeto.Value);
 
-                            $("#divFicha2_GrupoObjetos").append(tagchk + taglbl);
+                                var taglbl = '<label for="idXXX" class="chklst" >TextoXXX</label> <br />';
+                                taglbl = taglbl.replace("idXXX", "chk" + i);
+                                taglbl = taglbl.replace("TextoXXX", objeto.Text);
+
+                                $("#divFicha2_GrupoObjetos").append(tagchk + taglbl);
+                            }
                         }
                     });
                 }
@@ -1333,11 +1555,16 @@
         else
             // ENCONTROS
             if (ivalor == 14) {
+                // mostra Subdivisao2
+                document.getElementById("Ficha2_divSubdivisao2").style.display = 'block';
+                Ficha2_preencheCombo(7, 'Ficha2_cmbSubdivisao2', '--Selecione--', ivalor);
+
                 // oculta tudo e deixa somente o botao salvar
-                document.getElementById("Ficha2_divGrupoObjetos").style.display = 'none';
+                //document.getElementById("Ficha2_divGrupoObjetos").style.display = 'none';
 
                 //// mostra Subdivisao2 e 3
                 //document.getElementById("Ficha2_divSubdivisao2").style.display = 'block';
+                //Ficha2_preencheCombo(8, 'Ficha2_cmbSubdivisao2', '--Selecione--', ivalor);
 
                 //// preenche combo manualmente, tip_id = 22,23,24 ESTRUTURAS DE TERRRA, DE CONCRETO E ACESSOS
                 //$("#Ficha2_cmbSubdivisao2").append($('<option></option>').val("").html("--Selecione--"));
@@ -1366,15 +1593,16 @@
         var valor = document.getElementById("Ficha2_cmbSubdivisao2").value;
         var ivalor = getTipoId(valor);
 
-        if ((ivalor == 24) || (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
+        //if (ivalor != 24) //|| (ivalor == 15) || (ivalor == 16)) { // 15 = Tabuleiro Face Superior; 16=Tabuleiro Face Inferior; 24 = Acesso
+        //{
             Ficha2_LimparCampos(9);
             Ficha2_preencheCombo(9, 'divFicha2_GrupoObjetos', '--Selecione--', ivalor)
-        }
-        else {
-            Ficha2_LimparCampos(8);
-            document.getElementById("Ficha2_divSubdivisao3").style.display = 'block';
-            Ficha2_preencheCombo(8, 'Ficha2_cmbSubdivisao3', '--Selecione--', ivalor)
-        }
+        //}
+        //else {
+        //    Ficha2_LimparCampos(8);
+        //    document.getElementById("Ficha2_divSubdivisao3").style.display = 'block';
+        //    Ficha2_preencheCombo(8, 'Ficha2_cmbSubdivisao3', '--Selecione--', ivalor)
+        //}
 
 
     }
@@ -1413,7 +1641,7 @@
 
             var grupo_Prefixo = codigoTipoOAE + "-" + Ficha2_cmbSubdivisao1;
 
-            if (iFicha2_cmbSubdivisao1 != 14) {
+            //if (iFicha2_cmbSubdivisao1 != 14) {
                 var Ficha2_divSubdivisao2 = document.getElementById("Ficha2_divSubdivisao2");
                 if (Ficha2_divSubdivisao2.style.display != 'none') {
                     var grupo_Prefixo = grupo_Prefixo + "-" + getTipoCodigo($("#Ficha2_cmbSubdivisao2").val());
@@ -1433,9 +1661,9 @@
                         grupos_codigos = grupos_codigos + ";" + grupo_Prefixo + "-" + getTipoCodigo(selchks[i]);
 
                 grupos_codigos = grupos_codigos + ";"; // acrescenta um delimitador no final da string
-            }
-            else
-                grupos_codigos = grupo_Prefixo; // codigo encontros + delimitador no final da string
+            //}
+            //else
+            //    grupos_codigos = grupo_Prefixo; // codigo encontros + delimitador no final da string
 
 
             var listaGrupos = {
@@ -1481,63 +1709,67 @@
     // parte 3
     function Ficha2_Calcula_Notas_1_Requisito() {
         var cmb_atr_id_99 = document.getElementById("cmb_atr_id_99");
-        var cmb_atr_id_99_val = 0;
-        if (cmb_atr_id_99.selectedIndex > -1)
-            cmb_atr_id_99_val = parseInt(cmb_atr_id_99.options[cmb_atr_id_99.selectedIndex].text);
-        else
-            cmb_atr_id_99_val = 0;
-
         var cmb_atr_id_100 = document.getElementById("cmb_atr_id_100");
-        var cmb_atr_id_100_val = 0;
-        if (cmb_atr_id_100.selectedIndex > -1)
-            cmb_atr_id_100_val = parseInt(cmb_atr_id_100.options[cmb_atr_id_100.selectedIndex].text);
-        else
-            cmb_atr_id_100_val = 0;
-
-
         var cmb_atr_id_130 = document.getElementById("cmb_atr_id_130");
         var cmb_atr_id_131 = document.getElementById("cmb_atr_id_131");
-        cmb_atr_id_130.selectedIndex = cmb_atr_id_99.selectedIndex;
-        cmb_atr_id_131.selectedIndex = cmb_atr_id_100.selectedIndex;
-
-        if (cmb_atr_id_130.selectedIndex > -1)
-            document.getElementById("lblcmb_130").innerText = cmb_atr_id_130.options[cmb_atr_id_130.selectedIndex].text;
-        else
-            document.getElementById("lblcmb_130").innerText = "";
-
-        if (cmb_atr_id_131.selectedIndex > -1)
-            document.getElementById("lblcmb_131").innerText = cmb_atr_id_131.options[cmb_atr_id_131.selectedIndex].text;
-        else
-            document.getElementById("lblcmb_131").innerText = "";
-
-        document.getElementById("txt_atr_id_151").value = cmb_atr_id_99_val + cmb_atr_id_100_val;
-
-
-        var soma22 = document.getElementById("txt_atr_id_152").value; // = parseInt(cmb_atr_id_100_val);
-        if (isNaN(soma22))
-            soma2 = 0;
-        else
-            soma2 = parseFloat(soma22);
-
-        var total = parseFloat(soma22) + cmb_atr_id_99_val + cmb_atr_id_100_val;
-        document.getElementById("txt_atr_id_157").value = total.toFixed(2);
-        document.getElementById("txt_historico_Pontuacao_Geral_OAE_1").value = total.toFixed(2);
-
-        // preenche o ultimo item do menu acordeon
         var cmb1_Nota = document.getElementById("cmb_atr_id_147");
         var cmb1_Desc = document.getElementById("cmb_atr_id_148");
 
-        if ((cmb_atr_id_99_val <= cmb_atr_id_100_val) && (cmb_atr_id_99_val > 0)) {
-            cmb1_Nota.selectedIndex = cmb_atr_id_99.selectedIndex;
-            cmb1_Desc.selectedIndex = cmb_atr_id_99.selectedIndex;
-            document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_99.selectedIndex].text;
-        }
-        else
-            if ((cmb_atr_id_99_val > cmb_atr_id_100_val) && (cmb_atr_id_100_val > 0)) {
-                cmb1_Nota.selectedIndex = cmb_atr_id_100.selectedIndex;
-                cmb1_Desc.selectedIndex = cmb_atr_id_100.selectedIndex;
-                document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_100.selectedIndex].text;
+        if ((cmb_atr_id_99) && (cmb_atr_id_100) && (cmb_atr_id_130) && (cmb_atr_id_131) && (cmb1_Nota) && (cmb1_Desc)) {
+
+            var cmb_atr_id_99_val = 0;
+            if (cmb_atr_id_99.selectedIndex > -1)
+                cmb_atr_id_99_val = parseInt(cmb_atr_id_99.options[cmb_atr_id_99.selectedIndex].text);
+            else
+                cmb_atr_id_99_val = 0;
+
+            var cmb_atr_id_100_val = 0;
+            if (cmb_atr_id_100.selectedIndex > -1)
+                cmb_atr_id_100_val = parseInt(cmb_atr_id_100.options[cmb_atr_id_100.selectedIndex].text);
+            else
+                cmb_atr_id_100_val = 0;
+
+
+            cmb_atr_id_130.selectedIndex = cmb_atr_id_99.selectedIndex;
+            cmb_atr_id_131.selectedIndex = cmb_atr_id_100.selectedIndex;
+
+            if (cmb_atr_id_130.selectedIndex > -1)
+                document.getElementById("lblcmb_130").innerText = cmb_atr_id_130.options[cmb_atr_id_130.selectedIndex].text;
+            else
+                document.getElementById("lblcmb_130").innerText = "";
+
+            if (cmb_atr_id_131.selectedIndex > -1)
+                document.getElementById("lblcmb_131").innerText = cmb_atr_id_131.options[cmb_atr_id_131.selectedIndex].text;
+            else
+                document.getElementById("lblcmb_131").innerText = "";
+
+            document.getElementById("txt_atr_id_151").value = cmb_atr_id_99_val + cmb_atr_id_100_val;
+
+
+            var soma22 = document.getElementById("txt_atr_id_152").value; // = parseInt(cmb_atr_id_100_val);
+            if (isNaN(soma22))
+                soma2 = 0;
+            else
+                soma2 = parseFloat(soma22);
+
+            var total = parseFloat(soma22) + cmb_atr_id_99_val + cmb_atr_id_100_val;
+            document.getElementById("txt_atr_id_157").value = total.toFixed(2);
+            document.getElementById("txt_historico_Pontuacao_Geral_OAE_1").value = total.toFixed(2);
+
+            // preenche o ultimo item do menu acordeon
+
+            if ((cmb_atr_id_99_val <= cmb_atr_id_100_val) && (cmb_atr_id_99_val > 0)) {
+                cmb1_Nota.selectedIndex = cmb_atr_id_99.selectedIndex;
+                cmb1_Desc.selectedIndex = cmb_atr_id_99.selectedIndex;
+                document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_99.selectedIndex].text;
             }
+            else
+                if ((cmb_atr_id_99_val > cmb_atr_id_100_val) && (cmb_atr_id_100_val > 0)) {
+                    cmb1_Nota.selectedIndex = cmb_atr_id_100.selectedIndex;
+                    cmb1_Desc.selectedIndex = cmb_atr_id_100.selectedIndex;
+                    document.getElementById("lblcmb_148").innerText = cmb1_Desc.options[cmb_atr_id_100.selectedIndex].text;
+                }
+        }
 
     }
     function Ficha2_Calcula_Notas_2_Requisito() {
@@ -1554,15 +1786,34 @@
         var cmb10 = document.getElementById("cmb_atr_id_1094"); var cmb10_Nota = document.getElementById("cmb_atr_id_144");
 
         // posiciona os combos Nota
-        cmb1_Nota.selectedIndex = cmb1.selectedIndex;
-        cmb2_Nota.selectedIndex = cmb2.selectedIndex;
-        cmb3_Nota.selectedIndex = cmb3.selectedIndex;
-        cmb4_Nota.selectedIndex = cmb4.selectedIndex;
-        cmb5_Nota.selectedIndex = cmb5.selectedIndex;
-        cmb6_Nota.selectedIndex = cmb6.selectedIndex;
-        cmb7_Nota.selectedIndex = cmb7.selectedIndex;
-        cmb8_Nota.selectedIndex = cmb8.selectedIndex;
-        cmb9_Nota.selectedIndex = cmb9.selectedIndex;
+        if ((cmb1) && (cmb1_Nota))
+            cmb1_Nota.selectedIndex = cmb1.selectedIndex;
+
+        if ((cmb2) && (cmb2_Nota))
+            cmb2_Nota.selectedIndex = cmb2.selectedIndex;
+
+        if ((cmb3) && (cmb3_Nota))
+            cmb3_Nota.selectedIndex = cmb3.selectedIndex;
+
+        if ((cmb4) && (cmb4_Nota))
+            cmb4_Nota.selectedIndex = cmb4.selectedIndex;
+
+        if ((cmb5) && (cmb5_Nota))
+            cmb5_Nota.selectedIndex = cmb5.selectedIndex;
+
+        if ((cmb6) && (cmb6_Nota))
+            cmb6_Nota.selectedIndex = cmb6.selectedIndex;
+
+        if ((cmb7) && (cmb7_Nota))
+            cmb7_Nota.selectedIndex = cmb7.selectedIndex;
+
+        if ((cmb8) && (cmb8_Nota))
+            cmb8_Nota.selectedIndex = cmb8.selectedIndex;
+
+        if ((cmb9) && (cmb9_Nota))
+            cmb9_Nota.selectedIndex = cmb9.selectedIndex;
+
+        if ((cmb10) && (cmb10_Nota))
         cmb10_Nota.selectedIndex = cmb10.selectedIndex;
 
         // acha os valores
@@ -1630,3 +1881,63 @@
         Ficha2_Calcula_Nota_Parametro_Funcional();
     }
 
+
+    function cmb_pista_onchange(quem)
+    {
+        var valor = $('#' + quem.id).val();
+
+        if ((selected_obj_codigo + "") == "")
+            selected_obj_codigo = $("#txt_atr_id_102").val();
+
+        if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
+        {
+            $.ajax({
+                url: "/Objeto/BuscaValorVDM",
+                data: JSON.stringify({ 'obj_codigo_TipoOAE': selected_obj_codigo, 'itipo_pista': valor }),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    // selectedId_tos_id cadastral = 7; rotineira = 8; especial = 9
+                    var retorno = parseInt(result);
+
+                    if (retorno == -1) {
+                        swal({
+                            type: 'error',
+                            title: 'Erro',
+                            text: "Erro ao sincronizar VDM"
+                        }).then(
+                                 function () {
+                                     return false;
+                                 });
+                    }
+                    else {                        
+                        $("#cmb_atr_id_84").val(retorno);
+                        $("#cmb_atr_id_1084").val(retorno);
+
+                        var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
+                        var cmb_atr_id_135 = document.getElementById("cmb_atr_id_135");
+                        if ((cmb_atr_id_135) && (cmb_atr_id_1084))
+                            if (cmb_atr_id_135.selectedIndex > 0)
+                                cmb_atr_id_135.selectedIndex = cmb_atr_id_1084.selectedIndex;
+
+                    }
+                    return false;
+                },
+                error: function (errormessage) {
+                    swal({
+                        type: 'error',
+                        title: 'Erro',
+                        text: errormessage.responseText
+                    }).then(
+                            function () {
+                                return false;
+                            });
+
+                }
+            });
+
+        }
+
+    }

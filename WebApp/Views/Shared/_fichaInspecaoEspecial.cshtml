@@ -1,6 +1,6 @@
 ﻿
 
-
+<script src="~/Scripts/Shared/_fichaInspecaoEspecial.js"></script>
 <style type="text/css">
     #divFicha4 option:first-child {
         color: black !important;
@@ -15,7 +15,7 @@
         }
 
     .centroH {
-        text-align: center;
+        text-align: center !important;
     }
 
     .contornoBranco {
@@ -170,6 +170,7 @@
         display: inline-block;
         font-weight: normal;
         color: blue;
+        padding-left: 5px;
     }
 
     .cmbsNoWidth {
@@ -213,46 +214,7 @@
         height: 1px;
     }
 
-    .altura50 {
-        height: 50px;
-    }
-
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
-
-    .borderBottomPt {
-        border-bottom: dotted 1px black;
-    }
-
-    .borderTopPt {
-        border-top: dotted 1px black;
-    }
-
-    .borderLeftPt {
-        border-left: dotted 1px black;
-    }
-
-    .borderRightPt {
-        border-right: dotted 1px black;
-    }
-
-    .borderNone {
-        border: none
-    }
-
+ 
     #divFicha4 input:disabled,
     #divFicha4 textarea:disabled,
     #divFicha4 select:disabled {
@@ -353,7 +315,7 @@
         </tr>
 
         <tr>
-            <td colspan="2" class="borderLeft borderBottom"><label class="lblsBold" id="lblatr_id_107">Nome Rodovia</label><input disabled id="txt_atr_id_107" class="txts" /></td>
+            <td colspan="2" class="borderLeft borderBottom"><label class="lblsBold" id="lblatr_id_107">Nome Rodovia</label><input disabled id="txt_atr_id_107" class="txts"   maxlength="255"/></td>
             <td class="borderLeft borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_13">Localização - KM</label><input disabled id="txt_atr_id_13" class="txts25" /> </td>
             <td class="borderLeft borderBottom borderRight" colspan="2"><label class="lblsBold" id="lblatr_id_14">Município</label><select disabled id="cmb_atr_id_14" class="cmbs"></select></td>
         </tr>
@@ -365,7 +327,7 @@
             </td>
             <td class="borderLeft borderRight" colspan="3">
                 <label class="lblsBold" id="lblatr_id_16">Pista</label>
-                <select disabled id="cmb_atr_id_15" class="cmbs"></select>
+                <select disabled id="cmb_atr_id_15" class="cmbs" onchange="cmb_pista_onchange(this)"></select>
                 <select disabled id="cmb_atr_id_16" class="cmbs"></select>
             </td>
         </tr>
@@ -451,20 +413,20 @@
                                 <label class="lblsBold" id="lbl_historico_Inspecao_1">Insp Atual</label>
                             </td>
                             <td class="borderLeftPt borderBottomPt borderRightPt" colspan="2">
-                                <input disabled id="txt_historico_documento_1" class="txts90 centroH" />
+                                <input disabled id="txt_historico_documento_1" class="txts90 centroH" maxlength="255" />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRightPt" style="text-align:center;">
                                 @*<label class="lblsNormal" id="lblcmb_148b" style="padding:2px"></label>*@
-                                <input disabled id="txt_historico_data_1" class="txts90 centroH" readonly />
+                                <input disabled id="txt_historico_data_1" class="txts90 centroH" readonly  maxlength="255" />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRightPt" colspan="2">
-                                <input disabled id="txt_historico_executantes_1" class="txts90 centroH" />
+                                <input disabled id="txt_historico_executantes_1" class="txts90 centroH"  maxlength="255" />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="3">
-                                <input disabled id="txt_historico_Pontuacao_Geral_OAE_1" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_Pontuacao_Geral_OAE_1" readonly class="txts90 centroH"  maxlength="255" />
                             </td>
                         </tr>
 
@@ -473,19 +435,19 @@
                                 <label class="lblsBold" id="lbl_historico_Inspecao_2">Insp Anterior</label>
                             </td>
                             <td class="borderLeftPt borderBottomPt borderRightPt" colspan="2">
-                                <input disabled id="txt_historico_documento_2" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_documento_2" readonly class="txts90 centroH" maxlength="255"  />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRightPt" style="text-align:center;">
-                                <input disabled id="txt_historico_data_2" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_data_2" readonly class="txts90 centroH" maxlength="255"  />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRightPt" colspan="2">
-                                <input disabled id="txt_historico_executantes_2" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_executantes_2" readonly class="txts90 centroH"  maxlength="255" />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="3">
-                                <input disabled id="txt_historico_Pontuacao_Geral_OAE_2" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_Pontuacao_Geral_OAE_2" readonly class="txts90 centroH" maxlength="255"  />
                             </td>
 
                         </tr>
@@ -495,19 +457,19 @@
                                 <label class="lblsBold" id="lbl_historico_Inspecao_3">Insp Anterior</label>
                             </td>
                             <td class="borderLeftPt borderBottomPt borderRightPt" colspan="2">
-                                <input disabled id="txt_historico_documento_3" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_documento_3" readonly class="txts90 centroH" maxlength="255"  />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRightPt" style="text-align:center;">
-                                <input disabled id="txt_historico_data_3" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_data_3" readonly class="txts90 centroH"  maxlength="255" />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRightPt" colspan="2">
-                                <input disabled id="txt_historico_executantes_3" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_executantes_3" readonly class="txts90 centroH"  maxlength="255" />
                             </td>
 
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="3">
-                                <input disabled id="txt_historico_Pontuacao_Geral_OAE_3" readonly class="txts90 centroH" />
+                                <input disabled id="txt_historico_Pontuacao_Geral_OAE_3" readonly class="txts90 centroH"  maxlength="255" />
                             </td>
 
                         </tr>
@@ -584,7 +546,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs"></select></td>
+                            <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_84">Volume Diário Médio de Tráfego (VDM)</label><select disabled id="cmb_atr_id_84" class="cmbs" readonly ></select></td>
                             <td class="borderLeft borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_85">Principal Utilização do Trecho</label><select disabled id="cmb_atr_id_85" class="cmbs"></select></td>
                         </tr>
 
@@ -694,7 +656,7 @@
                             <td class="borderLeft borderBottom "><label class="lblsBold" id="lblatr_id_21">Carga Máxima de Operação por Eixo</label></td>
                             <td class="borderBottom "><input disabled id="txt_atr_id_21" class="txts25" /> tonelada (t)</td>
                             <td class="borderLeft borderBottom " colspan="2"><label class="lblsBold" id="lblatr_id_22">Espaçamento</label><input disabled id="txt_atr_id_22" class="txts25" /> metro(m)</td>
-                            <td class="borderLeft borderBottom borderRight" rowspan="3" colspan="2"><label class="lblsBold" id="lblatr_id_28" style="vertical-align:top">ATRIBUTOS | OBSERVAÇÕES </label><textarea disabled id="txt_atr_id_90" class="txts" rows="4" cols="50"></textarea> </td>
+                            <td class="borderLeft borderBottom borderRight" rowspan="3" colspan="2"><label class="lblsBold" id="lblatr_id_28" style="vertical-align:top">ATRIBUTOS | OBSERVAÇÕES </label><textarea disabled id="txt_atr_id_90" class="txts" rows="4" cols="50"   maxlength="255"></textarea> </td>
                         </tr>
 
                         <tr>
@@ -810,7 +772,7 @@
                             <td class="borderRightPt paddingLeft5"><input disabled type="checkbox" id="chk_atr_id_31_232" /><label class="lblsNormal" id="lblatr_id_31_232">Viga Isostática</label></td>
 
                             <td class="lblsBold borderRight" colspan="4" rowspan="8">
-                                <textarea disabled id="txt_atr_id_112" class="txts" rows="4" cols="80" style="width:95%"></textarea>
+                                <textarea disabled id="txt_atr_id_112" class="txts" rows="4" cols="80"  maxlength="255"  style="width:95%"></textarea>
                             </td>
                         </tr>
 
@@ -892,7 +854,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottomPt paddingLeft5" colspan="3"><input disabled type="checkbox" id="chk_atr_id_32_242" onclick="chk_tick4(this.id)" /><label class="lblsNormal" id="lblatr_id_32_242">Outro</label><input disabled id="txt_atr_id_32_242" class="txts25" onkeyup="tica_chktxt4(this.id)" /></td>
+                            <td class="borderLeft borderBottomPt paddingLeft5" colspan="3"><input disabled type="checkbox" id="chk_atr_id_32_242" onclick="chk_tick4(this.id)" /><label class="lblsNormal" id="lblatr_id_32_242">Outro</label><input disabled id="txt_atr_id_32_242" class="txts25"  maxlength="255" onkeyup="tica_chktxt4(this.id)" /></td>
                             <td class="borderRight borderBottomPt" colspan="2"><label class="lblsBold" id="lblatr_id_42">Esquerdo:</label><input disabled id="txt_atr_id_42" class="txts25" />  metro</td>
                         </tr>
 
@@ -927,7 +889,7 @@
 
                         <tr>
                             <td class="borderLeft borderBottom"><label class="lblsBold" id="lblatr_id_113">Observação</label></td>
-                            <td class="borderRight borderBottom" colspan="5"><input disabled id="txt_atr_id_113" class="txts" /></td>
+                            <td class="borderRight borderBottom" colspan="5"><input disabled id="txt_atr_id_113" class="txts"  maxlength="255" /></td>
                         </tr>
 
                         <tr>
@@ -945,8 +907,8 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_51">Sistema de Iluminação</label><input disabled id="txt_atr_id_51" class="txts" /></td>
-                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_55">Utilidades</label><input disabled id="txt_atr_id_55" class="txts" /></td>
+                            <td class="borderLeft borderBottomPt" colspan="3"><label class="lblsBold" id="lblatr_id_51">Sistema de Iluminação</label><input disabled id="txt_atr_id_51" class="txts" maxlength="255" /></td>
+                            <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_55">Utilidades</label><input disabled id="txt_atr_id_55" class="txts" maxlength="255"  /></td>
                         </tr>
 
                         <tr>
@@ -1105,7 +1067,7 @@
 
                         <tr>
                             <td class="borderLeft borderBottom" colspan="2"><label class="lblsBold" id="lblatr_id_125">Consolo</label><select disabled id="cmb_atr_id_125" class="cmbs25"></select></td>
-                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_126">Observação</label><input disabled id="txt_atr_id_126" class="txts" /></td>
+                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_126">Observação</label><input disabled id="txt_atr_id_126" class="txts" maxlength="255"  /></td>
                         </tr>
 
                         <tr>
@@ -1124,7 +1086,7 @@
                             <td class="borderLeft borderBottom borderRight" style="border-left:none" colspan="2"><label class="lblsBold" id="lblatr_id_66">APARELHOS DE APOIO | Carga do Aparelho (max)</label><input disabled id="txt_atr_id_66" class="txtsNoWidth" /> tonelada(t)</td>
                         </tr>
                         <tr>
-                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_67">APARELHOS DE APOIO | Observação</label><input disabled id="txt_atr_id_67" class="txts" /></td>
+                            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_67">APARELHOS DE APOIO | Observação</label><input disabled id="txt_atr_id_67" class="txts" maxlength="255" /></td>
                         </tr>
                     </table>
                 </div>
@@ -1166,7 +1128,7 @@
                         <td style="width:25px !important; ">
                             <button id="btn_Salvar_INFRAESTRUTURA"
                                     type="button"
-                                    onclick="return SalvarDados_Ficha4l(tblFicha4_INFRAESTRUTURA)"
+                                    onclick="return SalvarDados_Ficha4(tblFicha4_INFRAESTRUTURA)"
                                     title="Salvar"
                                     style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
@@ -1176,7 +1138,7 @@
                         <td style="width:25px !important; ">
                             <button id="btn_Cancelar_INFRAESTRUTURA"
                                     type="button"
-                                    onclick="return CancelarDados_Ficha4(tblFicha_INFRAESTRUTURA)"
+                                    onclick="return CancelarDados_Ficha4(tblFicha4_INFRAESTRUTURA)"
                                     title="Cancelar Edição"
                                     style="display:none; border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
@@ -1184,7 +1146,7 @@
 
                             <button id="btn_Editar_INFRAESTRUTURA"
                                     type="button"
-                                    onclick="return EditarDados_Ficha4(tblFicha_INFRAESTRUTURA)"
+                                    onclick="return EditarDados_Ficha4(tblFicha4_INFRAESTRUTURA)"
                                     title="Editar"
                                     style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-pencil"></span>
@@ -1362,9 +1324,8 @@
                             <td class="borderLeft borderBottom" colspan="3"><label class="lblsBold" id="lblatr_id_163">Viga Travessa</label><select disabled id="cmb_atr_id_163" class="cmbs"></select></td>
                             <td class="borderBottom borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_164">Dimensões das Vigas Travessas</label><input disabled id="txt_atr_id_164" class="txtsNoWidth" /> metro (m)</td>
                         </tr>
-
                         <tr>
-                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações</td>
+                            <td colspan="6" class="lblsBold borderLeft borderBottomPt borderRight">Observações<input disabled id="txt_atr_id_74" maxlength="255" class="txts" /></td>
                         </tr>
                         <tr>
                             <td class="lblsBold borderBottom borderLeft" rowspan="2">Profundidade da Fundação</td>
@@ -1377,8 +1338,8 @@
                         </tr>
 
                         @*<tr>
-                <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_74">FUNDAÇÃO | Observação</label><input disabled id="txt_atr_id_74" class="txts" /></td>
-            </tr>*@
+            <td class="borderLeft borderBottom borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_74">FUNDAÇÃO | Observação</label><input disabled id="txt_atr_id_74" class="txts" /></td>
+        </tr>*@
 
                         <tr>
                             <td colspan="6" class="borderLeft lblsBold borderRight borderBottomPt">Condição Geológico-Geotécnica</td>
@@ -1388,7 +1349,7 @@
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="3"><label class="lblsBold" id="lblatr_id_76">Material de Apoio</label><select disabled id="cmb_atr_id_76" class="cmbs"></select></td>
                         </tr>
                         <tr>
-                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_77">CONDIÇÕES GEOLÓGICAS - Observação</label><input disabled id="txt_atr_id_77" class="txts" /></td>
+                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_77">CONDIÇÕES GEOLÓGICAS - Observação</label><input disabled id="txt_atr_id_77" class="txts" maxlength="255" /></td>
                         </tr>
                     </table>
                 </div>
@@ -1473,102 +1434,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ENCONTROS | Observação</label><input disabled id="txt_atr_id_80" class="txts" /></td>
+                            <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ENCONTROS | Observação</label><input disabled id="txt_atr_id_80" class="txts" maxlength="255" /></td>
                         </tr>
-                        <tr>
-                            <td colspan="6"></td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <table id="tblFicha4_ESQUEMA_ESTRUTURAL" cellpadding="0" cellspacing="1" style="width: 100%;">
-        <tr>
-            <td class="lblTitulos" style="margin:0; padding:0;">
-                <table style="width:100%">
-                    <tr>
-                        <td>
-                            <button id="btn_Toggle_ESQUEMA_ESTRUTURAL"
-                                    type="button" data-toggle="collapse" data-target="#div_Ficha_ESQUEMA_ESTRUTURAL"
-                                    onclick="header_click4(this)" aria-expanded="false"
-                                    class="btnHeader1">
-                                5 - ESQUEMA ESTRUTURAL
-                            </button>
-                        </td>
-                        <td style="width:25px !important; ">
-                            <button id="btn_Salvar_ESQUEMA_ESTRUTURAL"
-                                    type="button"
-                                    onclick="return SalvarDados_Ficha4(tblFicha4_ESQUEMA_ESTRUTURAL)"
-                                    title="Salvar"
-                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
-                                <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
-                            </button>
-                        </td>
-
-                        <td style="width:25px !important; ">
-                            <button id="btn_Cancelar_ESQUEMA_ESTRUTURAL"
-                                    type="button"
-                                    onclick="return CancelarDados_Ficha4(tblFicha4_ESQUEMA_ESTRUTURAL)"
-                                    title="Cancelar Edição"
-                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
-                                <span class="glyphicon glyphicon-remove text-danger contornoBranco"></span>
-                            </button>
-
-                            <button id="btn_Editar_ESQUEMA_ESTRUTURAL"
-                                    type="button"
-                                    onclick="return EditarDados_Ficha4(tblFicha4_ESQUEMA_ESTRUTURAL)"
-                                    title="Editar"
-                                    style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                        </td>
-                        <td style="width:20px !important; padding-right:5px !important; text-align:right !important">
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left" id="iconAngle_ESQUEMA_ESTRUTURAL"></i>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <div id="div_Ficha_ESQUEMA_ESTRUTURAL" class="collapse">
-                    <table id="tblFicha4_6" cellpadding="0" cellspacing="1" style="width: 100%; margin-bottom:20px">
-                        <tr style="visibility:hidden;">
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                            <td class="larguraPadrao"></td>
-                        </tr>
-
-                        <tr>
-                            <td class="borderLeft borderBottomPt borderRight" colspan="6" style="text-align:right">
-                                @*<input id="txtdoc_caminho9" name="txtdoc_caminho9"
-                                    readonly placeholder="Selecionar Arquivo local"
-                                    class="form-control" style="width: 85%; display:inline" />*@
-                                @*<button style="display:inline; width:40px; height:25px; display:inline" onclick="esquemaBrowse.click(); return false;">...</button>*@
-                                <button id="btnEsquemaUpload" class="btn btn-primary" onclick="esquemaBrowse.click();return false;"><i class="fa fa-search margin-r-5"></i> Upload</button>
-                                <input type="file" id="esquemaBrowse" name="esquemaBrowse" style="display:none"
-                                       onchange="esquemaBrowse_onchange(this.files);"
-                                       accept="image/png, image/jpeg" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6" style="text-align:center ">
-                                <img id="img_atr_id_159" align="middle" style="border:solid 1px gray; width:80%; height:auto; min-height:300px " />
-                            </td>
-                        </tr>
-
-
-                        @*<tr>
-                                <td class="borderLeft borderBottom altura50 borderRight" colspan="6"><label class="lblsBold" id="lblatr_id_80">ESQUEMA_ESTRUTURAL | Observação</label><input disabled id="txt_atr_id_80" class="txts" /></td>
-                            </tr>*@
                         <tr>
                             <td colspan="6"></td>
                         </tr>
@@ -1588,7 +1455,7 @@
                                     type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_CRITERIO_DE_CLASSIFICACAO"
                                     onclick="header_click4(this)" aria-expanded="false"
                                     class="btnHeader1">
-                                6 - NOTA GERAL DE AVALIAÇÃO E CLASSIFICAÇÃO DA OBRA DE ARTE (1º Requisito + 2º Requisito)
+                                5 - NOTA GERAL DE AVALIAÇÃO E CLASSIFICAÇÃO DA OBRA DE ARTE (1º Requisito + 2º Requisito)
                             </button>
                         </td>
                         <td style="width:95px; ">
@@ -1768,7 +1635,7 @@
                                     type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_NOTA_OAE_PARAMETRO_FUNCIONAL"
                                     onclick="header_click4(this)" aria-expanded="false"
                                     class="btnHeader1">
-                                7 - NOTA DA OBRA DE ARTE PARA O PARÂMETRO FUNCIONAL (NBR 9452:2019) - Conforto e Segurança do Usuário
+                                6 - NOTA DA OBRA DE ARTE PARA O PARÂMETRO FUNCIONAL (NBR 9452:2019) - Conforto e Segurança do Usuário
                             </button>
                         </td>
                         <td style="width:25px !important; ">
@@ -1831,7 +1698,7 @@
                         </tr>
 
                         <tr>
-                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_99">Funcional</label></td>
+                            <td class="borderLeft borderBottomPt"><label class="lblsBold" id="lblatr_id_aaa">Funcional</label></td>
                             <td class="borderLeftPt borderBottomPt centroH"><select disabled id="cmb_atr_id_145" class="cmbs" style="width:40px" onchange="Ficha4_Calcula_Nota_Parametro_Funcional()"></select></td>
                             <td class="borderLeftPt borderBottomPt borderRight" colspan="7">
                                 <label class="lblsNormal" id="lblcmb_146" style="padding:2px"></label>
@@ -1863,7 +1730,7 @@
                                     type="button" data-toggle="collapse" data-target="#div_Ficha_Inspecao_POLITICA_ACOES_A_IMPLEMENTAR"
                                     onclick="header_click4(this)" aria-expanded="false"
                                     class="btnHeader1">
-                                8 - POLÍTICA DE AÇÕES A SEREM IMPLEMENTADAS EM FUNÇÃO DAS NOTAS
+                                7 - POLÍTICA DE AÇÕES A SEREM IMPLEMENTADAS EM FUNÇÃO DAS NOTAS
                             </button>
                         </td>
 
@@ -1954,13 +1821,4 @@
     </table>
 
 </div>
-
-<script>
-
-
-
-
-
-
-</script>
 

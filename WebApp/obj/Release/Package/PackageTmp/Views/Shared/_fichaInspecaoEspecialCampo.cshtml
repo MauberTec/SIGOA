@@ -14,7 +14,7 @@
         }
 
     .centroH {
-        text-align: center;
+        text-align: center !important;
     }
 
     .contornoBranco {
@@ -165,50 +165,6 @@
         height: 1px;
     }
 
-    .altura50 {
-        height: 50px;
-    }
-
-    .borderBottom {
-        border-bottom: solid 1px black;
-    }
-
-    .borderTop {
-        border-top: solid 1px black;
-    }
-
-    .borderLeft {
-        border-left: solid 1px black;
-    }
-
-    .borderRight {
-        border-right: solid 1px black;
-    }
-
-    .borderBottomPt {
-        border-bottom: dotted 1px black;
-    }
-
-    .borderTopPt {
-        border-top: dotted 1px black;
-    }
-
-    .borderLeftPt {
-        border-left: dotted 1px black;
-    }
-
-    .borderRightPt {
-        border-right: dotted 1px black;
-    }
-
-    .borderNone {
-        border: none
-    }
-
-    .borderAll {
-        border: solid 1px black;
-    }
-
     #divFicha4_CAMPO input:disabled,
     #divFicha4_CAMPO textarea:disabled,
     #divFicha4_CAMPO select:disabled {
@@ -246,6 +202,10 @@
         font-size: 10pt;
         text-align: left;
     }
+
+    #tblFicha4_INSPECAO_ESPECIAL_CAMPO tr.change_on_over:hover td {
+        background-color:lightgray;
+    }
 </style>
 
 <div id="divFicha4_CAMPO" style="font-family:Calibri; font-size:10.5pt; ">
@@ -255,7 +215,13 @@
         .cabecalho_subdivisao2 { font-family: Calibri; font-size: 8pt; font-weight: bold; color: green; }
         .cabecalho_grupos { font-family: Calibri; font-size: 8pt; font-weight: bold; color: blue; }
         .cabecalho_objeto { font-family: Calibri; font-size: 8pt; font-weight: normal; color: blue;}
-        .linha_normal {  font-family: Calibri; font-size: 8pt; font-weight: normal; color: black; }
+        .linha_normal {
+            font-family: Calibri;
+            font-size: 8pt;
+            font-weight: normal;
+            color: black;
+            vertical-align: middle;
+        }
         input.txts2, .txts2 {
             width: 75%;
             height: 95%;
@@ -270,8 +236,8 @@
     </style>
 
     <table id="tblFicha4_INSPECAO_ESPECIAL_CAMPO" cellpadding="0" cellspacing="0" style="width: 100%; margin-bottom:20px; border:solid 1px black">
-        <tr >
-            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header000a" ></td>
+        <tr>
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header000a"></td>
 
             <td class="larguraPadrao"></td>
             <td class="larguraPadrao"></td>
@@ -289,12 +255,14 @@
             <td class="larguraPadrao"></td>
             <td class="larguraPadrao"></td>
             <td class="larguraPadrao"></td>
+            <td class="larguraPadrao" style="display:none"></td>
             <td class="larguraPadrao"></td>
 
-            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header001a" ></td>
-            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header002a" ></td>
-            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header003a" ></td>
-            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header004a" ></td>
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header001a"></td>
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header002a"></td>
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header003a"></td>
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header004a"></td>
+            <td class="larguraPadrao" id="tdFICHA4_CodObjeto_ian_id_header005a"></td>
         </tr>
 
 
@@ -302,23 +270,22 @@
         <tr style="border:solid 1px black;">
             <td id="tdFICHA4_CodObjeto_ian_id_header1a" class="lblTitulos" style="margin:0; padding:0; border:none"></td>
 
-            <td colspan="4"  id="tdFICHA4_CodObjeto_ian_id_header1b" class="lblTitulos" style="margin:0; padding:0; text-align:right; border:none;"> </td>
-
+            <td colspan="5" id="tdFICHA4_CodObjeto_ian_id_header1b" class="lblTitulos" style="margin:0; padding:0; text-align:right; border:none;"> </td>
             <td colspan="17" class="lblTitulos" style="margin:0; padding:0; text-align:right; margin-right:5px; border:none;">
                 <table style="width:100%">
                     <tr>
                         <td></td>
-                        <td style="width:25px !important; text-align:right;margin-right:5px; ">
+                        <td style="width:25px !important; text-align:right;margin-right:5px;">
                             <button id="btn_Salvar_INSPECAO_ESPECIAL_CAMPO"
                                     type="button"
-                                    onclick="return SalvarDados_Ficha4_CAMPO_VALORES(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
+                                    onclick="return SalvarDados_Ficha4_CAMPO_VALORES(tblFicha4_INSPECAO_ESPECIAL_CAMPO,0,-1)"
                                     title="Salvar"
                                     style="display:none;  border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-ok text-success contornoBranco"></span>
                             </button>
                         </td>
 
-                        <td style="width:25px !important; text-align:right;margin-right:5px; ">
+                        <td style="width:25px !important; text-align:right;margin-right:5px; " class="borderRight">
                             <button id="btn_Cancelar_INSPECAO_ESPECIAL_CAMPO"
                                     type="button"
                                     onclick="return CancelarDados_Ficha4_CAMPO(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
@@ -342,36 +309,40 @@
         </tr>
 
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000b" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header000b"></td>
 
             <td class="borderLeft"><label class="lblsBold">OAE:</label></td>
-            <td colspan="3"><label class="txts" id="lblOAE" style="border:none !important"></label></td>
+            <td colspan="4"><label class="txts" id="lblOAE" style="border:none !important"></label></td>
             <td colspan="10" style="text-align:center; height:20px"><label class="lblsBold">DEPARTAMENTO DE ESTRADAS DE RODAGEM DO ESTADO DE SÃO PAULO - DER/SP</label></td>
             <td><label class="lblsBold" id="lbldatainspcampo">DATA:</label></td>
-            <td colspan="2" class="borderRight"><input disabled id="txt_ins_anom_data" class="txts" readonly style="width:95%" /></td>
+            <td style="display:none"></td>
+            <td class="borderRight"><input disabled id="txt_ins_anom_data" class="txts" readonly style="width:95%" /></td>
 
-            <td id="tdFICHA4_CodObjeto_ian_id_header001b" ></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header002b" ></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header003b" ></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header004b" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header001b"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header002b"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header003b"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header004b"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header005b" class="borderRight"></td>
         </tr>
 
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000c" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header000c"></td>
 
             <td class="borderLeft"><label class="lblsBold" id="lblins_anom_OAE">Responsável:</label></td>
-            <td colspan="3"><input disabled id="txt_ins_anom_Responsavel" class="txts" /></td>
+            <td colspan="4"><input disabled id="txt_ins_anom_Responsavel" class="txts" maxlength="100" /></td>
             <td colspan="10" style="text-align:center; height:20px"><label class="lblsBold">FICHA DE CADASTRAMENTO DE ANOMALIAS - INSPEÇÃO ESPECIAL</label></td>
-            <td colspan="3" class="borderRight"><label class="lblsBold" id="lblFL">Fl:</label></td>
+            <td style="display:none"></td>
+            <td colspan="2" class="borderRight"><label class="lblsBold" id="lblFL">Fl:</label></td>
 
-            <td id="tdFICHA4_CodObjeto_ian_id_header001c" ></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header002c" ></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header003c" ></td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header004c" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header001c"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header002c"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header003c"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header004c"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header005c" class="borderRight"></td>
         </tr>
 
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000d" rowspan="3" class="borderAll cabecalho" >CÓDIGO DO OBJETO</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header000d" rowspan="3" class="borderAll cabecalho">CÓDIGO DO OBJETO</td>
 
             <td rowspan="3" class="borderAll cabecalho ">
                 <table style="width:100%;">
@@ -379,9 +350,9 @@
                         <td style="width:26px">
                             <button id="btn_Adicionar_Objeto_Anomalia"
                                     type="button"
-                                    onclick="return Ficha4_CAMPO_btn_Adicionar_Objeto_Anomalia_onclick()"
+                                    onclick="return SalvarDados_Ficha4_CAMPO_VALORES(null, 3, -2) "
                                     title="Inserir Objeto"
-                                    style="; border:none; box-shadow:none; background-color:transparent; ">
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-plus text-success contornoBranco"></span>
                             </button>
                         </td>
@@ -393,7 +364,8 @@
                     </tr>
                 </table>
             </td>
-            <td rowspan="3" class="borderAll cabecalho ">LOCALIZAÇÃO (SUB-TRECHO)  ELEMENTO ESTRUTURAL</td>
+            <td rowspan="3" class="borderAll cabecalho ">LOCALIZAÇÃO ELEMENTO ESTRUTURAL</td>
+            <td rowspan="3" class="borderAll cabecalho ">LOCALIZAÇÃO ESPECÍFICA</td>
             <td rowspan="2" colspan="3" class="borderAll cabecalho ">TIPO DE ANOMALIA</td>
             <td rowspan="3" class="borderAll cabecalho ">NÍVEL DE ALERTA</td>
             <td rowspan="3" class="borderAll cabecalho ">QUANTI DADE</td>
@@ -402,13 +374,14 @@
             <td rowspan="3" class="borderAll cabecalho ">CAUSA PROVÁVEL</td>
             <td rowspan="3" class="borderAll cabecalho ">FOTO Nº</td>
             <td rowspan="3" class="borderAll cabecalho ">CROQUI Nº</td>
-            <td rowspan="3" class="borderAll cabecalho ">DESENHO</td>
+            <td rowspan="3" class="borderAll cabecalho " style="display:none">DESENHO</td>
             <td rowspan="3" class="borderAll cabecalho ">OBSERVAÇÕES</td>
 
-            <td id="tdFICHA4_CodObjeto_ian_id_header001d" rowspan="3" class="borderAll cabecalho " >REPARO INDICADO</td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header002d" rowspan="3" class="borderAll cabecalho " >QUANTIDADE INDICADA</td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header003d" rowspan="3" class="borderAll cabecalho " >REPARO ADOTADO</td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header004d" rowspan="3" class="borderAll cabecalho " >QUANTIDADE ADOTADA</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header001d" rowspan="3" class="borderAll cabecalho ">REPARO INDICADO</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header002d" rowspan="3" class="borderAll cabecalho ">QUANTIDADE INDICADA</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header003d" rowspan="3" class="borderAll cabecalho ">REPARO ADOTADO</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header004d" rowspan="3" class="borderAll cabecalho ">QUANTIDADE ADOTADA</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header005d" rowspan="3" class="borderAll cabecalho ">PROVI DÊNCIA</td>
         </tr>
 
 
@@ -438,14 +411,14 @@
 
         @* RODAPÉ *@
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000e"  class="borderTop"></td>
-            <td colspan="17" class="cabecalho borderTop borderLeft borderRight" style="text-align:left">QUADRO A:</td>
-            <td colspan="4" class="fontePadrao borderTop"  id="tdFICHA4_CodObjeto_ian_id_header001e" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header000e" class="borderTop"></td>
+            <td colspan="18" class="cabecalho borderTop borderLeft borderRight" style="text-align:left">QUADRO A:</td>
+            <td colspan="5" class="fontePadrao borderTop" id="tdFICHA4_CodObjeto_ian_id_header001e"></td>
         </tr>
 
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000f" ></td>
-            <td class="fontePadrao borderLeft borderRight" colspan="17">
+            <td id="tdFICHA4_CodObjeto_ian_id_header000f"></td>
+            <td class="fontePadrao borderLeft borderRight" colspan="18">
                 Houve dúvidas para identificar alguma anomalia?
                 <select name="DuvidasAnomalia" id="cmb_ins_anom_quadroA_1" class="cmbs" disabled>
                     <option value=""></option>
@@ -453,18 +426,17 @@
                     <option value="nao">NÃO</option>
                 </select>
             </td>
-            <td colspan="4"  id="tdFICHA4_CodObjeto_ian_id_header001f" class="fontePadrao" ></td>
+            <td colspan="5" id="tdFICHA4_CodObjeto_ian_id_header001f" class="fontePadrao"></td>
         </tr>
 
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000g" ></td>
-            <td class="fontePadrao borderLeft borderRight" colspan="17">
+            <td id="tdFICHA4_CodObjeto_ian_id_header000g" class="fontePadrao borderBottom" ></td>
+            <td class="fontePadrao borderLeft borderRight borderBottom" colspan="18">
                 Em caso positivo identificar as anomalias  através do nº:
                 <input id="txt_ins_anom_quadroA_2" class="txts" style="width:45%;" disabled />
             </td>
-            <td  id="tdFICHA4_CodObjeto_ian_id_header001g" colspan="4" class="fontePadrao" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header001g" colspan="5" class="fontePadrao borderBottom"></td>
         </tr>
-
     </table>
 
 
@@ -554,21 +526,5 @@
         document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
     else
         document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
-
-    //moment.locale('pt-br');         // pt-br
-    //$.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
-
-    //jQuery(function ($) {
-    //    $.datepicker.regional['pt-BR'] = datepicker_regional;
-    //    $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
-    //});
-
-    //$('#txt_atr_id_103').datepicker({
-    //    dateFormat: 'dd/mm/yy'
-    //});
-
-    //$('#txt_atr_id_104').datepicker({
-    //    dateFormat: 'dd/mm/yy'
-    //});
 
 </script>

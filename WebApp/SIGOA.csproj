@@ -58,6 +58,12 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.11.3.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.11.3\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.AppService.ApiApps.Service, Version=0.9.16.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.AppService.ApiApps.Service.0.9.16\lib\net45\Microsoft.Azure.AppService.ApiApps.Service.dll</HintPath>
       <Private>True</Private>
@@ -69,19 +75,31 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.ReportViewer.Common.10.0.40219.1\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <HintPath>bin\Microsoft.ReportViewer.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.ReportViewer.Common.10.0.40219.1\lib\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+      <HintPath>bin\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Microsoft.ReportViewer.Design.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.ReportViewer.Common.10.0.40219.1\lib\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+      <HintPath>bin\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Microsoft.ReportViewer.WebDesign.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.WebForms\11.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.WebForms.dll</HintPath>
+      <HintPath>bin\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.0.0\lib\net40\Swashbuckle.Core.dll</HintPath>
@@ -98,6 +116,8 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -176,11 +196,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Business\ConservaBLL.cs" />
     <Compile Include="Business\InspecaoBLL.cs" />
+    <Compile Include="Business\NotificacaoOcorrenciaBLL.cs" />
+    <Compile Include="Business\OrcamentoBLL.cs" />
     <Compile Include="Business\ReparoBLL.cs" />
     <Compile Include="Business\AnomaliaBLL.cs" />
-    <Compile Include="Business\PrecoUnitarioBLL.cs" />
-    <Compile Include="Business\UnidadeBLL.cs" />
     <Compile Include="Business\LoginBLL.cs" />
     <Compile Include="Business\OrdemServicoBLL.cs" />
     <Compile Include="Business\ObjetoBLL.cs" />
@@ -193,13 +214,17 @@
     <Compile Include="Business\PerfilBLL.cs" />
     <Compile Include="Business\ParametroBLL.cs" />
     <Compile Include="Controllers\AcessoNegadoController.cs" />
+    <Compile Include="Controllers\AjudaController.cs" />
+    <Compile Include="Controllers\ConservaController.cs" />
+    <Compile Include="Controllers\RelatorioController.cs" />
+    <Compile Include="Controllers\IntegracaoController.cs" />
     <Compile Include="Controllers\InspecaoController.cs" />
+    <Compile Include="Controllers\NotificacaoOcorrenciaController.cs" />
+    <Compile Include="Controllers\OrcamentoController.cs" />
     <Compile Include="Controllers\ReparoController.cs" />
     <Compile Include="Controllers\DocumentoController.cs" />
     <Compile Include="Controllers\AnomaliaController.cs" />
     <Compile Include="Controllers\OrdemServicoController.cs" />
-    <Compile Include="Controllers\Preco_UnitarioController.cs" />
-    <Compile Include="Controllers\UnidadeController.cs" />
     <Compile Include="Controllers\ObjetoController.cs" />
     <Compile Include="Controllers\LogSistemaController.cs" />
     <Compile Include="Controllers\NamespaceController.cs" />
@@ -210,13 +235,16 @@
     <Compile Include="Controllers\ModuloController.cs" />
     <Compile Include="Controllers\ParametroController.cs" />
     <Compile Include="Controllers\PerfilController.cs" />
+    <Compile Include="DAO\ConservaDAO.cs" />
     <Compile Include="DAO\InspecaoDAO.cs" />
+    <Compile Include="DAO\IntegracaoDAO.cs" />
+    <Compile Include="DAO\NotificacaoOcorrenciaDAO.cs" />
+    <Compile Include="DAO\OrcamentoDAO.cs" />
     <Compile Include="DAO\RelatoriosDAO.cs" />
     <Compile Include="DAO\ReparoDAO.cs" />
     <Compile Include="DAO\Conexao.cs" />
     <Compile Include="DAO\AnomaliaDAO.cs" />
-    <Compile Include="DAO\PrecoUnitarioDAO.cs" />
-    <Compile Include="DAO\UnidadeDAO.cs" />
+    <Compile Include="DAO\ReparoTpuDAO.cs" />
     <Compile Include="DAO\OrdemServicoDAO.cs" />
     <Compile Include="DAO\ObjetoDAO.cs" />
     <Compile Include="DAO\LogSistemaDAO.cs" />
@@ -233,12 +261,22 @@
     <Compile Include="Helpers\Gerais.cs" />
     <Compile Include="Helpers\LogErro.cs" />
     <Compile Include="Helpers\NamespaceHelpers.cs" />
+    <Compile Include="Models\Conserva.cs" />
+    <Compile Include="Models\ConservaDTO.cs" />
+    <Compile Include="Models\ConservaModel.cs" />
+    <Compile Include="Models\ConservaPoliticaModel.cs" />
+    <Compile Include="Models\Integracao.cs" />
     <Compile Include="Models\Inspecao.cs" />
+    <Compile Include="Models\NotificaoOcorrencia.cs" />
+    <Compile Include="Models\Orcamento.cs" />
+    <Compile Include="Models\PoliticaReparoModel.cs" />
     <Compile Include="Models\Reparo.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\Anomalia.cs" />
-    <Compile Include="Models\PrecoUnitario.cs" />
-    <Compile Include="Models\Unidades.cs" />
+    <Compile Include="Models\ReparoTipoModel.cs" />
+    <Compile Include="Models\ReparoTpuModel.cs" />
+    <Compile Include="Models\TpuDtoModel.cs" />
+    <Compile Include="Models\TpuFontesModel.cs" />
     <Compile Include="Models\OrdemServico.cs" />
     <Compile Include="Models\Objeto.cs" />
     <Compile Include="Models\LogSistema.cs" />
@@ -262,6 +300,11 @@
       <DependentUpon>frmReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Teste.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Teste.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AdminLTE.min.css" />
@@ -377,14 +420,564 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image001.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image002.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image003.png" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image004.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image006.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image007.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image009.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image011.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image012.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image014.jpg" />
+    <Content Include="ImagensManual\Módulo de Anomalias_files\image015.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image001.png" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image002.png" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image004.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image006.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image007.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image009.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image011.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image012.png" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image014.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image015.png" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image016.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image017.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image018.png" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image019.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image020.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image021.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image022.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image023.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image024.jpg" />
+    <Content Include="ImagensManual\Módulo de Conservas_files\image025.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image001.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image002.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image004.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image006.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image007.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image009.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image010.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image011.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image012.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image013.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image014.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image015.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image016.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image017.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image018.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image019.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image020.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image021.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image022.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image023.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image024.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image025.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image026.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image027.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image028.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image029.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image030.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image031.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image032.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image033.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image034.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image035.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image036.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image037.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image038.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image039.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image040.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image041.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image042.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image043.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image044.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image045.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image046.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image047.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image048.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image049.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image050.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image051.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image052.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image053.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image054.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image055.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image056.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image057.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image058.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image059.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image060.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image061.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image062.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image063.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image064.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image065.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image066.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image067.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image068.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image069.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image070.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image071.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image072.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image073.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image074.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image075.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image076.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image077.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image078.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image079.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image080.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image081.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image082.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image083.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image084.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image085.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image086.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image087.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image088.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image089.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image090.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image091.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image092.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image093.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image094.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image095.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image096.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image097.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image098.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image099.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image100.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image101.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image102.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image103.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image104.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image105.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image106.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image107.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image108.jpg" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image109.png" />
+    <Content Include="ImagensManual\Módulo de Objetos_files\image110.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image001.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image002.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image004.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image006.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image007.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image008.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image009.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image011.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image012.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image014.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image015.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image016.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image017.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image018.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image019.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image020.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image021.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image022.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image023.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image024.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image025.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image026.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image027.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image028.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image029.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image030.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image031.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image032.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image033.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image034.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image035.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image036.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image037.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image038.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image039.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image040.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image041.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image042.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image043.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image044.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image045.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image046.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image047.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image048.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image049.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image050.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image051.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image052.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image053.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image054.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image055.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image056.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image057.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image058.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image059.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image060.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image061.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image062.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image063.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image064.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image065.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image066.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image067.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image068.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image069.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image070.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image071.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image072.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image073.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image074.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image075.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image076.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image077.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image078.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image079.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image080.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image081.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image082.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image083.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image084.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image085.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image086.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image087.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image088.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image089.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image090.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image091.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image092.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image093.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image094.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image095.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image096.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image097.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image098.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image099.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image100.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image101.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image102.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image103.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image104.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image105.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image106.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image107.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image108.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image109.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image110.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image111.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image112.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image113.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image114.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image115.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image116.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image117.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image118.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image119.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image120.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image121.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image122.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image123.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image124.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image125.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image126.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image127.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image128.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image129.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image130.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image131.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image132.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image133.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image134.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image135.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image136.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image137.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image138.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image139.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image140.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image141.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image142.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image143.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image144.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image145.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image146.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image147.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image148.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image149.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image150.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image151.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image152.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image153.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image154.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image155.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image156.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image157.png" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image158.jpg" />
+    <Content Include="ImagensManual\Módulo de Ordens de Serviço_files\image159.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image001.png" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image002.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image004.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image006.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image007.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image009.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image011.png" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image012.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image014.png" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image015.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image016.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image017.png" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image018.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image019.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image020.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image021.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image022.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image023.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image024.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image025.png" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image026.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image027.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image028.jpg" />
+    <Content Include="ImagensManual\Módulo de Reparos_files\image029.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image002.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image004.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image005.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image006.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image007.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image009.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image010.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image011.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image012.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image014.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image015.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image016.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image017.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image018.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image019.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image020.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image021.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image022.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image023.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image024.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image025.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image026.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image027.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image028.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image029.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image030.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image031.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image032.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image033.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image034.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image035.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image036.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image037.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image038.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image039.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image040.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image041.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image042.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image043.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image044.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image045.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image046.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image047.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image048.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image049.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image050.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image051.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image052.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image053.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image054.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image055.jpg" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image056.png" />
+    <Content Include="ImagensManual\Módulo Documentos_files\image057.jpg" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image002.jpg" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image004.jpg" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image006.png" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image007.png" />
+    <Content Include="ImagensManual\Módulo Inspeções_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Integração_files\image002.png" />
+    <Content Include="ImagensManual\Módulo Integração_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image004.png" />
+    <Content Include="ImagensManual\Módulo Integração_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image006.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image007.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image009.jpg" />
+    <Content Include="ImagensManual\Módulo Integração_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo Manuais SIGOA_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Orçamentos_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Orçamentos_files\image002.png" />
+    <Content Include="ImagensManual\Módulo Orçamentos_files\image003.png" />
+    <Content Include="ImagensManual\Módulo Orçamentos_files\image004.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image002.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image003.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image004.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image006.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image007.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image008.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image009.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image011.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image012.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image014.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image015.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image016.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image017.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image018.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image019.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image020.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image021.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image022.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image023.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image024.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image025.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image026.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image027.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image028.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image029.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image030.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image031.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image032.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image033.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image034.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image035.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image036.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image037.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image038.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image039.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image040.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image041.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image042.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image043.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image044.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image045.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image046.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image047.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image048.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image049.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image050.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image051.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image052.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image053.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image054.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image055.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image056.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image057.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image058.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image059.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image060.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image061.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image062.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image063.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image064.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image065.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image066.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image067.jpg" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image068.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image069.png" />
+    <Content Include="ImagensManual\Módulo Relatórios_files\image070.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image001.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image002.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image003.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image004.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image005.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image006.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image007.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image008.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image009.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image010.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image011.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image012.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image013.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image014.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image015.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image016.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image017.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image018.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image019.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image020.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image021.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image022.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image023.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image024.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image025.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image026.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image027.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image028.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image029.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image030.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image031.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image032.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image033.jpg" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image034.png" />
+    <Content Include="ImagensManual\Módulo Segurança_files\image035.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image001.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image002.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image003.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image004.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image005.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image006.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image007.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image008.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image009.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image010.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image011.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image012.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image013.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image014.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image015.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image016.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image017.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image018.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image019.jpg" />
+    <Content Include="ImagensManual\Tela de Login_files\image020.png" />
+    <Content Include="ImagensManual\Tela de Login_files\image021.jpg" />
+    <Content Include="Content\js\adminlte.min.js" />
     <Content Include="images\1.png" />
+    <Content Include="images\css.css" />
     <Content Include="images\default.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo_branco.png" />
     <Content Include="images\logo_der.png" />
-    <Content Include="Content\js\adminlte.min.js" />
+    <Content Include="images\logo_maubertec.png" />
+    <Content Include="Microsoft.SqlServer.Types.dll" />
     <Content Include="Reports\frmDownloadFile.aspx" />
     <Content Include="Reports\frmReport.aspx" />
+    <Content Include="Reports\rptRelatorio_OrcamentosApr.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\Anomalia\AnomStatus.js" />
     <Content Include="Scripts\Anomalia\AnomCausa.js" />
     <Content Include="Scripts\Anomalia\AnomAlerta.js" />
@@ -406,6 +999,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Manuais\MANUAL DE ANALISE.pdf" />
+    <Content Include="Manuais\MANUAL DE CADASTRO.pdf" />
+    <Content Include="Manuais\MANUAL DE CONSERVA.pdf" />
+    <Content Include="Manuais\MANUAL DE INSPECAO.pdf" />
+    <Content Include="Manuais\MANUAL DE REPAROS.pdf" />
+    <Content Include="Manuais\Manual_do_Usuario A2.pdf" />
     <None Include="Properties\PublishProfiles\SIGOA.pubxml" />
     <Content Include="Content\js\jquery-3.4.1.slim.js" />
     <Content Include="Content\js\jquery-3.4.1.slim.min.js" />
@@ -419,6 +1018,8 @@
     <Content Include="Scripts\bootstrap-multiselect.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Conserva\ConservaTipo.js" />
+    <Content Include="Scripts\Conserva\PoliticaConserva.js" />
     <Content Include="Scripts\datetime-moment.js" />
     <Content Include="Scripts\Documento\DocClasse.js" />
     <Content Include="Scripts\Documento\Documento.js" />
@@ -429,20 +1030,27 @@
     <Content Include="Scripts\Anomalia\AnomLegenda.js" />
     <Content Include="Scripts\Objeto\Objeto.js" />
     <Content Include="Scripts\Objeto\Objeto_BotaoNovo.js" />
+    <Content Include="Scripts\Orcamento\OrcamentoFluxoStatus.js" />
+    <Content Include="Scripts\Orcamento\OrcamentoStatus.js" />
     <Content Include="Scripts\OrdemServico\OSFluxoStatus.js" />
     <Content Include="Scripts\OrdemServico\OSStatus.js" />
     <Content Include="Scripts\OrdemServico\OrdemServico.js" />
     <Content Include="Scripts\OrdemServico\OSTipo.js" />
     <Content Include="Scripts\Inspecao\InspecaoTipo.js" />
-    <Content Include="Scripts\PrecoUnitario\PrecoUnitario.js" />
+    <Content Include="Scripts\Reparo\PoliticaReparos.js" />
     <Content Include="Scripts\Reparo\ReparoTipo.js" />
+    <Content Include="Scripts\Reparo\ReparoTpu.js" />
+    <Content Include="Scripts\report.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoCadastral.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial.js" />
+    <Content Include="Scripts\Shared\_fichaRequalificacaoOAE.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoRotineira_Providencias.js" />
+    <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Providencias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoEspecial_Anomalias.js" />
     <Content Include="Scripts\Shared\_fichaInspecaoRotineira.js" />
+    <Content Include="Scripts\Shared\_fichaNotificacaoOcorrencia.js" />
     <Content Include="Scripts\Shared\_fichasInspecao.js" />
     <Content Include="Scripts\Shared\_SelecionarDocumento.js" />
-    <Content Include="Scripts\Unidade\Unidade.js" />
     <Content Include="Scripts\Grupo\Grupo.js" />
     <Content Include="Scripts\images\ui-icons_444444_256x240.png" />
     <Content Include="Scripts\images\ui-icons_555555_256x240.png" />
@@ -461,6 +1069,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\Ficha_Cadastramento_Anomalias.xlsx" />
+    <Content Include="Reports\Modelo_Orcamento.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -566,6 +1175,7 @@
     <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll" />
     <Content Include="SqlServerTypes\x86\msvcr120.dll" />
     <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll" />
+    <Content Include="temp\1.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste1.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste2.png" />
     <Content Include="UPLOAD\SP-010 %28FERNÃO DIAS%29\ImagemTeste3.png" />
@@ -609,8 +1219,6 @@
     <Content Include="Views\Objeto\ObjAtributo.cshtml" />
     <Content Include="Views\Objeto\ObjClasse.cshtml" />
     <Content Include="Views\Objeto\Objeto.cshtml" />
-    <Content Include="Views\Unidade\Unidade.cshtml" />
-    <Content Include="Views\PrecoUnitario\PrecoUnitario.cshtml" />
     <Content Include="Views\OrdemServico\OSTipo.cshtml" />
     <Content Include="Views\OrdemServico\OSStatus.cshtml" />
     <Content Include="Views\OrdemServico\OSFluxoStatus.cshtml" />
@@ -628,16 +1236,57 @@
     <Content Include="Views\Shared\_SelecionarDocumento.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoCadastral.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoRotineira.cshtml" />
-    <Content Include="Views\Relatorio\Relatorio.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecial.cshtml" />
     <Content Include="Views\Inspecao\Inspecao.cshtml" />
     <Content Include="Views\Shared\_fichaInspecaoEspecialCampo.cshtml" />
+    <Content Include="Views\Orcamento\Orcamento.cshtml" />
+    <Content Include="Views\Orcamento\OrcamentoFluxoStatus.cshtml" />
+    <Content Include="Views\Orcamento\OrcamentoStatus.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoSirgeo.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoVDM.cshtml" />
+    <Content Include="Views\Integracao\IntegracaoTPU.cshtml" />
+    <Content Include="Views\Shared\_ObjPriorizacao.cshtml" />
+    <Content Include="Views\Shared\_fichaInspecaoEspecialProvidencias.cshtml" />
+    <Content Include="Views\Shared\_fichaNotificacaoOcorrencia.cshtml" />
+    <Content Include="Views\Objeto\ObjPriorizacao.cshtml" />
+    <Content Include="Views\Shared\_OrcamentoDetalhes.cshtml" />
+    <Content Include="Views\Relatorio\Relatorio.cshtml" />
+    <Content Include="Views\Shared\_fichaInspecaoRotineiraProvidencias.cshtml" />
+    <Content Include="Views\Conserva\ConservaTipo.cshtml" />
+    <Content Include="Views\Conserva\PoliticaConserva.cshtml" />
+    <Content Include="Views\Reparo\PoliticaReparos.cshtml" />
+    <Content Include="Views\Reparo\ReparoTpu.cshtml" />
+    <Content Include="Views\Ajuda\Index.cshtml" />
+    <Content Include="Views\Shared\_fichaRequalificacaoOAE.cshtml" />
+    <Content Include="Views\Ajuda\Anomalias.cshtml" />
+    <Content Include="Views\Ajuda\Reparos.cshtml" />
+    <Content Include="Views\Ajuda\Conservas.cshtml" />
+    <Content Include="Views\Ajuda\Documentos.cshtml" />
+    <Content Include="Views\Ajuda\Objetos.cshtml" />
+    <Content Include="Views\Ajuda\MenuLateral.cshtml" />
+    <Content Include="Views\Ajuda\OrdensServico.cshtml" />
+    <Content Include="Views\Ajuda\Inspecao.cshtml" />
+    <Content Include="Views\Ajuda\Integracao.cshtml" />
+    <Content Include="Views\Ajuda\ManuaisSigoa.cshtml" />
+    <Content Include="Views\Ajuda\Orcamentos.cshtml" />
+    <Content Include="Views\Ajuda\Relatorio.cshtml" />
+    <Content Include="Views\Ajuda\Seguranca.cshtml" />
+    <Content Include="Views\Ajuda\TelaLogin.cshtml" />
+    <Content Include="Teste.xsc">
+      <DependentUpon>Teste.xsd</DependentUpon>
+    </Content>
+    <None Include="Teste.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Teste.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Teste.xss">
+      <DependentUpon>Teste.xsd</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
-    <Folder Include="img\" />
-    <Folder Include="temp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -647,9 +1296,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Reports\FichaRotineira_sub1.rdlc" />
+    <Content Include="Reports\FichaRotineira_sub1.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Reports\rptFichaInspecaoCadastral_1.rdlc">
       <SubType>Designer</SubType>
     </Content>
@@ -664,6 +1316,49 @@
     <Content Include="Reports\rptFichaInspecaoEspecial_campo.rdlc">
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptFichaInspecaoEspecial_Providencias.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptFichaNotificacaoOcorrencia.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_Priorizacao.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_Acoes.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_PerformanceOAEs.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_OS.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptFichaInspecaoRotineira_Providencias.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Reports\rptRelatorio_AnomaliasAgRep.rdlc">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\rptRelatorio_OSRecup.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

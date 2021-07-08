@@ -164,6 +164,23 @@ namespace WebApp.Models
         /// </summary>
         public int tem_var_inspecao { get; set; }
 
+        /// <summary>
+        /// Id do Pai do Tipo de Objeto
+        /// </summary>
+        public int tip_pai { get; set; }
+
+        /// <summary>
+        /// Nome do Pai do Tipo de Objeto
+        /// </summary>
+        public string tip_pai_nome { get; set; }
+
+
+        /// <summary>
+        /// Lista dos Tipos Pai possiveis para preenchimento de combo
+        /// </summary>
+        public string lsttip_pai { get; set; }
+
+
 
     }
 
@@ -517,7 +534,7 @@ namespace WebApp.Models
         /// <summary>
         /// Id da Variável do Grupo
         /// </summary>
-        public int ogv_id { get; set; }
+        public int cgv_id { get; set; }
 
         /// <summary>
         /// Descricao da variavel
@@ -577,6 +594,17 @@ namespace WebApp.Models
 
 
         /// <summary>
+        /// Id da providência selecionada
+        /// </summary>
+        public int prt_id { get; set; }
+
+        /// <summary>
+        /// Descricao providência selecionada
+        /// </summary>
+        public string prt_descricao { get; set; }
+
+
+        /// <summary>
         /// Lista dos itens de caracterização de situação, para preenchimento de combo
         /// </summary>
         public string caracterizacao_situacao_cmb { get; set; }   
@@ -591,6 +619,234 @@ namespace WebApp.Models
         /// </summary>
         public string tpu_descricao_itens_cmb { get; set; }        
 
+
+        /// <summary>
+        /// Lista dos itens de providencias, para preenchimento de combo
+        /// </summary>
+        public string providencias_cmb { get; set; } 
+        
+
+
+    }
+
+    /// <summary>
+    /// Valores das Conserrvas
+    /// </summary>
+    public class ConservaPolitica
+    {
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ocp_id { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int cgv_id { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ogi_id_caracterizacao_situacao { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public string ocp_descricao_alerta { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public string ocp_descricao_servico { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public bool ocp_ativo { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public DateTime ocp_deletado { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public DateTime ocp_data_criacao { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ocp_criado_por { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public DateTime ocp_data_atualizacao { get; set; }
+        /// <summary>
+        /// Campos da conserva
+        /// </summary>
+        public int ocp_atualizado_por { get; set; }
+    }
+
+    /// <summary>
+    /// Priorizacao dos objetos
+    /// </summary>
+    public class ObjPriorizacao
+    {
+        /// <summary>
+        /// Id da Priorização
+        /// </summary>
+       public int pri_id { get; set; }
+
+        /// <summary>
+        /// Id da Ordem de Serviço que contém esse Objeto ranqueado
+        /// </summary>
+       public int ord_id { get; set; }
+
+        /// <summary>
+        /// Id do Objeto ranqueado
+        /// </summary>
+       public int obj_id { get; set; }
+
+        /// <summary>
+        /// Ordem dos Objetos
+        /// </summary>
+       public int pri_ordem { get; set; }
+
+        /// <summary>
+        /// Classificação dos Objetos
+        /// </summary>
+       public int pri_classificacao { get; set; }
+
+        /// <summary>
+        /// Data da Classificação
+        /// </summary>
+       public string pri_data_classificacao { get; set; }
+
+        /// <summary>
+        /// Data da Inspeção do Objeto
+        /// </summary>
+       public string pri_data_inspecao { get; set; }
+
+        /// <summary>
+        /// Nota Final
+        /// </summary>
+       public  string pri_nota_final { get; set; }
+
+        /// <summary>
+        /// Nota Estrutural
+        /// </summary>
+       public string pri_nota_estrutura { get; set; }
+
+        /// <summary>
+        /// Nota Durabilidade
+        /// </summary>
+       public string pri_nota_durabilidade { get; set; }
+
+        /// <summary>
+        /// Nota Ação
+        /// </summary>
+        public string pri_nota_acao { get; set; }
+
+        /// <summary>
+        /// Descrição da Ação
+        /// </summary>
+        public string pri_acao { get; set; }
+
+
+        /// <summary>
+        /// Id do Status da Prioridade
+        /// </summary>
+        public string prs_id { get; set; }
+
+        /// <summary>
+        /// Status
+        /// </summary>
+        public string pri_status { get; set; }
+
+        /// <summary>
+        /// Descrição do Status
+        /// </summary>
+        public string status_descricao { get; set; }
+
+
+        /// <summary>
+        /// Caso haja status, coloca cor de fundo
+        /// </summary>
+        public string corFundo { get; set; }
+
+
+        // /// <summary>
+        // /// Nota Funcionalidade
+        // /// </summary>
+        //public string pri_nota_funcionalidade { get; set; }
+        /// <summary>
+        /// Nota da Importância da OAE
+        /// </summary>
+        public string pri_nota_importancia_oae_malha { get; set; }
+
+        /// <summary>
+        /// Nota da VDM
+        /// </summary>
+       public string pri_nota_vdm { get; set; }
+
+        /// <summary>
+        /// Nota da Principal Utilização
+        /// </summary>
+       public string pri_nota_principal_utilizacao { get; set; }
+
+        /// <summary>
+        /// Nota da Facilidade de Desvio
+        /// </summary>
+       public string pri_nota_facilidade_desvio { get; set; }
+
+        /// <summary>
+        /// Nota do Gabarito Vertical
+        /// </summary>
+       public string pri_nota_gabarito_vertical { get; set; }
+
+        /// <summary>
+        /// Nota do Gabarito Horizontal
+        /// </summary>
+       public string pri_nota_gabarito_horizontal { get; set; }
+
+        /// <summary>
+        /// Nota da Largura da Plataforma
+        /// </summary>
+       public string pri_nota_largura_plataforma { get; set; }
+
+        /// <summary>
+        /// Nota da Agressividade Ambiental
+        /// </summary>
+       public string pri_nota_agressividade_ambiental { get; set; }
+
+        /// <summary>
+        /// Nota do Trem Tipo
+        /// </summary>
+       public string pri_nota_trem_tipo { get; set; }
+
+        /// <summary>
+        /// Nota da Barreira de Segurança
+        /// </summary>
+       public string pri_nota_barreira_seguranca { get; set; }
+
+        /// <summary>
+        /// Nota da Restrição de Treminhões
+        /// </summary>
+       public string pri_restricao_treminhoes { get; set; }
+			
+        /// <summary>
+        /// Código do Objeto
+        /// </summary>
+       public string obj_codigo { get; set; }
+
+        /// <summary>
+        /// Descrição do Objeto
+        /// </summary>
+       public string obj_descricao { get; set; }
+
+
+        /// <summary>
+        /// Data da Inspeção
+        /// </summary>
+        public string ord_data_termino_execucao { get; set; }
+
+        /// <summary>
+        /// Descrição do Tipo de O.S.
+        /// </summary>
+        public string tos_descricao { get; set; }
 
     }
 

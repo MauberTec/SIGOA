@@ -14,6 +14,7 @@ using WebApp.Helpers;
 using Color = DocumentFormat.OpenXml.Spreadsheet.Color;
 using Font = DocumentFormat.OpenXml.Spreadsheet.Font;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace WebApp.Business
 {
@@ -31,11 +32,12 @@ namespace WebApp.Business
         /// <param name="filtro_obj_codigo">Filtro por codigo de Objeto, 0 para todos</param> 
         /// <param name="filtro_obj_descricao">Filtro por descrição de Objeto, null para todos</param> 
         /// <param name="filtro_clo_id">Filtro por classe de Objeto, -1 para todos</param> 
-        /// <param name="filtro_tip_id">Filtro por tipo de Objeto, -1 para todos</param> 
+        /// <param name="filtro_tip_nome">Filtro por tipo de Objeto, "" para todos</param> 
         /// <returns>Lista de Objetos</returns>
-        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, int? filtro_tip_id = -1)
+        public List<Objeto> Objeto_ListAll(int obj_id, string filtro_obj_codigo = null, string filtro_obj_descricao = null, int? filtro_clo_id = -1, string filtro_tip_nome = "")
         {
-            return new ObjetoDAO().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_id);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().Objeto_ListAll(obj_id, filtro_obj_codigo, filtro_obj_descricao, filtro_clo_id, filtro_tip_nome, paramUsuario.usu_id);
         }
 
         /// <summary>
@@ -93,14 +95,15 @@ namespace WebApp.Business
 
 
         /// <summary>
-        /// Exclui Objeto do tipo Subdivisao2 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
+        /// Exclui Objeto do tipo Subdivisao3 (encontro/ estrutura de terra; encontros/ estrutura de concreto)
         /// </summary>
-        /// <param name="obj_id">Id do Objeto Selecionado</param>
+        /// <param name="tip_id">Id Tipo do Objeto Selecionado</param>
+        /// <param name="obj_id_tipoOAE">Id Objeto Selecionado</param>
         /// <returns>string</returns>
-        public string Objeto_Subdivisao2_Excluir(int tip_id, int obj_id_tipoOAE)
+        public string Objeto_Subdivisao3_Excluir(int tip_id, int obj_id_tipoOAE)
         {
             Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
-            return new ObjetoDAO().Objeto_Subdivisao2_Excluir(tip_id, obj_id_tipoOAE, paramUsuario.usu_id, paramUsuario.usu_ip);
+            return new ObjetoDAO().Objeto_Subdivisao3_Excluir(tip_id, obj_id_tipoOAE, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
 
@@ -123,7 +126,8 @@ namespace WebApp.Business
         /// <returns>Lista de Documentos</returns>
         public List<Documento> Objeto_Documentos_ListAll(int obj_id)
         {
-            return new ObjetoDAO().Objeto_Documentos_ListAll(obj_id);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().Objeto_Documentos_ListAll(obj_id, paramUsuario.usu_id);
 
         }
 
@@ -135,7 +139,8 @@ namespace WebApp.Business
         /// <returns>List(SelectListItem)</returns>
         public List<SelectListItem> PreencheCmbDocumentosLocalizados(int obj_id, string codDoc)
         {
-            List<Documento> lstDocumentos = new ObjetoDAO().Objeto_DocumentosNaoAssociados_ListAll(obj_id, codDoc);
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            List<Documento> lstDocumentos = new ObjetoDAO().Objeto_DocumentosNaoAssociados_ListAll(obj_id, codDoc, paramUsuario.usu_id);
             List<SelectListItem> lstListaCmbDocumentosLocalizados = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstDocumentos)
             {
@@ -179,11 +184,13 @@ namespace WebApp.Business
         /// Lista Objeto Localizacao
         /// </summary>
         /// <param name="obj_id_TipoOAE">Id do Objeto do Tipo OAE</param> 
-        /// <param name="tip_id_Subdivisao1">Id do tipo de Objeto, nivel subdivisao1</param> 
+        /// <param name="tip_id_Grupo">Id do tipo Grupo de Objeto, nivel subdivisao1</param> 
         /// <returns>List(SelectListItem)</returns>
-        public List<SelectListItem> PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Subdivisao1)
+        public List<SelectListItem> PreencheCmbObjetoLocalizacao(int obj_id_TipoOAE, int tip_id_Grupo)
         {
-            List<Objeto> lstObjetosLocalizacao = new ObjetoDAO().Objeto_Localizacao_ListAll(obj_id_TipoOAE, tip_id_Subdivisao1);
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+
+            List<Objeto> lstObjetosLocalizacao = new ObjetoDAO().Objeto_Localizacao_ListAll(obj_id_TipoOAE, tip_id_Grupo, paramUsuario.usu_id);
             List<SelectListItem> lstListaCmbObjetoLocalizacao = new List<SelectListItem>(); // lista de combo
             foreach (var temp in lstObjetosLocalizacao)
             {
@@ -252,6 +259,113 @@ namespace WebApp.Business
             return new ObjetoDAO().ObjAtributoValor_Salvar(ObjAtributoValor, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
+        /// <summary>
+        /// Busca o valor da VDM na API DER e retorna o valor ati_id do combo na ficha de inspecao
+        /// </summary>
+        /// <param name="obj_codigo_TipoOAE">Codigo do Objeto TIPO OAE</param>
+        /// <param name="itipo_pista">Valor do Tipo de Pista (17=dupla/16=simples)</param>
+        /// <returns>int</returns>
+        public int BuscaValorVDM(string obj_codigo_TipoOAE, int itipo_pista)
+        {
+            int retorno = -1;
+            string[] pedacos = obj_codigo_TipoOAE.Trim().Split('-');
+
+            string rodovia = pedacos[0].ToUpper().Replace(" ", "");
+
+            CultureInfo culturePTBR =  new CultureInfo("pt-BR") ;
+
+            string quilometragem = pedacos[1]; //.Replace(",", ".");
+            decimal km = Convert.ToDecimal(quilometragem, culturePTBR);
+
+            IntegracaoDAO saida = new IntegracaoDAO();
+            List<vdm> listaVDM = saida.get_VDMs(rodovia, 0 , 999);
+
+            if ((listaVDM.Count == 1) && (listaVDM[0].vdm_ano == -1))
+                return -1;
+
+            decimal valorVDM1 = 0;
+            decimal valorVDM2 = 0;
+            decimal valorVDM = 0;
+            bool achou = false;
+
+            // procura o intervalo correto
+            for (int i=0; i < listaVDM.Count; i++)
+            {
+                if ((listaVDM[i].vdm_valor1 == null) || (listaVDM[i].vdm_valor1 == ""))
+                    listaVDM[i].vdm_valor1 = "0";
+
+                if ((listaVDM[i].vdm_valor2 == null) || (listaVDM[i].vdm_valor2 == ""))
+                    listaVDM[i].vdm_valor2 = "0";
+
+               decimal kmIni = Convert.ToDecimal(listaVDM[i].pcl_kminicial.Replace(".", ","), culturePTBR);
+               decimal kmFim = Convert.ToDecimal(listaVDM[i].pcl_kmfinal.Replace(".", ","), culturePTBR);
+               if (( kmIni <= km) && (kmFim >= km))
+                {
+                    valorVDM1 = Convert.ToDecimal(listaVDM[i].vdm_valor1, culturePTBR);
+                    valorVDM2 = Convert.ToDecimal(listaVDM[i].vdm_valor2, culturePTBR);
+                    achou = true;
+                    break;
+                }
+            }
+
+            // se nao achou, procura a faixa mais proxima
+            if (!achou)
+            {
+                for (int i = 0; i < listaVDM.Count - 1; i++)
+                {
+                    if ((listaVDM[i].vdm_valor1 == null) || (listaVDM[i].vdm_valor1 == ""))
+                       listaVDM[i].vdm_valor1 = "0";
+
+                    if ((listaVDM[i].vdm_valor2 == null) || (listaVDM[i].vdm_valor2 == ""))
+                        listaVDM[i].vdm_valor2 = "0";
+
+                    decimal kmIni_prox = Convert.ToDecimal(listaVDM[i + 1].pcl_kminicial.Replace(".", ","), culturePTBR);
+                    decimal kmFim = Convert.ToDecimal(listaVDM[i].pcl_kmfinal.Replace(".", ","), culturePTBR);
+
+                    if ((km - kmFim) < (kmIni_prox - km))
+                    {
+                        valorVDM1 = Convert.ToDecimal(listaVDM[i].vdm_valor1, culturePTBR);
+                        valorVDM2 = Convert.ToDecimal(listaVDM[i].vdm_valor2, culturePTBR);
+                        achou = true;
+                        break;
+                    }
+                    else
+                    {
+                        valorVDM1 = Convert.ToDecimal(listaVDM[i + 1].vdm_valor1.Trim() == "" ? "0" : listaVDM[i + 1].vdm_valor1, culturePTBR);
+                        valorVDM2 = Convert.ToDecimal(listaVDM[i + 1].vdm_valor2.Trim() == "" ? "0" : listaVDM[i + 1].vdm_valor2, culturePTBR);
+                    }
+                }
+            }
+
+            /* analisa e retorna
+               ati_id  atr_id  valor
+               143     84      ACIMA DE 20.000
+               144     84      DE 5.000 A 20.000
+               145     84      DE 1.000 A 5.000
+               146     84      ATÉ 1.000
+           */
+            if (itipo_pista == 16) // pista simples
+                valorVDM = valorVDM1 + valorVDM2;
+            else
+                if (itipo_pista == 17) // pista dupla
+                    valorVDM = valorVDM1 > valorVDM2 ? valorVDM1 : valorVDM2;
+
+
+            if (valorVDM > 20000)
+                retorno = 143;
+            else
+                if ((valorVDM >= 5000) && (valorVDM < 20000))
+                retorno = 144;
+            else
+                if ((valorVDM >= 1000) && (valorVDM < 5000))
+                retorno = 145;
+            else
+                if (valorVDM < 1000)
+                retorno = 146;
+
+             return retorno;
+
+        }
 
 
         /// <summary>
@@ -345,6 +459,18 @@ namespace WebApp.Business
             return new ObjetoDAO().ObjTipo_ListAll(clo_id, tip_id);
         }
 
+
+        /// <summary>
+        /// lista concatenada dos pais de tipos de objeto por classe
+        /// </summary>
+        /// <param name="clo_id">Classe do Objeto selecionado</param>
+        /// <returns>string</returns>
+        public string lstTipos_da_Classe(int clo_id)
+        {
+            return new ObjetoDAO().lstTipos_da_Classe(clo_id);
+        }
+
+
         /// <summary>
         /// Dados do Tipo selecionado
         /// </summary>
@@ -427,7 +553,7 @@ namespace WebApp.Business
         {
             List<ObjTipo> lstObjTipo = new ObjetoDAO().ObjTipo_ListAll(clo_id, null, tip_pai, excluir_existentes, obj_id);
 
-            if (clo_id == 6) // para ordenar Superestrutra, Mesoestrutura, Infraestrutura, encontro
+            if (clo_id == 6) // para ordenar Superestrutura, Mesoestrutura, Infraestrutura, encontro
                 lstObjTipo = lstObjTipo.OrderBy(o => o.tip_id).ToList();
 
             List<SelectListItem> lstListaCmbTiposObjeto = new List<SelectListItem>(); // lista de combo
@@ -449,8 +575,14 @@ namespace WebApp.Business
 
                 }
             }
+          //  return lstListaCmbTiposObjeto;
 
-            return lstListaCmbTiposObjeto;
+            List<SelectListItem> distinctV = lstListaCmbTiposObjeto
+                                                 .GroupBy(m => new { m.Text })
+                                                 .Select(group => group.First())
+                                                 .OrderBy(o => o.Text)
+                                                 .ToList();
+            return distinctV;
         }
 
         // ----------------------------------------------------------------------
@@ -584,10 +716,12 @@ namespace WebApp.Business
         /// </summary>
         /// <param name="obj_id">Id do Objeto selecionado</param>
         /// <param name="ord_id">Id da Ordem de Serviço selecionada</param>
+        /// <param name="ehProvidencia">Flag para tela Providências</param>
+        /// <param name="filtro_prt_id">Filtro id da Providência</param>
         /// <returns>Lista de ObjAtributoValores</returns>
-        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1)
+        public List<GruposVariaveisValores> GruposVariaveisValores_ListAll(int obj_id, int? ord_id = -1, int? ehProvidencia = 0, int? filtro_prt_id = 0)
         {
-            return new ObjetoDAO().GruposVariaveisValores_ListAll(obj_id, ord_id);
+            return new ObjetoDAO().GruposVariaveisValores_ListAll(obj_id, ord_id, ehProvidencia, filtro_prt_id);
         }
 
 
@@ -627,7 +761,7 @@ namespace WebApp.Business
         /// <summary>
         /// Limpa arquivos da pasta temp, com data anterior à vespera do dia corrente
         /// </summary>
-        private void limpaArquivosAntigos()
+        public void limpaArquivosAntigos()
         {
             string caminho = System.Web.HttpContext.Current.Server.MapPath("~/temp");
 
@@ -883,6 +1017,136 @@ namespace WebApp.Business
             {
                 return ex.Message;
             }
+        }
+
+
+        /// <summary>
+        /// Lista de Objetos Priorizados
+        /// </summary>
+        /// <param name="CodRodovia">Filtro por Codigo da Rodovia</param>
+        /// <param name="FiltroidRodovias">Filtro por id de Rodovia</param>
+        /// <param name="FiltroidRegionais">Filtro por id de  Regional</param>
+        /// <param name="FiltroidObjetos">Filtro por id de Objeto</param>
+        /// <param name="Filtro_data_De">Filtro por Data Inicial</param>
+        /// <param name="Filtro_data_Ate">Filtro por Data final</param>
+        /// <param name="somenteINSP_ESPECIAIS">Filtro por Inspecao Especial</param>
+        /// <returns>Lista de Objetos</returns>
+        public List<ObjPriorizacao> ObjPriorizacao_ListAll(string CodRodovia,
+                                                            string FiltroidRodovias, string FiltroidRegionais, string FiltroidObjetos, string Filtro_data_De, string Filtro_data_Ate,
+                                                            int? somenteINSP_ESPECIAIS = 0)
+        {
+            // cria lista de Regionais
+            string strRegionais = new IntegracaoDAO().str_Regionais();
+
+            Usuario paramUsuario = (Usuario)HttpContext.Current.Session["Usuario"];
+            return new ObjetoDAO().ObjPriorizacao_ListAll(CodRodovia, FiltroidRodovias, FiltroidRegionais, FiltroidObjetos, Filtro_data_De, Filtro_data_Ate, somenteINSP_ESPECIAIS, strRegionais, paramUsuario.usu_id);
+
+        }
+
+
+        /// <summary>
+        /// Preenchimento do combo Filtro Regionais 
+        /// </summary>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbFiltroRegionais()
+        {
+            List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
+            List<Regional> lstRegionais = new IntegracaoDAO().get_Regionais(); // lista de "Regional"
+            if (lstRegionais[0].reg_id > 0)
+            {
+                foreach (var temp in lstRegionais)
+                {
+                    if (temp.reg_email.Trim() != "")
+                    {
+                        string txt = temp.reg_codigo + "-" + temp.reg_descricao;
+                        lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                    }
+                }
+            }
+            else
+            {
+                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = lstRegionais[0].reg_codigo, Value = "-1"});
+            }
+
+            return lstListacmbFiltroRegionais;
+        }
+
+
+        /// <summary>
+        /// Preenchimento do combo Filtro Email Regionais 
+        /// </summary>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbEmailRegionais()
+        {
+            List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
+            List<Regional> lstRegionais = new IntegracaoDAO().get_Regionais(); // lista de "Regional"
+            if (lstRegionais[0].reg_id > 0)
+            {
+                foreach (var temp in lstRegionais)
+                {
+                    if (temp.reg_email.Trim() != "")
+                    {
+                        string txt = temp.reg_codigo + "-" + temp.reg_descricao + "<" + temp.reg_email.Trim() + ">";
+                        lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = txt });
+                    }
+                }
+            }
+            else
+            {
+                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = lstRegionais[0].reg_codigo, Value = "-1" });
+            }
+            return lstListacmbFiltroRegionais;
+        }
+
+        /// <summary>
+        /// Funçao para filtrar a lista de retorno porque a busca pelo SirGeo é exata e nao aproximada
+        /// </summary>
+        /// <param name="targerList">Lista a se procurar</param>
+        /// <param name="filterStr">String procurada</param>
+        /// <returns>Lista Rodovia </returns>
+        public static List<Rodovia> StartsWithStringContains(List<Rodovia> targerList, string filterStr)
+        {
+            var resultList = from resultValues in targerList
+                             where
+                                 (resultValues.rod_codigo.StartsWith(filterStr))
+                             select
+                                 resultValues;
+
+            return resultList.ToList();
+        }
+
+        /// <summary>
+        /// Preenchimento do combo Filtro Rodovias 
+        /// </summary>
+        /// <param name="rod_codigo">Filtro por Código da Rodovia</param>
+        /// <returns>Lista de SelectListItem</returns>
+        public List<SelectListItem> PreenchecmbFiltroRodovias(string rod_codigo = "")
+        {
+            List<SelectListItem> lstListacmbFiltroRodovias = new List<SelectListItem>(); // lista de combo
+            List<Rodovia> lstRodovias = new IntegracaoDAO().get_Rodovias(rod_codigo); // lista de "Rodovias"
+            if (lstRodovias[0].rod_id > 0)
+            {
+                // filtra aqui por aproximacao porque a busca pelo SirGeo é exata
+                rod_codigo = rod_codigo.ToUpper();
+                List<Rodovia> SortedList = StartsWithStringContains(lstRodovias, rod_codigo);
+
+
+
+                foreach (var temp in SortedList)
+                {
+                    if (temp.rod_codigo.Trim() != "")
+                    {
+                        string txt = temp.rod_codigo; // + " (" + temp.rod_descricao + ")";
+                        lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = txt, Value = temp.rod_id.ToString() });
+                    }
+                }
+            }
+            else
+            {
+                lstListacmbFiltroRodovias.Add(new SelectListItem() { Text = lstRodovias[0].rod_descricao, Value = "-1" });
+            }
+
+            return lstListacmbFiltroRodovias;
         }
 
 
