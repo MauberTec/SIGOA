@@ -426,7 +426,8 @@ namespace WebApp.Models
         /// <summary>
         /// Id do reparo adotado
         /// </summary>
-        public int rpt_id_adotado { get; set; }
+        public string rpt_id_adotado { get; set; }
+     //   public int rpt_id_adotado { get; set; }
 
         /// <summary>
         /// Codigo do reparo adotado

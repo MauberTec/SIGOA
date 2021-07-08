@@ -72,6 +72,17 @@ namespace WebApp.Models
         public string ord_data_atualizacao_status { get; set; }
 
         /// <summary>
+        /// Data Início Planejada
+        /// </summary>
+        public string ord_data_inicio_planejada { get; set; }
+
+        /// <summary>
+        /// Data Término Planejada
+        /// </summary>
+        public string ord_data_termino_planejada { get; set; }
+
+
+        /// <summary>
         /// Data Início Programada
         /// </summary>
         public string ord_data_inicio_programada { get; set; }
@@ -303,6 +314,10 @@ namespace WebApp.Models
         /// </summary>
         public string ord_aberta_por_nome { get; set; }
 
+        /// <summary>
+        /// Codigo do Orçamento de pai
+        /// </summary>
+        public string ord_codigo_orcamento { get; set; }
 
 
         /// <summary>

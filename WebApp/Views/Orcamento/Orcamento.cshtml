@@ -29,7 +29,9 @@
     .cellRed {
         color: red
     }
-
+    .cellBlue {
+        color: blue
+    }
     .alignRight {
         text-align: right;
         padding-right: 2px;
@@ -299,6 +301,11 @@
     }
 </style>
 
+<script>
+    // variavel usada para identificar a view origem da ficha cadastral shared
+    var paginaPai = "Orcamento";
+
+</script>
 
 <div style="width:100%;" id="divFiltros">
     <div class="box box-primary">
@@ -3733,7 +3740,6 @@
 
                 // carrega o grid Detalhes
                 carregaGridOrcamentoDetalhes(aba, quem.value, 1, false);
-              //  carregaGridServicosAdicionados(aba, quem.value, false);
                 calculaTotal(aba, quem.value);
 
                 ////var div_FICHA_ORCAMENTO_DETALHES = document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + aba);
@@ -3778,17 +3784,21 @@
 
                         // carrega o grid Detalhes
                         carregaGridOrcamentoDetalhes(aux + 1, orc_ids_selecionados[aux], 1, false);
-                      //  carregaGridServicosAdicionados(aux + 1, orc_ids_selecionados[aux], );
                         calculaTotal(aba, orc_ids_selecionados[aux]);
 
                         if (btnEditar)
                             btnEditar.style.display = 'none';
+
                     }
 
-
+                    
                     break;
                 }
             }
+
+            for (var i=1; i <=10; i++)
+                ORCAMENTO_DETALHES_EncolherAba("btn_Toggle_ORCAMENTO_DETALHES_" + i, 1);
+
         }
 
         if (orc_ids_selecionados.length > 0)
@@ -3820,7 +3830,7 @@
             if (div_FICHA_ORCAMENTO_DETALHES)
                 div_FICHA_ORCAMENTO_DETALHES.style.display = 'none';
 
-            ORCAMENTO_DETALHES_EncolherAba("btn_Toggle_ORCAMENTO_DETALHES_" + aba, 0);
+            ORCAMENTO_DETALHES_EncolherAba("btn_Toggle_ORCAMENTO_DETALHES_" + aba);
         }
 
         return false;
@@ -4087,6 +4097,8 @@
     }
 
     function LimparFiltroOrcamento() {
+        idsRodoviasSelecionados = '';
+        idsObjetosSelecionados = '';
 
         filtroRodovia = '';
         filtroObjetos = '';
@@ -4094,6 +4106,8 @@
 
         $("#txtFiltroRodovia").val("");
         $("#txtFiltroObjetos").val("");
+        $("#txtFiltroRodovias").val("");
+        $("#txtFiltroObj_codigo").val("");
         $("#cmbFiltroStatusOrcamento").val(null);
 
 
@@ -4191,8 +4205,6 @@
 
         return false;
     }
-
-
 
     function ORCAMENTO_DETALHES_setaReadWrite(aba, ehRead) {
 
@@ -4306,7 +4318,7 @@
                             if (div_FICHA_ORCAMENTO_DETALHES)
                                 div_FICHA_ORCAMENTO_DETALHES.style.display = 'none';
 
-                            ORCAMENTO_DETALHES_EncolherAba("btn_Toggle_ORCAMENTO_DETALHES_" + aba, 0);
+                            ORCAMENTO_DETALHES_EncolherAba("btn_Toggle_ORCAMENTO_DETALHES_" + aba);
                         }
 
                         $('#tblOrcamento').DataTable().ajax.reload(null, false);  //false = sem reload na pagina.
@@ -4342,24 +4354,12 @@
     function ORCAMENTO_DETALHES_Editar(quem) {
         var aba = acha_Aba(quem);//senderID.replaceAll("btn_Editar_ORCAMENTO_DETALHES_", "");
         var orc_id = acha_orc_id(quem);
-
-        // procura o indice no array
-        //var index = -1;
-        //var qualAba = -1;
-        //for (index = 0; index < orc_ids_selecionados.length; index++) {
-        //    qualAba = index + 1;
-        //    if (qualAba === parseInt(aba)) {
         // seta para Escrita
         ORCAMENTO_DETALHES_setaReadWrite(aba, false);
 
         // recarrega os dados
         carregaGridOrcamentoDetalhes(aba, orc_id, 2, false);
-        //  carregaGridServicosAdicionados(aba, orc_id, false);// ja esta embutido no carregaGridOrcamentoDetalhes
         calculaTotal(aba, orc_id);
-
-        //        break;
-        //    }
-        //}
 
         return false;
     }
@@ -4381,7 +4381,6 @@
 
                 // recarrega os dados
                 carregaGridOrcamentoDetalhes(qualAba, orc_ids_selecionados[index], 1, true);
-                // carregaGridServicosAdicionados(qualAba, orc_ids_selecionados[index], true);
                 calculaTotal(aba, orc_ids_selecionados[index]);
 
                 break;
@@ -4759,68 +4758,63 @@
         var sufixo = senderID.replaceAll("btn_Toggle_ORCAMENTO_DETALHES_", "");
         var quem = document.getElementById(senderID);
 
+        var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + sufixo + ' ';
+        var cmbStatusOrcamentoDetalhesVAL = $(prefixo + "#cmbStatusOrcamentoDetalhes").val();
+
         // mostra o botao editar
+        if (parseInt(cmbStatusOrcamentoDetalhesVAL) == 1) // "em elaboracao"
+        {
+            if (quem.getAttribute('aria-expanded') == "false") {
+                document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+                document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+                document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
+                document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
+                document.getElementById("btn_Excel_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
+
+                document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
+            }
+            else {
+
+                document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+                document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+                document.getElementById("btn_Excel_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+
+                if (quem.getAttribute('aria-expanded') == "true") {
+                    document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+                    document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
+                }
+                else {
+                    document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
+                    document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
+                }
+            }
+        }
+
+
+        // roda o icone 90graus
         if (quem.getAttribute('aria-expanded') == "false") {
-            document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-            document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-            document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
-            document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
-            document.getElementById("btn_Excel_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
-
-            document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
-
-            // roda o icone 90graus
             document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
             document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.add('rotate');
         }
         else {
-            //  document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-
-            document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-            document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-            document.getElementById("btn_Excel_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-
-            if (quem.getAttribute('aria-expanded') == "true") {
-                document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-                document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'none';
-            }
-            else {
-                document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
-                document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = 'block';
-            }
-
-            // roda o icone 90graus
             document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
         }
 
-        ////// carrega o grid Detalhes
-        ////carregaGridOrcamentoDetalhes(sufixo, orc_ids_selecionados[parseInt(sufixo) - 1], 1);
-        ////carregaGridServicosAdicionados(sufixo, orc_ids_selecionados[parseInt(sufixo) - 1], false);
 
-        ////calculaTotal(sufixo, orc_ids_selecionados[parseInt(sufixo) - 1]);
 
         return false;
     }
 
-    function ORCAMENTO_DETALHES_EncolherAba(senderID) {
+    function ORCAMENTO_DETALHES_EncolherAba(senderID, somente_encolher) {
+
         var estado1 = 'none';
         var estado2 = 'block';
 
         var sufixo = senderID.replaceAll("btn_Toggle_ORCAMENTO_DETALHES_", "");
         var quem = document.getElementById(senderID);
 
-        //if (expandir == 1) {
-        //    estado1 = 'block';
-        //    estado2 = 'none';
-
         // roda o icone 90graus
         document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
-        //}
-        //else {
-        //    // roda o icone 90graus
-        //    document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.remove('rotate');
-        //    document.getElementById("iconAngle_ORCAMENTO_DETALHES_" + sufixo).classList.add('rotate');
-        //}
 
         document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
         document.getElementById("btn_Clonar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
@@ -4829,8 +4823,8 @@
         document.getElementById("btn_Salvar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
         document.getElementById("btn_Cancelar_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
 
-        document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
-        document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
+        if (somente_encolher != 1)
+            document.getElementById("div_FICHA_ORCAMENTO_DETALHES_" + sufixo).style.display = estado1;
 
         document.getElementById("div_ORCAMENTO_DETALHES_" + sufixo).classList.remove("in");
 
@@ -4907,7 +4901,7 @@
 
                     $("#btn_Toggle_ORCAMENTO_DETALHES_" + aba).html("");
 
-
+                    var cmbStatusOrcamentoDetalhesVAL = $(prefixo + '#cmbStatusOrcamentoDetalhes').val();
                     var btnehRead = true;
                     var btnEditar = document.getElementById("btn_Editar_ORCAMENTO_DETALHES_" + aba);
                     if (btnEditar) {
@@ -4972,89 +4966,88 @@
                                 return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
                             }
                         },
+
                         {
                             data: "rpt_id_adotado_codigo", "searchable": false, "className": "borderLeft Centralizado", "sortable": false, "autoWidth": true,
                             "render": function (data, type, row) {
-                                var retorno = "";
-                                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
-                                if (qtAdotadaValor == 0)
-                                    return (row["rpt_id_sugerido_codigo"]);
-                                else
+                                if (row["rpt_id_adotado_codigo"] != "")
                                     return (row["rpt_id_adotado_codigo"]);
+                                else
+                                    return (row["rpt_id_sugerido_codigo"]);
                             },
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (rowData["rpt_id_adotado_codigo"] != rowData["rpt_id_sugerido_codigo"])
-                                    $(td).addClass('cellRed');
+                                if (rowData["rpt_id_adotado_codigo"] != "")
+                                     $(td).addClass('cellRed');
+                                
+                                $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
                             }
                         },
                         {
                             data: "ian_quantidade_adotada", "searchable": false, "className": "Centralizado", "sortable": false,
                             "render": function (data, type, row) {
-                                var retorno = "";
-                                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
-                                if (qtAdotadaValor == 0)
-                                    return (row["ian_quantidade_sugerida"] + '').replaceAll(".", ",");
-                                else
+                                if (row["ian_quantidade_adotada"] != "")
                                     return (row["ian_quantidade_adotada"] + '').replaceAll(".", ",");
+                                else
+                                    return (row["ian_quantidade_sugerida"] + '').replaceAll(".", ",");
+
                             },
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (parseFloat(rowData["ian_quantidade_sugerida"]) != parseFloat(rowData["ian_quantidade_adotada"]))
-                                    $(td).addClass('cellRed');
+                                if (rowData["ian_quantidade_adotada"] != "")
+                                        $(td).addClass('cellRed');
                             }
                         },
                         {
                             data: "rpt_id_adotado_unidade", "searchable": false, "className": "Centralizado", "sortable": false,
                             "render": function (data, type, row) {
-                                var retorno = "";
-                                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
-                                if (qtAdotadaValor == 0)
-                                    return (row["rpt_id_sugerido_unidade"] + '').replaceAll(".", ",");
+                                if (row["ian_quantidade_adotada"] != "")
+                                    return (row["rpt_id_adotado_unidade"] + '');
                                 else
-                                    return (row["rpt_id_adotado_unidade"] + '').replaceAll(".", ",");
+                                    return (row["rpt_id_sugerido_unidade"] + '');
                             },
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (rowData["rpt_id_sugerido_unidade"] != rowData["rpt_id_adotado_unidade"])
+                                if (rowData["ian_quantidade_adotada"] != "")
                                     $(td).addClass('cellRed');
                             }
                         },
                         {
                             data: "rtu_preco_unitario_adotado", "searchable": false, "className": "alignRight", "sortable": false, "autoWidth": true,
                             "render": function (data, type, row) {
-                                var retorno = "";
-                                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
-                                if (qtAdotadaValor == 0) {
-                                    var rtu_preco_unitario_sugerido = parseFloat(row["rtu_preco_unitario_sugerido"]);
-                                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_sugerido);
-                                }
-                                else {
+                                if (row["rtu_preco_unitario_adotado"] != "")
+                                {
                                     var rtu_preco_unitario_adotado = parseFloat(row["rtu_preco_unitario_adotado"]);
                                     return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_adotado);
                                 }
+                                else
+                                 {
+                                    var rtu_preco_unitario_sugerido = parseFloat(row["rtu_preco_unitario_sugerido"]);
+                                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_preco_unitario_sugerido);
+                                }
                             },
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (rowData["rtu_preco_unitario_sugerido"] != rowData["rtu_preco_unitario_adotado"])
+                                if (rowData["rtu_preco_unitario_adotado"] != "")
                                     $(td).addClass('cellRed');
+
                             }
                         },
                         {
                             data: "rtu_valor_total_linha_adotado", "searchable": false, "className": "alignRight borderRight", "sortable": false, "autoWidth": true,
                             "render": function (data, type, row) {
-                                var retorno = "";
-                                var qtAdotadaValor = parseFloat(row["ian_quantidade_adotada"]);
-                                if (qtAdotadaValor == 0) {
-                                    var rtu_valor_total_linha_sugerido = parseFloat(row["rtu_valor_total_linha_sugerido"]);
-                                    return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
-                                }
-                                else {
+                                if (row["rtu_valor_total_linha_adotado"] != "")
+                                {
                                     var rtu_valor_total_linha_adotado = parseFloat(row["rtu_valor_total_linha_adotado"]);
                                     return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_adotado);
                                 }
+                                else {
+                                        var rtu_valor_total_linha_sugerido = parseFloat(row["rtu_valor_total_linha_sugerido"]);
+                                        return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(rtu_valor_total_linha_sugerido);
+                                } 
                             },
                             createdCell: function (td, cellData, rowData, row, col) {
-                                if (rowData["rtu_valor_total_linha_sugerido"] != rowData["rtu_valor_total_linha_adotado"])
+                                if (rowData["rtu_valor_total_linha_adotado"] != "")
                                     $(td).addClass('cellRed');
                             }
                         },
+
                         { data: "orc_objetos_associados", "className": "hide_column" },
 
                         { data: "pri_ids_associados", "className": "hide_column" },
@@ -5128,6 +5121,7 @@
                                 }
 
                                 $(prefixo + '#cmbStatusOrcamentoDetalhes').val((row.childNodes[6].innerText));
+                                cmbStatusOrcamentoDetalhesVAL = row.childNodes[6].innerText;
                             }
 
                             var valor_total_sugerido = parseFloat(data["valor_total_sugerido"]);
@@ -5207,12 +5201,12 @@
                                 return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2, minimumFractionDigits: 2 }).format(data);
                             }
                         }
-                        , {
-                            targets: [25] // tooltip rpt_id_adotado_codigo
-                            , "createdCell": function (td, cellData, rowData, row, col) {
-                                $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
-                            }
-                        }
+                        //, {
+                        //    targets: [25] // tooltip rpt_id_adotado_codigo
+                        //    , "createdCell": function (td, cellData, rowData, row, col) {
+                        //        $(td).attr('title', rowData["rpt_id_adotado_descricao"]);
+                        //    }
+                        //}
                         , {
                             targets: [26] // quantidade adotada
                             , "render": function (data, type, row) {
@@ -5243,17 +5237,20 @@
 
 
                     //selectedId_orc_id = orc_id;
-                    carregaGridServicosAdicionados(aba, orc_id, ehRead);
+                    carregaGridServicosAdicionados(aba, orc_id, ehRead, cmbStatusOrcamentoDetalhesVAL);
 
                     return false;
 
     }
 
-    function carregaGridServicosAdicionados(aba, orc_id, ehRead) {
+    function carregaGridServicosAdicionados(aba, orc_id, ehRead, cmbStatusOrcamentoDetalhesVAL ) {
         orc_servicos_valor_total = 0;
         totalParcial_ServicosAdicionados = 0;
         var prefixo = '#div_FICHA_ORCAMENTO_DETALHES_' + aba + ' ';
         $(prefixo + "#txtorc_valor_total").val(0);
+
+
+        //var cmbStatusOrcamentoDetalhesVAL = $(prefixo + "#cmbStatusOrcamentoDetalhes").val();
 
         if ($.fn.dataTable.isDataTable(prefixo + '#tblServicosAdicionados_' + aba)) {
             $(prefixo + '#tblServicosAdicionados_' + aba).DataTable().destroy();
@@ -5289,7 +5286,7 @@
                     "sortable": false,
                     "render": function (data, type, row) {
                         var retorno = "";
-                        if ((permissaoExclusao > 0) && (!ehRead))
+                        if ((permissaoExclusao > 0) && (!ehRead) && (parseInt(cmbStatusOrcamentoDetalhesVAL)==1)) // "em elaboracao"
                             retorno += '<a href="#" onclick="return ServicosAdicionados_Deletar(' + aba + ',' + orc_id + ',' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
                         else
                             retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';
@@ -5873,14 +5870,16 @@
         $('#txtCodOAE').val("");
         $("#cmbFiltroRegionais").multiselect("clearSelection");
 
-        //carregaGridPriorizacao();
+        $('#tblPriorizacao').DataTable().ajax.reload(null, false);
+       // carregaGridPriorizacao();
 
         return false;
     }
 
     function ExecutarFiltroPriorizacao() {
 
-        carregaGridPriorizacao();
+       $('#tblPriorizacao').DataTable().ajax.reload(null, false);
+        //  carregaGridPriorizacao();
         return false;
     }
 
@@ -5900,17 +5899,17 @@
                 }
             }
             , "columns": [
-                { data: "pri_id", "searchable": false },
+                { data: "pri_id", "width":"20px", "searchable": false },
                 { data: "pri_id", "className": "hide_column", "searchable": false },
                 { data: "obj_id", "className": "hide_column", "searchable": false },
-                { data: "pri_ordem", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "obj_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_ordem", "width": "20px", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "obj_codigo", "width": "120px","className": "Centralizado",  "searchable": true },
+                { data: "pri_nota_final", "width": "20px", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_estrutura", "width": "20px", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_nota_durabilidade", "width": "20px", "className": "Centralizado", "autoWidth": true, "searchable": true },
 
-                { data: "pri_acao", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "pri_status", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                { data: "pri_acao", "width": "70%", "className": "Centralizado", "searchable": true },
+                { data: "pri_status", "width": "50px", "className": "Centralizado", "searchable": true },
                 { data: "ord_id", "className": "hide_column", "searchable": false }
             ]
             , "order": [3, "asc"]
@@ -6123,7 +6122,7 @@
 
             var selrod_id = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].value;
             var sel_txt = lstRodoviasLocalizados.options[lstRodoviasLocalizados.selectedIndex].text;
-            var selrod_codigo = sel_txt.substring(0, sel_txt.indexOf("(") - 1);
+            var selrod_codigo = sel_txt; //.substring(0, sel_txt.indexOf("(") - 1);
 
             var txtRodoviasSelecionadosTxt = $('#txtRodoviasSelecionados').val() + ";" + selrod_codigo;
             if (txtRodoviasSelecionadosTxt.startsWith(";"))
@@ -6455,8 +6454,8 @@
 
                                         <div>
                                             <div class="btn-box-tool pull-right" style="margin-top:10px">
-                                                <button type="reset" class="btn btn-info" onclick="LimparFiltroPriorizacao();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
-                                                <button type="submit" class="btn btn-primary" onclick="ExecutarFiltroPriorizacao();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
+                                                <button  class="btn btn-info" onclick="return LimparFiltroPriorizacao();"><i class="fa fa-eraser margin-r-5"></i> Limpar</button>
+                                                <button  class="btn btn-primary" onclick="return ExecutarFiltroPriorizacao();" style="margin-right: 10px !important;"><i class="fa fa-search margin-r-5"></i> Pesquisar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -6774,7 +6773,8 @@
                     "render": function (data, type, row) {
 
                         var retorno = "";
-                        if (permissaoEscrita > 0) {
+                        if ((permissaoEscrita > 0) && (parseInt(row["ocs_id"]) == 1))
+                        {
                             retorno = '<a href="#" onclick="return EditarOrcamento(' + data + ')" title="Editar" ><span class="glyphicon glyphicon-pencil"></span></a>' + '  ';
 
                             if (row.orc_ativo == 1)
@@ -6792,7 +6792,7 @@
 
                         }
 
-                        if (permissaoExclusao > 0)
+                        if ((permissaoExclusao > 0) && (parseInt(row["ocs_id"]) == 1))
                             retorno += '<a href="#" onclick="return DeletarOrcamento(' + data + ')" title="Excluir" ><span class="glyphicon glyphicon-trash"></span></a>';
                         else
                             retorno += '<span class="glyphicon glyphicon-trash desabilitado" title="Excluir" ></span>';

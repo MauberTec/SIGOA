@@ -1808,6 +1808,8 @@ namespace WebApp.DAO
                             pri_restricao_treminhoes = rdr["pri_restricao_treminhoes"] == DBNull.Value ? "0.00" : rdr["pri_restricao_treminhoes"].ToString(),
 
                             ord_data_termino_execucao = ((rdr["ord_data_termino_execucao"] == DBNull.Value) ? "" : rdr["ord_data_termino_execucao"]).ToString(),
+                            ord_codigo = ((rdr["ord_codigo"] == DBNull.Value) ? "" :rdr["ord_codigo"]).ToString(),
+                            ord_descricao = ((rdr["ord_descricao"] == DBNull.Value) ? "" :rdr["ord_descricao"]).ToString(),
                             tos_descricao = ((rdr["tos_descricao"] == DBNull.Value) ? "" :rdr["tos_descricao"]).ToString()
 
                         });

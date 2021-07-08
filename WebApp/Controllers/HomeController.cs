@@ -88,7 +88,7 @@ namespace WebApp.Controllers
                                                      paramUsuario.usu_ip);
 
                 // vai para a pagina requisitada 
-                if (caminho.IndexOf("/Ajuda") < 0)
+                //if (caminho.IndexOf("/Ajuda") < 0)
                     caminho = caminho + "&id=" + id;
 
                 return AbreMenu(caminho);

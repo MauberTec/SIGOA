@@ -190,9 +190,10 @@ function accordion_encolher4(todos_menos) {
 
 
 
-
-    document.getElementById("btn_Editar_DADOS_GERAIS").style.display = 'block';
-
+    if (selectedId_sos_id == 14)
+        document.getElementById("btn_Editar_DADOS_GERAIS").style.display = 'none';
+    else
+        document.getElementById("btn_Editar_DADOS_GERAIS").style.display = 'block';
 
 }
 
@@ -395,11 +396,25 @@ function preenchetblFicha4(obj_id, classe, tipo) {
         }
     });
 
-    travaBotoes();
+               // chama funcao se existir 
 
 }
 
 function Ficha4_setaReadWrite(tabela, ehRead) {
+
+    // se a O.S. estiver encerrada, trava para escrita
+    if (selectedId_sos_id == 14) {
+        ehRead = true;
+
+        var lstBtns = tabela.getElementsByTagName('button');
+        for (var i = 0; i < lstBtns.length; i++)
+        {
+            if ((lstBtns[i].id.includes("btn_Editar")) || (lstBtns[i].id.includes("btn_Cancelar")) || (lstBtns[i].id.includes("btn_Salvar")))
+                lstBtns[i].style.display = 'none';
+        }
+        return;
+    }
+
     // habilita ou desabilita todos os controles editaveis
     var lstTxtBoxes = tabela.getElementsByTagName('input');
     var lstCombos = tabela.getElementsByTagName('select');
@@ -415,6 +430,7 @@ function Ficha4_setaReadWrite(tabela, ehRead) {
         controlesReadOnlyFicha4.push("cmb_atr_id_98"); // combo Tipo OAE
         controlesReadOnlyFicha4.push("txt_atr_id_105"); // descricao Tipo OAE
     }
+
     for (var i = 0; i < lstTxtBoxes.length; i++)
         if (!controlesReadOnlyFicha4.includes(lstTxtBoxes[i].id))
             lstTxtBoxes[i].disabled = ehRead;
@@ -442,7 +458,11 @@ function Ficha4_setaReadWrite(tabela, ehRead) {
     //else
     //    document.getElementById("btnEsquemaUpload").style.display = 'unset';
 
-
+    if (selectedId_sos_id == 14)
+    {
+        display1 = 'none';
+        display2 = 'none';
+    }
 
     switch (tabela.id) {
         case "tblFicha4_DADOS_GERAIS":
@@ -811,6 +831,13 @@ function header_click4(quem, expandir) {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_HISTORICO_INSPECOES, true);
 
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_HISTORICO_INSPECOES").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
+
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
                         document.getElementById("btn_Salvar_HISTORICO_INSPECOES").style.display = 'none';
@@ -830,8 +857,6 @@ function header_click4(quem, expandir) {
 
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_HISTORICO_INSPECOES").classList.toggle('rotate');
                     break;
                 }
 
@@ -839,6 +864,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_ATRIBUTOS_FUNCIONAIS, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ATRIBUTOS_FUNCIONAIS").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -859,8 +891,6 @@ function header_click4(quem, expandir) {
 
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ATRIBUTOS_FUNCIONAIS").classList.toggle('rotate');
                     break;
                 }
 
@@ -868,6 +898,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_ATRIBUTOS_FIXOS, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ATRIBUTOS_FIXOS").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -887,8 +924,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ATRIBUTOS_FIXOS").classList.toggle('rotate');
                     break;
                 }
 
@@ -896,6 +931,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_SUPERESTRUTURA, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_SUPERESTRUTURA").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -915,8 +957,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_SUPERESTRUTURA").classList.toggle('rotate');
                     break;
                 }
 
@@ -924,6 +964,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_MESOESTRUTURA, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_MESOESTRUTURA").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -943,8 +990,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_MESOESTRUTURA").classList.toggle('rotate');
                     break;
                 }
 
@@ -952,6 +997,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_INFRAESTRUTURA, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_INFRAESTRUTURA").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -971,8 +1023,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_INFRAESTRUTURA").classList.toggle('rotate');
                     break;
                 }
 
@@ -980,6 +1030,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_ENCONTROS, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ENCONTROS").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -999,8 +1056,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ENCONTROS").classList.toggle('rotate');
                     break;
                 }
 
@@ -1008,6 +1063,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_ESQUEMA_ESTRUTURAL, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ESQUEMA_ESTRUTURAL").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1027,8 +1089,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ESQUEMA_ESTRUTURAL").classList.toggle('rotate');
                     break;
                 }
 
@@ -1036,6 +1096,16 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_CRITERIO_DE_CLASSIFICACAO, true);
+
+                    //calcula as notas
+                    Ficha4_Calcula_Notas_2_Requisito();
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_CRITERIO_DE_CLASSIFICACAO").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1055,11 +1125,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    //calcula as notas
-                    Ficha4_Calcula_Notas_2_Requisito();
-
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_CRITERIO_DE_CLASSIFICACAO").classList.toggle('rotate');
                     break;
                 }
 
@@ -1067,6 +1132,13 @@ function header_click4(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     Ficha4_setaReadWrite(tblFicha4_NOTA_OAE_PARAMETRO_FUNCIONAL, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_NOTA_OAE_PARAMETRO_FUNCIONAL").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1086,8 +1158,6 @@ function header_click4(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_NOTA_OAE_PARAMETRO_FUNCIONAL").classList.toggle('rotate');
                     break;
                 }
 
@@ -1121,7 +1191,7 @@ function header_click4(quem, expandir) {
 
         }
 
-    travaBotoes();
+               // chama funcao se existir 
 
 }
 
@@ -1319,6 +1389,9 @@ function Ficha4_Calcula_Notas_Tudo() {
 
 function cmb_pista_onchange(quem) {
     var valor = $('#' + quem.id).val();
+
+    if ((selected_obj_codigo + "") == "")
+        selected_obj_codigo = $("#txt_atr_id_102").val();
 
     if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
     {

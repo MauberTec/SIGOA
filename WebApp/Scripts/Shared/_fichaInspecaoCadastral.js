@@ -5,6 +5,11 @@ var controlesReadOnly_Cadastral = ["txtord_codigo", "txtobj_codigo_Novo2", "btnA
 
 function setaReadWrite_FichaInspecaoCadastral(tabela, ehRead) {
 
+    // trava se for O.S. Encerrada
+    if (selectedId_sos_id == 14) {
+        ehRead = true;
+    }
+
     // habilita ou desabilita todos os controles editaveis
     var lstTxtBoxes = tabela.getElementsByTagName('input');
     var lstCombos = tabela.getElementsByTagName('select');
@@ -66,8 +71,11 @@ function accordion_encolher(todos_menos) {
         return;
 
     // reseta DADOS GERAIS
-    setaReadWrite_FichaInspecaoCadastral(tblFicha_DADOS_GERAIS, 1);
-    document.getElementById("btn_Editar_DADOS_GERAIS").style.display = 'block';
+    setaReadWrite_FichaInspecaoCadastral(tblFicha_DADOS_GERAIS, true);
+
+    // se nao for O.S. Encerrada, libera
+    if (selectedId_sos_id != 14)
+        document.getElementById("btn_Editar_DADOS_GERAIS").style.display = 'block';
 
 
     // verifica os outros tabs
@@ -409,6 +417,7 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
 
                 // preenche o valor se houver
                 if (parseInt(result.data[i].nItens) == 0) {
+
                     var textbox = document.getElementById(result.data[i].atv_controle.replace("lbl", "txt_"));
                     var textbox2 = document.getElementById((nome_segundo_cabecalho2(result.data[i].atv_controle.replace("lbl", "txt_"))).replace("lbl", "txt_"));
                     var mascara = result.data[i].atr_mascara_texto;
@@ -509,10 +518,7 @@ function preenchetblFicha(obj_id, classe, tipo, ins_id)
 
             }
 
-            // chama funcao se existir 
-            if (typeof travaBotoes === "function") {
-                travaBotoes();
-            }
+                           // chama funcao se existir 
         }
     });
 
@@ -1149,6 +1155,13 @@ function header_click(quem, expandir) {
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FUNCIONAIS, true);
 
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ATRIBUTOS_FUNCIONAIS").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
+
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
                         document.getElementById("btn_Salvar_ATRIBUTOS_FUNCIONAIS").style.display = 'none';
@@ -1168,8 +1181,6 @@ function header_click(quem, expandir) {
 
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ATRIBUTOS_FUNCIONAIS").classList.toggle('rotate');
                     break;
                 }
 
@@ -1177,6 +1188,12 @@ function header_click(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_ATRIBUTOS_FIXOS, true);
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ATRIBUTOS_FIXOS").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1196,8 +1213,6 @@ function header_click(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ATRIBUTOS_FIXOS").classList.toggle('rotate');
                     break;
                 }
 
@@ -1205,6 +1220,13 @@ function header_click(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_SUPERESTRUTURA, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_SUPERESTRUTURA").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1224,8 +1246,6 @@ function header_click(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_SUPERESTRUTURA").classList.toggle('rotate');
                     break;
                 }
 
@@ -1233,6 +1253,13 @@ function header_click(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_MESOESTRUTURA, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_MESOESTRUTURA").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1252,8 +1279,6 @@ function header_click(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_MESOESTRUTURA").classList.toggle('rotate');
                     break;
                 }
 
@@ -1261,6 +1286,13 @@ function header_click(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_INFRAESTRUTURA, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_INFRAESTRUTURA").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1279,9 +1311,6 @@ function header_click(quem, expandir) {
                             document.getElementById("btn_Cancelar_INFRAESTRUTURA").style.display = 'block';
                         }
                     }
-
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_INFRAESTRUTURA").classList.toggle('rotate');
                     break;
                 }
 
@@ -1289,6 +1318,13 @@ function header_click(quem, expandir) {
                 {
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_ENCONTROS, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_ENCONTROS").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1308,8 +1344,6 @@ function header_click(quem, expandir) {
                         }
                     }
 
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_ENCONTROS").classList.toggle('rotate');
                     break;
                 }
 
@@ -1318,6 +1352,13 @@ function header_click(quem, expandir) {
 
                     // alterna os campos para leitura
                     setaReadWrite_FichaInspecaoCadastral(tblFicha_HISTORICO_INTERVENCOES, true);
+
+                    // roda o icone 90graus
+                    document.getElementById("iconAngle_HISTORICO_INTERVENCOES").classList.toggle('rotate');
+
+                    // se for O.S. Encerrada, trava
+                    if (selectedId_sos_id == 14)
+                        break;
 
                     // mostra o botao editar
                     if ((quem.getAttribute('aria-expanded') == "false") || (expandir == 1)) {
@@ -1337,16 +1378,11 @@ function header_click(quem, expandir) {
                         }
                     }
 
-
-
-
-                    // roda o icone 90graus
-                    document.getElementById("iconAngle_HISTORICO_INTERVENCOES").classList.toggle('rotate');
                     break;
                 }
     }
 
-        travaBotoes();
+                   // chama funcao se existir 
 
     }
 

@@ -257,8 +257,11 @@ function preenchetblFicha4_PROVIDENCIAS() {
         }
     });
 
-    travaBotoes();
-  //  Ficha4_PROVIDENCIAS_setaReadWrite($("#tblFicha4_INSPECAO_ESPECIAL_PROVIDENCIAS"), true);
+    // chama funcao se existir 
+    if (typeof travaBotoes === "function") {
+        travaBotoes();
+    } 
+
 }
 
 function Ficha4_PROVIDENCIAS_setaReadWrite(tabela, ehRead) {

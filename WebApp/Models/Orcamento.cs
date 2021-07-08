@@ -406,12 +406,36 @@ namespace WebApp.Models
         /// </summary>
         public decimal valor_total_sugerido { get; set; }
 
+        /// <summary>
+        /// Valor total do reparo sugerido
+        /// </summary>
+        public decimal vtotal_reparos { get; set; }
 
+        /// <summary>
+        /// Valor total do reparo executado
+        /// </summary>
+        public decimal vtotal_reparos_executado { get; set; }
         /// <summary>
         /// Valor total do reparo adotado
         /// </summary>
         public decimal valor_total_adotado { get; set; }
-            
+
+
+        /// <summary>
+        /// Valor Total Executado
+        /// </summary>
+        public Decimal valor_total_executado { get; set; }
+
+
+        /// <summary>
+        /// Valor Total O.S. Orçado
+        /// </summary>
+        public Decimal vTotalOrcamento { get; set; }
+
+        /// <summary>
+        /// Valor Total O.S. Executado
+        /// </summary>
+        public Decimal vTotalOrcamento_Executado { get; set; }
 
 
         /// <summary>
@@ -528,6 +552,12 @@ namespace WebApp.Models
         /// </summary>
         public Decimal ose_quantidade { get; set; }
 
+
+        /// <summary>
+        /// Quantidade Executada
+        /// </summary>
+        public Decimal ose_quantidade_executada { get; set; }
+
         /// <summary>
         /// Unidade 
         /// </summary>
@@ -545,9 +575,19 @@ namespace WebApp.Models
         public Decimal valor_total_linha { get; set; }
 
         /// <summary>
+        /// Valor Total Parcial Executado
+        /// </summary>
+        public Decimal valor_total_linha_executado { get; set; }
+
+        /// <summary>
         /// Valor Total 
         /// </summary>
         public Decimal valor_total { get; set; }
+
+        /// <summary>
+        /// Valor Total Executado
+        /// </summary>
+        public Decimal valor_total_executado { get; set; }
 
         /// <summary>
         /// Desonerado?

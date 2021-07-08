@@ -1052,22 +1052,28 @@ namespace WebApp.Business
         {
             List<SelectListItem> lstListacmbFiltroRegionais = new List<SelectListItem>(); // lista de combo
             List<Regional> lstRegionais = new IntegracaoDAO().get_Regionais(); // lista de "Regional"
-            if (lstRegionais[0].reg_id > 0)
+            if (lstRegionais.Count > 0)
             {
-                foreach (var temp in lstRegionais)
+                if (lstRegionais[0].reg_id > 0)
                 {
-                    if (temp.reg_email.Trim() != "")
+                    foreach (var temp in lstRegionais)
                     {
-                        string txt = temp.reg_codigo + "-" + temp.reg_descricao;
-                        lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                        if (temp.reg_email.Trim() != "")
+                        {
+                            string txt = temp.reg_codigo + "-" + temp.reg_descricao;
+                            lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = txt, Value = temp.reg_id.ToString() });
+                        }
                     }
+                }
+                else
+                {
+                    lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = lstRegionais[0].reg_codigo, Value = "-1" });
                 }
             }
             else
             {
-                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = lstRegionais[0].reg_codigo, Value = "-1"});
+                lstListacmbFiltroRegionais.Add(new SelectListItem() { Text = "Erro ao sincronizar Regionais", Value = "-1" });
             }
-
             return lstListacmbFiltroRegionais;
         }
 

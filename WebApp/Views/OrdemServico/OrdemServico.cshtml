@@ -51,6 +51,26 @@
     }
 
 
+    .inputRead {
+        background: none !important;border: none;
+    }
+
+    .inputWrite {
+
+    }
+    .cellRed {
+        color: red
+    }
+
+    .cellBlue {
+        color: blue
+    }
+
+    .alignRight {
+        text-align: right;
+        padding-right: 2px;
+    }
+
     .rotate-135-left {
         -o-transform: rotate(-135deg);
         -webkit-transform: rotate(-135deg);
@@ -141,8 +161,10 @@
                         <select name="cmbDatas" id="cmbDatas" class="form-control">
                             <option value="">--Selecione--</option>
                             <option value="Abertura">Data Abertura</option>
-                            <option value="Inicio_Programada">Data Início Planejada</option>
-                            <option value="Termino_Programada">Data Término Planejada</option>
+                            <option value="Inicio_Planejada">Data Início Planejada</option>
+                            <option value="Termino_Planejada">Data Término Planejada</option>
+                            <option value="Inicio_Programada">Data Início Programada</option>
+                            <option value="Termino_Programada">Data Término Programada</option>
                             <option value="Inicio_Execucao">Data Início Execução</option>
                             <option value="Termino_Execucao">Data Término Execução</option>
                             <option value="Suspensao">Data Suspensão</option>
@@ -211,7 +233,7 @@
                     }
                 }
 
-                <button type="button" class="btn btn-primary botaoInserir" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=100000&ord_id=-1',  '_blank');">Ficha de Notificação em Branco</button>
+                <button type="button" id="btnFichaEmBranco" class="btn btn-primary botaoInserir" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaNotificacaoOcorrencia&id=100000&ord_id=-1',  '_blank');">Ficha de Notificação em Branco</button>
                 <input type="hidden" id="hddnSelectedord_id" name="hddnSelectedord_id" value="-1" />
 
             </div>
@@ -242,7 +264,7 @@
 
         qualFicha = qualFicha1;
         if (qualFicha == 11) {    // Orcamento
-            carregaGridOrcamentoDetalhes(selectedId_orc_id, 11);
+            OS_carregaGridOrcamentoDetalhes(selectedId_orc_id, 11);
         }
         else
             if (qualFicha == -14) {    // Reparo
@@ -383,6 +405,10 @@
                         <a id="tabFichaNotificacaoOcorrenciaheader" data-toggle="tab" href="#tabFichaNotificacaoOcorrencia" onclick="abreFicha(6);">Ficha de Notificação de Ocorrência</a>
                     </li>
 
+                    <li style="display:none" id="liIndicacaoServicos">
+                        <a id="tabIndicacaoServicosHeader" data-toggle="tab" href="#tabIndicacaoServicos" onclick="OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id);">Indicação de Serviços</a>
+                    </li>
+
                     <li id="liDocumentosAssociadosOBJ">
                         <a id="tabDocumentosAssociadosOBJHeader" data-toggle="tab" href="#tabDocumentosAssociadosOBJ" onclick="$('#tblDocumentosAssociadosOBJ').DataTable().ajax.reload();">Documentos Associados ao Objeto</a>
                     </li>
@@ -390,9 +416,6 @@
                         <a id="tabDocumentosAssociadosOSHeader" data-toggle="tab" href="#tabDocumentosAssociadosOS" onclick="$('#tblDocumentosAssociados').DataTable().ajax.reload();">Documentos Associados à Ordem de Serviço</a>
                     </li>
 
-                    <li style="display:none" id="liIndicacaoServicos">
-                        <a id="tabIndicacaoServicosHeader" data-toggle="tab" href="#tabIndicacaoServicos" onclick="OrdemServico_Indicacao_Servico_ListAll(selectedId_ord_id);">Indicação de Serviços</a>
-                    </li>
                 </ul>
 
                 <div class="tab-content" id="TabContent">
@@ -513,13 +536,20 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Início Planejada<span class="text-danger">*</span></label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_inicio_planejada" name="txtord_data_inicio_planejada" placeholder="Data Início Planejada"
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Data Início Programada<span class="text-danger">*</span></label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_inicio_programada" name="txtord_data_inicio_programada" placeholder="Data Início Programada"
                                                    maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Data Início Execução</label></nobr>
                                         <div class="col-sm-8">
@@ -579,10 +609,15 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <nobr><label class="control-label col-sm-4">O.S. Principal</label></nobr>
+                                        @*<nobr><label class="control-label col-sm-4">O.S. Principal</label></nobr>
+                            <div class="col-sm-8">
+                                <input id="txtord_codigo_pai" name="txtord_codigo_pai" class="form-control" maxlength="20"
+                                       placeholder="Ordem de Serviço Principal" />
+                            </div>*@
+
+                                        <nobr></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtord_codigo_pai" name="txtord_codigo_pai" class="form-control" maxlength="20"
-                                                   placeholder="Ordem de Serviço Principal" />
+                                            <input id="txtDummy12" class="form-control" style="visibility:hidden" />
                                         </div>
                                     </div>
 
@@ -611,7 +646,7 @@
                                     <div class="form-group">
                                         <nobr></nobr>
                                         <div class="col-sm-8">
-                                            <input id="txtDummy1" class="form-control" style="visibility:hidden" />
+                                            <input id="txtDummy14" class="form-control" style="visibility:hidden" />
                                         </div>
                                     </div>
 
@@ -631,13 +666,20 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <nobr><label class="control-label col-sm-4">Data Término Planejada</label></nobr>
+                                        <div class="col-sm-8">
+                                            <input id="txtord_data_termino_planejada" name="txtord_data_termino_planejada" placeholder="Data Término Planejada"
+                                                   maxlength="20" class="form-control fundoBranco" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Data Término Programada</label></nobr>
                                         <div class="col-sm-8">
                                             <input id="txtord_data_termino_programada" name="txtord_data_termino_programada" placeholder="Data Término Programada"
                                                    maxlength="20" class="form-control fundoBranco" readonly />
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <nobr><label class="control-label col-sm-4">Data Término Execução</label></nobr>
                                         <div class="col-sm-8">
@@ -808,7 +850,7 @@
                             <div class="form-group">
                                 <div class="col-sm-4">
                                     <button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha em Branco</button>
-                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar para XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS('OrdemServico');">Exportar para XLS</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Ficha de Cadastramento de Anomalias - Inspeção Especial</label></h3>
@@ -875,47 +917,113 @@
                                     <button type="button" class="btn btn-primary" id="btnSairEdicao_FichaReparo" style="display:none" onclick="FichaReparo_SairEdicao()">Sair da Edição</button>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Reparo</label></h3>
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Recuperação / Reparo</label></h3>
                                 </div>
                             </div>
                         </div>
 
                         <br /><br /><br />
 
-                        <div id="partialFicha14a">
-                            <table id="tblOrcamentoReparo">
-                                <thead>
-                                    <tr>
-                                        <th colspan="7" class="borderBottom "></th>
-                                        <th colspan="3" class="borderLeft borderBottom Centralizado">Indicado</th>
-                                        <th colspan="3" class="borderLeft borderBottom Centralizado">Adotado</th>
-                                        <th class="borderLeft borderBottom Centralizado"></th>
-                                    </tr>
-                                    <tr>
-                                        <th>ian_ordem_apresentacao</th>
-                                        <th>ore_id</th>
-                                        <th>orc_id</th>
-                                        <th>orc_id</th>
-                                        <th>Elemento</th>
-                                        <th>Núm</th>
-                                        <th>Tipo</th>
-                                        <th>Sigla</th>
-                                        <th>Alerta</th>
-                                        <th>Causa</th>
-                                        <th>Qtde</th>
+                                    <div id="partialFicha14a">
+                                        <br />
+                                        <br />
+                                        <table style="font-weight:bold; font-size:14pt;" cellpadding="2" cellspacing="2">
+                                            <tr>
+                                                <td class="borderRight borderBottom Centralizado" style="width:200px;"></td>
+                                                <td class="borderRight borderBottom Centralizado" style="width:200px;">Orçado</td>
+                                                <td class=" borderBottom Centralizado" style="width:200px;">Executado</td>
+                                            </tr>
 
-                                        <th>Reparo</th>
-                                        <th>Qtde</th>
-                                        <th>Unid</th>
+                                            <tr>
+                                                <td class="borderRight borderBottom">Serviços Adicionais</td>
+                                                <td class="borderRight borderBottom Centralizado">
+                                                    <input id="txtServicosAdicionaisReparos_valor_total" name="txtServicosAdicionaisReparos_valor_total" class="Centralizado"  style="border:none !important;" Disabled readonly />
+                                                </td>
+                                                <td class=" borderBottom Centralizado">
+                                                    <input id="txtServicosAdicionaisvalor_total_executado" name="txtServicosAdicionaisvalor_total_executado" class="Centralizado" style="border:none !important;" Disabled readonly />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="borderRight borderBottom">Reparos</td>
+                                                <td class="borderRight borderBottom Centralizado">
+                                                    <input id="txtReparos_valor_total_AdotadoReparos" name="txtReparos_valor_total_AdotadoReparos" class="Centralizado" style="border:none !important;" Disabled readonly />
+                                                </td>
+                                                <td class=" borderBottom Centralizado">
+                                                    <input id="txtReparos_valor_total_AdotadoReparos_executado" name="txtReparos_valor_total_AdotadoReparos_executado" class="Centralizado" style="border:none !important;" Disabled readonly />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="borderRight borderBottom">Total</td>
+                                                <td class="borderRight borderBottom Centralizado">
+                                                    <input id="txtorc_valor_totalReparos" name="txtorc_valor_totalReparos"  class="Centralizado" style="border:none !important;" class="lblsBold" Disabled readonly />
+                                                </td>
+                                                <td class=" borderBottom Centralizado">
+                                                    <input id="txtorc_valor_totalReparos_executado" name="txtorc_valor_totalReparos_executado" class="Centralizado" style="border:none !important;" class="lblsBold" Disabled readonly />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <br />
+                                        <br />
+                                        <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">Serviços Adicionais</h4>
+                                        <table id="tblServicosAdicionadosReparos">
+                                            <thead>
+                                                <tr>
+                                                    <th>ose_id</th>
+                                                    <th>OAE</th>
+                                                    <th>Qt Prevista</th>
+                                                    <th>Qt Executada</th>
+                                                    <th>Unidade</th>
+                                                    <th>Código</th>
+                                                    <th>Nome</th>
+                                                    <th>Data Base</th>
+                                                    <th>Fase</th>
+                                                    <th class="alignRight">Preço Unitário</th>
+                                                    <th class="alignRight">Valor Total</th>
+                                                    <th></th>
+                                                    </tr>
+                                            </thead>
+                                        </table>
+                                        <br />
+                                        <br />
+                                        <br />
 
-                                        <th>Reparo</th>
-                                        <th>Qtde</th>
-                                        <th>Unid</th>
-                                        <th class="borderLeft borderBottom Centralizado">Reparado</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+                                        <h4 style="display:inline-table; font-weight:bold; margin-left: 3px;">Reparos</h4>
+                                        <table id="tblOrcamentoReparo">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="7" class="borderBottom "></th>
+                                                    @*<th colspan="3" class="borderLeft borderBottom Centralizado">Indicado</th>*@
+                                                    <th colspan="5" class="borderLeft borderBottom Centralizado">Adotado</th>
+                                                    <th class="borderLeft borderBottom Centralizado"><input type="checkbox" id="chkTodos" title="Todos" onclick="javascript:chkTodos_click(this);" disabled></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>ian_ordem_apresentacao</th>
+                                                    <th>ore_id</th>
+                                                    <th>orc_id</th>
+                                                    <th>orc_id</th>
+                                                    <th>Elemento</th>
+                                                    <th>Núm</th>
+                                                    <th>Tipo</th>
+                                                    <th>Sigla</th>
+                                                    <th>Alerta</th>
+                                                    <th>Causa</th>
+                                                    <th>Qtde</th>
+
+                                                    <th>Reparo</th>
+                                                    <th>Qtde</th>
+                                                    <th>Unid</th>
+
+                                                    <th class="alignRight">Val Unit</th>
+                                                    <th class="alignRight">Val Total</th>
+
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th class="borderLeft borderBottom Centralizado">Reparado</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                     </div>
 
 
@@ -925,8 +1033,8 @@
                             <div class="form-group">
                                 <div class="col-sm-5">
                                     @*<button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoRotineira&tos_id=2&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha</button>
-                                        <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
-                                        <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>*@
+                        <button type="button" class="btn btn-primary" onclick="Ficha2_ExportarXLS();">Exportar para XLS</button>
+                        <button type="button" class="btn btn-primary" onclick="window.open(' ../../Reports/frmDownloadFile.aspx?filename=Modelo_Folha_A1_Insp_Rotineira.dwt', '_blank');">Modelo A1 (.dwt)</button>*@
                                 </div>
                                 <div class="col-sm-7">
                                     <h3 class="modal-title"><label id="lblModalHeader_RequalificacaoOAE" class="titulosAbas">Requalificação da OAE</label></h3>
@@ -961,6 +1069,44 @@
                         <div id="partialFicha6">
                             @*AQUI A FICHA É COLOCADA DINAMICAMENTE*@
                         </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tabIndicacaoServicos" role="tabpanel" aria-labelledby="tabIndicacaoServicos">
+                        <br /><br />
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-primary" id="btnEditar_IndicacaoServicos" style="display:inline" onclick="IndicacaoServicos_Editar()">Editar</button>
+                                    <button type="button" class="btn btn-primary" id="btnSalvar_IndicacaoServicos" style="display:none" onclick="IndicacaoServicos_Salvar()">Salvar</button>
+                                    <button type="button" class="btn btn-primary" id="btnCancelar_IndicacaoServicos" style="display:none" onclick="IndicacaoServicos_Cancelar()">Cancelar</button>
+                                </div>
+                                <div class="col-sm-8">
+                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Indicação de Serviços</label></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br /><br />
+
+                        <form class="form-horizontal">
+                            <br />
+                            <div class="form-group" id="divDetalhesIndicacaoServico">
+                                <div class="col-sm-12">
+                                    <table style="width:100%; height:100%; min-height:800px">
+                                        <tr>
+                                            <td>
+                                                <h5><label class="control-label">Descrição:</label></h5>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td id="tdTexto">
+                                                <textarea id="txt_IndicacaoServico" style="width:100%; height:100%; min-height:800px; border:solid 1px lightgray; vertical-align:top"></textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
                     <div class="tab-pane fade" id="tabDocumentosAssociadosOBJ" role="tabpanel" aria-labelledby="tabDocumentosAssociadosOBJ">
@@ -1019,44 +1165,6 @@
                             </thead>
                         </table>
 
-                    </div>
-
-                    <div class="tab-pane fade" id="tabIndicacaoServicos" role="tabpanel" aria-labelledby="tabIndicacaoServicos">
-                        <br /><br />
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="col-sm-4">
-                                    <button type="button" class="btn btn-primary" id="btnEditar_IndicacaoServicos" style="display:inline" onclick="IndicacaoServicos_Editar()">Editar</button>
-                                    <button type="button" class="btn btn-primary" id="btnSalvar_IndicacaoServicos" style="display:none" onclick="IndicacaoServicos_Salvar()">Salvar</button>
-                                    <button type="button" class="btn btn-primary" id="btnCancelar_IndicacaoServicos" style="display:none" onclick="IndicacaoServicos_Cancelar()">Cancelar</button>
-                                </div>
-                                <div class="col-sm-8">
-                                    <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Indicação de Serviços</label></h3>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br /><br />
-
-                        <form class="form-horizontal">
-                            <br />
-                            <div class="form-group" id="divDetalhesIndicacaoServico">
-                                <div class="col-sm-12">
-                                    <table style="width:100%; height:100%; min-height:800px">
-                                        <tr>
-                                            <td>
-                                                <h5><label class="control-label">Descrição:</label></h5>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td id="tdTexto">
-                                                <textarea id="txt_IndicacaoServico" style="width:100%; height:100%; min-height:800px; border:solid 1px lightgray; vertical-align:top"></textarea>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </form>
                     </div>
 
                 </div>
@@ -1332,13 +1440,18 @@
         }
     });
 
+    $('#txtord_data_inicio_planejada').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_planejada').datepicker({ dateFormat: 'dd/mm/yy' });
+
     $('#txtord_data_inicio_programada').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_programada').datepicker({ dateFormat: 'dd/mm/yy' });
+
     $('#txtord_data_inicio_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
+    $('#txtord_data_termino_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
+
     $('#txtord_data_suspensao').datepicker({ dateFormat: 'dd/mm/yy' });
     $('#txtord_data_cancelamento').datepicker({ dateFormat: 'dd/mm/yy' });
     $('#txtord_data_reinicio').datepicker({ dateFormat: 'dd/mm/yy' });
-    $('#txtord_data_termino_programada').datepicker({ dateFormat: 'dd/mm/yy' });
-    $('#txtord_data_termino_execucao').datepicker({ dateFormat: 'dd/mm/yy' });
 
     $('#filtroord_data_De').datepicker({
         dateFormat: 'dd/mm/yy',

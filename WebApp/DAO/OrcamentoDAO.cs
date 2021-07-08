@@ -392,6 +392,9 @@ namespace WebApp.DAO
                             valor_total_sugerido = rdr["valor_total_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_sugerido"], culturePTBR),
                             valor_total_adotado = rdr["valor_total_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_adotado"], culturePTBR),
 
+                            //vTotalOrcamento = rdr["vTotalOrcamento"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vTotalOrcamento"], culturePTBR),
+                            //vTotalOrcamento_Executado = rdr["vTotalOrcamento_Executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vTotalOrcamento_Executado"], culturePTBR),
+
 
                             rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
                             rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
@@ -492,6 +495,7 @@ namespace WebApp.DAO
                             obj_descricao = obj_codigo_atual != obj_codigo_anterior ?  rdr["obj_descricao"].ToString() : "",
                             tpt_id = rdr["tpt_id"].ToString(),
                             ose_quantidade = Convert.ToDecimal(rdr["ose_quantidade"], culturePTBR),
+                            ose_quantidade_executada = rdr["ose_quantidade_executada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ose_quantidade_executada"], culturePTBR),
                             DataTpu = rdr["DataTpu"].ToString(),
                             ose_fase = rdr["ose_fase"].ToString(),
                             CodSubItem = rdr["CodSubItem"].ToString(),
@@ -500,6 +504,9 @@ namespace WebApp.DAO
                             PrecoUnit = Convert.ToDecimal(rdr["PrecoUnitario"]),
                             valor_total_linha = Convert.ToDecimal(rdr["valor_total_linha"], culturePTBR),
                             valor_total = Convert.ToDecimal(rdr["valor_total"], culturePTBR),
+
+                            valor_total_linha_executado = rdr["valor_total_linha_executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_linha_executado"], culturePTBR),
+                            valor_total_executado = rdr["valor_total_executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_executado"], culturePTBR),
 
                             Desonerado = rdr["Desonerado"].ToString(),
 
@@ -706,7 +713,7 @@ namespace WebApp.DAO
                 {
                     con.Open();
                     SqlDataAdapter da2 = new SqlDataAdapter();
-                    SqlCommand com = new SqlCommand("SELECT dbo.fn_TotalOrcamento(" + orc_id.ToString() + ")", con);
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_TotalOrcamento(" + orc_id.ToString() + ", null)", con);
                     com.Parameters.Clear();
 
                      decimal retorno =  Convert.ToDecimal( com.ExecuteScalar(), culturePTBR);
@@ -722,6 +729,34 @@ namespace WebApp.DAO
 
         }
 
+
+        /// <summary>
+        /// Concatena Orcamentos por O.S.
+        /// </summary>
+        /// <param name="ord_id">Id da O.S.</param>
+        /// <returns>string</returns>
+        public string ConcatenaOrcamentos_por_OS(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.ConcatenaOrcamentos_por_OS(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    return com.ExecuteScalar().ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
 
 
         // *************** STATUS  *************************************************************

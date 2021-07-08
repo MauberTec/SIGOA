@@ -375,6 +375,11 @@
 
             // mostra as abas pertinentes ao tipo da O.S.
             mostraAba(selectedId_tos_id, true);
+
+            // chama funcao se existir 
+            if (typeof travaBotoes === "function") {
+                travaBotoes();
+            }
         });
 
     });
@@ -550,8 +555,10 @@
                     $('[href="#tabFichaInspecaoEspecialProvidencias"]').tab('show');
 
 
-                travaBotoes();
-                break;
+                // chama funcao se existir 
+                if (typeof travaBotoes === "function") {
+                    travaBotoes();
+                } break;
 
         }
 
@@ -729,7 +736,7 @@
                                 <div class="col-sm-4">
                                     @*<button type="button" class="btn btn-primary" onclick="window.open('../../Reports/frmReport.aspx?relatorio=rptFichaInspecaoEspecial_campo&id=' + selectedId_obj_id + '&ord_id=' + selectedId_ord_id, '_blank');">Imprimir Ficha em Branco</button>
                                     *@
-                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS();">Exportar XLS</button>
+                                    <button type="button" class="btn btn-primary" onclick="Ficha4_CAMPO_ExportarXLS('Inspecao');">Exportar XLS</button>
                                 </div>
                                 <div class="col-sm-8">
                                     <h3 class="modal-title"><label id="lblModalHeader" class="titulosAbas">Ficha de Cadastramento de Anomalias - Inspeção Especial</label></h3>

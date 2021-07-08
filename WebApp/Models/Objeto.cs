@@ -848,6 +848,18 @@ namespace WebApp.Models
         /// </summary>
         public string tos_descricao { get; set; }
 
+
+        /// <summary>
+        /// Codigo da Ordem de Servico
+        /// </summary>
+        public string ord_codigo { get; set; }
+
+        /// <summary>
+        /// Descrição da Ordem de Servico
+        /// </summary>
+        public string ord_descricao { get; set; }
+
+
     }
 
 

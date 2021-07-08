@@ -213,10 +213,11 @@ namespace WebApp.Controllers
         ///    Cria Ficha Inspecao Especial Exportada para XLS
         /// </summary>
         /// <param name="ord_id">Id da O.S pertinente ao objeto</param>
+        /// <param name="origem">Tela que chamou o evento</param>
         /// <returns>JsonResult caminho do arquivo</returns>
-        public JsonResult FichaInspecaoEspecialAnomalias_ExportarXLS(int ord_id)
+        public JsonResult FichaInspecaoEspecialAnomalias_ExportarXLS(int ord_id, string origem)
         {
-            return Json(new { data = new InspecaoBLL().FichaInspecaoEspecialAnomalias_ExportarXLS(ord_id) }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = new InspecaoBLL().FichaInspecaoEspecialAnomalias_ExportarXLS(ord_id, origem) }, JsonRequestBehavior.AllowGet);
         }
 
 

@@ -159,6 +159,7 @@
         display: inline-block;
         font-weight: normal;
         color: blue;
+        padding-left: 5px;
     }
 
     .cmbsNoWidth {
@@ -1436,23 +1437,23 @@
 
                         <tr>
                             <td class="borderBottom altura50 borderRight borderLeft" colspan="6">
-                                <input disabled id="txt_atr_id_174" class="txts" />
+                                <input disabled id="txt_atr_id_174" class="txts" style="width:99%; height:60px; overflow-y:scroll" />
+                                @*  <textarea disabled id="txt_atr_id_174" class="txts" rows="5" cols="80" maxlength="255" style="width:99%; height:60px; overflow-y:scroll" />*@
                             </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
+                            </tr>
+                        </table>
+                      </div>
+                </td>
+            </tr>
+        </table>
 
-    </table>
-
-</div>
+           </div>
 
 
-<script>
-    if (paginaPai == "Objeto")
-        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
-    else
-        document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
+           <script>
+               if (paginaPai == "Objeto")
+                   document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'none';
+               else
+                   document.getElementById("tblFicha_HISTORICO_INTERVENCOES").style.display = 'inline-table';
 
-</script>
+           </script>

@@ -458,7 +458,16 @@ namespace WebApp.Controllers
             return Json(new OrdemServicoBLL().OSFluxoStatus_Salvar(fos), JsonRequestBehavior.AllowGet);
         }
 
-
+        /// <summary>
+        /// Busca os dados da Mensagem/Email 
+        /// </summary>
+        /// <param name="msg_id">Id da mensagem</param>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>JsonResult</returns>
+        public JsonResult OSEmail_ID(int ord_id, int msg_id)
+        {
+            return Json(new OrdemServicoBLL().OSEmail_ID(ord_id, msg_id), JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
         ///  Envia Email de Notificacao
@@ -501,20 +510,21 @@ namespace WebApp.Controllers
         ///  Altera Status de Item de Reparo  Ordem de Servico
         /// </summary>
         /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
         /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
-        public JsonResult OrdemServicoReparoItem_Status(int ore_id, int ast_id)
+        public JsonResult OrdemServicoReparoItem_Status(int ore_id, int ord_id, int ast_id)
         {
-            int retorno = new OrdemServicoBLL().OrdemServicoReparoItem_Status(ore_id, ast_id);
-            bool valid = retorno >= 0;
+            int retorno = new OrdemServicoBLL().OrdemServicoReparoItem_Status(ore_id, ord_id, ast_id);
+            bool valid = retorno >= 0 || retorno == -314159;
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
         ///  Altera Status dos Itens Nao Reparados da Ordem de Servico
         /// </summary>
-        /// <param name="ord_id">Id do Reparo Selecionado</param>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
         /// <returns>JsonResult</returns>
         [HttpPost]
         public JsonResult OrdemServicoReparo_Atualiza_Itens_NaoReparados(int ord_id)
@@ -523,6 +533,38 @@ namespace WebApp.Controllers
             bool valid = retorno >= 0;
             return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        ///  Checa se a Inspecao já tem Versao de Orcamento aberta
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult OrdemServico_Checa_Tem_Versao_Orcamento(int ord_id)
+        {
+            int retorno = new OrdemServicoBLL().OrdemServico_Checa_Tem_Versao_Orcamento(ord_id);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        /// <summary>
+        ///  Salva a Quantidade Executada do Servico selecionado
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ose_id">Id do Servico Selecionado</param>
+        /// <param name="qtValor">Valor do Servico</param>
+        /// <returns>JsonResult</returns>
+        [HttpPost]
+        public JsonResult ServicosQtExecutado_Salvar(int ord_id, int ose_id, string qtValor)
+        {
+            int retorno = new OrdemServicoBLL().ServicosQtExecutado_Salvar(ord_id, ose_id, qtValor);
+            bool valid = retorno >= 0;
+            return Json(new { status = valid, erroId = retorno }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

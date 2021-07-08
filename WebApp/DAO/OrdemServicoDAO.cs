@@ -114,8 +114,13 @@ namespace WebApp.DAO
                             ord_data_atualizacao_status = rdr["ord_data_atualizacao_status"] == DBNull.Value ? string.Empty : rdr["ord_data_atualizacao_status"].ToString(),
 
                             con_id = rdr["con_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id"]),
+
+                            ord_data_inicio_planejada = rdr["ord_data_inicio_planejada"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_planejada"].ToString(),
+                            ord_data_termino_planejada = rdr["ord_data_termino_planejada"] == DBNull.Value ? string.Empty : rdr["ord_data_termino_planejada"].ToString(),
+
                             ord_data_inicio_programada = rdr["ord_data_inicio_programada"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_programada"].ToString(),
                             ord_data_termino_programada = rdr["ord_data_termino_programada"] == DBNull.Value ? string.Empty : rdr["ord_data_termino_programada"].ToString(),
+
                             ord_data_inicio_execucao = rdr["ord_data_inicio_execucao"] == DBNull.Value ? string.Empty : rdr["ord_data_inicio_execucao"].ToString(),
                             ord_data_termino_execucao = rdr["ord_data_termino_execucao"] == DBNull.Value ? string.Empty : rdr["ord_data_termino_execucao"].ToString(),
                             ord_quantidade_estimada = rdr["ord_quantidade_estimada"] == DBNull.Value ? -1 : Convert.ToDouble(rdr["ord_quantidade_estimada"]),
@@ -137,6 +142,8 @@ namespace WebApp.DAO
                             ord_data_cancelamento = rdr["ord_data_cancelamento"] == DBNull.Value ? string.Empty : rdr["ord_data_cancelamento"].ToString(),
                             ord_data_reinicio = rdr["ord_data_reinicio"] == DBNull.Value ? string.Empty : rdr["ord_data_reinicio"].ToString(),
                             con_id_orcamento = rdr["con_id_orcamento"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["con_id_orcamento"]),
+
+                            ord_codigo_orcamento = rdr["ord_codigo_orcamento"] == DBNull.Value ? string.Empty : rdr["ord_codigo_orcamento"].ToString(),
 
                             orc_id = rdr["orc_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["orc_id"]),
 
@@ -199,6 +206,8 @@ namespace WebApp.DAO
                     if (ord.con_id > 0)
                         com.Parameters.AddWithValue("@con_id", ord.con_id);
 
+                    com.Parameters.AddWithValue("@ord_data_inicio_planejada", ord.ord_data_inicio_planejada);
+                    com.Parameters.AddWithValue("@ord_data_termino_planejada", ord.ord_data_termino_planejada);
                     com.Parameters.AddWithValue("@ord_data_inicio_programada", ord.ord_data_inicio_programada);
                     com.Parameters.AddWithValue("@ord_data_termino_programada", ord.ord_data_termino_programada);
                     com.Parameters.AddWithValue("@ord_data_inicio_execucao", ord.ord_data_inicio_execucao);
@@ -287,7 +296,7 @@ namespace WebApp.DAO
                     com.Parameters.AddWithValue("@tos_id", ord.tos_id);
                     com.Parameters.AddWithValue("@obj_id", ord.obj_id);
                     com.Parameters.AddWithValue("@ord_ativo", ord.ord_ativo);
-                    com.Parameters.AddWithValue("@ord_data_inicio_programada", ord.ord_data_inicio_programada);
+                    com.Parameters.AddWithValue("@ord_data_inicio_planejada", ord.ord_data_inicio_planejada);
                     com.Parameters.AddWithValue("@ord_aberta_por", ord.ord_aberta_por);
                     com.Parameters.AddWithValue("@ord_data_abertura", ord.ord_data_abertura);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
@@ -1538,12 +1547,26 @@ namespace WebApp.DAO
                             rpt_id_sugerido_descricao = rdr["rpt_id_sugerido_descricao"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_descricao"].ToString(),
                             rpt_id_sugerido_unidade = rdr["rpt_id_sugerido_unidade"] == DBNull.Value ? "" : rdr["rpt_id_sugerido_unidade"].ToString(),
                             ian_quantidade_sugerida = rdr["ian_quantidade_sugerida"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_sugerida"], culturePTBR),
+                            rtu_preco_unitario_sugerido = rdr["rtu_preco_unitario_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_sugerido"], culturePTBR),
+                            rtu_valor_total_linha_sugerido = rdr["rtu_valor_total_linha_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_linha_sugerido"], culturePTBR),
+
+                            valor_total_sugerido = rdr["valor_total_sugerido"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_sugerido"], culturePTBR),
+                            valor_total_adotado = rdr["valor_total_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["valor_total_adotado"], culturePTBR),
+
+                            vtotal_reparos = rdr["vtotal_reparos"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vtotal_reparos"], culturePTBR),
+                            vtotal_reparos_executado = rdr["vtotal_reparos_executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vtotal_reparos_executado"], culturePTBR),
+
+                            vTotalOrcamento = rdr["vTotalOrcamento"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vTotalOrcamento"], culturePTBR),
+                            vTotalOrcamento_Executado = rdr["vTotalOrcamento_Executado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["vTotalOrcamento_Executado"], culturePTBR),
+
 
                             rpt_id_adotado = rdr["rpt_id_adotado"] == DBNull.Value ? 0 : Convert.ToInt32(rdr["rpt_id_adotado"]),
                             rpt_id_adotado_codigo = rdr["rpt_id_adotado_codigo"] == DBNull.Value ? "" : rdr["rpt_id_adotado_codigo"].ToString(),
                             rpt_id_adotado_descricao = rdr["rpt_id_adotado_descricao"] == DBNull.Value ? "" : rdr["rpt_id_adotado_descricao"].ToString(),
                             rpt_id_adotado_unidade = rdr["rpt_id_adotado_unidade"] == DBNull.Value ? "" : rdr["rpt_id_adotado_unidade"].ToString(),
                             ian_quantidade_adotada = rdr["ian_quantidade_adotada"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["ian_quantidade_adotada"]),
+                            rtu_preco_unitario_adotado = rdr["rtu_preco_unitario_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_preco_unitario_adotado"], culturePTBR),
+                            rtu_valor_total_linha_adotado = rdr["rtu_valor_total_linha_adotado"] == DBNull.Value ? 0 : Convert.ToDecimal(rdr["rtu_valor_total_linha_adotado"], culturePTBR),
 
                             ast_id = rdr["ast_id"] == DBNull.Value ? -1 : Convert.ToInt32(rdr["ast_id"]),
                             ast_codigo = rdr["ast_codigo"] == DBNull.Value ? "" : rdr["ast_codigo"].ToString(),
@@ -1597,11 +1620,12 @@ namespace WebApp.DAO
         ///  Altera Status de Item de Reparo  Ordem de Servico
         /// </summary>
         /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
         /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
         /// <param name="usu_id">Id do Usuário Logado</param>
         /// <param name="ip">IP do Usuário Logado</param>
         /// <returns>int</returns>
-        public int OrdemServicoReparoItem_Status(int ore_id, int ast_id, int usu_id, string ip)
+        public int OrdemServicoReparoItem_Status(int ore_id, int ord_id, int ast_id, int usu_id, string ip)
         {
             try
             {
@@ -1620,6 +1644,7 @@ namespace WebApp.DAO
                     com.Parameters[0].Size = 32000;
 
                     com.Parameters.AddWithValue("@ore_id", ore_id);
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
                     com.Parameters.AddWithValue("@ast_id", ast_id);
                     com.Parameters.AddWithValue("@usu_id", usu_id);
                     com.Parameters.AddWithValue("@ip", ip);
@@ -1685,11 +1710,158 @@ namespace WebApp.DAO
 
 
         /// <summary>
+        ///  Checa se a Inspecao já tem Versao de Orcamento aberta
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <returns>int</returns>
+        public int OrdemServico_Checa_Tem_Versao_Orcamento(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("OrdemServico_Checa_Tem_Versao_Orcamento", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        ///  Salva a Quantidade Executada do Servico selecionado
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ose_id">Id do Servico Selecionado</param>
+        /// <param name="qtValor">Valor do Servico</param>
+        /// <param name="usu_id">Id do Usuário Logado</param>
+        /// <param name="ip">IP do Usuário Logado</param>
+        /// <returns>int</returns>
+        public int ServicosQtExecutado_Salvar(int ord_id, int ose_id, string qtValor, int usu_id, string ip)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("STP_UPD_OS_SERVICO_EXECUTADO", con);
+                    com.CommandType = CommandType.StoredProcedure;
+
+                    com.Parameters.Clear();
+
+                    System.Data.SqlClient.SqlParameter p_return = new System.Data.SqlClient.SqlParameter();
+                    p_return.Direction = System.Data.ParameterDirection.ReturnValue;
+                    com.Parameters.Add(p_return);
+                    com.Parameters[0].Size = 32000;
+
+                    com.Parameters.AddWithValue("@ord_id", ord_id);
+                    com.Parameters.AddWithValue("@ose_id", ose_id);
+                    com.Parameters.AddWithValue("@ose_quantidade_executada", qtValor);
+                    com.Parameters.AddWithValue("@usu_id", usu_id);
+                    com.Parameters.AddWithValue("@ip", ip);
+
+                    com.ExecuteScalar();
+
+                    return Convert.ToInt32(p_return.Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Busca o valor do Status atual da O.S.
+        /// </summary>
+        /// <param name="ord_id">Id da O.S</param>
+        /// <returns>int</returns>
+        public int StatusOS(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_StatusOS(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    int retorno = Convert.ToInt32(com.ExecuteScalar());
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+        /// <summary>
+        /// Checa se mudou Notas na Priorizacao.
+        /// </summary>
+        /// <param name="ord_id">Id da O.S</param>
+        /// <returns>int</returns>
+        public int MudouNotas(int ord_id)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(strConn))
+                {
+                    con.Open();
+                    SqlDataAdapter da2 = new SqlDataAdapter();
+                    SqlCommand com = new SqlCommand("SELECT dbo.fn_ChecaMudouNota(" + ord_id.ToString() + ")", con);
+                    com.Parameters.Clear();
+
+                    int retorno = Convert.ToInt32(com.ExecuteScalar());
+                    return retorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                int id = 0;
+                new LogSistemaDAO().InserirLogErro(new LogErro(ex, this.GetType().Name, new StackTrace().GetFrame(0).GetMethod().Name), out id);
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+
+
+        /// <summary>
         /// Busca os dados do Email 
         /// </summary>
         /// <param name="msg_id">Id da mensagem</param>
         /// <param name="ord_id">Id da Ordem de Servico</param>
-        /// <returns>Dados do Email</returns>
+        /// <returns>Dados da Mensagem/Email</returns>
         public List<OSEmail> OSEmail_ID(int ord_id, int msg_id)
         {
             try

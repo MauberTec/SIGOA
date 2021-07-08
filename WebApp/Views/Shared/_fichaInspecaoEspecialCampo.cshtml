@@ -298,7 +298,7 @@
                                     type="button"
                                     onclick="return EditarDados_Ficha4_CAMPO(tblFicha4_INSPECAO_ESPECIAL_CAMPO)"
                                     title="Editar"
-                                    style="border:none; box-shadow:none; background-color:transparent; ">
+                                    style="display:none; border:none; box-shadow:none; background-color:transparent; ">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                         </td>
@@ -381,7 +381,7 @@
             <td id="tdFICHA4_CodObjeto_ian_id_header002d" rowspan="3" class="borderAll cabecalho ">QUANTIDADE INDICADA</td>
             <td id="tdFICHA4_CodObjeto_ian_id_header003d" rowspan="3" class="borderAll cabecalho ">REPARO ADOTADO</td>
             <td id="tdFICHA4_CodObjeto_ian_id_header004d" rowspan="3" class="borderAll cabecalho ">QUANTIDADE ADOTADA</td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header005d" rowspan="3" class="borderAll cabecalho ">PROVI DÊNCIA</td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header005d" rowspan="3" class="borderAll cabecalho " style="display:none">PROVI DÊNCIA</td>
         </tr>
 
 
@@ -413,7 +413,8 @@
         <tr>
             <td id="tdFICHA4_CodObjeto_ian_id_header000e" class="borderTop"></td>
             <td colspan="18" class="cabecalho borderTop borderLeft borderRight" style="text-align:left">QUADRO A:</td>
-            <td colspan="5" class="fontePadrao borderTop" id="tdFICHA4_CodObjeto_ian_id_header001e"></td>
+            <td colspan="4" class="fontePadrao borderTop" id="tdFICHA4_CodObjeto_ian_id_header001e"></td>
+            <td style="display:none"></td>
         </tr>
 
         <tr>
@@ -426,16 +427,18 @@
                     <option value="nao">NÃO</option>
                 </select>
             </td>
-            <td colspan="5" id="tdFICHA4_CodObjeto_ian_id_header001f" class="fontePadrao"></td>
+            <td colspan="4" id="tdFICHA4_CodObjeto_ian_id_header001f" class="fontePadrao"></td>
+            <td style="display:none"></td>
         </tr>
 
         <tr>
-            <td id="tdFICHA4_CodObjeto_ian_id_header000g" class="fontePadrao borderBottom" ></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header000g" class="fontePadrao borderBottom"></td>
             <td class="fontePadrao borderLeft borderRight borderBottom" colspan="18">
                 Em caso positivo identificar as anomalias  através do nº:
                 <input id="txt_ins_anom_quadroA_2" class="txts" style="width:45%;" disabled />
             </td>
-            <td id="tdFICHA4_CodObjeto_ian_id_header001g" colspan="5" class="fontePadrao borderBottom"></td>
+            <td id="tdFICHA4_CodObjeto_ian_id_header001g" colspan="4" class="fontePadrao borderBottom"></td>
+            <td style="display:none"></td>
         </tr>
     </table>
 

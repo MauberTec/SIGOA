@@ -102,8 +102,11 @@
                 });
 
 
-        travaBotoes();
-}
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
+    }
 
     function CancelarDados_FichaNotificacaoOcorrencia(tabela) {
         preenchetblFicha(selectedId_obj_id, selectedId_clo_id, selectedId_tip_id);

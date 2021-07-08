@@ -51,33 +51,35 @@ namespace WebApp.Business
         ///  Altera os dados da Ordem de Servico no Banco
         /// </summary>
         /// <param name="ord">Ordem de Servico</param>
-        /// <returns>int</returns>
-        public int OrdemServico_Salvar(OrdemServico ord)
+        /// <returns>string</returns>
+        public string OrdemServico_Salvar(OrdemServico ord)
         {
+            int sos_id_anterior = new OrdemServicoDAO().StatusOS(ord.ord_id);
+
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
             int retorno = new OrdemServicoDAO().OrdemServico_Salvar(ord, paramUsuario.usu_id, paramUsuario.usu_ip);
 
-            // se retorno > 0 entao verifica se tem que mandar email
-            if (retorno > 0) // salvou com sucesso
+            string sretorno = "";
+            List<OSEmail> email = null;
+            int email_Enviar_Emails = Convert.ToInt16(new ParametroDAO().Parametro_GetValor("email_Enviar_Emails"));
+
+            if (sos_id_anterior != ord.sos_id)
             {
-                 ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
-                 List<OSEmail> email = null;
-                 AlternateView av1 = null;
-                 string retornoEmail = "";
-
-                // "E" = 14 = encerrada
-                if ((ord.sos_codigo == "E") || (ord.sos_id == 14)) 
+                // se O.S. Orcamento for de "Em Revisao" para "Encerrada", o sistema informa que a OAE com dados em revisão será excluída da OS de Orçamento através de mensagem na tela e no e-mail
+                if ((sos_id_anterior == 18) && (ord.sos_id == 14) && (ord.tos_id == 11))
                 {
-                    //cadastral(7), rotineira(8) : email para Regional id mensagem #1
-                    if ((ord.tos_id == 7) || (ord.tos_id == 8)) 
-                    {
-                        // verifica se tem apontamentos de serviços e quantitativos na OS
-                        int qt = new OrdemServicoDAO().OrdemServico_ChecaApontamentoServicos(ord.ord_id);
+                    // busca a mensagem de tela para retornar
+                    email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 24); // id da mensagem 
+                    sretorno = email[0].mensagem;
 
-                        // se tem, entao manda o email
-                        if (qt > 0)
+                    // enviar email
+                    if (retorno > 0)
+                    {
+                        if (email_Enviar_Emails != 0)
                         {
-                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 1); // id da mensagem = 1
+                            ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
+                            string retornoEmail = "";
+                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 25); // id da mensagem 
 
                             // envia o email
                             pEmail.Para = email[0].destinatarios;
@@ -88,99 +90,202 @@ namespace WebApp.Business
                             if (pEmail.IsBodyHtml)
                                 av2 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
 
-                            retornoEmail = new Gerais().MandaEmail(av2, pEmail);
+                            if (pEmail.Para.Trim() != "")
+                                retornoEmail = new Gerais().MandaEmail(av2, pEmail);
+
                         }
-                    }
-
-                    //cadastral(7), rotineira(8), especial(9)
-                    if ((ord.tos_id == 7) || (ord.tos_id == 8) || (ord.tos_id == 9))
-                    {
-                        // Sistema notifica a Seção de OAE da Sede  o encerramento da OS
-                        email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 2); // id da mensagem = 2
-                    }
-                    else
-                    {  // (24/mai/2021)Com exceção das OSs de Recuperação/Reparo(14) e de Projeto de Reforço(13), os e-mails serão enviados sempre que a OS for encerrada 
-                        //   5,10,11,16,17,22,24
-                        //  Inspeção Extraordinária, Monitoramento, Orçamento, Ensaios, Levantamento Cadastral, Conserva,Projeto de OAE
-                        if ((ord.tos_id == 5) || (ord.tos_id == 10) || (ord.tos_id == 11) 
-                            || (ord.tos_id == 16) || (ord.tos_id == 17) || (ord.tos_id == 22) || (ord.tos_id == 24))
-                        {
-                            // Sistema notifica a Seção de OAE da Sede o encerramento da OS 
-                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 3); // id da mensagem = 3
-                        }
-                        else
-                        {
-                            if (ord.tos_id == 18)  // ocorrencia (18)
-                            {
-                                // enviar e-mail para a seção de OAE e para a Regional
-                                email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 5); // id da mensagem = 5
-                            }
-                        }
-                    }
-
-                    // envia o email
-                    if (email.Count > 0)
-                    {
-                        pEmail.Para = email[0].destinatarios;
-                        pEmail.Assunto = email[0].assunto;
-                        pEmail.Texto = email[0].mensagem;
-
-                        if (pEmail.IsBodyHtml)
-                            av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
-
-                        retornoEmail = new Gerais().MandaEmail(av1, pEmail);
                     }
                 }
                 else
                 {
-                    // "EXEC = 11 = executada
-                    if ((ord.sos_codigo == "EXEC") || (ord.sos_id == 11))
+                    // se retorno > 0 entao verifica se tem que mandar email
+                    if (email_Enviar_Emails != 0)
                     {
-                        //Recuperação / Reparo(14), Execução de Obras(23)
-                        if ((ord.tos_id == 14) || (ord.tos_id == 23))
+                        if (retorno > 0) // salvou com sucesso
                         {
-                            //Enviar e-mail para a seção de OAE
-                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 6);
+                            // checa sincronizacao OAEs e Regionais por conta dos emails das Regionais
+                            List<OAE> oaes = new IntegracaoDAO().get_OAEs();
+                            List<Regional> regionais = new IntegracaoDAO().get_Regionais();
 
-                            pEmail.Para = email[0].destinatarios;
-                            pEmail.Assunto = email[0].assunto;
-                            pEmail.Texto = email[0].mensagem;
+                            ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
+                            AlternateView av1 = null;
+                            string retornoEmail = "";
 
-                            // envia o email
-                            if (pEmail.IsBodyHtml)
-                                av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
-
-                            retornoEmail = new Gerais().MandaEmail(av1, pEmail);
-                        }
-
-                    }
-                    else
-                    {
-                        if ((ord.sos_codigo == "CORR") || (ord.sos_id == 13))  // Reaberta para Correção
-                        {
-                            if (ord.tos_id == 9) // Inspeção Especial
+                            // "E" = 14 = encerrada
+                            if ((ord.sos_codigo == "E") || (ord.sos_id == 14))
                             {
+                                // cadastral(7), rotineira(8) : email para Regional id mensagem #1
+                                if ((ord.tos_id == 7) || (ord.tos_id == 8))
+                                {
+                                    // verifica se tem apontamentos de serviços e quantitativos na OS
+                                    int qt = new OrdemServicoDAO().OrdemServico_ChecaApontamentoServicos(ord.ord_id);
 
-                                //Enviar e-mail para a seção de OAE
-                                email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 7);
+                                    // se tem, entao manda o email
+                                    if (qt > 0)
+                                    {
+                                        email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 1); // id da mensagem = 1
 
-                                pEmail.Para = email[0].destinatarios;
-                                pEmail.Assunto = email[0].assunto;
-                                pEmail.Texto = email[0].mensagem;
+                                        // envia o email
+                                        pEmail.Para = email[0].destinatarios;
+                                        pEmail.Assunto = email[0].assunto;
+                                        pEmail.Texto = email[0].mensagem;
 
+                                        AlternateView av2 = null;
+                                        if (pEmail.IsBodyHtml)
+                                            av2 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                                        if (pEmail.Para.Trim() != "")
+                                            retornoEmail = new Gerais().MandaEmail(av2, pEmail);
+                                    }
+                                }
+
+                                // cadastral(7), rotineira(8)
+                                if ((ord.tos_id == 7) || (ord.tos_id == 8))
+                                {
+                                    // Sistema notifica a Seção de OAE da Sede  o encerramento da OS
+                                    email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 2); // id mensagem #2
+                                }
+                                else
+                                if (ord.tos_id == 9) // O.S. especial(9)
+                                {
+                                    // Sistema notifica a Seção de OAE da Sede  o encerramento da OS
+                                    email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 8); // id mensagem #8
+                                }
+                                else
+                                if (ord.tos_id == 11)// Orçamento (11)
+                                {
+                                    // Sistema notifica a Seção de OAE da Sede o encerramento da OS 
+                                    email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 13); // id da mensagem = 13
+                                }
+                                else
+                                    if ((ord.tos_id == 5) || (ord.tos_id == 10) //  Inspeção Extraordinária, Monitoramento, Ensaios, Levantamento Cadastral, Conserva,Projeto de OAE
+                                        || (ord.tos_id == 16) || (ord.tos_id == 17) || (ord.tos_id == 22) || (ord.tos_id == 24))
+                                {
+                                    // Sistema notifica a Seção de OAE da Sede o encerramento da OS 
+                                    email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 3); // id da mensagem = 3
+                                }
+                                else
+                                        if (ord.tos_id == 18)  // ocorrencia (18)
+                                {
+                                    // enviar e-mail para a seção de OAE e para a Regional
+                                    email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 5); // id da mensagem = 5
+                                }
+                                else
+                                {
+                                    int mudouNotas = new OrdemServicoDAO().MudouNotas(ord.ord_id);
+                                    if ((mudouNotas == 0) && ((ord.tos_id == 14) || (ord.tos_id == 23)))
+                                    {
+                                        if (ord.tos_id == 14) //  Recuperação/Reparo(14) 
+                                        {
+                                            // enviar e-mail para a seção de OAEl
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 17);
+                                        }
+                                        else
+                                            if (ord.tos_id == 23)// Execucao de Obra Nova
+                                        {
+                                            // enviar e-mail para a seção de OAE
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 18);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((ord.tos_id == 14) || (ord.tos_id == 13))  //  Recuperação/Reparo(14) //  Projeto de Reforço(13)
+                                        {
+                                            // enviar e-mail para a seção de OAE e para a Regional
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 15); // id da mensagem = 15
+                                        }
+                                        else
+                                            if (ord.tos_id == 23) // Execucao de Obra Nova
+                                        {
+                                            // enviar e-mail para a seção de OAE e para a Regional
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 16); // id da mensagem = 16
+                                        }
+                                    }
+                                }
                                 // envia o email
-                                if (pEmail.IsBodyHtml)
-                                    av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+                                if (email != null)
+                                {
+                                    pEmail.Para = email[0].destinatarios;
+                                    pEmail.Assunto = email[0].assunto;
+                                    pEmail.Texto = email[0].mensagem;
 
-                                retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                                    if (pEmail.IsBodyHtml)
+                                        av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                                    retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                                }
+                            }
+                            else
+                            {
+                                // "EXEC = 11 = executada
+                                if ((ord.sos_codigo == "EXEC") || (ord.sos_id == 11))
+                                {
+                                    //Recuperação / Reparo(14), Execução de Obras(23)
+                                    if ((ord.tos_id == 13) || (ord.tos_id == 14) || (ord.tos_id == 23))
+                                    {
+                                        //Enviar e-mail para a seção de OAE
+                                        if ((ord.tos_id == 14) || (ord.tos_id == 13))  //  Recuperação/Reparo(14) //  Projeto de Reforço(13)
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 6);
+                                        else
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, 14);
+
+                                        pEmail.Para = email[0].destinatarios;
+                                        pEmail.Assunto = email[0].assunto;
+                                        pEmail.Texto = email[0].mensagem;
+
+                                        // envia o email
+                                        if (pEmail.IsBodyHtml)
+                                            av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                                        retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                                    }
+                                }
+                                else
+                                {
+                                    if ((ord.sos_codigo == "CORR") || (ord.sos_id == 13))  // Reaberta para Correção
+                                    {
+                                        // cadastral(7), rotineira(8), Especial(9)
+                                        if ((ord.tos_id == 9) || (ord.tos_id == 7) || (ord.tos_id == 8))
+                                        {
+                                            int msgid = 7;
+                                            if (ord.tos_id == 9) // Especial(9)
+                                                msgid = 9;
+
+                                            //Enviar e-mail para a seção de OAE
+                                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, msgid); // mensagem id #7 para cadastral/rotineira; #9 para especial
+
+                                            pEmail.Para = email[0].destinatarios;
+                                            pEmail.Assunto = email[0].assunto;
+                                            pEmail.Texto = email[0].mensagem;
+
+                                            // envia o email
+                                            if (pEmail.IsBodyHtml)
+                                                av1 = AlternateView.CreateAlternateViewFromString(pEmail.Texto, null, "text/html");
+
+                                            retornoEmail = new Gerais().MandaEmail(av1, pEmail);
+                                        }
+
+                                    }
+                                }
                             }
                         }
                     }
+
+                    if ((ord.tos_id == 9) && (ord.sos_id == 13)) // Especial(9) Reaberta para Correção 
+                    {
+                        if (retorno < 0)
+                        {
+                            // busca a mensagem de tela para retornar
+                            email = new OrdemServicoDAO().OSEmail_ID(ord.ord_id, -retorno); // id da mensagem 
+
+                            sretorno = email[0].mensagem;
+                        }
+                    }
+
                 }
             }
 
-
-            return retorno;
+            return sretorno;
         }
 
         /// <summary>
@@ -654,15 +759,31 @@ namespace WebApp.Business
 
 
         // *************** FICHA DE NOTIFICACAO DE OCORRENCIAS  *************************************************************
-
         /// <summary>
-        ///  Envia Email de Notificacao
+        /// Busca os dados da Mensagem/Email 
         /// </summary>
-        /// <param name="lstDestinatarios">Lista de Destinatarios separada por ponto e virgula</param>
-        /// <param name="TextoEmail">Texto do Email</param>
-        /// <param name="ord_id">Id da O.S.</param>
-        /// <returns>string</returns>
-        public string FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail, int ord_id)
+        /// <param name="msg_id">Id da mensagem</param>
+        /// <param name="ord_id">Id da Ordem de Servico</param>
+        /// <returns>Dados da Mensagem/Email</returns>
+        public string OSEmail_ID(int ord_id, int msg_id)
+        {
+            List<OSEmail> email = new OrdemServicoDAO().OSEmail_ID(ord_id, msg_id);
+            if (email.Count > 0)
+                return email[0].mensagem;
+            else
+                return "";
+        }
+
+
+
+            /// <summary>
+            ///  Envia Email de Notificacao
+            /// </summary>
+            /// <param name="lstDestinatarios">Lista de Destinatarios separada por ponto e virgula</param>
+            /// <param name="TextoEmail">Texto do Email</param>
+            /// <param name="ord_id">Id da O.S.</param>
+            /// <returns>string</returns>
+            public string FichaNotificacao_EnviarEmail(string lstDestinatarios, string TextoEmail, int ord_id)
         {
                 ParamsEmail pEmail = new ParametroBLL().Parametro_ListAllParamsEmail()[0];
                 List<OSEmail> email = new OrdemServicoDAO().OSEmail_ID(ord_id, 4);
@@ -709,12 +830,13 @@ namespace WebApp.Business
         ///  Altera Status de Item de Reparo  Ordem de Servico
         /// </summary>
         /// <param name="ore_id">Id do Reparo Selecionado</param>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
         /// <param name="ast_id">Id do Status do Reparo Selecionado</param>
         /// <returns>int</returns>
-        public int OrdemServicoReparoItem_Status(int ore_id, int ast_id)
+        public int OrdemServicoReparoItem_Status(int ore_id, int ord_id, int ast_id)
         {
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
-            return new OrdemServicoDAO().OrdemServicoReparoItem_Status(ore_id, ast_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+            return new OrdemServicoDAO().OrdemServicoReparoItem_Status(ore_id, ord_id, ast_id, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
 
@@ -727,6 +849,31 @@ namespace WebApp.Business
         {
             Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
             return new OrdemServicoDAO().OrdemServicoReparo_Atualiza_Itens_NaoReparados(ord_id, paramUsuario.usu_id, paramUsuario.usu_ip);
+        }
+
+
+        /// <summary>
+        ///  Checa se a Inspecao já tem Versao de Orcamento aberta
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <returns>int</returns>
+        public int OrdemServico_Checa_Tem_Versao_Orcamento(int ord_id)
+        {
+            return new OrdemServicoDAO().OrdemServico_Checa_Tem_Versao_Orcamento(ord_id);
+        }
+
+
+        /// <summary>
+        ///  Salva a Quantidade Executada do Servico selecionado
+        /// </summary>
+        /// <param name="ord_id">Id da O.S. Selecionada</param>
+        /// <param name="ose_id">Id do Servico Selecionado</param>
+        /// <param name="qtValor">Valor do Servico</param>
+        /// <returns>int</returns>
+        public int ServicosQtExecutado_Salvar(int ord_id, int ose_id, string qtValor)
+        {
+            Usuario paramUsuario = (Usuario)System.Web.HttpContext.Current.Session["Usuario"];
+            return new OrdemServicoDAO().ServicosQtExecutado_Salvar(ord_id, ose_id, qtValor, paramUsuario.usu_id, paramUsuario.usu_ip);
         }
 
 

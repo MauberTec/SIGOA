@@ -282,7 +282,10 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
 
             }
 
-        travaBotoes();
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
     }
 
     function nome_segundo_cabecalho2(controleId) {
@@ -564,7 +567,10 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         }
 
 
-        travaBotoes();
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
     }
 
     function Ficha2_setaReadWrite(tabela, ehRead) {
@@ -1780,15 +1786,34 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
         var cmb10 = document.getElementById("cmb_atr_id_1094"); var cmb10_Nota = document.getElementById("cmb_atr_id_144");
 
         // posiciona os combos Nota
-        cmb1_Nota.selectedIndex = cmb1.selectedIndex;
-        cmb2_Nota.selectedIndex = cmb2.selectedIndex;
-        cmb3_Nota.selectedIndex = cmb3.selectedIndex;
-        cmb4_Nota.selectedIndex = cmb4.selectedIndex;
-        cmb5_Nota.selectedIndex = cmb5.selectedIndex;
-        cmb6_Nota.selectedIndex = cmb6.selectedIndex;
-        cmb7_Nota.selectedIndex = cmb7.selectedIndex;
-        cmb8_Nota.selectedIndex = cmb8.selectedIndex;
-        cmb9_Nota.selectedIndex = cmb9.selectedIndex;
+        if ((cmb1) && (cmb1_Nota))
+            cmb1_Nota.selectedIndex = cmb1.selectedIndex;
+
+        if ((cmb2) && (cmb2_Nota))
+            cmb2_Nota.selectedIndex = cmb2.selectedIndex;
+
+        if ((cmb3) && (cmb3_Nota))
+            cmb3_Nota.selectedIndex = cmb3.selectedIndex;
+
+        if ((cmb4) && (cmb4_Nota))
+            cmb4_Nota.selectedIndex = cmb4.selectedIndex;
+
+        if ((cmb5) && (cmb5_Nota))
+            cmb5_Nota.selectedIndex = cmb5.selectedIndex;
+
+        if ((cmb6) && (cmb6_Nota))
+            cmb6_Nota.selectedIndex = cmb6.selectedIndex;
+
+        if ((cmb7) && (cmb7_Nota))
+            cmb7_Nota.selectedIndex = cmb7.selectedIndex;
+
+        if ((cmb8) && (cmb8_Nota))
+            cmb8_Nota.selectedIndex = cmb8.selectedIndex;
+
+        if ((cmb9) && (cmb9_Nota))
+            cmb9_Nota.selectedIndex = cmb9.selectedIndex;
+
+        if ((cmb10) && (cmb10_Nota))
         cmb10_Nota.selectedIndex = cmb10.selectedIndex;
 
         // acha os valores
@@ -1860,6 +1885,9 @@ var cabecalho3 = '<tr id="trFICHA2_OOBBJJIIDD_GGG_VVV_YYY">' +
     function cmb_pista_onchange(quem)
     {
         var valor = $('#' + quem.id).val();
+
+        if ((selected_obj_codigo + "") == "")
+            selected_obj_codigo = $("#txt_atr_id_102").val();
 
         if (selectedId_sos_id != 14) // se for diferente de encerrada entao calcula o VDM
         {

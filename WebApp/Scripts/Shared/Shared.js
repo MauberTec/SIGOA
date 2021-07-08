@@ -54,6 +54,7 @@ var submenus = menu.getElementsByTagName("a");
 for (var i = 0; i < submenus.length; i++) {
     var subItem_A = submenus[i];
     var subItem_A_href = subItem_A.href.replace("/Home/Menu_Click?caminho=", "").replace(window.location.origin, "") + " ";
+    var abriu = false;
 
     if (subItem_A_href != undefined) {
         //if ((subItem_A_href.startsWith(url)) || (subItem_A.href.replace(window.location.origin, "") == "/Home/Index")) // procura o subitem cujo href == url
@@ -67,22 +68,26 @@ for (var i = 0; i < submenus.length; i++) {
             {
                 // procura item pai
                 for (var j = 0; j < submenus.length; j++) {
-                    if (submenus[j].innerText.trim() == menuPai_txt) {
+                    if (submenus[j].innerText.trim() == menuPai_txt)  {
                         var menuPai_A = submenus[j];
 
                         // procura o elemento li
                         var menuPai_li = menuPai_A.parentElement;
 
                         // abre o menu
-                        menuPai_li.className = "treeview menu-open";
-                        var menu_ul = menuPai_li.getElementsByTagName("ul")[0];
-                        if (menu_ul)
-                            menu_ul.style.display = 'block';
+                        if (!abriu) {
+                            menuPai_li.className = "treeview menu-open";
+                            abriu = true;
+                            var menu_ul = menuPai_li.getElementsByTagName("ul")[0];
+                            if (menu_ul)
+                                menu_ul.style.display = 'block';
 
-                        var iconSubMenu1 = document.getElementById("iconSubMenu1");  //  icone do menu crumb
-                        var menu_ico = menuPai_li.getElementsByTagName("i")[0];
-                        if (menu_ico)
-                            iconSubMenu1.className = menu_ico.className;
+                            var iconSubMenu1 = document.getElementById("iconSubMenu1");  //  icone do menu crumb
+                            var menu_ico = menuPai_li.getElementsByTagName("i")[0];
+                            if (menu_ico)
+                                iconSubMenu1.className = menu_ico.className;
+                        }
+
                     }
                 }
             }

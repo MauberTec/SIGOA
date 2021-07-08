@@ -85,7 +85,10 @@
                     }
             }
 
-        travaBotoes();
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
     }
 
     function FichaRequalificacaoOAE_limpar() {
@@ -232,7 +235,10 @@
         });
 
 
-        travaBotoes();
+        // chama funcao se existir 
+        if (typeof travaBotoes === "function") {
+            travaBotoes();
+        }
     }
 
     function FichaRequalificacaoOAE_setaReadWrite(tabela, ehRead) {
@@ -679,6 +685,7 @@
                         $("#cmb_atr_id_84").val(retorno);
 
                         var cmb_atr_id_135 = document.getElementById("cmb_atr_id_135");
+                        var cmb_atr_id_1084 = document.getElementById("cmb_atr_id_1084");
                         if ((cmb_atr_id_135) && (cmb_atr_id_1084))
                             if (cmb_atr_id_135.selectedIndex > 0)
                                 cmb_atr_id_135.selectedIndex = cmb_atr_id_1084.selectedIndex;

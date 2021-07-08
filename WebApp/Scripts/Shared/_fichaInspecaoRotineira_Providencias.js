@@ -345,6 +345,9 @@ function Ficha2_PROVIDENCIAS_CriarTabelaGrupos() {
     });
 
 
-    travaBotoes();
+    // chama funcao se existir 
+    if (typeof travaBotoes === "function") {
+        travaBotoes();
+    }
 }
 

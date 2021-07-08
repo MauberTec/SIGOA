@@ -22,7 +22,8 @@
         ' <td class="borderLeft " id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft " id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
         ' <td class="borderLeft borderRight" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
-        ' <td class="borderLeft borderRight" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
+ //       ' <td class="borderLeft borderRight" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico" ></td> ' +
+        ' <td class="borderLeft borderRight" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:none" ></td> ' +
         ' </tr>';
 
     var linhaObjetos = ' <tr id="trFICHA4_CAMPO_ian_id_ZZZ"  class="change_on_over" > ' +
@@ -73,8 +74,9 @@
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_QtIndicada_ian_id_ZZZ" style="display:EhOrdemServico" ><label class="centroH txts2" id="lbl_QuantidadeIndicada_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicada_VVV</label><label class="centroH txts2" id="lbl_QuantidadeIndicadaUnidade_ian_id_ZZZ" style="display:inline">lbl_QuantidadeIndicadaUnidade_VVV</label></td> ' +
         ' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><select disabled id="cmb_ReparoAdotado_ian_id_ZZZ" class="cmbs_anom" title="TOOLTIP_cmb_ReparoAdotado" >OPCOES_cmb_ReparoAdotado</select></td> ' +
         //' <td class="borderLeft centroH qualClasse" id="tdFICHA4_ReparoAdotado_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_ReparoAdotado_ian_id_ZZZ" class="centroH" style="width:94%;" value="txt_ReparoAdotado_VVV" /></td> ' +
-        ' <td class="borderLeft centroH  qualClasse" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_QuantidadeAdotada_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_QuantidadeAdotada_VVV" /></td> ' +
-        ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
+        ' <td class="borderLeft centroH  qualClasse" id="tdFICHA4_QtAdotada_ian_id_ZZZ" style="display:EhOrdemServico" ><input disabled id="txt_QuantidadeAdotada_ian_id_ZZZ" class="centroH txts2" style="width:94%; " value="txt_QuantidadeAdotada_VVV" /><label class="centroH txts2" id="lbl_QuantidadeAdotadaUnidade_ian_id_ZZZ" style="display:inline">lbl_QuantidadeAdotadaUnidade_VVV</label></td> ' +
+  //      ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:EhOrdemServico"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
+        ' <td class="borderLeft centroH borderRight qualClasse" id="tdFICHA4_Providencia_ian_id_ZZZ" style="display:none"  ><label class="centroH txts2" id="lbl_Providencia_ian_id_ZZZ" title="TOOLTIP_Providencia_UUUU" >lbl_Providencia_VVV</label></td> ' +
         ' </tr>';
 
 
@@ -104,11 +106,13 @@ function txt_Obs_onKeyDown(quem) {
 
 
 function txt_Largura_onKeyUP(quem) {
+    Ficha4_CAMPO_CalculaReparoIndicado(quem);
     quem.style.backgroundColor = corBranca;
 }
 
 
 function txt_Comprimento_onKeyUP(quem) {
+    Ficha4_CAMPO_CalculaReparoIndicado(quem);
     quem.style.backgroundColor = corBranca;
 }
 
@@ -119,12 +123,12 @@ function txt_Numero_onchange(quem) {
     quem.style.backgroundColor = corBranca;
 }
 
-function Ficha4_CAMPO_ExportarXLS() {
+function Ficha4_CAMPO_ExportarXLS(origem) {
     $.ajax({
         "url": "/Inspecao/FichaInspecaoEspecialAnomalias_ExportarXLS",
         "type": "GET",
         "datatype": "json",
-        "data": { "ord_id": selectedId_ord_id },
+        "data": { "ord_id": selectedId_ord_id, "origem":origem },
         "success": function (result) {
             // return result = caminho da planilha preenchida e salva para download
 
@@ -348,24 +352,24 @@ function SalvarDados_Ficha4_CAMPO_VALORES(tabela, qualEvento, qual_ian_id) {
                         }
                     }
 
-                    // comprimento é obrigatorio
+                    // comprimento é obrigatorio -- nao é mais obrigatorio (2021/07/05)
                     valor = ian_comprimento;
                     if ((valor.trim() == ",") || (valor.trim() == ".") || (valor.trim() == "")) {
                         ian_comprimento = " ";
 
-                        if ((ehLinhaOK == false) && (!ehLinhaVazia)) {
-                            var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
-                            txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
-                            swal({
-                                type: 'error',
-                                title: 'Aviso',
-                                text: 'O Comprimento é obrigatório'
-                            }).then(
-                                function () {
-                                    return false;
-                                });
-                            return false;
-                        }
+                        //if ((ehLinhaOK == false) && (!ehLinhaVazia)) {
+                        //    var txt_Comprimento_ian_id = document.getElementById("txt_Comprimento_ian_id_" + ian_id);
+                        //    txt_Comprimento_ian_id.style.backgroundColor = corVermelho;
+                        //    swal({
+                        //        type: 'error',
+                        //        title: 'Aviso',
+                        //        text: 'O Comprimento é obrigatório'
+                        //    }).then(
+                        //        function () {
+                        //            return false;
+                        //        });
+                        //    return false;
+                        //}
                     }
 
 
@@ -523,7 +527,8 @@ function Ficha4_CAMPO_prenchetdCombos(qualCombo, listadeValores, selectedValue, 
     var tooltip = 'TOOLTIP_' + qualCombo;
     var opcoes = 'OPCOES_' + qualCombo;
 
-    var op0 = ' <option selectedxx disabled value="-1" ></option> ';
+  //  var op0 = ' <option selectedxx disabled value="-1" ></option> ';
+    var op0 = ' <option selectedxx  value="" ></option> ';
     //if (qualCombo == 'cmb_Sigla')
     //    op0 = op0.replace('disabled', '');
 
@@ -673,15 +678,17 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
                         linhaAux = linhaAux.replace(/TOOLTIP_Providencia_UUUU/g, result.data[i].apt_descricao);
 
-                        if (!isNaN((result.data[i].ian_quantidade_adotada))) {
+                        if (!isNaN((result.data[i].ian_quantidade_sugerida))) {
                             var qts = parseFloat(result.data[i].ian_quantidade_sugerida);
+                            linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
+
                             if (qts > 0) {
                                 linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
-                                linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
+                             //   linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, result.data[i].rpt_id_sugerido_unidade);
                             }
                             else {
                                 linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, '');
-                                linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, '');
+                             //   linhaAux = linhaAux.replace(/lbl_QuantidadeIndicadaUnidade_VVV/g, '');
                             }
                             //  linhaAux = linhaAux.replace(/lbl_QuantidadeIndicada_VVV/g, (((result.data[i].ian_quantidade_sugerida.toFixed(2)) + " ").replace(".", ",").trim()));
                         }
@@ -694,6 +701,8 @@ function preenchetblFicha4_CAMPO(ehRead) {
                         var qta = -1;
                         if (!isNaN((result.data[i].ian_quantidade_adotada))) {
                             var qta = parseFloat(result.data[i].ian_quantidade_adotada);
+                            linhaAux = linhaAux.replace(/lbl_QuantidadeAdotadaUnidade_VVV/g, result.data[i].rpt_id_adotado_unidade);
+
                             if (qta > 0) {
                                 linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, (((result.data[i].ian_quantidade_adotada.toFixed(2)) + " ").replace(".", ",").trim()));
                             }
@@ -703,6 +712,7 @@ function preenchetblFicha4_CAMPO(ehRead) {
                         }
                         else {
                             linhaAux = linhaAux.replace(/txt_QuantidadeAdotada_VVV/g, '');
+                            linhaAux = linhaAux.replace(/lbl_QuantidadeAdotadaUnidade_VVV/g, '');
                         }
 
                         // substitui o valor -1 por vazio
@@ -720,7 +730,8 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
                         linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_Causa', result.data[i].lstCausas, result.data[i].aca_codigo, linhaAux);
 
-                        if (qta > 0)
+                        // if (qta > 0)
+                       // if (parseInt(result.data[i].rpt_id_sugerido_codigo) > 0)
                             linhaAux = Ficha4_CAMPO_prenchetdCombos('cmb_ReparoAdotado', result.data[i].lstReparoTipos, result.data[i].rpt_id_adotado, linhaAux);
                     }
 
@@ -780,7 +791,7 @@ function preenchetblFicha4_CAMPO(ehRead) {
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header002d").style.display = '';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header003d").style.display = '';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header004d").style.display = '';
-                    document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = '';
+                    //document.getElementById("tdFICHA4_CodObjeto_ian_id_header005d").style.display = '';
 
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header000e").style.display = '';
                     document.getElementById("tdFICHA4_CodObjeto_ian_id_header001e").style.display = '';
@@ -841,7 +852,7 @@ function preenchetblFicha4_CAMPO(ehRead) {
                 if (tblFicha4_INSPECAO_ESPECIAL_CAMPO)
                     Ficha4_CAMPO_setaReadWrite(tblFicha4_INSPECAO_ESPECIAL_CAMPO, ehRead);
 
-                travaBotoes();
+                           // chama funcao se existir 
             }
         }
         ,"error": function (errormessage) {
@@ -858,7 +869,9 @@ function preenchetblFicha4_CAMPO(ehRead) {
 
 function Ficha4_CAMPO_CalculaReparoIndicado(quem)
 {
-    var sufixo = quem.id.replace("cmb_Sigla", "").replace("cmb_Cod", "").replace("cmb_Alerta", "").replace("cmb_Causa", "");
+    limpa_ReparoSugerido(quem);
+
+    var sufixo = quem.id.replace("cmb_Sigla", "").replace("cmb_Cod", "").replace("cmb_Alerta", "").replace("cmb_Causa", "").replace("txt_Largura", "").replace("txt_Comprimento", "");
 
     // combo Sigla
     var cmb_Sigla_id = "cmb_Sigla" + sufixo;
@@ -917,12 +930,6 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
 
     var rpt_area = (f_Comprimento / 100) * (f_Largura / 100);
 
-    $.ajax({
-        url: '/Inspecao/InspecaoAnomalia_ReparoSugerido',
-        type: "POST",
-        dataType: "JSON",
-        data: { leg_codigo: leg_codigo, atp_codigo: atp_codigo, ale_codigo: ale_codigo, aca_codigo: aca_codigo, rpt_area: rpt_area },
-        success: function (result) {
             lbl_QuantidadeIndicada.innerHTML = "";
             lbl_ReparoIndicado.innerHTML = "";
             lbl_ReparoIndicado.title = "";
@@ -930,6 +937,13 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
 
             lbl_Providencia.innerHTML = "";
             lbl_Providencia.title = "";
+
+    $.ajax({
+        url: '/Inspecao/InspecaoAnomalia_ReparoSugerido',
+        type: "POST",
+        dataType: "JSON",
+        data: { leg_codigo: leg_codigo, atp_codigo: atp_codigo, ale_codigo: ale_codigo, aca_codigo: aca_codigo, rpt_area: rpt_area },
+        success: function (result) {
 
             if (result.data.length > 0) {
                 if (result.data[0].rpt_codigo != "") {
@@ -946,9 +960,11 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
                     lbl_ReparoIndicado.title = result.data[0].rpt_descricao;
                     lbl_QuantidadeIndicadaUnidade.innerHTML = result.data[0].rpt_unidade;
 
-                    // metro linear para reparo rpt_id in (1, 26, 27, 28, 30, 31) 2021/fev/15
+                    // lista metro quadrado - 18/jun/2021
+                    var lista_rpt_ids_m2 = [2,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,23,24,25,27,29];
                     var rpt_id = parseInt(result.data[0].rpt_id);
-                    if ((rpt_id == 1) || (rpt_id == 26) || (rpt_id == 27) || (rpt_id == 28) || (rpt_id == 30) || (rpt_id == 31)) {
+
+                    if (!lista_rpt_ids_m2.includes(rpt_id)){
                         lbl_QuantidadeIndicada.innerHTML = (((f_Quantidade * (f_Comprimento / 100)).toFixed(2)) + " ").replace(".", ",").trim();
                     }
                     else {
@@ -977,7 +993,19 @@ function Ficha4_CAMPO_CalculaReparoIndicado(quem)
 
 }
 
+
+function limpa_ReparoSugerido(quem)
+{
+    var ian_id_value = quem.id.replace("cmb_Sigla", "").replace("cmb_Cod", "").replace("cmb_Alerta", "").replace("cmb_Causa", "").replace("txt_Largura", "").replace("txt_Comprimento", "");
+
+    $("#lbl_ReparoIndicado" + ian_id_value).text("");
+    $("#lbl_QuantidadeIndicada" + ian_id_value).text("");
+    $("#lbl_QuantidadeIndicadaUnidade" + ian_id_value).text("");
+
+}
+
 function cmb_Sigla_onchange(quem) {
+    limpa_ReparoSugerido(quem);
 
     quem.style.backgroundColor = corBranca;
 
@@ -1050,8 +1078,12 @@ function cmb_Sigla_onchange(quem) {
                                     opt.title = aux[1].trim();
                                 cmb_Alerta.appendChild(opt);
                             }
+
+                            Ficha4_CAMPO_CalculaReparoIndicado(quem);
+
                         }
                     })
+
                 }
             })
         }
@@ -1071,11 +1103,18 @@ function cmb_Alerta_onchange(quem) {
 function cmb_Causa_onchange(quem) {
 
     quem.style.backgroundColor = corBranca;
-
     Ficha4_CAMPO_CalculaReparoIndicado(quem);
 }
 
 function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
+
+    if (selectedId_sos_id == 14)
+    {
+        document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
+        document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
+        document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
+        ehRead = true;
+    }
 
     // a cada refresh, reseta o timer
     resetTimeout();
@@ -1128,17 +1167,19 @@ function Ficha4_CAMPO_setaReadWrite(tabela, ehRead) {
         lstCombos[i].disabled = ehRead;
 
     // =============== ALTERNA OS BOTOES SALVAR/CANCELAR/EDITAR =============================================================
-    if (ehRead) {
-        document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-        document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-        document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
-        document.getElementById("btn_Adicionar_Objeto_Anomalia").style.display = 'none';
-    }
-    else {
-        document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
-        document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
-        document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
-        document.getElementById("btn_Adicionar_Objeto_Anomalia").style.display = 'block';
+    if (selectedId_sos_id != 14) {
+        if (ehRead) {
+            document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
+            document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
+            document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
+            document.getElementById("btn_Adicionar_Objeto_Anomalia").style.display = 'none';
+        }
+        else {
+            document.getElementById("btn_Salvar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
+            document.getElementById("btn_Cancelar_INSPECAO_ESPECIAL_CAMPO").style.display = 'block';
+            document.getElementById("btn_Editar_INSPECAO_ESPECIAL_CAMPO").style.display = 'none';
+            document.getElementById("btn_Adicionar_Objeto_Anomalia").style.display = 'block';
+        }
     }
 
     // botoes da lixeira criados dinamicamente

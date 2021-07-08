@@ -137,7 +137,8 @@ namespace WebApp.Controllers
         public JsonResult Integracao_VDMs_ListAll(string rod_codigo = "", decimal kminicial = 0, decimal kmfinal = 0)
         {
             IntegracaoDAO saida = new IntegracaoDAO();
-            List<vdm> retorno = saida.get_VDMs(rod_codigo.ToUpper().Trim(), kminicial, kmfinal);
+            //List<vdm> retorno = saida.get_VDMs(rod_codigo.ToUpper().Trim(), kminicial, kmfinal);
+            List<vdm> retorno = saida.get_VDMs_API(rod_codigo.ToUpper().Trim(), kminicial, kmfinal);
             
             return Json(new { data = retorno }, JsonRequestBehavior.AllowGet);
         }
@@ -166,7 +167,8 @@ namespace WebApp.Controllers
         public JsonResult Integracao_TPUs_ListAll(string ano = "", string fase = "", string mes = "01", string onerado = "")
         {
             IntegracaoDAO saida = new IntegracaoDAO();            
-            List<tpu> retorno = saida.get_TPUs(ano == "" ? DateTime.Now.Year.ToString() : ano, fase,  mes.Trim() == "" ? "01" : mes, onerado.Trim() == "" ? "" : onerado);
+          //  List<tpu> retorno = saida.get_TPUs(ano == "" ? DateTime.Now.Year.ToString() : ano, fase,  mes.Trim() == "" ? "01" : mes, onerado.Trim() == "" ? "" : onerado);
+            List<tpu> retorno = saida.get_TPUs_API(ano == "" ? DateTime.Now.Year.ToString() : ano, fase,  mes.Trim() == "" ? "01" : mes, onerado.Trim() == "" ? "" : onerado);
 
             // inverte o campo "Onerado" porque na tela é Desonerado. email nelson 30/03/2021
             if ((retorno.Count > 0) && (retorno[0].DataTpu != "-1"))

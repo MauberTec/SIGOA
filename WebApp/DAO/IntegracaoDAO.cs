@@ -310,6 +310,10 @@ namespace WebApp.DAO
             // transforma em DataTable
             DataTable dtOAE = new Gerais().ToDataTable<OAE>(lstOAE);
 
+           
+            DataView view = new DataView(dtOAE);
+            DataTable distinctValues = view.ToTable(true, "rod_id", "oae_km_inicial", "oae_km_final", "sen_id", "reg_id", "oae_data_levantamento", "oae_extensao", "oat_id", "oae_data_criacao", "oae_id_sigoa", "oae_data_atualizacao");
+
             try
             {
                 using (SqlConnection con = new SqlConnection(strConn))
@@ -330,7 +334,7 @@ namespace WebApp.DAO
 
                     com.Parameters.AddWithValue("@forcar_atualizacao", forcar_atualizacao);
 
-                    SqlParameter tvpParam = com.Parameters.AddWithValue("@OAEs", dtOAE);
+                    SqlParameter tvpParam = com.Parameters.AddWithValue("@OAEs", distinctValues);
                     tvpParam.SqlDbType = SqlDbType.Structured;
 
                     com.ExecuteScalar();
@@ -829,7 +833,8 @@ namespace WebApp.DAO
                 strRegionais = strRegionais + ";" + lstRegionais[i].reg_id.ToString() + ":" + lstRegionais[i].reg_codigo + "|" + lstRegionais[i].reg_descricao;
 
             // remove o 1o ponto e virgula
-            strRegionais = strRegionais.Substring(1);
+            if ((strRegionais != "") && (strRegionais.Length > 1))
+                strRegionais = strRegionais.Substring(1);
 
             return strRegionais;
         }
@@ -1490,20 +1495,20 @@ namespace WebApp.DAO
 
 
                         // checa a data da ultima atualizacao. se nao for do dia atual, atualiza
-                        if (lst[0].tpu_data_atualizacao != "")
+                        if ((lst[0].tpu_data_atualizacao != "") || (sincronizar == false))
                         {
-                            if ((Convert.ToDateTime(lst[0].tpu_data_atualizacao).Day == (DateTime.Today.Day)) &&
-                                   (Convert.ToDateTime(lst[0].tpu_data_atualizacao).Month == (DateTime.Today.Month)) &&
-                                     (Convert.ToDateTime(lst[0].tpu_data_atualizacao).Year == (DateTime.Today.Year)))
-                            {
+                            //if ((Convert.ToDateTime(lst[0].tpu_data_atualizacao).Day == (DateTime.Today.Day)) &&
+                            //       (Convert.ToDateTime(lst[0].tpu_data_atualizacao).Month == (DateTime.Today.Month)) &&
+                            //         (Convert.ToDateTime(lst[0].tpu_data_atualizacao).Year == (DateTime.Today.Year)))
+                            //{
                                 sincronizar = false;
                                 continue;
-                            }
-                            else
-                            {
-                                sincronizar = true;
-                                break;
-                            }
+                            //}
+                            //else
+                            //{
+                            //    sincronizar = true;
+                            //    break;
+                            //}
                         }
                         else
                         {

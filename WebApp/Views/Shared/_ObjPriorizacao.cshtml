@@ -85,8 +85,8 @@
                             <th title="OAE">OAE</th>
                             <th title="Nota Final">Nota Geral</th>
 
-                            <th title="Nota Final">Data Priorização</th>
-                            <th title="Nota Final">Tipo Inspeção</th>
+                            <th title="Dada Por">Dada Por</th>
+                            <th title="Na Data">Na Data</th>
 
                             <th title="Nota Estrutura">Estrut</th>
                             <th title="Nota Durabilidade">Durab</th>
@@ -186,9 +186,14 @@
                 { data: "obj_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_final", "className": "Centralizado", "autoWidth": true, "searchable": true },
 
-               { data: "pri_data_classificacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
-         // mudou de novo 18/abr/2021 :data execucao para data classificacao       { data: "ord_data_termino_execucao", "className": "Centralizado", "autoWidth": true, "searchable": true },
-                { data: "tos_descricao", "className": "Centralizado", "autoWidth": true, "searchable": true },
+                {
+                   data: "ord_codigo", "className": "Centralizado", "autoWidth": true, "searchable": true
+                   ,createdCell: function (td, cellData, rowData, row, col) {
+                       $(td).attr('title', rowData["ord_descricao"]);
+                }
+
+                },
+                { data: "pri_data_classificacao", "className": "Centralizado", "autoWidth": true, "searchable": true },
 
                 { data: "pri_nota_estrutura", "className": "Centralizado", "autoWidth": true, "searchable": true },
                 { data: "pri_nota_durabilidade", "className": "Centralizado", "autoWidth": true, "searchable": true },
